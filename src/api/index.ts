@@ -1,0 +1,10 @@
+export { default as api, setTokens, clearTokens, getTokens } from './axios';
+export { authApi } from './auth';
+export { doctorsApi } from './doctors';
+export { appointmentsApi } from './appointments';
+export { reviewsApi } from './reviews';
+export { notificationsApi } from './notifications';
+export { specialtiesApi } from './specialties';
+export { adminApi } from './admin';
+export { profileApi } from './profile';
+export { patientApi } from './patient';
