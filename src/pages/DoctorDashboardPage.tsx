@@ -65,7 +65,7 @@ export function DoctorDashboardPage() {
     );
   }
 
-  const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  // const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-teal-50/40 to-white py-8 sm:py-12">

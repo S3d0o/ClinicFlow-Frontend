@@ -11,7 +11,7 @@ import {
 import { toast } from 'sonner';
 import {
   PieChart, Pie, Cell, Tooltip, ResponsiveContainer,
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid,
 } from 'recharts';
 
 // ── Colour tokens ────────────────────────────────────────────────────────────

@@ -147,7 +147,7 @@ export function DoctorSchedulesPage() {
           ) : (
             <div className="space-y-3">
               {weekDays.map((day, dayIndex) => {
-                const daySchedules = schedules.filter((s) => s.dayOfWeek === day);
+                const daySchedules = schedules.filter((s) => String(s.dayOfWeek) === day);
                 return (
                   <motion.div key={day} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: dayIndex * 0.03 }}>
                     <Card className="border-slate-100">

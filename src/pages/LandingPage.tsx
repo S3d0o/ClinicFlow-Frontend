@@ -13,7 +13,6 @@ import {
   Activity,
   Database,
   Server,
-  Lock,
   Zap,
   Globe,
   Code2,
