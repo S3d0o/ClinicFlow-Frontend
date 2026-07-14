@@ -1,7 +1,7 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import type { LoginResponse, RefreshTokenRequest } from '@/types';
 
-const API_BASE_URL = 'https://localhost:7129';
+const API_BASE_URL = import.meta.env.VITE_API_URL ?? '';
 
 const api = axios.create({
   baseURL: `${API_BASE_URL}/api`,
