@@ -71,7 +71,10 @@ export function DoctorAppointmentsPage() {
   useEffect(() => {
     fetchAppointments();
   }, [fetchAppointments]);
-
+  const isPast = (apt: Appointment) => {
+  const appointmentDateTime = new Date(`${apt.appointmentDate}T${apt.startTime}`);
+  return appointmentDateTime < new Date();
+  };
   const handleComplete = async () => {
     if (!completeId) return;
     setActionLoading(true);
@@ -162,16 +165,18 @@ export function DoctorAppointmentsPage() {
                             </div>
                           </div>
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${statusColors[apt.status]}`}>{apt.status}</span>
-                            {apt.status === 'Confirmed' && (
-                              <>
-                                <Button size="sm" onClick={() => setCompleteId(apt.id)} className="bg-emerald-600 hover:bg-emerald-700 h-8 text-xs">
-                                  <CheckCircle className="h-3.5 w-3.5 mr-1" /> Complete
-                                </Button>
-                                <Button variant="outline" size="sm" onClick={() => { setNotesId(apt.id); setNotes(apt.doctorNotes || ''); }} className="h-8 text-xs">
-                                  <MessageSquare className="h-3.5 w-3.5 mr-1" /> Notes
-                                </Button>
-                              </>
+                            <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${statusColors[apt.status]}`}>
+                              {apt.status}
+                            </span>
+                            {apt.status === 'Confirmed' && isPast(apt) && (
+                              <Button size="sm" onClick={() => setCompleteId(apt.id)} className="bg-emerald-600 hover:bg-emerald-700 h-8 text-xs">
+                                <CheckCircle className="h-3.5 w-3.5 mr-1" /> Complete
+                              </Button>
+                            )}
+                            {(apt.status === 'Confirmed' || apt.status === 'Completed') && (
+                              <Button variant="outline" size="sm" onClick={() => { setNotesId(apt.id); setNotes(apt.doctorNotes || ''); }} className="h-8 text-xs">
+                                <MessageSquare className="h-3.5 w-3.5 mr-1" /> Notes
+                              </Button>
                             )}
                           </div>
                         </div>

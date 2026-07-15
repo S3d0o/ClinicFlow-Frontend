@@ -240,6 +240,7 @@ export interface Appointment {
   cancelledAt?: string;
   cancellationReason?: string;
   cancelledBy?: CancelledBy;
+  hasReview: boolean;
 }
 
 export interface BookAppointmentRequest {

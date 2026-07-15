@@ -56,6 +56,7 @@ export function PatientAppointmentsPage() {
   const [reviewComment, setReviewComment] = useState('');
   const [reviewLoading, setReviewLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [reviewedIds, setReviewedIds] = useState<Set<number>>(new Set());
 
   const fetchAppointments = useCallback(async () => {
     setLoading(true);
@@ -104,6 +105,7 @@ export function PatientAppointmentsPage() {
         comment: reviewComment || undefined,
       });
       toast.success('Review submitted!');
+      setReviewedIds(prev => new Set(prev).add(reviewAppointment.id));
       setReviewAppointment(null);
       setReviewRating(5);
       setReviewComment('');
@@ -200,11 +202,11 @@ export function PatientAppointmentsPage() {
                                 <X className="h-3.5 w-3.5 mr-1" /> Cancel
                               </Button>
                             )}
-                            {apt.status === 'Completed' && (
-                              <Button variant="outline" size="sm" onClick={() => setReviewAppointment(apt)} className="text-amber-600 hover:text-amber-700 hover:bg-amber-50 border-amber-200">
-                                <Star className="h-3.5 w-3.5 mr-1" /> Review
-                              </Button>
-                            )}
+                            {apt.status === 'Completed' && !apt.hasReview && !reviewedIds.has(apt.id) && (
+                                <Button variant="outline" size="sm" onClick={() => setReviewAppointment(apt)} className="text-amber-600 hover:text-amber-700 hover:bg-amber-50 border-amber-200">
+                                  <Star className="h-3.5 w-3.5 mr-1" /> Review
+                                </Button>
+                              )}
                           </div>
                         </div>
                         {apt.doctorNotes && (
