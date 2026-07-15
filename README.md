@@ -2,7 +2,7 @@
 
 > React + TypeScript frontend for ClinicFlow — a full-stack clinic management platform connecting patients with doctors through a seamless booking experience.
 
-**→ [Backend Repository](https://github.com/S3d0o/ClinicFlow) · [Live API Docs](https://registry.scalar.com/@default-team-2gu37/apis/clinicflow-v1@1.0.0) · [Live Demo on LinkedIn](https://www.linkedin.com/in/saad-mohamed-li/)**
+**→ [Backend Repository](https://github.com/S3d0o/ClinicFlow) · [Live API Docs](https://registry.scalar.com/@default-team-2gu37/apis/clinicflow-v1@1.0.0) · [Live Demo on LinkedIn](https://www.linkedin.com/posts/saad-mohamed-li_dotnet-csharp-react-ugcPost-7483058574588379136-R35x/?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAAFtidxABr0vs0HxJVu7Xnwvp_d1T8J8FNdM)**
 
 > 📸 Screenshots, demo video, full feature breakdown, and seeded test accounts are all documented in the **[Backend Repository](https://github.com/S3d0o/ClinicFlow)**.
 
