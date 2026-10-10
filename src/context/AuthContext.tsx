@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { isAxiosError } from 'axios';
 import type { UserRole, LoginResponse, UserProfile } from '@/types';
-import { authApi, profileApi, setTokens, clearTokens } from '@/api';
+import { authApi, profileApi, setTokens, saveSession, clearSession } from '@/api';
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -52,10 +53,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           userName: storedName,
           isLoading: false,
         });
-      } catch {
-        clearTokens();
-        localStorage.clear();
-        setState({ isAuthenticated: false, role: null, user: null, userName: '', isLoading: false });
+      } catch (error) {
+        const status = isAxiosError(error) ? error.response?.status : undefined;
+        if (status !== undefined && status >= 400 && status < 500) {
+          clearSession();
+          setState({ isAuthenticated: false, role: null, user: null, userName: '', isLoading: false });
+        } else {
+          // Server unreachable or 5xx: keep the session; the profile loads on a later request.
+          setState({ isAuthenticated: true, role: storedRole, user: null, userName: storedName, isLoading: false });
+        }
       }
     } else {
       setState((s) => ({ ...s, isLoading: false }));
@@ -79,13 +85,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const res = await authApi.login({ email, password });
     const data: LoginResponse = res.data;
 
-    setTokens({ accessToken: data.accessToken, refreshToken: data.refreshToken });
-    localStorage.setItem('accessToken', data.accessToken);
-    localStorage.setItem('refreshToken', data.refreshToken);
-    localStorage.setItem('expiresAt', data.expiresAt);
-    localStorage.setItem('userRole', data.role);
-    localStorage.setItem('userName', data.fullName);
-    localStorage.setItem('userEmail', data.email);
+    saveSession(data);
 
     const profileRes = await profileApi.getMyProfile();
     setState({
@@ -106,8 +106,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // ignore
       }
     }
-    clearTokens();
-    localStorage.clear();
+    clearSession();
     setState({ isAuthenticated: false, role: null, user: null, userName: '', isLoading: false });
     navigate('/');
   }, [navigate]);

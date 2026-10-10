@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { adminApi } from '@/api';
 import type { Specialty, CreateSpecialtyRequest } from '@/types';
+import { getApiErrorMessage } from '@/lib/api-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
+import { Spinner } from '@/components/ui/spinner';
 import {
   Dialog,
   DialogContent,
@@ -14,15 +14,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
-import {
-  Shield,
-  Plus,
-  Pencil,
-  Trash2,
-  AlertTriangle,
-} from 'lucide-react';
+import { Page, PageHeader } from '@/components/layout/Page';
+import { EmptyState, LoadingState } from '@/components/states';
+import { Field } from '@/components/form/Field';
+import { Pencil, Plus, Shield, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
+
+const NAME_MAX_LENGTH = 100;
+const DESCRIPTION_MAX_LENGTH = 500;
 
 export function AdminSpecialtiesPage() {
   const [specialties, setSpecialties] = useState<Specialty[]>([]);
@@ -58,16 +57,23 @@ export function AdminSpecialtiesPage() {
     setForm({ name: '', description: '', iconUrl: '' });
   };
 
+  // Optional fields must be omitted rather than sent as "" (iconUrl must be an absolute URL)
+  const toRequest = (): CreateSpecialtyRequest => ({
+    name: form.name.trim(),
+    description: form.description?.trim() || undefined,
+    iconUrl: form.iconUrl?.trim() || undefined,
+  });
+
   const handleCreate = async () => {
     setSubmitting(true);
     try {
-      await adminApi.createSpecialty(form);
+      await adminApi.createSpecialty(toRequest());
       toast.success('Specialty created');
       setShowCreate(false);
       resetForm();
       fetchSpecialties();
-    } catch (err: any) {
-      toast.error(err.response?.data?.title || 'Failed to create');
+    } catch (err) {
+      toast.error(getApiErrorMessage(err, 'Failed to create'));
     } finally {
       setSubmitting(false);
     }
@@ -77,13 +83,13 @@ export function AdminSpecialtiesPage() {
     if (!showEdit) return;
     setSubmitting(true);
     try {
-      await adminApi.updateSpecialty(showEdit.id, form);
+      await adminApi.updateSpecialty(showEdit.id, toRequest());
       toast.success('Specialty updated');
       setShowEdit(null);
       resetForm();
       fetchSpecialties();
-    } catch (err: any) {
-      toast.error(err.response?.data?.title || 'Failed to update');
+    } catch (err) {
+      toast.error(getApiErrorMessage(err, 'Failed to update'));
     } finally {
       setSubmitting(false);
     }
@@ -97,8 +103,8 @@ export function AdminSpecialtiesPage() {
       toast.success('Specialty deleted');
       setShowDelete(null);
       fetchSpecialties();
-    } catch (err: any) {
-      toast.error(err.response?.data?.title || 'Failed to delete');
+    } catch (err) {
+      toast.error(getApiErrorMessage(err, 'Failed to delete'));
     } finally {
       setSubmitting(false);
     }
@@ -109,113 +115,132 @@ export function AdminSpecialtiesPage() {
     setShowEdit(s);
   };
 
+  const closeForm = () => {
+    setShowCreate(false);
+    setShowEdit(null);
+    resetForm();
+  };
+
+  const activeCount = specialties.filter((s) => s.isActive).length;
+  const deleteTarget = specialties.find((s) => s.id === showDelete);
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-50/40 to-white py-8 sm:py-12">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900">Specialties</h1>
-              <p className="text-sm text-slate-500">Manage medical specialties</p>
-            </div>
-            <Button onClick={() => { resetForm(); setShowCreate(true); }} className="bg-teal-600 hover:bg-teal-700">
-              <Plus className="h-4 w-4 mr-2" /> Add Specialty
-            </Button>
-          </div>
+    <Page>
+      <PageHeader
+        title="Specialties"
+        description={
+          loading
+            ? 'The medical specialties doctors can register under.'
+            : `${specialties.length} specialties · ${activeCount} active. Doctors choose one when they register.`
+        }
+        actions={
+          <Button onClick={() => { resetForm(); setShowCreate(true); }}>
+            <Plus aria-hidden="true" /> Add specialty
+          </Button>
+        }
+      />
 
-          {loading ? (
-            <div className="flex justify-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600" />
-            </div>
-          ) : specialties.length === 0 ? (
-            <Card className="border-slate-100">
-              <CardContent className="p-12 text-center">
-                <Shield className="h-12 w-12 text-slate-300 mx-auto mb-4" />
-                <p className="text-sm text-slate-500">No specialties found</p>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {specialties.map((s, i) => (
-                <motion.div key={s.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
-                  <Card className="border-slate-100 hover:border-teal-200 transition-colors">
-                    <CardContent className="p-4">
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="h-10 w-10 rounded-lg bg-teal-50 flex items-center justify-center">
-                            <Shield className="h-5 w-5 text-teal-600" />
-                          </div>
-                          <div>
-                            <h3 className="font-semibold text-slate-900">{s.name}</h3>
-                            {s.description && <p className="text-xs text-slate-500 line-clamp-2 max-w-[200px]">{s.description}</p>}
-                            <span className={`inline-block mt-1 px-1.5 py-0.5 rounded text-xs ${s.isActive ? 'bg-teal-50 text-teal-600' : 'bg-slate-100 text-slate-500'}`}>
-                              {s.isActive ? 'Active' : 'Inactive'}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-teal-600" onClick={() => openEdit(s)}>
-                            <Pencil className="h-3.5 w-3.5" />
-                          </Button>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-red-600" onClick={() => setShowDelete(s.id)}>
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </Button>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-          )}
-        </motion.div>
-      </div>
+      {loading ? (
+        <LoadingState label="Loading specialties…" />
+      ) : specialties.length === 0 ? (
+        <EmptyState
+          icon={Shield}
+          title="No specialties yet"
+          description="Add a specialty so doctors can register under it."
+          action={<Button onClick={() => { resetForm(); setShowCreate(true); }}><Plus aria-hidden="true" /> Add specialty</Button>}
+        />
+      ) : (
+        <ul className="divide-y rounded-xl border bg-card shadow-card">
+          {specialties.map((s) => (
+            <li key={s.id} className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:px-5">
+              <div className="flex min-w-0 flex-1 items-start gap-3">
+                <span className="mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
+                  <Shield className="size-4" aria-hidden="true" />
+                </span>
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h2 className="font-semibold">{s.name}</h2>
+                    {s.isActive ? (
+                      <span className="rounded-full bg-success/10 px-2 py-0.5 text-[11px] font-medium text-success">Active</span>
+                    ) : (
+                      <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">Inactive</span>
+                    )}
+                  </div>
+                  <p className="mt-0.5 line-clamp-2 text-sm text-muted-foreground">{s.description || 'No description'}</p>
+                </div>
+              </div>
+              <div className="flex gap-1 self-end sm:self-auto">
+                <Button variant="ghost" size="sm" onClick={() => openEdit(s)} aria-label={`Edit ${s.name}`}>
+                  <Pencil aria-hidden="true" /> Edit
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-destructive hover:bg-destructive/[0.06] hover:text-destructive"
+                  onClick={() => setShowDelete(s.id)}
+                  aria-label={`Delete ${s.name}`}
+                >
+                  <Trash2 aria-hidden="true" /> Delete
+                </Button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
 
-      {/* Create/Edit Dialog */}
-      <Dialog open={showCreate || !!showEdit} onOpenChange={() => { setShowCreate(false); setShowEdit(null); resetForm(); }}>
+      {/* Create / edit dialog */}
+      <Dialog open={showCreate || !!showEdit} onOpenChange={(o) => { if (!o) closeForm(); }}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{showEdit ? 'Edit Specialty' : 'Add Specialty'}</DialogTitle>
-            <DialogDescription>{showEdit ? 'Update the specialty details' : 'Create a new medical specialty'}</DialogDescription>
+            <DialogTitle>{showEdit ? `Edit ${showEdit.name}` : 'Add specialty'}</DialogTitle>
+            <DialogDescription>{showEdit ? 'Update how this specialty appears to patients and doctors.' : 'Doctors will be able to register under this specialty.'}</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-3">
-            <div className="space-y-2">
-              <Label>Name *</Label>
-              <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="e.g., Cardiology" maxLength={100} />
-            </div>
-            <div className="space-y-2">
-              <Label>Description</Label>
-              <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Description..." maxLength={500} />
-            </div>
-            <div className="space-y-2">
-              <Label>Icon URL</Label>
-              <Input value={form.iconUrl} onChange={(e) => setForm({ ...form, iconUrl: e.target.value })} placeholder="https://..." />
-            </div>
-          </div>
+          <form
+            id="specialty-form"
+            className="space-y-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (!form.name.trim() || submitting) return;
+              if (showEdit) handleEdit();
+              else handleCreate();
+            }}
+          >
+            <Field id="specialty-name" label="Name" required hint="Must be unique.">
+              <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="e.g. Cardiology" maxLength={NAME_MAX_LENGTH} />
+            </Field>
+            <Field id="specialty-description" label="Description" optional hint={`${form.description?.length ?? 0}/${DESCRIPTION_MAX_LENGTH}`}>
+              <Textarea rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="What this specialty covers" maxLength={DESCRIPTION_MAX_LENGTH} />
+            </Field>
+            <Field id="specialty-icon" label="Icon URL" optional hint="A full URL starting with https://">
+              <Input type="url" inputMode="url" value={form.iconUrl} onChange={(e) => setForm({ ...form, iconUrl: e.target.value })} placeholder="https://…" />
+            </Field>
+          </form>
           <DialogFooter>
-            <Button variant="outline" onClick={() => { setShowCreate(false); setShowEdit(null); resetForm(); }}>Cancel</Button>
-            <Button onClick={showEdit ? handleEdit : handleCreate} disabled={submitting || !form.name} className="bg-teal-600 hover:bg-teal-700">
-              {submitting ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" /> : (showEdit ? 'Save Changes' : 'Create')}
+            <Button variant="outline" onClick={closeForm} disabled={submitting}>Cancel</Button>
+            <Button type="submit" form="specialty-form" disabled={submitting || !form.name.trim()}>
+              {submitting && <Spinner aria-hidden="true" />}
+              {showEdit ? 'Save changes' : 'Add specialty'}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Delete Dialog */}
-      <Dialog open={!!showDelete} onOpenChange={() => setShowDelete(null)}>
+      {/* Delete dialog */}
+      <Dialog open={!!showDelete} onOpenChange={(o) => { if (!o) setShowDelete(null); }}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2"><AlertTriangle className="h-5 w-5 text-red-500" /> Delete Specialty</DialogTitle>
-            <DialogDescription>This will permanently delete this specialty. Only allowed if no doctors are assigned.</DialogDescription>
+            <DialogTitle>Delete {deleteTarget?.name ?? 'specialty'}?</DialogTitle>
+            <DialogDescription>This can’t be undone. Specialties that doctors are registered under can’t be deleted.</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDelete(null)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setShowDelete(null)} disabled={submitting}>Cancel</Button>
             <Button variant="destructive" onClick={handleDelete} disabled={submitting}>
-              {submitting ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" /> : 'Delete'}
+              {submitting && <Spinner aria-hidden="true" />}
+              {submitting ? 'Deleting…' : 'Delete specialty'}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </Page>
   );
 }

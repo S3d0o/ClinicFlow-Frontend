@@ -1,482 +1,336 @@
-import { useRef } from 'react';
+import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useInView } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import {
-  Stethoscope,
-  CalendarCheck,
-  ShieldCheck,
-  Clock,
-  HeartPulse,
-  Users,
-  Star,
   ArrowRight,
-  Activity,
-  Database,
-  Server,
-  Zap,
-  Globe,
-  Code2,
-  Layers,
-  Bell,
+  BellRing,
+  CalendarCheck,
+  CalendarClock,
   CheckCircle2,
-  Building2,
+  ClipboardList,
+  LayoutDashboard,
+  Search,
+  ShieldCheck,
+  Star,
+  Stethoscope,
   UserRound,
+  Users,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-/* ─── Animation wrapper ─── */
-function FadeInUp({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-60px' });
+/**
+ * Fades content in once when it scrolls into view. With reduced motion preferred, content renders
+ * statically (visible immediately) instead of starting transparent.
+ */
+function Reveal({ children, delay = 0, className }: { children: ReactNode; delay?: number; className?: string }) {
+  const reduceMotion = useReducedMotion();
+  if (reduceMotion) return <div className={className}>{children}</div>;
   return (
     <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-      transition={{ duration: 0.6, delay, ease: 'easeOut' }}
+      className={className}
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.5, delay, ease: 'easeOut' }}
     >
       {children}
     </motion.div>
   );
 }
 
-/* ─── Hero Section ─── */
-function HeroSection() {
-  return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-slate-50 via-teal-50/30 to-emerald-50/20 pt-16">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 right-10 w-72 h-72 bg-teal-200/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 left-10 w-96 h-96 bg-emerald-200/20 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-teal-100/10 rounded-full blur-3xl" />
-      </div>
+/* ─── Hero ─── */
+const heroPoints = ['Confirmed instantly', 'Reminders before every visit', 'Reviews from completed visits'];
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Left Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7 }}
-            className="text-center lg:text-left"
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-50 border border-teal-200 text-teal-700 text-sm font-medium mb-6"
+function BookingPreview() {
+  const times = ['9:00', '9:30', '10:00', '10:30', '11:00', '12:30'];
+  return (
+    <div aria-hidden="true" className="relative mx-auto w-full max-w-md select-none">
+      <div className="absolute -inset-6 -z-10 rounded-[2rem] bg-[radial-gradient(60%_60%_at_50%_40%,hsl(var(--primary)/0.12),transparent_70%)]" />
+      <div className="rounded-2xl border bg-card p-5 shadow-elevated">
+        <div className="flex items-center gap-3">
+          <span className="inline-flex size-12 items-center justify-center rounded-full bg-secondary text-base font-semibold text-secondary-foreground">AE</span>
+          <div className="min-w-0">
+            <p className="font-semibold">Dr. Ahmed El-Sayed</p>
+            <p className="text-sm text-muted-foreground">Cardiology · Cairo</p>
+          </div>
+          <span className="ml-auto inline-flex items-center gap-1 text-sm font-semibold">
+            <Star className="size-3.5 fill-amber-400 text-amber-400" /> 4.8
+          </span>
+        </div>
+        <div className="mt-5 grid grid-cols-5 gap-1.5 text-center">
+          {['Today', 'Tue', 'Wed', 'Thu', 'Fri'].map((d, i) => (
+            <div key={d} className={i === 1 ? 'rounded-lg bg-primary py-2 text-primary-foreground' : 'rounded-lg py-2 text-muted-foreground'}>
+              <p className="text-[11px] font-medium">{d}</p>
+              <p className="text-base font-semibold">{12 + i}</p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-5 text-xs font-medium uppercase tracking-wide text-muted-foreground">Morning</p>
+        <div className="mt-2 grid grid-cols-3 gap-1.5">
+          {times.map((t, i) => (
+            <div
+              key={t}
+              className={
+                i === 2
+                  ? 'rounded-md border border-primary bg-primary/[0.06] py-2 text-center text-sm font-semibold text-primary'
+                  : 'rounded-md border py-2 text-center text-sm text-foreground'
+              }
             >
-              <HeartPulse className="w-4 h-4" />
-              Modern Healthcare Management
-            </motion.div>
-
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight">
-              Your Health,{' '}
-              <span className="bg-gradient-to-r from-teal-500 to-emerald-600 bg-clip-text text-transparent">
-                Simplified
-              </span>
-            </h1>
-
-            <p className="mt-6 text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-              ClinicFlow connects patients with top doctors seamlessly. Book appointments,
-              manage your health records, and experience healthcare the modern way.
-            </p>
-
-            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Link to="/doctors">
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transition-all px-8"
-                >
-                  Find a Doctor
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </Link>
-              <Link to="/register/patient">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="border-2 border-teal-200 hover:bg-teal-50 text-teal-700 px-8"
-                >
-                  Get Started
-                </Button>
-              </Link>
+              {t} AM
             </div>
-
-            {/* Stats */}
-            <div className="mt-12 grid grid-cols-3 gap-6 max-w-md mx-auto lg:mx-0">
-              {[
-                { value: '500+', label: 'Doctors' },
-                { value: '10K+', label: 'Patients' },
-                { value: '50K+', label: 'Appointments' },
-              ].map((stat) => (
-                <div key={stat.label} className="text-center lg:text-left">
-                  <div className="text-2xl font-bold text-slate-900">{stat.value}</div>
-                  <div className="text-sm text-slate-500">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Right Visual */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="relative hidden lg:flex items-center justify-center"
-          >
-            <div className="relative">
-              {/* Main card */}
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                className="bg-white rounded-3xl shadow-2xl p-6 w-80 border border-slate-100"
-              >
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal-400 to-emerald-500 flex items-center justify-center">
-                    <Stethoscope className="w-7 h-7 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-900">Dr. Sarah Johnson</h3>
-                    <p className="text-sm text-slate-500">Cardiologist</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-1 mb-3">
-                  {[1, 2, 3, 4, 5].map((s) => (
-                    <Star key={s} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  ))}
-                  <span className="text-xs text-slate-500 ml-1">(128 reviews)</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-slate-600 mb-4">
-                  <Clock className="w-4 h-4 text-teal-500" />
-                  <span>Next available: Today, 2:00 PM</span>
-                </div>
-                <Button className="w-full bg-teal-500 hover:bg-teal-600 text-white">
-                  Book Appointment
-                </Button>
-              </motion.div>
-
-              {/* Floating notification card */}
-              <motion.div
-                animate={{ y: [0, 8, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-                className="absolute -top-6 -right-8 bg-white rounded-2xl shadow-lg p-4 border border-slate-100"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-slate-900">Appointment Confirmed</p>
-                    <p className="text-xs text-slate-500">Today at 3:30 PM</p>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Floating reminder card */}
-              <motion.div
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-                className="absolute -bottom-6 -left-8 bg-white rounded-2xl shadow-lg p-4 border border-slate-100"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center">
-                    <Bell className="w-5 h-5 text-teal-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-slate-900">Reminder Set</p>
-                    <p className="text-xs text-slate-500">30 min before</p>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─── Features Section ─── */
-function FeaturesSection() {
-  const features = [
-    {
-      icon: CalendarCheck,
-      title: 'Easy Booking',
-      description: 'Book appointments with just a few clicks. View real-time availability and choose your preferred time slot.',
-      color: 'from-teal-400 to-teal-600',
-    },
-    {
-      icon: UserRound,
-      title: 'Expert Doctors',
-      description: 'Access a network of verified, experienced specialists across multiple medical fields.',
-      color: 'from-emerald-400 to-emerald-600',
-    },
-    {
-      icon: ShieldCheck,
-      title: 'Secure & Private',
-      description: 'Your health data is protected with enterprise-grade security and encryption.',
-      color: 'from-cyan-400 to-cyan-600',
-    },
-    {
-      icon: Clock,
-      title: '24/7 Availability',
-      description: 'Book appointments anytime, anywhere. No more waiting on hold or busy signals.',
-      color: 'from-teal-500 to-emerald-500',
-    },
-    {
-      icon: Bell,
-      title: 'Smart Reminders',
-      description: 'Get automated reminders via email and notifications so you never miss an appointment.',
-      color: 'from-emerald-400 to-teal-500',
-    },
-    {
-      icon: Star,
-      title: 'Verified Reviews',
-      description: 'Read honest feedback from real patients to find the right doctor for your needs.',
-      color: 'from-cyan-500 to-emerald-500',
-    },
-  ];
-
-  return (
-    <section className="py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <FadeInUp>
-          <div className="text-center mb-16">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-50 text-teal-700 text-sm font-medium mb-4">
-              <Activity className="w-4 h-4" />
-              Why Choose ClinicFlow
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">
-              Healthcare Made Simple
-            </h2>
-            <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
-              Everything you need to manage your health in one modern platform.
-            </p>
-          </div>
-        </FadeInUp>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature, i) => (
-            <FadeInUp key={feature.title} delay={i * 0.1}>
-              <div className="group p-6 rounded-2xl bg-slate-50 hover:bg-white border border-transparent hover:border-teal-100 hover:shadow-xl transition-all duration-300">
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
-                  <feature.icon className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-lg font-semibold text-slate-900 mb-2">{feature.title}</h3>
-                <p className="text-slate-600 text-sm leading-relaxed">{feature.description}</p>
-              </div>
-            </FadeInUp>
           ))}
         </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─── Tech Stack Section ─── */
-function TechStackSection() {
-  const techStack = [
-    {
-      category: 'Backend',
-      icon: Server,
-      items: [
-        { name: '.NET 10', desc: 'Latest framework powering our API' },
-        { name: 'Entity Framework Core 10', desc: 'Type-safe database operations' },
-        { name: 'SQL Server', desc: 'Reliable relational database' },
-        { name: 'JWT Auth', desc: 'Secure token-based authentication' },
-      ],
-    },
-    {
-      category: 'Frontend',
-      icon: Globe,
-      items: [
-        { name: 'React 19', desc: 'Modern UI library' },
-        { name: 'TypeScript', desc: 'Type-safe development' },
-        { name: 'Tailwind CSS', desc: 'Utility-first styling' },
-        { name: 'Framer Motion', desc: 'Smooth animations' },
-      ],
-    },
-    {
-      category: 'DevOps & Tools',
-      icon: Layers,
-      items: [
-        { name: 'Docker', desc: 'Containerized deployment' },
-        { name: 'Serilog + Seq', desc: 'Structured logging' },
-        { name: 'Scalar API', desc: 'Interactive API docs' },
-        { name: 'GitHub Actions', desc: 'CI/CD pipeline' },
-      ],
-    },
-    {
-      category: 'Architecture',
-      icon: Code2,
-      items: [
-        { name: 'Clean Architecture', desc: 'Separation of concerns' },
-        { name: 'Repository Pattern', desc: 'Abstracted data access' },
-        { name: 'Unit of Work', desc: 'Transaction management' },
-        { name: 'Result Pattern', desc: 'Explicit error handling' },
-      ],
-    },
-  ];
-
-  return (
-    <section className="py-24 bg-gradient-to-b from-slate-50 to-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <FadeInUp>
-          <div className="text-center mb-16">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 text-emerald-700 text-sm font-medium mb-4">
-              <Database className="w-4 h-4" />
-              Built with Modern Tech
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">
-              Our Technology Stack
-            </h2>
-            <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
-              ClinicFlow is built with cutting-edge technologies for performance, security, and scalability.
-            </p>
-          </div>
-        </FadeInUp>
-
-        <div className="grid sm:grid-cols-2 gap-8">
-          {techStack.map((stack, i) => (
-            <FadeInUp key={stack.category} delay={i * 0.15}>
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-lg transition-shadow">
-                <div className="flex items-center gap-3 mb-5">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-400 to-emerald-500 flex items-center justify-center">
-                    <stack.icon className="w-5 h-5 text-white" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-slate-900">{stack.category}</h3>
-                </div>
-                <div className="space-y-3">
-                  {stack.items.map((item) => (
-                    <div key={item.name} className="flex items-start gap-3 p-3 rounded-lg bg-slate-50 hover:bg-teal-50/50 transition-colors">
-                      <Zap className="w-4 h-4 text-teal-500 mt-0.5 flex-shrink-0" />
-                      <div>
-                        <p className="text-sm font-medium text-slate-900">{item.name}</p>
-                        <p className="text-xs text-slate-500">{item.desc}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </FadeInUp>
-          ))}
+        <div className="mt-5 flex h-10 items-center justify-center rounded-md bg-primary text-sm font-medium text-primary-foreground">
+          Book Tue 13 · 10:00 AM
         </div>
       </div>
-    </section>
-  );
-}
-
-/* ─── How It Works Section ─── */
-function HowItWorksSection() {
-  const steps = [
-    {
-      step: '01',
-      icon: Users,
-      title: 'Create Account',
-      description: 'Sign up as a patient in seconds with our streamlined registration process.',
-    },
-    {
-      step: '02',
-      icon: Stethoscope,
-      title: 'Find a Doctor',
-      description: 'Browse verified doctors by specialty, location, or rating.',
-    },
-    {
-      step: '03',
-      icon: CalendarCheck,
-      title: 'Book Appointment',
-      description: 'Choose an available time slot that works for your schedule.',
-    },
-    {
-      step: '04',
-      icon: HeartPulse,
-      title: 'Get Care',
-      description: 'Visit your doctor and receive the care you need.',
-    },
-  ];
-
-  return (
-    <section className="py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <FadeInUp>
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">How It Works</h2>
-            <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
-              Getting started with ClinicFlow is easy. Follow these simple steps.
-            </p>
-          </div>
-        </FadeInUp>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {steps.map((s, i) => (
-            <FadeInUp key={s.step} delay={i * 0.15}>
-              <div className="relative text-center">
-                <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-teal-400 to-emerald-500 flex items-center justify-center mb-4 shadow-lg">
-                  <s.icon className="w-7 h-7 text-white" />
-                </div>
-                <span className="text-3xl font-bold text-teal-100 absolute -top-2 left-1/2 -translate-x-1/2 -z-10">
-                  {s.step}
-                </span>
-                <h3 className="text-lg font-semibold text-slate-900 mb-2">{s.title}</h3>
-                <p className="text-sm text-slate-600">{s.description}</p>
-              </div>
-            </FadeInUp>
-          ))}
+      <div className="absolute -bottom-16 -left-6 hidden items-center gap-3 rounded-xl border bg-card px-4 py-3 shadow-elevated sm:flex">
+        <span className="inline-flex size-8 items-center justify-center rounded-full bg-success/10 text-success">
+          <CheckCircle2 className="size-4" />
+        </span>
+        <div>
+          <p className="text-sm font-semibold">Appointment confirmed</p>
+          <p className="text-xs text-muted-foreground">Reminder set for Monday</p>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 
-/* ─── CTA Section ─── */
-function CTASection() {
+function Hero() {
   return (
-    <section className="py-24 bg-gradient-to-br from-teal-500 to-emerald-600">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <FadeInUp>
-          <Building2 className="w-16 h-16 text-white/30 mx-auto mb-6" />
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-            Ready to Transform Your Healthcare Experience?
-          </h2>
-          <p className="text-lg text-teal-50 mb-8 max-w-2xl mx-auto">
-            Join thousands of patients who trust ClinicFlow for their healthcare needs.
-            Sign up today and book your first appointment.
+    <section className="relative overflow-hidden border-b">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 [background:radial-gradient(50%_60%_at_85%_20%,hsl(var(--secondary)),transparent_70%)]"
+      />
+      <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-2 lg:gap-12 lg:px-8 lg:py-28">
+        <Reveal>
+          <p className="inline-flex items-center gap-2 rounded-full border bg-card px-3 py-1 text-xs font-medium text-muted-foreground shadow-xs">
+            <span className="size-1.5 rounded-full bg-success" aria-hidden="true" />
+            Clinic appointments, simplified
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/register/patient">
-              <Button
-                size="lg"
-                className="bg-white text-teal-700 hover:bg-teal-50 shadow-lg px-8"
-              >
-                Create Account
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Link>
-            <Link to="/doctors">
-              <Button
-                variant="outline"
-                size="lg"
-                className="border-2 border-white text-white hover:bg-white/10 px-8"
-              >
-                Browse Doctors
-              </Button>
-            </Link>
+          <h1 className="mt-6 font-display text-[2.5rem] font-semibold leading-[1.08] sm:text-5xl lg:text-[3.5rem]">
+            Care that fits <span className="text-primary">your schedule.</span>
+          </h1>
+          <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
+            Find the right specialist, see their real availability, and book a confirmed appointment in a few clicks — no phone calls, no waiting on hold.
+          </p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Button size="lg" asChild>
+              <Link to="/doctors">
+                <Search aria-hidden="true" /> Find a doctor
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" asChild>
+              <Link to="/register/patient">Create a free account</Link>
+            </Button>
           </div>
-        </FadeInUp>
+          <ul className="mt-8 flex flex-col gap-2.5 text-sm text-muted-foreground sm:flex-row sm:flex-wrap sm:gap-x-6">
+            {heroPoints.map((p) => (
+              <li key={p} className="inline-flex items-center gap-2">
+                <CheckCircle2 className="size-4 text-primary" aria-hidden="true" />
+                {p}
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+        <Reveal delay={0.15}>
+          <BookingPreview />
+        </Reveal>
       </div>
+    </section>
+  );
+}
+
+/* ─── How it works ─── */
+const steps = [
+  { icon: Search, title: 'Find a specialist', text: 'Search by name, city or specialty and compare ratings, experience and fees.' },
+  { icon: CalendarClock, title: 'Pick a time', text: 'Choose an open slot from the next two weeks. Your booking is confirmed straight away.' },
+  { icon: BellRing, title: 'Get reminded', text: 'We email and notify you before the visit, and you can cancel up to 2 hours ahead.' },
+];
+
+function HowItWorks() {
+  return (
+    <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
+      <Reveal className="max-w-2xl">
+        <p className="text-sm font-medium text-primary">How it works</p>
+        <h2 className="mt-2 font-display text-3xl font-semibold leading-tight sm:text-4xl">From search to confirmed visit in three steps</h2>
+      </Reveal>
+      <ol className="mt-12 grid gap-6 md:grid-cols-3">
+        {steps.map((s, i) => (
+          <Reveal key={s.title} delay={i * 0.08}>
+            <li className="h-full rounded-xl border bg-card p-6 shadow-card">
+              <div className="flex items-center gap-3">
+                <span className="inline-flex size-10 items-center justify-center rounded-lg bg-secondary text-primary">
+                  <s.icon className="size-5" aria-hidden="true" />
+                </span>
+                <span className="text-sm font-medium text-muted-foreground">Step {i + 1}</span>
+              </div>
+              <h3 className="mt-5 text-lg font-semibold">{s.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.text}</p>
+            </li>
+          </Reveal>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
+/* ─── Roles ─── */
+const roles = [
+  {
+    icon: UserRound,
+    title: 'For patients',
+    points: ['Search doctors by specialty, city and name', 'Book open slots and get instant confirmation', 'Cancel up to 2 hours before your visit', 'Review your doctor after a completed visit'],
+    cta: { label: 'Find a doctor', to: '/doctors' },
+  },
+  {
+    icon: Stethoscope,
+    title: 'For doctors',
+    points: ['Publish weekly hours; slots are created for you', 'See today’s visits at a glance', 'Complete visits and keep clinical notes', 'Build your reputation with verified reviews'],
+    cta: { label: 'Join as a doctor', to: '/register/doctor' },
+  },
+  {
+    icon: LayoutDashboard,
+    title: 'For clinic admins',
+    points: ['Approve new doctors before they go live', 'Manage the specialty catalogue', 'Track appointments and completion rates', 'Suspend accounts when needed'],
+    cta: null,
+  },
+];
+
+function Roles() {
+  return (
+    <section className="border-y bg-card">
+      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
+        <Reveal className="max-w-2xl">
+          <p className="text-sm font-medium text-primary">One platform, three roles</p>
+          <h2 className="mt-2 font-display text-3xl font-semibold leading-tight sm:text-4xl">Built for everyone in the visit</h2>
+        </Reveal>
+        <div className="mt-12 grid gap-6 lg:grid-cols-3">
+          {roles.map((r, i) => (
+            <Reveal key={r.title} delay={i * 0.08}>
+              <div className="flex h-full flex-col rounded-xl border bg-background p-6">
+                <span className="inline-flex size-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                  <r.icon className="size-5" aria-hidden="true" />
+                </span>
+                <h3 className="mt-5 text-lg font-semibold">{r.title}</h3>
+                <ul className="mt-4 flex-1 space-y-2.5">
+                  {r.points.map((p) => (
+                    <li key={p} className="flex gap-2.5 text-sm text-muted-foreground">
+                      <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+                {r.cta && (
+                  <Link to={r.cta.to} className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline">
+                    {r.cta.label} <ArrowRight className="size-4" aria-hidden="true" />
+                  </Link>
+                )}
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Trust ─── */
+const trust = [
+  { icon: ShieldCheck, title: 'Approved doctors', text: 'Every doctor is approved by the clinic team before appearing in search.' },
+  { icon: CalendarCheck, title: 'No double bookings', text: 'Each slot can only be booked once — what you see is genuinely available.' },
+  { icon: ClipboardList, title: 'Your health details', text: 'Keep blood type, allergies and an emergency contact on your profile.' },
+  { icon: Users, title: 'Honest reviews', text: 'Only patients with a completed visit can rate their doctor.' },
+];
+
+function Trust() {
+  return (
+    <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
+      <div className="grid gap-12 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-16">
+        <Reveal>
+          <p className="text-sm font-medium text-primary">Why ClinicFlow</p>
+          <h2 className="mt-2 font-display text-3xl font-semibold leading-tight sm:text-4xl">Thoughtful by design, reliable by default</h2>
+          <p className="mt-4 text-muted-foreground">
+            The details that make booking care less stressful — handled for you, every time.
+          </p>
+        </Reveal>
+        <div className="grid gap-x-8 gap-y-10 sm:grid-cols-2">
+          {trust.map((t, i) => (
+            <Reveal key={t.title} delay={i * 0.06}>
+              <t.icon className="size-6 text-primary" aria-hidden="true" />
+              <h3 className="mt-3 font-semibold">{t.title}</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{t.text}</p>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Tech (portfolio context, intentionally understated) ─── */
+const tech = ['.NET 10 Web API', 'EF Core + SQL Server', 'JWT with rotating refresh tokens', 'React 19 + TypeScript', 'Tailwind CSS', 'Docker'];
+
+function UnderTheHood() {
+  return (
+    <section aria-labelledby="tech-heading" className="border-t">
+      <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-10 sm:px-6 lg:flex-row lg:items-center lg:gap-10 lg:px-8">
+        <h2 id="tech-heading" className="shrink-0 text-sm font-semibold text-muted-foreground">Under the hood</h2>
+        <ul className="flex flex-wrap gap-2">
+          {tech.map((t) => (
+            <li key={t} className="rounded-md border bg-card px-2.5 py-1 text-xs font-medium text-muted-foreground">
+              {t}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Call to action ─── */
+function CallToAction() {
+  return (
+    <section className="px-4 pb-20 sm:px-6 lg:px-8">
+      <Reveal className="relative mx-auto max-w-7xl overflow-hidden rounded-2xl bg-primary px-6 py-14 text-center text-primary-foreground sm:px-12 sm:py-16">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 [background:radial-gradient(45%_70%_at_15%_0%,hsl(168_60%_40%/0.5),transparent_70%),radial-gradient(40%_60%_at_100%_100%,hsl(40_80%_70%/0.14),transparent_70%)]"
+        />
+        <div className="relative">
+          <h2 className="font-display text-3xl font-semibold leading-tight sm:text-4xl">Your next appointment is a few clicks away</h2>
+          <p className="mx-auto mt-4 max-w-xl text-primary-foreground/80">
+            Create a free account to book, manage and review your visits — or join as a doctor to start accepting patients.
+          </p>
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+            <Button size="lg" asChild className="bg-white text-primary hover:bg-white/90">
+              <Link to="/doctors">
+                Find a doctor <ArrowRight aria-hidden="true" />
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" asChild className="border-white/30 bg-transparent text-white hover:bg-white/10 hover:border-white/50">
+              <Link to="/register/doctor">
+                <Stethoscope aria-hidden="true" /> Join as a doctor
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </Reveal>
     </section>
   );
 }
 
 export function LandingPage() {
   return (
-    <div className="min-h-screen">
-      <HeroSection />
-      <FeaturesSection />
-      <HowItWorksSection />
-      <TechStackSection />
-      <CTASection />
-    </div>
+    <>
+      <Hero />
+      <HowItWorks />
+      <Roles />
+      <Trust />
+      <CallToAction />
+      <UnderTheHood />
+    </>
   );
 }

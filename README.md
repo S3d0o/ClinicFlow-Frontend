@@ -1,174 +1,126 @@
 # ClinicFlow — Frontend
 
-> A modern clinic management platform built with React, TypeScript, and Vite — connecting patients with doctors through a seamless booking experience.
+> A clinic-booking web app built with React, TypeScript and Vite. Patients find doctors and book appointments, doctors manage their schedules and visits, and admins run the platform.
+
+This repository is the **React frontend**. It talks to the [ClinicFlow .NET 10 backend](https://github.com/S3d0o/ClinicFlow-Backend) through a REST API described in [docs/API_CONTRACT.md](docs/API_CONTRACT.md).
 
 ---
 
-## Overview
+## Features
 
-ClinicFlow is a full-stack clinic management system. This repository contains the **React/TypeScript frontend**. It interfaces with a [.NET 10 REST API backend](#backend) to provide role-based dashboards for Patients, Doctors, and Admins.
+- **Patients:**
+  - search doctors by name, city and specialty, and sort by rating, fee or experience;
+  - book an available slot in the next 14 days;
+  - cancel up to 2 hours before an appointment;
+  - review completed visits;
+  - manage personal and medical information;
+  - read in-app notifications.
+- **Doctors:**
+  - publish weekly availability (one schedule per weekday; slots are generated automatically);
+  - see today's appointments;
+  - complete visits and add clinical notes;
+  - manage their professional profile.
+- **Admins:**
+  - platform dashboard with charts;
+  - approve or reject newly registered doctors;
+  - manage medical specialties.
+- **Accounts:**
+  - email confirmation and password reset by email;
+  - sessions that stay signed in and renew their tokens silently.
 
-### Key Features
+The full feature guide, with every page and its rules, is in [docs/FEATURES.md](docs/FEATURES.md).
 
-- **Patient** — Browse and search doctors by name, city, and specialty; book appointments; manage and cancel bookings; submit reviews; receive email and real-time notifications
-- **Doctor** — Manage weekly schedules and appointment slots; view and complete appointments; add clinical notes; track dashboard metrics
-- **Admin** — Platform-wide analytics dashboard with charts; manage specialties; approve/reject pending doctor registrations
-
----
-
-## Tech Stack
+## Tech stack
 
 | Layer | Technology |
 |---|---|
-| Framework | React 18 + TypeScript |
-| Build Tool | Vite |
-| Routing | React Router DOM v6 |
-| Styling | Tailwind CSS v3 |
-| UI Components | shadcn/ui (Radix UI primitives) |
-| Animations | Framer Motion |
-| Charts | Recharts |
-| HTTP Client | Axios |
-| Email (backend) | MailKit |
-| Auth | JWT + Refresh Tokens |
-| Notifications | SignalR (real-time) |
+| Framework | React 19 + TypeScript 5.9 |
+| Build tool | Vite 7 |
+| Routing | React Router 7 (`HashRouter`) |
+| Styling | Tailwind CSS 3 |
+| UI components | shadcn/ui (Radix UI primitives), lucide-react icons |
+| HTTP | axios (JWT + refresh-token interceptors) |
+| Animation / charts / toasts | framer-motion, recharts, sonner |
+| Deployment | Docker (Node build → nginx) |
 
----
+## Getting started
 
-## Screenshots
-
-> _Add screenshots here after deployment_
-
----
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+
-- npm 9+
-- The [ClinicFlow backend API](#backend) running locally on `https://localhost:7129`
-
-### Installation
+**Prerequisites:**
+- Node.js 20+ and npm;
+- the [ClinicFlow backend](https://github.com/S3d0o/ClinicFlow-Backend) running locally (by default on `http://localhost:5143`).
 
 ```bash
-# Clone the repository
-git clone https://github.com/S3d0o/clinicflow-frontend.git
-cd clinicflow-frontend/app
-
-# Install dependencies
+git clone https://github.com/S3d0o/ClinicFlow-Frontend.git
+cd ClinicFlow-Frontend
 npm install
+```
 
-# Start the development server
+The dev server has no proxy, so tell it where the backend is. Create a file named `.env.local` in the project root containing:
+
+```
+VITE_API_URL=http://localhost:5143
+```
+
+Then start the app:
+
+```bash
 npm run dev
 ```
 
-The app will be available at `http://localhost:3000`.
+Open http://localhost:3000. Keep port 3000, because the backend only allows that origin by default (CORS).
 
-### Environment
+In Development the backend seeds demo accounts (admin, doctors, patients). Their logins are listed in the backend repo's `docs/SETUP_AND_DEPLOYMENT.md`.
 
-The API base URL is configured in `src/api/axios.ts`. Update it if your backend runs on a different port:
+To run the whole stack (SQL Server + backend + frontend) with Docker, see [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md#full-stack-with-docker).
 
-```ts
-const BASE_URL = 'https://localhost:YOUR_PORT/api';
-```
+## Scripts
 
----
+| Command | Description |
+|---|---|
+| `npm run dev` | Dev server on http://localhost:3000 |
+| `npm run build` | Type check (`tsc -b`) and production build to `dist/` |
+| `npm run lint` | ESLint |
+| `npm run preview` | Serve the production build |
 
-## Project Structure
+## Documentation
 
-```
-app/
-├── public/
-└── src/
-    ├── api/              # Axios instance + all API service modules
-    │   ├── axios.ts      # Base client with JWT interceptors & token refresh
-    │   ├── auth.ts
-    │   ├── doctors.ts
-    │   ├── appointments.ts
-    │   ├── notifications.ts
-    │   └── admin.ts
-    ├── components/
-    │   ├── ui/           # shadcn/ui component library
-    │   └── Navbar.tsx    # Animated navbar with notification bell
-    ├── context/
-    │   └── AuthContext.tsx  # JWT auth state, role-based access
-    ├── pages/
-    │   ├── LandingPage.tsx
-    │   ├── DoctorsPage.tsx
-    │   ├── DoctorDetailPage.tsx
-    │   ├── PatientAppointmentsPage.tsx
-    │   ├── DoctorDashboardPage.tsx
-    │   ├── DoctorSchedulesPage.tsx
-    │   ├── AdminDashboardPage.tsx
-    │   ├── Login.tsx
-    │   ├── Register.tsx
-    │   ├── ConfirmEmailPage.tsx
-    │   └── ResetPasswordPage.tsx
-    ├── types/
-    │   └── index.ts      # All shared TypeScript interfaces
-    ├── App.tsx           # Route definitions
-    ├── main.tsx          # App entry point
-    └── index.css         # Tailwind base + CSS variables (teal theme)
-```
+| Document | Contents |
+|---|---|
+| [docs/FEATURES.md](docs/FEATURES.md) | What each role can do, page by page, with the business rules |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Routing, API layer, authentication and token refresh, error handling, UI system, build |
+| [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) | Setup, configuration, running with the backend or Docker, how-to recipes, conventions, troubleshooting |
+| [docs/BACKEND_OVERVIEW.md](docs/BACKEND_OVERVIEW.md) | The .NET backend in brief, the rules that shape the UI, and how the two apps connect |
+| [docs/API_CONTRACT.md](docs/API_CONTRACT.md) | The shared backend ↔ frontend API contract (endpoints, payloads, errors, auth) |
+| [docs/KNOWN_ISSUES.md](docs/KNOWN_ISSUES.md) | Open issues, recent fixes and the improvement roadmap |
 
----
-
-## Authentication Flow
-
-- Registration sends a **confirmation email** via MailKit — the user must verify before logging in
-- Login returns an **access token** (short-lived JWT) and a **refresh token** (stored in `localStorage`)
-- Axios interceptors automatically refresh the access token on 401 responses
-- Role-based routing enforces access to Patient, Doctor, and Admin pages
-
----
-
-## Role-Based Access
-
-| Route | Patient | Doctor | Admin |
-|---|:---:|:---:|:---:|
-| `/` | ✅ | ✅ | ✅ |
-| `/doctors` | ✅ | ✅ | ✅ |
-| `/doctors/:id` | ✅ | ✅ | ✅ |
-| `/patient/appointments` | ✅ | ❌ | ❌ |
-| `/doctor/dashboard` | ❌ | ✅ | ❌ |
-| `/doctor/schedules` | ❌ | ✅ | ❌ |
-| `/admin/dashboard` | ❌ | ❌ | ✅ |
-
----
-
-## Appointment Flow
+## Project structure
 
 ```
-Patient books slot → Status: Confirmed (auto, doctor schedule is trusted)
-    │
-    ├── Patient cancels (up to 2h before) → Status: Cancelled
-    ├── Doctor cancels → Status: Cancelled
-    └── Doctor marks complete → Status: Completed
-                                      │
-                                      └── Patient can leave a review
+ClinicFlow-Frontend/
+├── docs/                 Documentation (see above)
+├── src/
+│   ├── api/              axios instance + one module per API resource
+│   ├── components/       Navbar, Footer
+│   │   └── ui/           shadcn/ui components
+│   ├── context/          AuthContext (session, login, logout)
+│   ├── lib/              Shared helpers (class names, API errors, appointments)
+│   ├── pages/            One component per route
+│   ├── types/            API request/response types
+│   ├── App.tsx           Routes and role-based route protection
+│   └── main.tsx          Entry point
+├── DockerFile            Production image (Node build → nginx)
+└── nginx.conf            Serves the app and proxies /api to the backend
 ```
-
----
-
-## Notifications
-
-- **In-app** — Bell icon in the navbar shows unread count with a red badge; click any notification to mark it as read; "Mark all read" clears all
-- **Email** — Appointment confirmation and reminder emails sent via MailKit with a branded HTML template
-- **Real-time** — SignalR connection pushes new notifications live without page refresh
-
----
 
 ## Backend
 
-The backend is a **.NET 10 clean-architecture REST API** with:
+The backend is a **.NET 10 Clean Architecture REST API**:
+- ASP.NET Core, Entity Framework Core and SQL Server;
+- ASP.NET Core Identity with JWT and rotating refresh tokens;
+- MailKit for email;
+- an hourly reminder job.
 
-- ASP.NET Core Web API
-- Entity Framework Core + SQL Server
-- ASP.NET Core Identity (JWT + Refresh Tokens)
-- MailKit (transactional email)
-- background jobs — appointment reminders
-
-> Backend repository: _add link here_
+Repository: https://github.com/S3d0o/ClinicFlow-Backend. For a summary aimed at frontend developers, see [docs/BACKEND_OVERVIEW.md](docs/BACKEND_OVERVIEW.md).
 
 ---
 

@@ -1,47 +1,59 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { format } from 'date-fns';
 import { profileApi, doctorsApi } from '@/api';
-import type { UserProfile, UpdateDoctorProfileRequest, Gender } from '@/types';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { UserProfile, Gender } from '@/types';
 import { useAuth } from '@/context/AuthContext';
+import { getApiErrorMessage } from '@/lib/api-error';
+import { parseUtc } from '@/lib/format';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { User, Save, Stethoscope } from 'lucide-react';
+import { Spinner } from '@/components/ui/spinner';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Page, PageHeader } from '@/components/layout/Page';
+import { ErrorState, LoadingState } from '@/components/states';
+import { Field } from '@/components/form/Field';
+import { PersonalInfoFields, type PersonalInfoForm } from '@/components/profile/PersonalInfoFields';
+import { ProfileSummary } from '@/components/profile/ProfileSummary';
+import { Info, Stethoscope, User } from 'lucide-react';
 import { toast } from 'sonner';
+
+// PUT /api/doctors/profile requires consultationFee: > 0 and ≤ 10 000 (API contract §5.3 #13)
+const MAX_CONSULTATION_FEE = 10000;
+const BIO_MAX_LENGTH = 500;
 
 export function DoctorProfilePage() {
   const { refreshUser } = useAuth();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
   const [saving, setSaving] = useState(false);
   const [savingDoctor, setSavingDoctor] = useState(false);
 
-  const [baseForm, setBaseForm] = useState({
+  const [baseForm, setBaseForm] = useState<PersonalInfoForm>({
     firstName: '',
     lastName: '',
     phoneNumber: '',
     profilePictureUrl: '',
-    gender: '' as Gender | '',
+    gender: '',
     dateOfBirth: '',
   });
 
-  const [doctorForm, setDoctorForm] = useState<UpdateDoctorProfileRequest>(({
+  // The API has no endpoint that returns the doctor's own professional details, so this form
+  // starts blank. Blank text fields are omitted from the request and keep their current values.
+  const [doctorForm, setDoctorForm] = useState({
     bio: '',
-    consultationFee: 0,
+    consultationFee: '',
     clinicAddress: '',
     clinicCity: '',
-  }));
+  });
+
+  const feeValue = Number(doctorForm.consultationFee);
+  const isFeeValid =
+    doctorForm.consultationFee.trim() !== '' && feeValue > 0 && feeValue <= MAX_CONSULTATION_FEE;
+  const showFeeError = doctorForm.consultationFee !== '' && !isFeeValid;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,34 +63,21 @@ export function DoctorProfilePage() {
         setBaseForm({
           firstName: profileRes.data.firstName,
           lastName: profileRes.data.lastName,
-          phoneNumber: profileRes.data.phoneNumber,
+          phoneNumber: profileRes.data.phoneNumber ?? '',
           profilePictureUrl: profileRes.data.profilePictureUrl || '',
           gender: profileRes.data.gender,
           dateOfBirth: profileRes.data.dateOfBirth || '',
         });
-      } catch {
-        toast.error('Failed to load profile');
+        setLoadError(null);
+      } catch (err) {
+        // Don't show an editable empty form: saving it could blank out real data
+        setLoadError(getApiErrorMessage(err, 'Failed to load your profile'));
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchDoctor = async () => {
-      // We need to get the doctor ID from somewhere. For now, let's get it from the user info.
-      // Since we don't have a direct endpoint to get the doctor's own profile by ID,
-      // we'll use the updateDoctorProfile endpoint which doesn't need the ID.
-      // We'll just set some defaults for now.
-      setDoctorForm({
-        bio: '',
-        consultationFee: 0,
-        clinicAddress: '',
-        clinicCity: '',
-      });
-    };
-    fetchDoctor();
-  }, []);
+  }, [reloadKey]);
 
   const handleSaveBase = async () => {
     setSaving(true);
@@ -93,124 +92,138 @@ export function DoctorProfilePage() {
       });
       toast.success('Profile updated');
       refreshUser();
-    } catch {
-      toast.error('Failed to update profile');
+    } catch (err) {
+      toast.error(getApiErrorMessage(err, 'Failed to update profile'));
     } finally {
       setSaving(false);
     }
   };
 
   const handleSaveDoctor = async () => {
+    if (!isFeeValid) return;
     setSavingDoctor(true);
     try {
       await doctorsApi.updateProfile({
-        bio: doctorForm.bio || undefined,
-        consultationFee: doctorForm.consultationFee || undefined,
-        clinicAddress: doctorForm.clinicAddress || undefined,
-        clinicCity: doctorForm.clinicCity || undefined,
+        bio: doctorForm.bio.trim() || undefined,
+        consultationFee: feeValue,
+        clinicAddress: doctorForm.clinicAddress.trim() || undefined,
+        clinicCity: doctorForm.clinicCity.trim() || undefined,
       });
-      toast.success('Doctor profile updated');
-    } catch (err: any) {
-      toast.error(err.response?.data?.title || 'Failed to update');
+      toast.success('Practice details updated');
+    } catch (err) {
+      toast.error(getApiErrorMessage(err, 'Failed to update'));
     } finally {
       setSavingDoctor(false);
     }
   };
 
   if (loading) {
+    return <LoadingState label="Loading your profile…" className="min-h-[60vh]" />;
+  }
+
+  if (loadError) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-teal-50/40 to-white">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600" />
-      </div>
+      <Page width="narrow">
+        <ErrorState
+          title="Couldn’t load your profile"
+          message={loadError}
+          onRetry={() => {
+            setLoading(true);
+            setReloadKey((k) => k + 1);
+          }}
+        />
+      </Page>
     );
   }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-50/40 to-white py-8 sm:py-12">
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold text-slate-900">My Profile</h1>
-            <p className="text-sm text-slate-500">Manage your doctor profile information</p>
-          </div>
+  const fullName = profile ? `Dr. ${profile.firstName} ${profile.lastName}` : 'Your profile';
 
-          <Card className="mb-6 border-slate-100 shadow-sm">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-5">
-                <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-teal-500/20">
-                  {profile?.firstName?.charAt(0)}{profile?.lastName?.charAt(0)}
-                </div>
-                <div>
-                  <h2 className="text-xl font-bold text-slate-900">Dr. {profile?.firstName} {profile?.lastName}</h2>
-                  <p className="text-sm text-teal-600 font-medium">Doctor</p>
-                  <p className="text-sm text-slate-400">{profile?.email}</p>
-                </div>
+  return (
+    <Page width="narrow">
+      <PageHeader title="Profile" description="Manage your personal details and how your practice appears to patients." />
+
+      <ProfileSummary
+        name={fullName}
+        email={profile?.email}
+        role="Doctor"
+        memberSince={profile?.createdAt ? format(parseUtc(profile.createdAt), 'MMMM yyyy') : undefined}
+      />
+
+      <Tabs defaultValue="personal" className="gap-4">
+        <TabsList className="w-full sm:w-auto">
+          <TabsTrigger value="personal"><User aria-hidden="true" /> Personal</TabsTrigger>
+          <TabsTrigger value="professional"><Stethoscope aria-hidden="true" /> Practice</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="personal">
+          <Card>
+            <CardHeader>
+              <CardTitle>Personal information</CardTitle>
+              <CardDescription>Your name and contact details.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <PersonalInfoFields value={baseForm} onChange={setBaseForm} />
+            </CardContent>
+            <CardFooter className="justify-end border-t">
+              <Button onClick={handleSaveBase} disabled={saving}>
+                {saving && <Spinner aria-hidden="true" />}
+                {saving ? 'Saving…' : 'Save changes'}
+              </Button>
+            </CardFooter>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="professional">
+          <Card>
+            <CardHeader>
+              <CardTitle>Practice details</CardTitle>
+              <CardDescription>Shown to patients on your public profile.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-start gap-3 rounded-lg border border-info/20 bg-info/[0.06] px-4 py-3 text-sm">
+                <Info className="mt-0.5 size-4 shrink-0 text-info" aria-hidden="true" />
+                <p className="text-foreground/85">
+                  Fields you leave blank keep their current values. The consultation fee is required each time you save.
+                </p>
+              </div>
+              <Field
+                id="doctor-fee"
+                label="Consultation fee (EGP)"
+                required
+                hint={`More than 0 and at most ${MAX_CONSULTATION_FEE.toLocaleString()} EGP.`}
+                error={showFeeError ? `Enter a fee between 1 and ${MAX_CONSULTATION_FEE.toLocaleString()} EGP.` : null}
+              >
+                <Input
+                  type="number"
+                  inputMode="decimal"
+                  value={doctorForm.consultationFee}
+                  onChange={(e) => setDoctorForm({ ...doctorForm, consultationFee: e.target.value })}
+                  min={1}
+                  max={MAX_CONSULTATION_FEE}
+                  className="sm:max-w-[12rem]"
+                />
+              </Field>
+              <Field id="doctor-bio" label="Bio" hint={`${doctorForm.bio.length}/${BIO_MAX_LENGTH} — your experience, focus areas and approach to care.`}>
+                <Textarea rows={4} value={doctorForm.bio} onChange={(e) => setDoctorForm({ ...doctorForm, bio: e.target.value })} maxLength={BIO_MAX_LENGTH} />
+              </Field>
+              <div className="grid gap-4 sm:grid-cols-[2fr_1fr]">
+                <Field id="doctor-address" label="Clinic address">
+                  <Input autoComplete="street-address" placeholder="Street and building" value={doctorForm.clinicAddress} onChange={(e) => setDoctorForm({ ...doctorForm, clinicAddress: e.target.value })} maxLength={300} />
+                </Field>
+                <Field id="doctor-city" label="City">
+                  <Input autoComplete="address-level2" value={doctorForm.clinicCity} onChange={(e) => setDoctorForm({ ...doctorForm, clinicCity: e.target.value })} maxLength={100} />
+                </Field>
               </div>
             </CardContent>
+            <CardFooter className="justify-end border-t">
+              <Button onClick={handleSaveDoctor} disabled={savingDoctor || !isFeeValid}>
+                {savingDoctor && <Spinner aria-hidden="true" />}
+                {savingDoctor ? 'Saving…' : 'Save practice details'}
+              </Button>
+            </CardFooter>
           </Card>
-
-          <Tabs defaultValue="personal" className="w-full">
-            <TabsList className="w-full sm:w-auto mb-4">
-              <TabsTrigger value="personal" className="flex items-center gap-1.5"><User className="h-3.5 w-3.5" /> Personal</TabsTrigger>
-              <TabsTrigger value="professional" className="flex items-center gap-1.5"><Stethoscope className="h-3.5 w-3.5" /> Professional</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="personal">
-              <Card className="border-slate-100 shadow-sm">
-                <CardHeader><CardTitle className="text-lg">Personal Information</CardTitle><CardDescription>Update your basic profile details</CardDescription></CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-2"><Label>First Name</Label><Input value={baseForm.firstName} onChange={(e) => setBaseForm({ ...baseForm, firstName: e.target.value })} /></div>
-                    <div className="space-y-2"><Label>Last Name</Label><Input value={baseForm.lastName} onChange={(e) => setBaseForm({ ...baseForm, lastName: e.target.value })} /></div>
-                  </div>
-                  <div className="space-y-2"><Label>Phone Number</Label><Input value={baseForm.phoneNumber} onChange={(e) => setBaseForm({ ...baseForm, phoneNumber: e.target.value })} /></div>
-                  <div className="space-y-2"><Label>Profile Picture URL</Label><Input value={baseForm.profilePictureUrl} onChange={(e) => setBaseForm({ ...baseForm, profilePictureUrl: e.target.value })} placeholder="https://..." /></div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-2">
-                      <Label>Gender</Label>
-                      <Select value={baseForm.gender} onValueChange={(v) => setBaseForm({ ...baseForm, gender: v as Gender })}>
-                        <SelectTrigger><SelectValue /></SelectTrigger>
-                        <SelectContent><SelectItem value="Male">Male</SelectItem><SelectItem value="Female">Female</SelectItem></SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2"><Label>Date of Birth</Label><Input type="date" value={baseForm.dateOfBirth} onChange={(e) => setBaseForm({ ...baseForm, dateOfBirth: e.target.value })} /></div>
-                  </div>
-                  <Button onClick={handleSaveBase} disabled={saving} className="bg-teal-600 hover:bg-teal-700">
-                    <Save className="h-4 w-4 mr-2" /> {saving ? 'Saving...' : 'Save Changes'}
-                  </Button>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="professional">
-              <Card className="border-slate-100 shadow-sm">
-                <CardHeader><CardTitle className="text-lg">Professional Information</CardTitle><CardDescription>Update your practice details</CardDescription></CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label>Bio</Label>
-                    <Textarea value={doctorForm.bio || ''} onChange={(e) => setDoctorForm({ ...doctorForm, bio: e.target.value })} placeholder="Tell patients about your experience and expertise..." maxLength={500} />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Consultation Fee (EGP)</Label>
-                    <Input type="number" value={doctorForm.consultationFee || ''} onChange={(e) => setDoctorForm({ ...doctorForm, consultationFee: Number(e.target.value) })} min={1} max={10000} />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Clinic Address</Label>
-                    <Input value={doctorForm.clinicAddress || ''} onChange={(e) => setDoctorForm({ ...doctorForm, clinicAddress: e.target.value })} placeholder="Street address..." maxLength={300} />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Clinic City</Label>
-                    <Input value={doctorForm.clinicCity || ''} onChange={(e) => setDoctorForm({ ...doctorForm, clinicCity: e.target.value })} placeholder="City..." maxLength={100} />
-                  </div>
-                  <Button onClick={handleSaveDoctor} disabled={savingDoctor} className="bg-teal-600 hover:bg-teal-700">
-                    <Save className="h-4 w-4 mr-2" /> {savingDoctor ? 'Saving...' : 'Save Changes'}
-                  </Button>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </motion.div>
-      </div>
-    </div>
+        </TabsContent>
+      </Tabs>
+    </Page>
   );
 }

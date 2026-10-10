@@ -1,35 +1,52 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { format } from 'date-fns';
 import { appointmentsApi, doctorsApi } from '@/api';
-import type { Appointment, Schedule } from '@/types';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import type { Appointment, DayOfWeek, Schedule } from '@/types';
+import { useAuth } from '@/context/AuthContext';
+import { getApiErrorMessage } from '@/lib/api-error';
+import { hasAppointmentStarted } from '@/lib/appointments';
+import { formatTime, formatTimeRange } from '@/lib/format';
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import {
-  Calendar,
-  Clock,
-  CheckCircle,
-  ChevronRight,
-} from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Page, PageHeader } from '@/components/layout/Page';
+import { LoadingState } from '@/components/states';
+import { StatCard } from '@/components/StatCard';
+import { StatusBadge } from '@/components/StatusBadge';
+import { CalendarDays, CalendarRange, CheckCircle2, ChevronRight, Clock } from 'lucide-react';
 import { toast } from 'sonner';
 
+const weekDays: DayOfWeek[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+const greeting = () => {
+  const h = new Date().getHours();
+  if (h < 12) return 'Good morning';
+  if (h < 18) return 'Good afternoon';
+  return 'Good evening';
+};
+
 export function DoctorDashboardPage() {
+  const { user } = useAuth();
   const [todayAppointments, setTodayAppointments] = useState<Appointment[]>([]);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [stats, setStats] = useState({ totalToday: 0, totalUpcoming: 0, completedToday: 0 });
   const [loading, setLoading] = useState(true);
+  const [completingId, setCompletingId] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [aptRes, schedRes] = await Promise.all([
-          appointmentsApi.getDoctorAppointments({ pageSize: 50 }),
+          // The API requires both paging parameters (contract §5.4 #20); 50 is the documented maximum
+          appointmentsApi.getDoctorAppointments({ pageNumber: 1, pageSize: 50 }),
           doctorsApi.getSchedules(),
         ]);
         const allApts = aptRes.data;
         const today = format(new Date(), 'yyyy-MM-dd');
-        const todays = allApts.filter((a) => a.appointmentDate === today);
+        const todays = allApts
+          .filter((a) => a.appointmentDate === today)
+          .sort((a, b) => a.startTime.localeCompare(b.startTime));
         setTodayAppointments(todays);
         setSchedules(schedRes.data);
         setStats({
@@ -47,148 +64,132 @@ export function DoctorDashboardPage() {
   }, []);
 
   const handleComplete = async (id: number) => {
+    setCompletingId(id);
     try {
       await appointmentsApi.complete(id);
       toast.success('Appointment marked as completed');
       setTodayAppointments((prev) => prev.map((a) => (a.id === id ? { ...a, status: 'Completed' as const } : a)));
       setStats((s) => ({ ...s, completedToday: s.completedToday + 1 }));
-    } catch (err: any) {
-      toast.error(err.response?.data?.title || 'Failed to complete');
+    } catch (err) {
+      toast.error(getApiErrorMessage(err, 'Failed to complete'));
+    } finally {
+      setCompletingId(null);
     }
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-teal-50/40 to-white">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600" />
-      </div>
-    );
+    return <LoadingState label="Loading your dashboard…" className="min-h-[60vh]" />;
   }
 
-  // const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const firstName = user?.firstName;
+  const scheduleByDay = new Map(schedules.map((s) => [s.dayOfWeek, s]));
+  const todayName = format(new Date(), 'EEEE');
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-50/40 to-white py-8 sm:py-12">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-          <div className="mb-8">
-            <h1 className="text-2xl font-bold text-slate-900">Doctor Dashboard</h1>
-            <p className="text-sm text-slate-500">Overview of your practice today</p>
-          </div>
+    <Page width="wide">
+      <PageHeader
+        eyebrow={format(new Date(), 'EEEE, MMMM d')}
+        title={firstName ? `${greeting()}, Dr. ${firstName}` : greeting()}
+        description="Here’s what your day looks like."
+        actions={
+          <>
+            <Button variant="outline" asChild>
+              <Link to="/doctor/schedules"><CalendarRange aria-hidden="true" /> Manage schedule</Link>
+            </Button>
+            <Button asChild>
+              <Link to="/doctor/appointments">All appointments</Link>
+            </Button>
+          </>
+        }
+      />
 
-          {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-            {[
-              { label: "Today's Appointments", value: stats.totalToday, icon: Calendar, color: 'from-teal-500 to-teal-600' },
-              { label: 'Upcoming', value: stats.totalUpcoming, icon: Clock, color: 'from-blue-500 to-blue-600' },
-              { label: 'Completed Today', value: stats.completedToday, icon: CheckCircle, color: 'from-emerald-500 to-emerald-600' },
-            ].map((stat) => (
-              <Card key={stat.label} className="border-slate-100 shadow-sm overflow-hidden">
-                <CardContent className="p-5">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-slate-500">{stat.label}</p>
-                      <p className="text-3xl font-bold text-slate-900 mt-1">{stat.value}</p>
-                    </div>
-                    <div className={`h-11 w-11 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-md`}>
-                      <stat.icon className="h-5 w-5 text-white" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Today's Appointments */}
-            <div className="lg:col-span-2">
-              <Card className="border-slate-100 shadow-sm">
-                <CardHeader className="flex flex-row items-center justify-between pb-3">
-                  <div>
-                    <CardTitle className="text-lg">Today's Schedule</CardTitle>
-                    <p className="text-xs text-slate-400">{format(new Date(), 'EEEE, MMMM d, yyyy')}</p>
-                  </div>
-                  <Button asChild variant="outline" size="sm">
-                    <Link to="/doctor/appointments">View All <ChevronRight className="h-3.5 w-3.5 ml-1" /></Link>
-                  </Button>
-                </CardHeader>
-                <CardContent>
-                  {todayAppointments.length === 0 ? (
-                    <div className="text-center py-8">
-                      <Calendar className="h-10 w-10 text-slate-300 mx-auto mb-3" />
-                      <p className="text-sm text-slate-500">No appointments scheduled for today</p>
-                    </div>
-                  ) : (
-                    <div className="space-y-2">
-                      {todayAppointments.map((apt, i) => (
-                        <motion.div key={apt.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}>
-                          <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-teal-50/50 transition-colors">
-                            <div className="flex items-center gap-3">
-                              <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white text-sm font-semibold">
-                                {apt.patientName.charAt(0)}
-                              </div>
-                              <div>
-                                <p className="text-sm font-medium text-slate-800">{apt.patientName}</p>
-                                <p className="text-xs text-slate-400">{apt.startTime} - {apt.endTime}</p>
-                                {apt.reasonForVisit && <p className="text-xs text-slate-400">{apt.reasonForVisit}</p>}
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                                apt.status === 'Confirmed' ? 'bg-teal-50 text-teal-700' :
-                                apt.status === 'Completed' ? 'bg-emerald-50 text-emerald-700' :
-                                apt.status === 'Cancelled' ? 'bg-red-50 text-red-700' :
-                                'bg-amber-50 text-amber-700'
-                              }`}>{apt.status}</span>
-                              {apt.status === 'Confirmed' && (
-                                <Button size="sm" onClick={() => handleComplete(apt.id)} className="bg-emerald-600 hover:bg-emerald-700 h-7 text-xs">
-                                  <CheckCircle className="h-3 w-3 mr-1" /> Complete
-                                </Button>
-                              )}
-                            </div>
-                          </div>
-                        </motion.div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Weekly Schedule Overview */}
-            <div>
-              <Card className="border-slate-100 shadow-sm">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg flex items-center gap-2"><Clock className="h-4 w-4 text-teal-600" /> Weekly Schedule</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {schedules.length === 0 ? (
-                    <div className="text-center py-6">
-                      <Clock className="h-8 w-8 text-slate-300 mx-auto mb-2" />
-                      <p className="text-sm text-slate-500 mb-3">No schedules set</p>
-                      <Button asChild size="sm" className="bg-teal-600 hover:bg-teal-700">
-                        <Link to="/doctor/schedules">Set Schedule</Link>
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="space-y-2">
-                      {schedules.map((s) => (
-                        <div key={s.id} className="flex items-center justify-between p-2.5 rounded-lg bg-slate-50">
-                          <span className="text-sm font-medium text-slate-700">{s.dayOfWeek}</span>
-                          <span className="text-xs text-slate-500">{s.startTime} - {s.endTime}</span>
-                        </div>
-                      ))}
-                      <Button asChild variant="outline" size="sm" className="w-full mt-2">
-                        <Link to="/doctor/schedules">Manage Schedules</Link>
-                      </Button>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </motion.div>
+      <div className="mb-8 grid gap-4 sm:grid-cols-3">
+        <StatCard label="Today’s appointments" value={stats.totalToday} icon={CalendarDays} />
+        <StatCard label="Upcoming (confirmed)" value={stats.totalUpcoming} icon={Clock} hint="Across your 50 most recent bookings" />
+        <StatCard label="Completed today" value={stats.completedToday} icon={CheckCircle2} tone="success" />
       </div>
-    </div>
+
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
+        <Card>
+          <CardHeader className="border-b">
+            <CardTitle>Today’s agenda</CardTitle>
+            <CardDescription>{format(new Date(), 'EEEE, MMMM d, yyyy')}</CardDescription>
+          </CardHeader>
+          <CardContent className="pt-0 sm:pt-0">
+            {todayAppointments.length === 0 ? (
+              <div className="py-12 text-center">
+                <CalendarDays className="mx-auto mb-3 size-6 text-muted-foreground/60" aria-hidden="true" />
+                <p className="text-sm font-medium">No appointments today</p>
+                <p className="mt-1 text-sm text-muted-foreground">Enjoy the quiet — new bookings will appear here.</p>
+              </div>
+            ) : (
+              <ol className="divide-y">
+                {todayAppointments.map((apt) => {
+                  const canComplete = apt.status === 'Confirmed' && hasAppointmentStarted(apt);
+                  return (
+                    <li key={apt.id} className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center">
+                      <div className="w-24 shrink-0">
+                        <p className="text-sm font-semibold tabular-nums">{formatTime(apt.startTime)}</p>
+                        <p className="text-xs text-muted-foreground tabular-nums">until {formatTime(apt.endTime)}</p>
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate font-medium">{apt.patientName}</p>
+                        <p className="truncate text-sm text-muted-foreground">{apt.reasonForVisit || 'No reason given'}</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <StatusBadge status={apt.status} />
+                        {canComplete && (
+                          <Button size="sm" onClick={() => handleComplete(apt.id)} disabled={completingId === apt.id}>
+                            <CheckCircle2 aria-hidden="true" /> {completingId === apt.id ? 'Saving…' : 'Complete'}
+                          </Button>
+                        )}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ol>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card className="self-start">
+          <CardHeader className="border-b">
+            <CardTitle>Weekly availability</CardTitle>
+            <CardDescription>Slots are generated for the next 14 days.</CardDescription>
+          </CardHeader>
+          <CardContent className="pt-0 sm:pt-0">
+            <ul className="divide-y">
+              {weekDays.map((day) => {
+                const s = scheduleByDay.get(day);
+                const isToday = day === todayName;
+                return (
+                  <li key={day} className="flex items-center justify-between gap-3 py-3 text-sm">
+                    <span className={cn('font-medium', isToday && 'text-primary')}>
+                      {day}
+                      {isToday && <span className="sr-only"> (today)</span>}
+                    </span>
+                    {s ? (
+                      <span className="flex items-center gap-2">
+                        {!s.isActive && (
+                          <span className="rounded bg-muted px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground">Paused</span>
+                        )}
+                        <span className={cn('tabular-nums', s.isActive ? 'text-foreground' : 'text-muted-foreground')}>
+                          {formatTimeRange(s.startTime, s.endTime)}
+                        </span>
+                      </span>
+                    ) : (
+                      <span className="text-muted-foreground">Off</span>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+            <Link to="/doctor/schedules" className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
+              Edit availability <ChevronRight className="size-4" aria-hidden="true" />
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+    </Page>
   );
 }

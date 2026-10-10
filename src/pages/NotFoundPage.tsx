@@ -1,28 +1,23 @@
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Stethoscope, Home } from 'lucide-react';
+import { Home, Search } from 'lucide-react';
 
 export function NotFoundPage() {
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gradient-to-b from-teal-50/40 to-white py-12 px-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="text-center"
-      >
-        <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-teal-500/20">
-          <Stethoscope className="h-10 w-10 text-white" />
-        </div>
-        <h1 className="text-6xl font-bold text-slate-900 mb-2">404</h1>
-        <p className="text-lg text-slate-500 mb-8">This page doesn&apos;t exist</p>
-        <Button asChild className="bg-teal-600 hover:bg-teal-700">
-          <Link to="/">
-            <Home className="h-4 w-4 mr-2" /> Go Home
-          </Link>
+    <div className="mx-auto flex min-h-[calc(100dvh-16rem)] max-w-xl flex-col items-center justify-center px-4 py-16 text-center">
+      <p className="text-sm font-semibold uppercase tracking-widest text-primary">404</p>
+      <h1 className="mt-3 font-display text-4xl font-semibold leading-tight sm:text-5xl">Page not found</h1>
+      <p className="mt-4 text-muted-foreground">
+        The page you’re looking for doesn’t exist or may have moved.
+      </p>
+      <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+        <Button asChild>
+          <Link to="/"><Home aria-hidden="true" /> Go home</Link>
         </Button>
-      </motion.div>
+        <Button asChild variant="outline">
+          <Link to="/doctors"><Search aria-hidden="true" /> Find a doctor</Link>
+        </Button>
+      </div>
     </div>
   );
 }

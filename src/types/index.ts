@@ -184,9 +184,19 @@ export interface DoctorFilterRequest {
 export type DoctorSortBy = 'Rating' | 'Fee' | 'Experience';
 
 // ============ SCHEDULE TYPES ============
+// Sent and returned as strings (API contract §7)
+export type DayOfWeek =
+  | 'Sunday'
+  | 'Monday'
+  | 'Tuesday'
+  | 'Wednesday'
+  | 'Thursday'
+  | 'Friday'
+  | 'Saturday';
+
 export interface Schedule {
   id: number;
-  dayOfWeek: number;
+  dayOfWeek: DayOfWeek;
   startTime: string;
   endTime: string;
   slotDurationMinutes: number;
@@ -194,7 +204,7 @@ export interface Schedule {
 }
 
 export interface CreateScheduleRequest {
-  dayOfWeek: number;
+  dayOfWeek: DayOfWeek;
   startTime: string;
   endTime: string;
   slotDurationMinutes: number;

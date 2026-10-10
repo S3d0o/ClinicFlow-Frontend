@@ -1,52 +1,72 @@
 /** @type {import('tailwindcss').Config} */
+// Theme colors are HSL channel triplets defined in src/index.css. The `<alpha-value>` slot makes
+// opacity modifiers work (e.g. `bg-primary/90`, `ring-ring/40`).
+const token = (name) => `hsl(var(--${name}) / <alpha-value>)`;
+
 module.exports = {
   darkMode: ["class"],
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+        display: ['Fraunces', 'ui-serif', 'Georgia', 'serif'],
+      },
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        border: token('border'),
+        input: token('input'),
+        ring: token('ring'),
+        background: token('background'),
+        foreground: token('foreground'),
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: token('primary'),
+          foreground: token('primary-foreground'),
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: token('secondary'),
+          foreground: token('secondary-foreground'),
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive) / <alpha-value>)",
-          foreground: "hsl(var(--destructive-foreground) / <alpha-value>)",
+          DEFAULT: token('destructive'),
+          foreground: token('destructive-foreground'),
+        },
+        success: {
+          DEFAULT: token('success'),
+          foreground: token('success-foreground'),
+        },
+        warning: {
+          DEFAULT: token('warning'),
+          foreground: token('warning-foreground'),
+        },
+        info: {
+          DEFAULT: token('info'),
+          foreground: token('info-foreground'),
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: token('muted'),
+          foreground: token('muted-foreground'),
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: token('accent'),
+          foreground: token('accent-foreground'),
         },
         popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+          DEFAULT: token('popover'),
+          foreground: token('popover-foreground'),
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: token('card'),
+          foreground: token('card-foreground'),
         },
         sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
+          DEFAULT: token('sidebar-background'),
+          foreground: token('sidebar-foreground'),
+          primary: token('sidebar-primary'),
+          "primary-foreground": token('sidebar-primary-foreground'),
+          accent: token('sidebar-accent'),
+          "accent-foreground": token('sidebar-accent-foreground'),
+          border: token('sidebar-border'),
+          ring: token('sidebar-ring'),
         },
       },
       borderRadius: {
@@ -57,7 +77,9 @@ module.exports = {
         xs: "calc(var(--radius) - 6px)",
       },
       boxShadow: {
-        xs: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+        xs: "0 1px 2px 0 rgb(28 25 23 / 0.05)",
+        card: "0 1px 2px 0 rgb(28 25 23 / 0.04), 0 1px 3px 0 rgb(28 25 23 / 0.06)",
+        elevated: "0 16px 40px -16px rgb(28 25 23 / 0.22), 0 2px 6px -2px rgb(28 25 23 / 0.06)",
       },
       keyframes: {
         "accordion-down": {

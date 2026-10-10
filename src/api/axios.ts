@@ -15,7 +15,12 @@ const api = axios.create({
 let accessToken: string | null = null;
 let refreshTokenValue: string | null = null;
 let isRefreshing = false;
-let refreshSubscribers: Array<(token: string) => void> = [];
+
+interface RefreshSubscriber {
+  resolve: (token: string) => void;
+  reject: (error: unknown) => void;
+}
+let refreshSubscribers: RefreshSubscriber[] = [];
 
 // Initialize from localStorage so token survives navigation/refresh
 const storedAccess = localStorage.getItem('accessToken');
@@ -38,13 +43,39 @@ export const getTokens = () => ({
   refreshToken: refreshTokenValue,
 });
 
+// Session data persisted in localStorage
+const SESSION_KEYS = ['accessToken', 'refreshToken', 'expiresAt', 'userRole', 'userName', 'userEmail'] as const;
+
+/** Store a login/refresh response in memory and localStorage. */
+export const saveSession = (data: LoginResponse) => {
+  setTokens({ accessToken: data.accessToken, refreshToken: data.refreshToken });
+  localStorage.setItem('accessToken', data.accessToken);
+  localStorage.setItem('refreshToken', data.refreshToken);
+  localStorage.setItem('expiresAt', data.expiresAt);
+  localStorage.setItem('userRole', data.role);
+  localStorage.setItem('userName', data.fullName);
+  localStorage.setItem('userEmail', data.email);
+};
+
+/** Forget the session in memory and remove only this app's keys from localStorage. */
+export const clearSession = () => {
+  clearTokens();
+  SESSION_KEYS.forEach((key) => localStorage.removeItem(key));
+};
+
+const endSession = () => {
+  clearSession();
+  window.dispatchEvent(new CustomEvent('auth:logout'));
+};
+
 const onTokenRefreshed = (token: string) => {
-  refreshSubscribers.forEach((cb) => cb(token));
+  refreshSubscribers.forEach(({ resolve }) => resolve(token));
   refreshSubscribers = [];
 };
 
-const addRefreshSubscriber = (cb: (token: string) => void) => {
-  refreshSubscribers.push(cb);
+const onRefreshFailed = (error: unknown) => {
+  refreshSubscribers.forEach(({ reject }) => reject(error));
+  refreshSubscribers = [];
 };
 
 // Request interceptor - add auth header
@@ -68,25 +99,27 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // Avoid infinite loops
+    // Avoid infinite loops: the request already failed once with a fresh token
     if (originalRequest._retry) {
-      clearTokens();
-      window.dispatchEvent(new CustomEvent('auth:logout'));
+      endSession();
       return Promise.reject(error);
     }
 
     if (!refreshTokenValue) {
-      window.dispatchEvent(new CustomEvent('auth:logout'));
+      endSession();
       return Promise.reject(error);
     }
 
     originalRequest._retry = true;
 
     if (isRefreshing) {
-      return new Promise((resolve) => {
-        addRefreshSubscriber((token: string) => {
-          originalRequest.headers!.Authorization = `Bearer ${token}`;
-          resolve(api(originalRequest));
+      return new Promise((resolve, reject) => {
+        refreshSubscribers.push({
+          resolve: (token: string) => {
+            originalRequest.headers!.Authorization = `Bearer ${token}`;
+            resolve(api(originalRequest));
+          },
+          reject,
         });
       });
     }
@@ -99,28 +132,19 @@ api.interceptors.response.use(
         { refreshToken: refreshTokenValue } as RefreshTokenRequest
       );
 
-      const newAccessToken = response.data.accessToken;
-      const newRefreshToken = response.data.refreshToken;
-
-      accessToken = newAccessToken;
-      refreshTokenValue = newRefreshToken;
-
-      // Persist to localStorage
-      localStorage.setItem('refreshToken', newRefreshToken);
-      localStorage.setItem('accessToken', newAccessToken);
-      localStorage.setItem('expiresAt', response.data.expiresAt);
-      localStorage.setItem('userRole', response.data.role);
-      localStorage.setItem('userName', response.data.fullName);
-      localStorage.setItem('userEmail', response.data.email);
-
-      onTokenRefreshed(newAccessToken);
-      originalRequest.headers!.Authorization = `Bearer ${newAccessToken}`;
+      saveSession(response.data);
+      onTokenRefreshed(response.data.accessToken);
+      originalRequest.headers!.Authorization = `Bearer ${response.data.accessToken}`;
 
       return api(originalRequest);
     } catch (refreshError) {
-      clearTokens();
-      localStorage.clear();
-      window.dispatchEvent(new CustomEvent('auth:logout'));
+      onRefreshFailed(refreshError);
+      // Only a rejected refresh token ends the session (API contract §2.3).
+      // Network errors and 5xx keep the tokens so a later request can retry.
+      const status = axios.isAxiosError(refreshError) ? refreshError.response?.status : undefined;
+      if (status !== undefined && status >= 400 && status < 500) {
+        endSession();
+      }
       return Promise.reject(refreshError);
     } finally {
       isRefreshing = false;

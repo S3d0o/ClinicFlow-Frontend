@@ -1,55 +1,62 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { lazy, Suspense, useEffect } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { MotionConfig } from 'framer-motion';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import  { Navbar }  from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { Toaster } from '@/components/ui/sonner';
+import { LoadingState } from '@/components/states';
+
+// The landing page loads eagerly for the fastest first paint; every other page is split into its
+// own chunk and loaded on first visit (recharts, for example, only loads for the admin dashboard).
+import { LandingPage } from '@/pages/LandingPage';
+
+const page = <K extends string>(load: () => Promise<Record<K, React.ComponentType>>, name: K) =>
+  lazy(() => load().then((m) => ({ default: m[name] })));
 
 // Public pages
-import { LandingPage } from '@/pages/LandingPage';
-import { DoctorsPage } from '@/pages/DoctorsPage';
-import { DoctorDetailsPage } from '@/pages/DoctorDetailsPage';
+const DoctorsPage = page(() => import('@/pages/DoctorsPage'), 'DoctorsPage');
+const DoctorDetailsPage = page(() => import('@/pages/DoctorDetailsPage'), 'DoctorDetailsPage');
 
 // Auth pages
-import { LoginPage } from '@/pages/LoginPage';
-import { RegisterPatientPage } from '@/pages/RegisterPatientPage';
-import { RegisterDoctorPage } from '@/pages/RegisterDoctorPage';
-import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage';
-import { ResetPasswordPage } from '@/pages/ResetPasswordPage';
-import { ConfirmEmailPage } from '@/pages/ConfirmEmailPage';
+const LoginPage = page(() => import('@/pages/LoginPage'), 'LoginPage');
+const RegisterPatientPage = page(() => import('@/pages/RegisterPatientPage'), 'RegisterPatientPage');
+const RegisterDoctorPage = page(() => import('@/pages/RegisterDoctorPage'), 'RegisterDoctorPage');
+const ForgotPasswordPage = page(() => import('@/pages/ForgotPasswordPage'), 'ForgotPasswordPage');
+const ResetPasswordPage = page(() => import('@/pages/ResetPasswordPage'), 'ResetPasswordPage');
+const ConfirmEmailPage = page(() => import('@/pages/ConfirmEmailPage'), 'ConfirmEmailPage');
 
 // Patient pages
-import { PatientAppointmentsPage } from '@/pages/PatientAppointmentsPage';
-import { BookAppointmentPage } from '@/pages/BookAppointmentPage';
-import { PatientProfilePage } from '@/pages/PatientProfilePage';
+const PatientAppointmentsPage = page(() => import('@/pages/PatientAppointmentsPage'), 'PatientAppointmentsPage');
+const BookAppointmentPage = page(() => import('@/pages/BookAppointmentPage'), 'BookAppointmentPage');
+const PatientProfilePage = page(() => import('@/pages/PatientProfilePage'), 'PatientProfilePage');
 
 // Doctor pages
-import { DoctorDashboardPage } from '@/pages/DoctorDashboardPage';
-import { DoctorAppointmentsPage } from '@/pages/DoctorAppointmentsPage';
-import { DoctorSchedulesPage } from '@/pages/DoctorSchedulesPage';
-import { DoctorProfilePage } from '@/pages/DoctorProfilePage';
+const DoctorDashboardPage = page(() => import('@/pages/DoctorDashboardPage'), 'DoctorDashboardPage');
+const DoctorAppointmentsPage = page(() => import('@/pages/DoctorAppointmentsPage'), 'DoctorAppointmentsPage');
+const DoctorSchedulesPage = page(() => import('@/pages/DoctorSchedulesPage'), 'DoctorSchedulesPage');
+const DoctorProfilePage = page(() => import('@/pages/DoctorProfilePage'), 'DoctorProfilePage');
 
 // Admin pages
-import { AdminDashboardPage } from '@/pages/AdminDashboardPage';
-import { AdminPendingDoctorsPage } from '@/pages/AdminPendingDoctorsPage';
-import { AdminSpecialtiesPage } from '@/pages/AdminSpecialtiesPage';
+const AdminDashboardPage = page(() => import('@/pages/AdminDashboardPage'), 'AdminDashboardPage');
+const AdminPendingDoctorsPage = page(() => import('@/pages/AdminPendingDoctorsPage'), 'AdminPendingDoctorsPage');
+const AdminSpecialtiesPage = page(() => import('@/pages/AdminSpecialtiesPage'), 'AdminSpecialtiesPage');
 
 // Shared pages
-import { NotificationsPage } from '@/pages/NotificationsPage';
-import { NotFoundPage } from '@/pages/NotFoundPage';
+const NotificationsPage = page(() => import('@/pages/NotificationsPage'), 'NotificationsPage');
+const NotFoundPage = page(() => import('@/pages/NotFoundPage'), 'NotFoundPage');
 
 function ProtectedRoute({ children, allowedRoles }: { children: React.ReactNode; allowedRoles?: string[] }) {
   const { isAuthenticated, role, isLoading } = useAuth();
+  const location = useLocation();
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600" />
-      </div>
-    );
+    return <LoadingState label="Checking your session…" className="min-h-[60vh]" />;
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    // Remember where the user was going so LoginPage can send them back afterwards
+    return <Navigate to="/login" replace state={{ from: location.pathname + location.search }} />;
   }
 
   if (allowedRoles && role && !allowedRoles.includes(role)) {
@@ -60,10 +67,29 @@ function ProtectedRoute({ children, allowedRoles }: { children: React.ReactNode;
 }
 
 function AppLayout({ children }: { children: React.ReactNode }) {
+  const { pathname } = useLocation();
+
+  // Hash routing keeps the scroll position between pages; start each page at the top
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-screen flex-col bg-background">
+      <a
+        href="#main-content"
+        onClick={(e) => {
+          e.preventDefault();
+          document.getElementById('main-content')?.focus();
+        }}
+        className="sr-only z-[60] rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground focus:not-sr-only focus:fixed focus:left-4 focus:top-3"
+      >
+        Skip to content
+      </a>
       <Navbar />
-      <main className="flex-1">{children}</main>
+      <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
+        <Suspense fallback={<LoadingState label="Loading…" className="min-h-[50vh]" />}>{children}</Suspense>
+      </main>
       <Footer />
     </div>
   );
@@ -189,10 +215,12 @@ function AppRoutes() {
 
 function App() {
   return (
-    <AuthProvider>
-      <AppRoutes />
-      <Toaster position="top-right" richColors />
-    </AuthProvider>
+    <MotionConfig reducedMotion="user">
+      <AuthProvider>
+        <AppRoutes />
+        <Toaster position="top-right" richColors closeButton />
+      </AuthProvider>
+    </MotionConfig>
   );
 }
 

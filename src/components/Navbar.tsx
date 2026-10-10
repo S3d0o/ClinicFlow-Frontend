@@ -1,328 +1,351 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Menu, X, Stethoscope, User, LogOut, CalendarDays,
-  Shield, ChevronDown, Bell,
-} from 'lucide-react';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { Bell, CalendarDays, ChevronDown, LogOut, Menu, User } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
   DropdownMenuSeparator, DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Logo } from '@/components/Logo';
+import { UserAvatar } from '@/components/UserAvatar';
 import { notificationsApi } from '@/api';
-import type { Notification } from '@/types';
+import { formatTimeAgo } from '@/lib/format';
+import { NOTIFICATIONS_CHANGED_EVENT, notifyNotificationsChanged } from '@/lib/notifications';
+import { cn } from '@/lib/utils';
+import type { Notification, UserRole } from '@/types';
 
-const navLinks = [
-  { label: 'Home', path: '/' },
-  { label: 'Doctors', path: '/doctors' },
-];
+const NOTIFICATION_POLL_MS = 60_000;
 
-// Role-based profile and appointments routes
-const profileRoute = (role: string | null) => {
-  if (role === 'Doctor') return '/doctor/profile';
-  if (role === 'Admin') return '/admin/dashboard';
-  return '/patient/profile';
+interface NavItem { label: string; to: string }
+
+// Primary navigation per role (signed-out visitors get the first entry)
+const navByRole: Record<UserRole | 'Guest', NavItem[]> = {
+  Guest: [{ label: 'Find doctors', to: '/doctors' }],
+  Patient: [
+    { label: 'Find doctors', to: '/doctors' },
+    { label: 'Appointments', to: '/patient/appointments' },
+  ],
+  Doctor: [
+    { label: 'Dashboard', to: '/doctor/dashboard' },
+    { label: 'Appointments', to: '/doctor/appointments' },
+    { label: 'Schedule', to: '/doctor/schedules' },
+  ],
+  Admin: [
+    { label: 'Overview', to: '/admin/dashboard' },
+    { label: 'Doctor approvals', to: '/admin/pending-doctors' },
+    { label: 'Specialties', to: '/admin/specialties' },
+  ],
 };
 
-const appointmentsRoute = (role: string | null) => {
-  if (role === 'Doctor') return '/doctor/appointments';
-  return '/patient/appointments';
+const profileRouteByRole: Partial<Record<UserRole, string>> = {
+  Patient: '/patient/profile',
+  Doctor: '/doctor/profile',
+};
+
+const appointmentsRouteByRole: Partial<Record<UserRole, string>> = {
+  Patient: '/patient/appointments',
+  Doctor: '/doctor/appointments',
 };
 
 export function Navbar() {
-  const { user, role, isAuthenticated, logout } = useAuth();
+  const { user, role, userName, isAuthenticated, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [notifOpen, setNotifOpen] = useState(false);
+  const [unread, setUnread] = useState<Notification[]>([]);
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 10);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => { setMobileOpen(false); }, [location.pathname]);
-
-  const fetchNotifications = useCallback(() => {
-    if (isAuthenticated) {
-      notificationsApi.getMyNotifications(true)
-        .then((res) => setNotifications(res.data))
-        .catch(() => {});
-    }
+  const fetchUnread = useCallback(() => {
+    if (!isAuthenticated) return;
+    notificationsApi
+      .getMyNotifications(true)
+      .then((res) => setUnread(res.data))
+      .catch(() => {});
   }, [isAuthenticated]);
 
-  useEffect(() => { fetchNotifications(); }, [fetchNotifications]);
+  // Refresh on sign-in, on navigation, when the window regains focus, periodically,
+  // and whenever a page reports that notifications changed.
+  useEffect(() => {
+    fetchUnread();
+  }, [fetchUnread, location.pathname]);
 
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    const onFocus = () => fetchUnread();
+    window.addEventListener('focus', onFocus);
+    window.addEventListener(NOTIFICATIONS_CHANGED_EVENT, onFocus);
+    const timer = window.setInterval(fetchUnread, NOTIFICATION_POLL_MS);
+    return () => {
+      window.removeEventListener('focus', onFocus);
+      window.removeEventListener(NOTIFICATIONS_CHANGED_EVENT, onFocus);
+      window.clearInterval(timer);
+    };
+  }, [isAuthenticated, fetchUnread]);
+
+  const notifications = isAuthenticated ? unread : [];
   const unreadCount = notifications.length;
-  const displayName = user ? `${user.firstName} ${user.lastName}` : '';
-  const initials = user?.firstName?.[0]?.toUpperCase() ?? 'U';
-
-  const handleLogout = () => { logout(); navigate('/'); };
+  const navItems = navByRole[isAuthenticated && role ? role : 'Guest'];
+  const displayName = user ? `${user.firstName} ${user.lastName}` : userName || 'Account';
+  const profileRoute = role ? profileRouteByRole[role] : undefined;
 
   const handleMarkAllRead = async () => {
     try {
       await notificationsApi.markAllAsRead();
-      setNotifications([]);
-    } catch { /* ignore */ }
+      setUnread([]);
+      notifyNotificationsChanged();
+    } catch { /* the bell refreshes on the next poll */ }
   };
 
-  const handleMarkRead = async (id: number) => {
+  const openNotification = async (n: Notification) => {
     try {
-      await notificationsApi.markAsRead(id);
-      setNotifications((prev) => prev.filter((n) => n.id !== id));
-    } catch { /* ignore */ }
+      await notificationsApi.markAsRead(n.id);
+      setUnread((prev) => prev.filter((x) => x.id !== n.id));
+    } catch { /* still navigate */ }
+    const target = n.relatedEntityId && role ? appointmentsRouteByRole[role] : undefined;
+    navigate(target ?? '/notifications');
   };
-
-  const isActive = (path: string) => location.pathname === path;
 
   return (
-    <motion.header
-      initial={{ y: -80 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-white/90 backdrop-blur-lg shadow-sm border-b border-border'
-          : 'bg-transparent'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+    <header className="sticky top-0 z-50 border-b bg-background/85 backdrop-blur-md supports-[backdrop-filter]:bg-background/75">
+      <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4 sm:px-6 lg:px-8">
+        <Logo />
 
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
-              <Stethoscope className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent">
-              ClinicFlow
-            </span>
-          </Link>
+        {/* Desktop navigation */}
+        <nav aria-label="Main" className="hidden h-full items-center gap-1 md:flex">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              className={({ isActive }) =>
+                cn(
+                  'relative flex h-full items-center px-3 text-sm font-medium transition-colors',
+                  'after:absolute after:inset-x-3 after:bottom-0 after:h-0.5 after:rounded-full after:transition-colors',
+                  isActive ? 'text-foreground after:bg-primary' : 'text-muted-foreground hover:text-foreground after:bg-transparent'
+                )
+              }
+            >
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <Link key={link.path} to={link.path}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  isActive(link.path)
-                    ? 'bg-teal-50 text-teal-700'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-                }`}
-              >{link.label}</Link>
-            ))}
-            {isAuthenticated && role === 'Admin' && (
-              <Link to="/admin/dashboard"
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  isActive('/admin/dashboard')
-                    ? 'bg-teal-50 text-teal-700'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-                }`}
-              >Dashboard</Link>
-            )}
-            {isAuthenticated && role === 'Doctor' && (
-              <Link to="/doctor/dashboard"
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  isActive('/doctor/dashboard')
-                    ? 'bg-teal-50 text-teal-700'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-                }`}
-              >Dashboard</Link>
-            )}
-          </nav>
-
-          {/* Right side */}
-          <div className="hidden md:flex items-center gap-2">
-            {isAuthenticated ? (
-              <>
-                {/* Notification Bell */}
-                <DropdownMenu open={notifOpen} onOpenChange={(open) => {
-                  setNotifOpen(open);
-                }}>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="relative">
-                      <Bell className="w-5 h-5 text-slate-600" />
-                      {unreadCount > 0 && (
-                        <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-medium">
-                          {unreadCount > 9 ? '9+' : unreadCount}
-                        </span>
-                      )}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-80" onCloseAutoFocus={(e) => e.preventDefault()}>
-                    <div className="px-3 py-2 border-b border-border flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-semibold text-slate-900">Notifications</p>
-                        {unreadCount > 0 && (
-                          <p className="text-xs text-muted-foreground">{unreadCount} unread</p>
-                        )}
-                      </div>
-                      {unreadCount > 0 && (
-                        <button
-                          onClick={handleMarkAllRead}
-                          className="text-xs text-teal-600 hover:text-teal-800 font-medium"
-                        >
-                          Mark all read
-                        </button>
-                      )}
+        <div className="ml-auto flex items-center gap-1.5">
+          {isAuthenticated ? (
+            <>
+              {/* Notifications */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="relative text-muted-foreground hover:text-foreground"
+                    aria-label={unreadCount > 0 ? `Notifications, ${unreadCount} unread` : 'Notifications'}
+                  >
+                    <Bell className="size-5" aria-hidden="true" />
+                    {unreadCount > 0 && (
+                      <span className="absolute right-1.5 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-semibold leading-none text-destructive-foreground ring-2 ring-background">
+                        {unreadCount > 9 ? '9+' : unreadCount}
+                      </span>
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-[22rem] max-w-[calc(100vw-2rem)] p-0" onCloseAutoFocus={(e) => e.preventDefault()}>
+                  <div className="flex items-center justify-between border-b px-4 py-3">
+                    <div>
+                      <p className="text-sm font-semibold">Notifications</p>
+                      <p className="text-xs text-muted-foreground">
+                        {unreadCount > 0 ? `${unreadCount} unread` : 'You’re all caught up'}
+                      </p>
                     </div>
+                    {unreadCount > 0 && (
+                      <Button variant="ghost" size="sm" className="h-8 text-primary" onClick={handleMarkAllRead}>
+                        Mark all read
+                      </Button>
+                    )}
+                  </div>
+                  <div className="max-h-80 overflow-y-auto p-1 scrollbar-thin">
                     {notifications.length === 0 ? (
-                      <div className="p-6 text-center">
-                        <Bell className="w-8 h-8 text-slate-200 mx-auto mb-2" />
+                      <div className="flex flex-col items-center px-4 py-8 text-center">
+                        <Bell className="mb-2 size-6 text-muted-foreground/50" aria-hidden="true" />
                         <p className="text-sm text-muted-foreground">No new notifications</p>
                       </div>
                     ) : (
-                      <>
-                        {notifications.slice(0, 5).map((n) => (
-                          <DropdownMenuItem
-                            key={n.id}
-                            className="flex flex-col items-start gap-1 p-3 cursor-pointer group"
-                            onClick={() => handleMarkRead(n.id)}
-                          >
-                            <div className="flex items-center gap-2 w-full">
-                              <span className="w-2 h-2 rounded-full bg-teal-500 flex-shrink-0" />
-                              <span className="font-medium text-sm text-slate-900 flex-1">{n.title}</span>
-                              <span className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">✓</span>
-                            </div>
-                            <span className="text-xs text-muted-foreground line-clamp-2 pl-4">{n.message}</span>
-                          </DropdownMenuItem>
-                        ))}
-                        {notifications.length > 5 && (
-                          <div
-                            className="px-3 py-2 text-center text-xs text-teal-600 hover:text-teal-800 cursor-pointer border-t border-border"
-                            onClick={() => { navigate('/notifications'); setNotifOpen(false); }}
-                          >
-                            View all {notifications.length} notifications
-                          </div>
-                        )}
-                      </>
+                      notifications.slice(0, 5).map((n) => (
+                        <DropdownMenuItem
+                          key={n.id}
+                          onSelect={() => openNotification(n)}
+                          className="flex cursor-pointer flex-col items-start gap-0.5 rounded-md px-3 py-2.5"
+                        >
+                          <span className="flex w-full items-start gap-2">
+                            <span className="mt-1.5 size-2 shrink-0 rounded-full bg-primary" aria-hidden="true" />
+                            <span className="flex-1 text-sm font-medium leading-snug text-foreground">{n.title}</span>
+                          </span>
+                          <span className="line-clamp-2 pl-4 text-xs text-muted-foreground">{n.message}</span>
+                          <span className="pl-4 text-[11px] text-muted-foreground/80">{formatTimeAgo(n.createdAt)}</span>
+                        </DropdownMenuItem>
+                      ))
                     )}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-
-                {/* Profile Dropdown */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="flex items-center gap-2 pl-2 pr-3">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-400 to-emerald-500 flex items-center justify-center text-white font-semibold text-sm">
-                        {initials}
-                      </div>
-                      <span className="text-sm font-medium text-slate-700 max-w-[100px] truncate">
-                        {user?.firstName ?? 'User'}
-                      </span>
-                      <ChevronDown className="w-4 h-4 text-slate-400" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
-                    <div className="px-3 py-2 border-b border-border">
-                      <p className="text-sm font-medium">{displayName}</p>
-                      <p className="text-xs text-muted-foreground">{user?.email}</p>
-                      <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-xs font-medium bg-teal-50 text-teal-700">
-                        {role === 'Admin' && <Shield className="w-3 h-3" />}
-                        {role}
-                      </span>
-                    </div>
-                    <DropdownMenuItem onClick={() => navigate(profileRoute(role))} className="cursor-pointer">
-                      <User className="w-4 h-4 mr-2" />Profile
+                  </div>
+                  <div className="border-t p-1">
+                    <DropdownMenuItem asChild className="cursor-pointer justify-center rounded-md py-2 text-sm font-medium text-primary">
+                      <Link to="/notifications">View all notifications</Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate(appointmentsRoute(role))} className="cursor-pointer">
-                      <CalendarDays className="w-4 h-4 mr-2" />
-                      {role === 'Doctor' ? 'My Appointments' : 'My Appointments'}
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-600 focus:text-red-600">
-                      <LogOut className="w-4 h-4 mr-2" />Logout
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </>
-            ) : (
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" onClick={() => navigate('/login')} className="text-slate-600 hover:text-slate-900">
-                  Sign In
-                </Button>
-                <Button onClick={() => navigate('/register/patient')}
-                  className="bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-700 text-white shadow-md hover:shadow-lg transition-all">
-                  Get Started
-                </Button>
-              </div>
-            )}
-          </div>
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
-          {/* Mobile toggle */}
-          <button onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
-            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        </div>
-      </div>
+              {/* Account menu (desktop) */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="hidden h-10 gap-2 pl-1.5 pr-2 md:inline-flex" aria-label={`Account menu for ${displayName}`}>
+                    <UserAvatar name={displayName} size="sm" />
+                    <span className="max-w-[9rem] truncate text-sm font-medium">{user?.firstName ?? displayName}</span>
+                    <ChevronDown className="size-4 text-muted-foreground" aria-hidden="true" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-60">
+                  <DropdownMenuLabel className="font-normal">
+                    <p className="truncate text-sm font-semibold">{displayName}</p>
+                    {user?.email && <p className="truncate text-xs text-muted-foreground">{user.email}</p>}
+                    <p className="mt-1.5 inline-flex rounded-full bg-secondary px-2 py-0.5 text-[11px] font-medium text-secondary-foreground">{role}</p>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {profileRoute && (
+                    <DropdownMenuItem asChild className="cursor-pointer">
+                      <Link to={profileRoute}><User aria-hidden="true" /> Profile</Link>
+                    </DropdownMenuItem>
+                  )}
+                  {role === 'Patient' && (
+                    <DropdownMenuItem asChild className="cursor-pointer">
+                      <Link to="/patient/appointments"><CalendarDays aria-hidden="true" /> My appointments</Link>
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem asChild className="cursor-pointer">
+                    <Link to="/notifications"><Bell aria-hidden="true" /> Notifications</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem variant="destructive" className="cursor-pointer" onSelect={() => logout()}>
+                    <LogOut aria-hidden="true" /> Sign out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+          ) : (
+            <div className="hidden items-center gap-2 md:flex">
+              <Button variant="ghost" asChild>
+                <Link to="/login">Sign in</Link>
+              </Button>
+              <Button asChild>
+                <Link to="/register/patient">Create account</Link>
+              </Button>
+            </div>
+          )}
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden bg-white/95 backdrop-blur-lg border-b border-border overflow-hidden"
-          >
-            <div className="px-4 py-4 space-y-2">
-              {navLinks.map((link) => (
-                <Link key={link.path} to={link.path}
-                  className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                    isActive(link.path) ? 'bg-teal-50 text-teal-700' : 'text-slate-600 hover:bg-slate-50'
-                  }`}
-                >{link.label}</Link>
-              ))}
-              <div className="pt-4 border-t border-border">
+          {/* Mobile menu */}
+          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu">
+                <Menu className="size-5" aria-hidden="true" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[85vw] max-w-sm gap-0 p-0">
+              <SheetHeader className="border-b p-5">
+                <SheetTitle className="sr-only">Menu</SheetTitle>
+                <SheetDescription className="sr-only">Site navigation</SheetDescription>
                 {isAuthenticated ? (
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-3 px-4 py-2">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-400 to-emerald-500 flex items-center justify-center text-white font-semibold">
-                        {initials}
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium">{displayName}</p>
-                        <p className="text-xs text-muted-foreground">{role}</p>
-                      </div>
-                      {unreadCount > 0 && (
-                        <span className="ml-auto w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-medium">
-                          {unreadCount > 9 ? '9+' : unreadCount}
-                        </span>
-                      )}
+                  <div className="flex items-center gap-3 pr-8">
+                    <UserAvatar name={displayName} />
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold">{displayName}</p>
+                      <p className="text-xs text-muted-foreground">{role}</p>
                     </div>
-                    <button onClick={() => navigate(profileRoute(role))}
-                      className="w-full text-left px-4 py-3 rounded-lg text-sm text-slate-600 hover:bg-slate-50 flex items-center gap-2">
-                      <User className="w-4 h-4" /> Profile
-                    </button>
-                    <button onClick={() => navigate(appointmentsRoute(role))}
-                      className="w-full text-left px-4 py-3 rounded-lg text-sm text-slate-600 hover:bg-slate-50 flex items-center gap-2">
-                      <CalendarDays className="w-4 h-4" /> My Appointments
-                    </button>
-                    <button onClick={handleLogout}
-                      className="w-full text-left px-4 py-3 rounded-lg text-sm text-red-600 hover:bg-red-50 flex items-center gap-2">
-                      <LogOut className="w-4 h-4" /> Logout
-                    </button>
                   </div>
                 ) : (
-                  <div className="flex flex-col gap-2">
-                    <Button variant="outline" onClick={() => navigate('/login')} className="w-full">Sign In</Button>
-                    <Button onClick={() => navigate('/register/patient')}
-                      className="w-full bg-gradient-to-r from-teal-500 to-emerald-600 text-white">
-                      Get Started
+                  <Logo asLink={false} />
+                )}
+              </SheetHeader>
+              <nav aria-label="Mobile" className="flex flex-col gap-0.5 p-3">
+                {[{ label: 'Home', to: '/' }, ...navItems].map((item) => (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    end={item.to === '/'}
+                    onClick={() => setMobileOpen(false)}
+                    className={({ isActive }) =>
+                      cn(
+                        'rounded-md px-3 py-2.5 text-[0.9375rem] font-medium transition-colors',
+                        isActive ? 'bg-secondary text-secondary-foreground' : 'text-foreground hover:bg-accent'
+                      )
+                    }
+                  >
+                    {item.label}
+                  </NavLink>
+                ))}
+                {isAuthenticated && (
+                  <>
+                    <div className="my-2 border-t" />
+                    <NavLink
+                      to="/notifications"
+                      onClick={() => setMobileOpen(false)}
+                      className={({ isActive }) =>
+                        cn(
+                          'flex items-center justify-between rounded-md px-3 py-2.5 text-[0.9375rem] font-medium transition-colors',
+                          isActive ? 'bg-secondary text-secondary-foreground' : 'text-foreground hover:bg-accent'
+                        )
+                      }
+                    >
+                      Notifications
+                      {unreadCount > 0 && (
+                        <span className="rounded-full bg-destructive px-2 py-0.5 text-xs font-semibold text-destructive-foreground">
+                          {unreadCount} new
+                        </span>
+                      )}
+                    </NavLink>
+                    {profileRoute && (
+                      <NavLink
+                        to={profileRoute}
+                        onClick={() => setMobileOpen(false)}
+                        className={({ isActive }) =>
+                          cn(
+                            'rounded-md px-3 py-2.5 text-[0.9375rem] font-medium transition-colors',
+                            isActive ? 'bg-secondary text-secondary-foreground' : 'text-foreground hover:bg-accent'
+                          )
+                        }
+                      >
+                        Profile
+                      </NavLink>
+                    )}
+                  </>
+                )}
+              </nav>
+              <div className="mt-auto border-t p-4">
+                {isAuthenticated ? (
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => {
+                      setMobileOpen(false);
+                      logout();
+                    }}
+                  >
+                    <LogOut aria-hidden="true" /> Sign out
+                  </Button>
+                ) : (
+                  <div className="grid gap-2">
+                    <Button asChild onClick={() => setMobileOpen(false)}>
+                      <Link to="/register/patient">Create account</Link>
+                    </Button>
+                    <Button variant="outline" asChild onClick={() => setMobileOpen(false)}>
+                      <Link to="/login">Sign in</Link>
                     </Button>
                   </div>
                 )}
               </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.header>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
+    </header>
   );
 }

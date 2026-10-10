@@ -1,130 +1,91 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import { getApiErrorMessage } from '@/lib/api-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Stethoscope, Eye, EyeOff } from 'lucide-react';
+import { Spinner } from '@/components/ui/spinner';
+import { AuthLayout } from '@/components/layout/AuthLayout';
+import { Field } from '@/components/form/Field';
+import { PasswordInput } from '@/components/form/PasswordInput';
 import { toast } from 'sonner';
+
+const homeByRole: Record<string, string> = {
+  Admin: '/admin/dashboard',
+  Doctor: '/doctor/dashboard',
+  Patient: '/patient/appointments',
+};
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Set by ProtectedRoute (or a "Sign in to book" link) when the user was sent here to sign in
+  const from = (location.state as { from?: string } | null)?.from;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
     try {
       await login(email, password);
       toast.success('Welcome back!');
-      const role = localStorage.getItem('userRole');
-      if (role === 'Admin') navigate('/admin/dashboard');
-      else if (role === 'Doctor') navigate('/doctor/dashboard');
-      else navigate('/patient/appointments');
-    } catch (err: any) {
-      const title = err.response?.data?.title || 'Login failed';
-      toast.error(title);
+      const role = localStorage.getItem('userRole') ?? 'Patient';
+      navigate(from ?? homeByRole[role] ?? '/', { replace: true });
+    } catch (err) {
+      const message = getApiErrorMessage(err, 'Sign in failed. Please try again.');
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gradient-to-b from-teal-50/40 to-white py-12 px-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="w-full max-w-md"
-      >
-        <div className="text-center mb-6">
-          <Link to="/" className="inline-flex items-center gap-2.5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 shadow-md">
-              <Stethoscope className="h-5 w-5 text-white" />
-            </div>
-            <span className="text-2xl font-bold text-gradient">ClinicFlow</span>
-          </Link>
+    <AuthLayout
+      title="Welcome back"
+      description="Sign in to manage your appointments."
+      footer={
+        <div className="space-y-2">
+          <p>
+            New to ClinicFlow?{' '}
+            <Link to="/register/patient" className="font-medium text-primary hover:underline">Create a patient account</Link>
+          </p>
+          <p>
+            Are you a doctor?{' '}
+            <Link to="/register/doctor" className="font-medium text-primary hover:underline">Join as a doctor</Link>
+          </p>
         </div>
-
-        <Card className="border-slate-100 shadow-lg shadow-slate-200/50">
-          <CardHeader className="space-y-1 pb-4">
-            <CardTitle className="text-xl">Welcome back</CardTitle>
-            <CardDescription>Sign in to your ClinicFlow account</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                  >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
-                </div>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <Link to="/forgot-password" className="text-teal-600 hover:text-teal-700 font-medium">
-                  Forgot password?
-                </Link>
-              </div>
-              <Button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 shadow-md shadow-teal-500/20 h-10"
-              >
-                {loading ? (
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
-                ) : (
-                  'Sign In'
-                )}
-              </Button>
-            </form>
-
-            <div className="mt-6 pt-4 border-t text-center space-y-3">
-              <p className="text-sm text-slate-500">
-                Don&apos;t have an account?{' '}
-                <Link to="/register/patient" className="text-teal-600 hover:text-teal-700 font-medium">
-                  Register as Patient
-                </Link>
-              </p>
-              <p className="text-sm text-slate-500">
-                Are you a doctor?{' '}
-                <Link to="/register/doctor" className="text-teal-600 hover:text-teal-700 font-medium">
-                  Join as Doctor
-                </Link>
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
-    </div>
+      }
+    >
+      <form onSubmit={handleSubmit} className="space-y-5">
+        {error && (
+          <p role="alert" className="rounded-md border border-destructive/20 bg-destructive/[0.06] px-3 py-2.5 text-sm text-destructive">
+            {error}
+          </p>
+        )}
+        <Field id="email" label="Email">
+          <Input type="email" autoComplete="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        </Field>
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between">
+            <label htmlFor="password" className="text-[0.8125rem] font-medium">Password</label>
+            <Link to="/forgot-password" className="text-[0.8125rem] font-medium text-primary hover:underline">
+              Forgot password?
+            </Link>
+          </div>
+          <PasswordInput id="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        </div>
+        <Button type="submit" size="lg" disabled={loading} className="w-full">
+          {loading && <Spinner aria-hidden="true" />}
+          {loading ? 'Signing in…' : 'Sign in'}
+        </Button>
+      </form>
+    </AuthLayout>
   );
 }
