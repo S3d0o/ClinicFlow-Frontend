@@ -50,7 +50,7 @@ Open problems in the frontend, the improvements planned for them, and recent fix
 | Empty required fields use the browser's native validation bubbles, while other checks show inline messages | Two validation styles. Both are accessible, but they look different |
 | Phone formats are only hinted at, not checked, before sending | Server error instead of inline help |
 | `ResetPasswordPage` decodes the token twice (`decodeURIComponent` after `URLSearchParams`) | Harmless for current tokens, but breaks if a token contains `%` |
-| `ForgotPasswordPage` shows success even when the server failed to send the email | The user waits for an email that never arrives |
+| `ForgotPasswordPage` shows success even when the server failed to send the email. Since contract 1.0.2 the backend itself returns 204 in that case (so a mail outage doesn't reveal registered emails), so the page can't detect it | The user waits for an email that never arrives. Only the backend can fix this, by queuing emails with retries (backend REVIEW.md NM3) |
 
 ### Missing features — P2 (to confirm)
 | Issue | Notes |
