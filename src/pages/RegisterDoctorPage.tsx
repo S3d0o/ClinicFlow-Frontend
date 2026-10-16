@@ -20,7 +20,8 @@ import { AuthLayout } from '@/components/layout/AuthLayout';
 import { Field, FieldGroup } from '@/components/form/Field';
 import { PasswordInput } from '@/components/form/PasswordInput';
 import { PasswordRequirements } from '@/components/form/PasswordRequirements';
-import { ClipboardCheck } from 'lucide-react';
+import { IconInput } from '@/components/form/IconInput';
+import { ClipboardCheck, Mail, Phone } from 'lucide-react';
 import { toast } from 'sonner';
 
 const BIO_MAX_LENGTH = 500;
@@ -90,11 +91,11 @@ export function RegisterDoctorPage() {
   if (success) {
     return (
       <AuthLayout title="Application submitted" description={<>We sent a confirmation link to <strong className="font-semibold text-foreground">{form.email}</strong>.</>}>
-        <div className="rounded-xl border bg-card p-6 shadow-card">
-          <span className="inline-flex size-11 items-center justify-center rounded-full bg-secondary text-primary">
+        <div className="rounded-xl bg-muted p-6">
+          <span className="inline-flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
             <ClipboardCheck className="size-5" aria-hidden="true" />
           </span>
-          <ol className="mt-4 space-y-2 text-sm text-muted-foreground">
+          <ol className="mt-4 space-y-2 text-body-md text-muted-foreground">
             <li><span className="font-semibold text-foreground">1. Confirm your email</span> using the link we just sent.</li>
             <li><span className="font-semibold text-foreground">2. Wait for approval.</span> The clinic team reviews new doctors; you’ll be notified once approved.</li>
             <li><span className="font-semibold text-foreground">3. Set your weekly hours</span> so patients can book you.</li>
@@ -114,14 +115,14 @@ export function RegisterDoctorPage() {
       description="Create your practice profile. After you confirm your email, the clinic team reviews and approves your account."
       footer={
         <p>
-          Already have an account? <Link to="/login" className="font-medium text-primary hover:underline">Sign in</Link>
+          Already have an account? <Link to="/login" className="font-semibold text-primary hover:underline">Sign in</Link>
         </p>
       }
     >
       <form onSubmit={handleSubmit} className="space-y-8">
         <FieldGroup title="Account">
           <Field id="email" label="Email" required>
-            <Input type="email" autoComplete="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
+            <IconInput icon={Mail} type="email" autoComplete="email" placeholder="you@example.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
           </Field>
           <div className="space-y-2">
             <Field id="password" label="Password" required error={errors.password}>
@@ -140,13 +141,13 @@ export function RegisterDoctorPage() {
               <Input autoComplete="family-name" value={form.lastName} onChange={(e) => setForm({ ...form, lastName: e.target.value })} required maxLength={50} />
             </Field>
             <Field id="phone" label="Phone number" required hint="International format, e.g. +201112223334">
-              <Input type="tel" autoComplete="tel" placeholder="+201112223334" value={form.phoneNumber} onChange={(e) => setForm({ ...form, phoneNumber: e.target.value })} required />
+              <IconInput icon={Phone} type="tel" autoComplete="tel" placeholder="+201112223334" value={form.phoneNumber} onChange={(e) => setForm({ ...form, phoneNumber: e.target.value })} required />
             </Field>
             <Field id="dob" label="Date of birth" optional>
               <Input type="date" autoComplete="bday" value={form.dateOfBirth} onChange={(e) => setForm({ ...form, dateOfBirth: e.target.value })} />
             </Field>
             <div className="space-y-1.5">
-              <Label htmlFor="gender" className="gap-1 text-[0.8125rem]">
+              <Label htmlFor="gender" className="gap-1 text-label-md">
                 Gender<span className="text-destructive" aria-hidden="true">*</span>
               </Label>
               <Select value={form.gender} onValueChange={(v) => { setForm({ ...form, gender: v as Gender }); setErrors((er) => ({ ...er, gender: undefined })); }}>
@@ -158,7 +159,7 @@ export function RegisterDoctorPage() {
                   <SelectItem value="Female">Female</SelectItem>
                 </SelectContent>
               </Select>
-              {errors.gender && <p id="gender-error" className="text-xs font-medium text-destructive">{errors.gender}</p>}
+              {errors.gender && <p id="gender-error" className="text-body-sm font-medium text-destructive">{errors.gender}</p>}
             </div>
           </div>
         </FieldGroup>
@@ -166,7 +167,7 @@ export function RegisterDoctorPage() {
         <FieldGroup title="Your practice" description="This is what patients see on your public profile.">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5 sm:col-span-2">
-              <Label htmlFor="specialty" className="gap-1 text-[0.8125rem]">
+              <Label htmlFor="specialty" className="gap-1 text-label-md">
                 Specialty<span className="text-destructive" aria-hidden="true">*</span>
               </Label>
               <Select value={form.specialtyId} onValueChange={(v) => { setForm({ ...form, specialtyId: v }); setErrors((er) => ({ ...er, specialty: undefined })); }}>
@@ -179,7 +180,7 @@ export function RegisterDoctorPage() {
                   ))}
                 </SelectContent>
               </Select>
-              {errors.specialty && <p id="specialty-error" className="text-xs font-medium text-destructive">{errors.specialty}</p>}
+              {errors.specialty && <p id="specialty-error" className="text-body-sm font-medium text-destructive">{errors.specialty}</p>}
             </div>
             <Field id="experience" label="Years of experience" required>
               <Input type="number" inputMode="numeric" value={form.yearsOfExperience} onChange={(e) => setForm({ ...form, yearsOfExperience: e.target.value })} required min={0} />

@@ -2,8 +2,10 @@ import { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
-import  { Navbar }  from '@/components/Navbar';
+import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { AppShell } from '@/components/shell/AppShell';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Toaster } from '@/components/ui/sonner';
 import { LoadingState } from '@/components/states';
 
@@ -66,32 +68,51 @@ function ProtectedRoute({ children, allowedRoles }: { children: React.ReactNode;
   return <>{children}</>;
 }
 
+// Signed-in users get the sidebar shell; visitors get the top navbar and full footer.
 function AppLayout({ children }: { children: React.ReactNode }) {
   const { pathname } = useLocation();
+  const { isAuthenticated, role, isLoading } = useAuth();
 
   // Hash routing keeps the scroll position between pages; start each page at the top
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
+  // Wait for the session restore so signed-in users don't see the visitor navbar flash first
+  if (isLoading) {
+    return <LoadingState label="Loading…" className="min-h-screen" />;
+  }
+
+  const content = (
+    <ErrorBoundary key={pathname}>
+      <Suspense fallback={<LoadingState label="Loading…" className="min-h-[50vh]" />}>{children}</Suspense>
+    </ErrorBoundary>
+  );
+
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <>
       <a
         href="#main-content"
         onClick={(e) => {
           e.preventDefault();
           document.getElementById('main-content')?.focus();
         }}
-        className="sr-only z-[60] rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground focus:not-sr-only focus:fixed focus:left-4 focus:top-3"
+        className="sr-only z-[60] rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground focus:not-sr-only focus:fixed focus:left-4 focus:top-3"
       >
         Skip to content
       </a>
-      <Navbar />
-      <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
-        <Suspense fallback={<LoadingState label="Loading…" className="min-h-[50vh]" />}>{children}</Suspense>
-      </main>
-      <Footer />
-    </div>
+      {isAuthenticated && role ? (
+        <AppShell>{content}</AppShell>
+      ) : (
+        <div className="flex min-h-screen flex-col bg-background">
+          <Navbar />
+          <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
+            {content}
+          </main>
+          <Footer />
+        </div>
+      )}
+    </>
   );
 }
 

@@ -153,12 +153,13 @@ export function PatientProfilePage() {
 
   return (
     <Page width="narrow">
-      <PageHeader title="Profile" description="Keep your contact and health details up to date so your doctors have what they need." />
+      <PageHeader eyebrow="Account" title="Profile" description="Keep your contact and health details up to date so your doctors have what they need." />
 
       <ProfileSummary
         name={fullName}
         email={profile?.email}
         role="Patient"
+        pictureUrl={profile?.profilePictureUrl}
         memberSince={profile?.createdAt ? format(parseUtc(profile.createdAt), 'MMMM yyyy') : undefined}
       />
 
@@ -177,7 +178,7 @@ export function PatientProfilePage() {
             <CardContent>
               <PersonalInfoFields value={baseForm} onChange={setBaseForm} />
             </CardContent>
-            <CardFooter className="justify-end border-t">
+            <CardFooter className="justify-end border-t border-border/70">
               <Button onClick={handleSaveBase} disabled={saving}>
                 {saving && <Spinner aria-hidden="true" />}
                 {saving ? 'Saving…' : 'Save changes'}
@@ -195,7 +196,7 @@ export function PatientProfilePage() {
             <CardContent className="space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-1.5">
-                  <Label htmlFor="medical-blood-type" className="text-[0.8125rem]">Blood type</Label>
+                  <Label htmlFor="medical-blood-type" className="text-label-md">Blood type</Label>
                   <Select value={medicalForm.bloodType} onValueChange={(v) => setMedicalForm({ ...medicalForm, bloodType: v as BloodType })}>
                     <SelectTrigger id="medical-blood-type" className="w-full"><SelectValue placeholder="Select" /></SelectTrigger>
                     <SelectContent>
@@ -212,19 +213,19 @@ export function PatientProfilePage() {
               <Field id="medical-chronic" label="Chronic conditions" hint="e.g. Asthma, type 2 diabetes">
                 <Textarea rows={2} value={medicalForm.chronicConditions} onChange={(e) => setMedicalForm({ ...medicalForm, chronicConditions: e.target.value })} maxLength={500} />
               </Field>
-              <div className="border-t pt-4">
-                <p className="mb-3 text-sm font-semibold">Emergency contact</p>
+              <div className="rounded-xl bg-muted p-4">
+                <p className="eyebrow mb-3">Emergency contact</p>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field id="medical-emergency-name" label="Name">
-                    <Input autoComplete="off" value={medicalForm.emergencyContactName} onChange={(e) => setMedicalForm({ ...medicalForm, emergencyContactName: e.target.value })} maxLength={100} />
+                    <Input autoComplete="off" className="bg-card" value={medicalForm.emergencyContactName} onChange={(e) => setMedicalForm({ ...medicalForm, emergencyContactName: e.target.value })} maxLength={100} />
                   </Field>
                   <Field id="medical-emergency-phone" label="Phone">
-                    <Input type="tel" placeholder="+201098765432" value={medicalForm.emergencyContactPhone} onChange={(e) => setMedicalForm({ ...medicalForm, emergencyContactPhone: e.target.value })} />
+                    <Input type="tel" placeholder="+201098765432" className="bg-card" value={medicalForm.emergencyContactPhone} onChange={(e) => setMedicalForm({ ...medicalForm, emergencyContactPhone: e.target.value })} />
                   </Field>
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="justify-end border-t">
+            <CardFooter className="justify-end border-t border-border/70">
               <Button onClick={handleSaveMedical} disabled={savingPatient}>
                 {savingPatient && <Spinner aria-hidden="true" />}
                 {savingPatient ? 'Saving…' : 'Save changes'}

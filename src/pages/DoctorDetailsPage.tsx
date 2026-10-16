@@ -87,12 +87,12 @@ export function DoctorDetailsPage() {
   const bookingCard = (
     <Card className="lg:sticky lg:top-24">
       <CardHeader>
-        <p className="text-sm text-muted-foreground">Consultation fee</p>
-        <p className="text-2xl font-semibold tracking-tight tabular-nums">{formatFee(doctor.consultationFee)}</p>
+        <p className="eyebrow">Consultation fee</p>
+        <p className="font-display text-headline-xl tabular-nums">{formatFee(doctor.consultationFee)}</p>
       </CardHeader>
       <CardContent className="space-y-4">
         {doctor.clinicCity && (
-          <p className="flex items-start gap-2 text-sm text-muted-foreground">
+          <p className="flex items-start gap-2 rounded-xl bg-muted px-3 py-2.5 text-body-md text-muted-foreground">
             <MapPin className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
             <span>{doctor.clinicAddress ? `${doctor.clinicAddress}, ${doctor.clinicCity}` : doctor.clinicCity}</span>
           </p>
@@ -106,67 +106,71 @@ export function DoctorDetailsPage() {
             <Button size="lg" className="w-full" onClick={() => navigate('/login', { state: { from: `/patient/book/${doctor.id}` } })}>
               <CalendarPlus aria-hidden="true" /> Sign in to book
             </Button>
-            <p className="text-center text-xs text-muted-foreground">
-              New here? <Link to="/register/patient" className="font-medium text-primary hover:underline">Create a free account</Link>
+            <p className="text-center text-body-sm text-muted-foreground">
+              New here? <Link to="/register/patient" className="font-semibold text-primary hover:underline">Create a free account</Link>
             </p>
           </>
         ) : (
-          <p className="rounded-md bg-muted px-3 py-2.5 text-sm text-muted-foreground">Booking is available to patient accounts.</p>
+          <p className="rounded-xl bg-muted px-3 py-2.5 text-body-md text-muted-foreground">Booking is available to patient accounts.</p>
         )}
-        <p className="text-xs text-muted-foreground">Open slots are shown for the next 14 days. Bookings are confirmed instantly.</p>
+        <p className="text-body-sm text-muted-foreground">Open slots are shown for the next 14 days. Bookings are confirmed instantly.</p>
       </CardContent>
     </Card>
   );
 
   return (
     <Page width="wide">
-      <Link to="/doctors" className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+      <Link to="/doctors" className="mb-6 inline-flex items-center gap-1.5 text-label-md text-muted-foreground transition-colors hover:text-foreground">
         <ArrowLeft className="size-4" aria-hidden="true" /> All doctors
       </Link>
 
       <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="space-y-8">
           {/* Profile header */}
-          <section className="flex flex-col gap-5 sm:flex-row sm:items-center">
-            <UserAvatar name={doctor.fullName} size="xl" />
-            <div className="min-w-0">
-              <p className="text-sm font-medium text-primary">{doctor.specialtyName}</p>
-              <h1 className="mt-1 font-display text-3xl font-semibold leading-tight sm:text-[2.25rem]">{doctor.fullName}</h1>
-              <div className="mt-2">
-                <RatingSummary rating={doctor.averageRating} reviews={doctor.totalReviews} />
-              </div>
-            </div>
-          </section>
-
-          <dl className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            {facts.map((f) => (
-              <div key={f.label} className="flex items-center gap-3 rounded-xl border bg-card px-4 py-3 shadow-card">
-                <span className="inline-flex size-9 items-center justify-center rounded-lg bg-secondary text-primary">
-                  <f.icon className="size-4" aria-hidden="true" />
+          <section className="rounded-2xl border border-border/70 bg-card p-6 shadow-card">
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+              <UserAvatar name={doctor.fullName} size="xl" />
+              <div className="min-w-0">
+                <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-label-sm uppercase tracking-wider text-primary">
+                  {doctor.specialtyName}
                 </span>
-                <div className="min-w-0">
-                  <dt className="text-xs text-muted-foreground">{f.label}</dt>
-                  <dd className="truncate text-sm font-semibold">{f.value}</dd>
+                <h1 className="mt-2 font-display text-headline-lg sm:text-headline-xl">{doctor.fullName}</h1>
+                <div className="mt-1.5">
+                  <RatingSummary rating={doctor.averageRating} reviews={doctor.totalReviews} />
                 </div>
               </div>
-            ))}
-          </dl>
+            </div>
+
+            <dl className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+              {facts.map((f) => (
+                <div key={f.label} className="flex items-center gap-3 rounded-xl bg-muted px-4 py-3">
+                  <span className="inline-flex size-10 items-center justify-center rounded-lg bg-card text-primary shadow-xs">
+                    <f.icon className="size-[1.125rem]" aria-hidden="true" />
+                  </span>
+                  <div className="min-w-0">
+                    <dt className="text-caption uppercase tracking-wider text-muted-foreground">{f.label}</dt>
+                    <dd className="truncate text-title-sm tabular-nums">{f.value}</dd>
+                  </div>
+                </div>
+              ))}
+            </dl>
+          </section>
 
           {/* Booking card appears here on small screens so the main action is near the top */}
           <div className="lg:hidden">{bookingCard}</div>
 
           {doctor.bio && (
             <section aria-labelledby="about-heading">
-              <h2 id="about-heading" className="text-lg font-semibold">About</h2>
-              <p className="mt-3 max-w-prose leading-relaxed text-muted-foreground">{doctor.bio}</p>
+              <h2 id="about-heading" className="font-display text-headline-md">About</h2>
+              <p className="mt-3 max-w-prose text-body-lg text-muted-foreground">{doctor.bio}</p>
             </section>
           )}
 
           <section aria-labelledby="reviews-heading">
             <div className="flex items-end justify-between gap-4">
-              <h2 id="reviews-heading" className="text-lg font-semibold">Patient reviews</h2>
+              <h2 id="reviews-heading" className="font-display text-headline-md">Patient reviews</h2>
               {doctor.totalReviews > 0 && (
-                <p className="text-sm text-muted-foreground">
+                <p className="rounded-full bg-secondary px-2.5 py-0.5 text-label-sm text-secondary-foreground">
                   {doctor.totalReviews} {doctor.totalReviews === 1 ? 'review' : 'reviews'}
                 </p>
               )}
@@ -177,22 +181,22 @@ export function DoctorDetailsPage() {
               ) : reviews.length === 0 ? (
                 <EmptyState icon={MessageSquare} title="No reviews yet" description="Reviews appear after patients complete a visit." className="py-10" />
               ) : (
-                <ul className="divide-y rounded-xl border bg-card shadow-card">
+                <ul className="divide-y divide-border/70 rounded-2xl border border-border/70 bg-card shadow-card">
                   {reviews.map((review) => (
                     <li key={review.id} className="p-5">
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex items-center gap-3">
                           <UserAvatar name={review.patientName} size="sm" />
                           <div>
-                            <p className="text-sm font-semibold">{review.patientName}</p>
-                            <p className="text-xs text-muted-foreground">
+                            <p className="text-label-md">{review.patientName}</p>
+                            <p className="mt-0.5 text-body-sm text-muted-foreground">
                               <time dateTime={parseUtc(review.createdAt).toISOString()}>{format(parseUtc(review.createdAt), 'MMM d, yyyy')}</time>
                             </p>
                           </div>
                         </div>
                         <RatingStars value={review.rating} />
                       </div>
-                      {review.comment && <p className="mt-3 text-sm leading-relaxed text-foreground/85">{review.comment}</p>}
+                      {review.comment && <p className="mt-3 text-body-md text-foreground/85">{review.comment}</p>}
                     </li>
                   ))}
                 </ul>

@@ -15,7 +15,7 @@ interface PaginationProps {
 export function Pagination({ page, hasNext, onChange, label = 'Pagination' }: PaginationProps) {
   if (page === 1 && !hasNext) return null;
   return (
-    <nav aria-label={label} className="mt-8 flex items-center justify-between gap-3 border-t pt-5">
+    <nav aria-label={label} className="mt-8 flex items-center justify-between gap-3 border-t border-border/70 pt-5">
       <Button variant="outline" size="sm" onClick={() => onChange(Math.max(1, page - 1))} disabled={page === 1}>
         <ChevronLeft aria-hidden="true" /> Previous
       </Button>

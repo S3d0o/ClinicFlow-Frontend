@@ -61,11 +61,11 @@ export function ResetPasswordPage() {
   if (success) {
     return (
       <AuthLayout title="Password updated" description="For your security, you’ve been signed out on all devices.">
-        <div className="rounded-xl border bg-card p-6 shadow-card" role="status">
-          <span className="inline-flex size-11 items-center justify-center rounded-full bg-success/10 text-success">
+        <div className="rounded-xl bg-muted p-6" role="status">
+          <span className="inline-flex size-11 items-center justify-center rounded-xl bg-success/10 text-success">
             <CheckCircle2 className="size-5" aria-hidden="true" />
           </span>
-          <p className="mt-4 text-sm text-muted-foreground">You can now sign in with your new password.</p>
+          <p className="mt-4 text-body-md text-muted-foreground">You can now sign in with your new password.</p>
           <Button asChild className="mt-6 w-full">
             <Link to="/login">Sign in</Link>
           </Button>

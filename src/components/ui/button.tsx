@@ -5,21 +5,23 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,background-color,border-color,box-shadow,transform] duration-150 select-none active:translate-y-px disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background aria-[invalid=true]:border-destructive",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-semibold transition-[color,background-color,border-color,box-shadow,transform] duration-150 select-none active:translate-y-px disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background aria-[invalid=true]:border-destructive",
   {
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90",
+        // Deep slate fill for high-emphasis structural actions ("Add specialty", "Add working hours")
+        strong: "bg-ink text-ink-foreground shadow-xs hover:bg-ink/90",
         destructive:
           "bg-destructive text-destructive-foreground shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive",
         "destructive-outline":
           "border border-destructive/30 bg-card text-destructive shadow-xs hover:bg-destructive/[0.06] hover:border-destructive/50 focus-visible:ring-destructive",
         outline:
-          "border border-input bg-card text-foreground shadow-xs hover:bg-accent hover:border-foreground/20",
+          "border border-border bg-card text-foreground shadow-xs hover:bg-muted hover:border-input",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/70",
         ghost:
-          "text-foreground hover:bg-accent",
+          "text-muted-foreground hover:bg-accent hover:text-foreground",
         link: "text-primary underline-offset-4 hover:underline active:translate-y-0",
       },
       size: {

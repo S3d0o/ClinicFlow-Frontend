@@ -3,92 +3,107 @@
 @tailwind utilities;
 
 /*
- * ClinicFlow design tokens. Colors are HSL channel triplets consumed by tailwind.config.js as
- * `hsl(var(--name) / <alpha-value>)`, so every color supports opacity modifiers.
+ * ClinicFlow design tokens ("Clinical Sanctuary"). Colors are HSL channel triplets consumed by
+ * tailwind.config.js as `hsl(var(--name) / <alpha-value>)`, so every color supports opacity modifiers.
  *
- * Palette: deep clinical teal (primary) on a warm paper-white background with warm neutrals.
- * Semantic colors are tuned for readable text on their own 10% tint.
+ * Palette: restorative eucalyptus (primary, the interactive color) and deep medical slate (ink, for
+ * structure and high-emphasis fills) on a cool, softly blue-tinted canvas with tonal surface layers.
+ * Semantic colors are tuned for readable text (WCAG AA) on their own 10% tint.
  */
 @layer base {
   :root {
-    --background: 40 33% 98%;
-    --foreground: 195 25% 12%;
+    /* Canvas and surfaces (tonal layering: background < muted < accent < secondary) */
+    --background: 231 100% 98.6%;
+    --foreground: 212 63% 11.6%;
     --card: 0 0% 100%;
-    --card-foreground: 195 25% 12%;
+    --card-foreground: 212 63% 11.6%;
     --popover: 0 0% 100%;
-    --popover-foreground: 195 25% 12%;
+    --popover-foreground: 212 63% 11.6%;
 
-    --primary: 175 63% 24%;
+    /* Eucalyptus: primary actions, links, selected and active states */
+    --primary: 161 100% 21.2%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 168 30% 93%;
-    --secondary-foreground: 175 63% 20%;
+    /* Deep medical slate: logo mark, high-emphasis "create" actions, the Doctor role */
+    --ink: 222 47% 11.2%;
+    --ink-foreground: 0 0% 100%;
 
-    --muted: 40 20% 95%;
-    --muted-foreground: 195 9% 38%;
-    --accent: 40 22% 93%;
-    --accent-foreground: 195 25% 12%;
+    /* Soft blue surface: icon tiles, avatars, tonal buttons, active navigation */
+    --secondary: 218 100% 93.1%;
+    --secondary-foreground: 222 42% 12.7%;
+    --muted: 221 100% 96.9%;
+    --muted-foreground: 215 19% 34.5%;
+    --accent: 219 100% 94.9%;
+    --accent-foreground: 212 63% 11.6%;
 
-    --destructive: 2 68% 45%;
+    --destructive: 0 75% 41.6%;
     --destructive-foreground: 0 0% 100%;
-    --success: 152 58% 28%;
+    --success: 163 94% 24.3%;
     --success-foreground: 0 0% 100%;
-    --warning: 30 92% 34%;
+    --warning: 23 83% 31.4%;
     --warning-foreground: 0 0% 100%;
-    --info: 212 70% 42%;
+    --info: 201 96% 32.2%;
     --info-foreground: 0 0% 100%;
+    --violet: 273 67% 39.4%;
+    --violet-foreground: 0 0% 100%;
 
-    --border: 36 16% 88%;
-    --input: 36 12% 82%;
-    --ring: 175 63% 30%;
+    --border: 214 32% 91.4%;
+    --input: 213 27% 83.9%;
+    --ring: 161 94% 30.4%;
+    /* Form controls and buttons; cards use rounded-2xl (radius + 6px = 16px) */
     --radius: 0.625rem;
 
     /* Tailwind v4 spacing variable used by a few generated shadcn components */
     --spacing: 0.25rem;
 
-    --sidebar-background: 40 33% 98%;
-    --sidebar-foreground: 195 25% 12%;
-    --sidebar-primary: 175 63% 24%;
+    --sidebar-background: 221 100% 96.9%;
+    --sidebar-foreground: 215 19% 34.5%;
+    --sidebar-primary: 161 100% 21.2%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 40 22% 93%;
-    --sidebar-accent-foreground: 195 25% 12%;
-    --sidebar-border: 36 16% 88%;
-    --sidebar-ring: 175 63% 30%;
+    --sidebar-accent: 216 96% 91.2%;
+    --sidebar-accent-foreground: 212 63% 11.6%;
+    --sidebar-border: 214 32% 91.4%;
+    --sidebar-ring: 161 94% 30.4%;
   }
 
+  /* Not switched on anywhere yet; kept in step with the light palette for a future theme toggle */
   .dark {
-    --background: 195 22% 8%;
-    --foreground: 40 20% 94%;
-    --card: 195 20% 11%;
-    --card-foreground: 40 20% 94%;
-    --popover: 195 20% 11%;
-    --popover-foreground: 40 20% 94%;
-    --primary: 172 50% 45%;
-    --primary-foreground: 195 25% 8%;
-    --secondary: 175 25% 16%;
-    --secondary-foreground: 40 20% 94%;
-    --muted: 195 15% 16%;
-    --muted-foreground: 40 8% 65%;
-    --accent: 195 15% 18%;
-    --accent-foreground: 40 20% 94%;
-    --destructive: 2 62% 52%;
-    --destructive-foreground: 0 0% 100%;
-    --success: 152 45% 45%;
-    --success-foreground: 195 25% 8%;
-    --warning: 34 85% 55%;
-    --warning-foreground: 195 25% 8%;
-    --info: 212 70% 60%;
-    --info-foreground: 195 25% 8%;
-    --border: 195 15% 20%;
-    --input: 195 15% 24%;
-    --ring: 172 50% 45%;
-    --sidebar-background: 195 22% 8%;
-    --sidebar-foreground: 40 20% 94%;
-    --sidebar-primary: 172 50% 45%;
-    --sidebar-primary-foreground: 195 25% 8%;
-    --sidebar-accent: 195 15% 18%;
-    --sidebar-accent-foreground: 40 20% 94%;
-    --sidebar-border: 195 15% 20%;
-    --sidebar-ring: 172 50% 45%;
+    --background: 220 49% 8.4%;
+    --foreground: 214 32% 91.4%;
+    --card: 221 46% 12.4%;
+    --card-foreground: 214 32% 91.4%;
+    --popover: 221 46% 12.4%;
+    --popover-foreground: 214 32% 91.4%;
+    --primary: 158 64% 51.6%;
+    --primary-foreground: 220 49% 8.4%;
+    --ink: 214 32% 91.4%;
+    --ink-foreground: 220 49% 8.4%;
+    --secondary: 223 42% 17.6%;
+    --secondary-foreground: 214 32% 91.4%;
+    --muted: 223 42% 17.6%;
+    --muted-foreground: 215 20% 65.1%;
+    --accent: 217 30% 22%;
+    --accent-foreground: 214 32% 91.4%;
+    --destructive: 0 91% 70.8%;
+    --destructive-foreground: 220 49% 8.4%;
+    --success: 158 64% 51.6%;
+    --success-foreground: 220 49% 8.4%;
+    --warning: 43 96% 56.3%;
+    --warning-foreground: 220 49% 8.4%;
+    --info: 198 93% 59.6%;
+    --info-foreground: 220 49% 8.4%;
+    --violet: 252 95% 85.1%;
+    --violet-foreground: 220 49% 8.4%;
+    --border: 217 30% 22%;
+    --input: 217 30% 26%;
+    --ring: 158 64% 51.6%;
+    --sidebar-background: 221 46% 12.4%;
+    --sidebar-foreground: 215 20% 65.1%;
+    --sidebar-primary: 158 64% 51.6%;
+    --sidebar-primary-foreground: 220 49% 8.4%;
+    --sidebar-accent: 217 30% 22%;
+    --sidebar-accent-foreground: 214 32% 91.4%;
+    --sidebar-border: 217 30% 22%;
+    --sidebar-ring: 158 64% 51.6%;
   }
 }
 
@@ -105,7 +120,7 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background font-sans text-foreground antialiased;
     font-feature-settings: "cv11", "ss01";
     overflow: hidden auto !important;
   }
@@ -133,13 +148,23 @@
   h1, h2, h3, h4 {
     text-wrap: balance;
   }
+
+  /* Times, dates and counts never jitter: tables and time elements use tabular figures */
+  table,
+  time {
+    font-variant-numeric: tabular-nums;
+  }
 }
 
 @layer components {
-  /* Display serif for page titles and marketing headlines */
+  /* Plus Jakarta Sans for page titles, panel headers and names */
   .font-display {
-    font-variation-settings: "SOFT" 30, "WONK" 0;
     letter-spacing: -0.015em;
+  }
+
+  /* Small uppercase section label ("TODAY'S PATIENTS", "SELECT PORTAL DOMAIN") */
+  .eyebrow {
+    @apply text-label-sm uppercase tracking-[0.08em] text-muted-foreground;
   }
 }
 

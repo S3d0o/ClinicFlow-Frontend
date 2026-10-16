@@ -19,7 +19,8 @@ import { AuthLayout } from '@/components/layout/AuthLayout';
 import { Field, FieldGroup } from '@/components/form/Field';
 import { PasswordInput } from '@/components/form/PasswordInput';
 import { PasswordRequirements } from '@/components/form/PasswordRequirements';
-import { MailCheck } from 'lucide-react';
+import { IconInput } from '@/components/form/IconInput';
+import { Mail, MailCheck, Phone } from 'lucide-react';
 import { toast } from 'sonner';
 
 const bloodTypes: BloodType[] = ['APositive', 'ANegative', 'BPositive', 'BNegative', 'OPositive', 'ONegative', 'ABPositive', 'ABNegative'];
@@ -78,11 +79,11 @@ export function RegisterPatientPage() {
   if (success) {
     return (
       <AuthLayout title="Check your inbox" description={<>We sent a confirmation link to <strong className="font-semibold text-foreground">{form.email}</strong>.</>}>
-        <div className="rounded-xl border bg-card p-6 shadow-card">
-          <span className="inline-flex size-11 items-center justify-center rounded-full bg-secondary text-primary">
+        <div className="rounded-xl bg-muted p-6">
+          <span className="inline-flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
             <MailCheck className="size-5" aria-hidden="true" />
           </span>
-          <p className="mt-4 text-sm text-muted-foreground">
+          <p className="mt-4 text-body-md text-muted-foreground">
             Open the link in the email to confirm your account, then sign in. If it doesn’t arrive within a few minutes, check your spam folder.
           </p>
           <Button asChild className="mt-6 w-full">
@@ -100,16 +101,16 @@ export function RegisterPatientPage() {
       description="Book appointments with approved doctors and keep your visits in one place."
       footer={
         <p>
-          Already have an account? <Link to="/login" className="font-medium text-primary hover:underline">Sign in</Link>
+          Already have an account? <Link to="/login" className="font-semibold text-primary hover:underline">Sign in</Link>
           <span className="mx-2 text-border" aria-hidden="true">|</span>
-          Are you a doctor? <Link to="/register/doctor" className="font-medium text-primary hover:underline">Join as a doctor</Link>
+          Are you a doctor? <Link to="/register/doctor" className="font-semibold text-primary hover:underline">Join as a doctor</Link>
         </p>
       }
     >
       <form onSubmit={handleSubmit} className="space-y-8">
         <FieldGroup title="Account">
           <Field id="email" label="Email" required>
-            <Input type="email" autoComplete="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
+            <IconInput icon={Mail} type="email" autoComplete="email" placeholder="you@example.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
           </Field>
           <div className="space-y-2">
             <Field id="password" label="Password" required error={errors.password}>
@@ -128,13 +129,13 @@ export function RegisterPatientPage() {
               <Input autoComplete="family-name" value={form.lastName} onChange={(e) => setForm({ ...form, lastName: e.target.value })} required maxLength={50} />
             </Field>
             <Field id="phone" label="Phone number" required hint="International format, e.g. +201234567890">
-              <Input type="tel" autoComplete="tel" placeholder="+201234567890" value={form.phoneNumber} onChange={(e) => setForm({ ...form, phoneNumber: e.target.value })} required />
+              <IconInput icon={Phone} type="tel" autoComplete="tel" placeholder="+201234567890" value={form.phoneNumber} onChange={(e) => setForm({ ...form, phoneNumber: e.target.value })} required />
             </Field>
             <Field id="dob" label="Date of birth" optional hint="You must be at least 18.">
               <Input type="date" autoComplete="bday" value={form.dateOfBirth} onChange={(e) => setForm({ ...form, dateOfBirth: e.target.value })} />
             </Field>
             <div className="space-y-1.5">
-              <Label htmlFor="gender" className="gap-1 text-[0.8125rem]">
+              <Label htmlFor="gender" className="gap-1 text-label-md">
                 Gender<span className="text-destructive" aria-hidden="true">*</span>
               </Label>
               <Select value={form.gender} onValueChange={(v) => { setForm({ ...form, gender: v as Gender }); setErrors((er) => ({ ...er, gender: undefined })); }}>
@@ -146,7 +147,7 @@ export function RegisterPatientPage() {
                   <SelectItem value="Female">Female</SelectItem>
                 </SelectContent>
               </Select>
-              {errors.gender && <p id="gender-error" className="text-xs font-medium text-destructive">{errors.gender}</p>}
+              {errors.gender && <p id="gender-error" className="text-body-sm font-medium text-destructive">{errors.gender}</p>}
             </div>
           </div>
         </FieldGroup>
@@ -154,7 +155,7 @@ export function RegisterPatientPage() {
         <FieldGroup title="Health & emergency contact" description="Optional — you can add or change these later from your profile.">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
-              <Label htmlFor="bloodType" className="text-[0.8125rem]">Blood type</Label>
+              <Label htmlFor="bloodType" className="text-label-md">Blood type</Label>
               <Select value={form.bloodType} onValueChange={(v) => setForm({ ...form, bloodType: v as BloodType })}>
                 <SelectTrigger id="bloodType" className="w-full"><SelectValue placeholder="Select" /></SelectTrigger>
                 <SelectContent>
@@ -174,7 +175,7 @@ export function RegisterPatientPage() {
               <Input value={form.emergencyContactName} onChange={(e) => setForm({ ...form, emergencyContactName: e.target.value })} maxLength={100} />
             </Field>
             <Field id="emergencyPhone" label="Emergency contact phone">
-              <Input type="tel" placeholder="+201098765432" value={form.emergencyContactPhone} onChange={(e) => setForm({ ...form, emergencyContactPhone: e.target.value })} />
+              <IconInput icon={Phone} type="tel" placeholder="+201098765432" value={form.emergencyContactPhone} onChange={(e) => setForm({ ...form, emergencyContactPhone: e.target.value })} />
             </Field>
           </div>
         </FieldGroup>

@@ -1,4 +1,5 @@
 import { cloneElement, isValidElement, type ReactElement, type ReactNode } from 'react';
+import { AlertCircle } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
@@ -34,23 +35,24 @@ export function Field({ id, label, required, optional, hint, error, className, c
 
   return (
     <div className={cn('space-y-1.5', className)}>
-      <Label htmlFor={id} className="gap-1 text-[0.8125rem] font-medium text-foreground">
+      <Label htmlFor={id} className="gap-1 text-label-md text-foreground">
         {label}
         {required && (
           <span className="text-destructive" aria-hidden="true">
             *
           </span>
         )}
-        {optional && <span className="font-normal text-muted-foreground">(optional)</span>}
+        {optional && <span className="font-normal tracking-normal text-muted-foreground">(optional)</span>}
       </Label>
       {control}
       {hint && !error && (
-        <p id={hintId} className="text-xs text-muted-foreground">
+        <p id={hintId} className="text-body-sm text-muted-foreground">
           {hint}
         </p>
       )}
       {error && (
-        <p id={errorId} className="text-xs font-medium text-destructive">
+        <p id={errorId} className="flex items-start gap-1.5 text-body-sm font-medium text-destructive">
+          <AlertCircle className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
           {error}
         </p>
       )}
@@ -63,8 +65,8 @@ export function FieldGroup({ title, description, children, className }: { title:
   return (
     <fieldset className={cn('space-y-4', className)}>
       <div>
-        <legend className="text-sm font-semibold text-foreground">{title}</legend>
-        {description && <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>}
+        <legend className="font-display text-title-sm text-foreground">{title}</legend>
+        {description && <p className="mt-0.5 text-body-sm text-muted-foreground">{description}</p>}
       </div>
       {children}
     </fieldset>

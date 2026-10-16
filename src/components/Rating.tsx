@@ -10,7 +10,7 @@ export function RatingStars({ value, className, size = 'sm' }: { value: number; 
         <Star
           key={i}
           aria-hidden="true"
-          className={cn(starSize, i < Math.round(value) ? 'fill-amber-400 text-amber-400' : 'fill-muted text-border')}
+          className={cn(starSize, i < Math.round(value) ? 'fill-primary text-primary' : 'fill-secondary text-input')}
         />
       ))}
     </span>
@@ -20,11 +20,11 @@ export function RatingStars({ value, className, size = 'sm' }: { value: number; 
 /** Compact "★ 4.8" summary; shows "New" when a doctor has no rating yet. */
 export function RatingSummary({ rating, reviews, className }: { rating: number; reviews?: number; className?: string }) {
   if (!rating) {
-    return <span className={cn('inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground', className)}>New</span>;
+    return <span className={cn('inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 text-label-sm text-primary', className)}>New</span>;
   }
   return (
     <span className={cn('inline-flex items-center gap-1 text-sm', className)}>
-      <Star className="size-3.5 fill-amber-400 text-amber-400" aria-hidden="true" />
+      <Star className="size-3.5 fill-primary text-primary" aria-hidden="true" />
       <span className="font-semibold tabular-nums">{rating.toFixed(1)}</span>
       <span className="sr-only">out of 5</span>
       {reviews !== undefined && <span className="text-muted-foreground">({reviews} {reviews === 1 ? 'review' : 'reviews'})</span>}
@@ -41,7 +41,7 @@ export function RatingInput({ value, onChange, name = 'rating' }: { value: numbe
       <legend className="sr-only">Rating</legend>
       <div className="flex items-center justify-center gap-1">
         {[1, 2, 3, 4, 5].map((star) => (
-          <label key={star} className="group cursor-pointer rounded-md p-1 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring">
+          <label key={star} className="group cursor-pointer rounded-lg p-1 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring">
             <input
               type="radio"
               name={name}
@@ -55,13 +55,13 @@ export function RatingInput({ value, onChange, name = 'rating' }: { value: numbe
               aria-hidden="true"
               className={cn(
                 'size-8 transition-transform group-hover:scale-110',
-                star <= value ? 'fill-amber-400 text-amber-400' : 'fill-muted text-border'
+                star <= value ? 'fill-primary text-primary' : 'fill-transparent text-primary/40'
               )}
             />
           </label>
         ))}
       </div>
-      <p className="mt-2 text-center text-sm font-medium text-muted-foreground" aria-hidden="true">
+      <p className="mt-2 text-center text-label-md text-primary" aria-hidden="true">
         {ratingLabels[value - 1]}
       </p>
     </fieldset>

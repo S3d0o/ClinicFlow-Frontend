@@ -1,28 +1,26 @@
-import { CalendarCheck, CheckCircle2, CircleDashed, UserX, XCircle, type LucideIcon } from 'lucide-react';
 import type { AppointmentStatus } from '@/types';
 import { cn } from '@/lib/utils';
 
-const statusStyles: Record<AppointmentStatus, { label: string; icon: LucideIcon; className: string }> = {
-  Confirmed: { label: 'Confirmed', icon: CalendarCheck, className: 'bg-primary/[0.08] text-primary ring-primary/20' },
-  Completed: { label: 'Completed', icon: CheckCircle2, className: 'bg-success/10 text-success ring-success/20' },
-  Cancelled: { label: 'Cancelled', icon: XCircle, className: 'bg-destructive/[0.08] text-destructive ring-destructive/20' },
-  Pending: { label: 'Pending', icon: CircleDashed, className: 'bg-warning/10 text-warning ring-warning/20' },
-  NoShow: { label: 'No-show', icon: UserX, className: 'bg-muted text-muted-foreground ring-border' },
+const statusStyles: Record<AppointmentStatus, { label: string; className: string; dot: string }> = {
+  Confirmed: { label: 'Confirmed', className: 'border-success/25 bg-success/10 text-success', dot: 'bg-success' },
+  Completed: { label: 'Completed', className: 'border-info/20 bg-secondary text-secondary-foreground', dot: 'bg-info' },
+  Cancelled: { label: 'Cancelled', className: 'border-destructive/20 bg-destructive/[0.07] text-destructive', dot: 'bg-destructive' },
+  Pending: { label: 'Pending', className: 'border-warning/25 bg-warning/10 text-warning', dot: 'bg-warning' },
+  NoShow: { label: 'No-show', className: 'border-border bg-muted text-muted-foreground', dot: 'bg-muted-foreground' },
 };
 
-/** Appointment status: icon + text, so the state never depends on color alone. */
+/** Appointment status chip: a status dot plus the status name, so the state never depends on color alone. */
 export function StatusBadge({ status, className }: { status: AppointmentStatus; className?: string }) {
   const style = statusStyles[status] ?? statusStyles.Pending;
-  const Icon = style.icon;
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset',
+        'inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-2.5 py-0.5 text-label-sm',
         style.className,
         className
       )}
     >
-      <Icon className="size-3.5" aria-hidden="true" />
+      <span className={cn('size-1.5 rounded-full', style.dot)} aria-hidden="true" />
       {style.label}
     </span>
   );

@@ -29,7 +29,7 @@ export function ConfirmEmailPage() {
   if (status === 'loading') {
     return (
       <AuthLayout title="Confirming your email…" description="This only takes a moment.">
-        <div role="status" className="flex items-center gap-3 rounded-xl border bg-card p-6 text-sm text-muted-foreground shadow-card">
+        <div role="status" className="flex items-center gap-3 rounded-xl bg-muted p-6 text-body-md text-muted-foreground">
           <Spinner className="size-5 text-primary" aria-hidden="true" /> Verifying your confirmation link
         </div>
       </AuthLayout>
@@ -39,11 +39,11 @@ export function ConfirmEmailPage() {
   if (status === 'success') {
     return (
       <AuthLayout title="Email confirmed" description="Your account is ready. Sign in to book your first appointment.">
-        <div role="status" className="rounded-xl border bg-card p-6 shadow-card">
-          <span className="inline-flex size-11 items-center justify-center rounded-full bg-success/10 text-success">
+        <div role="status" className="rounded-xl bg-muted p-6">
+          <span className="inline-flex size-11 items-center justify-center rounded-xl bg-success/10 text-success">
             <CheckCircle2 className="size-5" aria-hidden="true" />
           </span>
-          <p className="mt-4 text-sm text-muted-foreground">
+          <p className="mt-4 text-body-md text-muted-foreground">
             Doctors: your profile becomes visible to patients once the clinic team approves it.
           </p>
           <Button asChild className="mt-6 w-full">
@@ -56,11 +56,11 @@ export function ConfirmEmailPage() {
 
   return (
     <AuthLayout title="This link didn’t work" description="The confirmation link is invalid or has expired.">
-      <div role="alert" className="rounded-xl border bg-card p-6 shadow-card">
-        <span className="inline-flex size-11 items-center justify-center rounded-full bg-destructive/10 text-destructive">
+      <div role="alert" className="rounded-xl bg-muted p-6">
+        <span className="inline-flex size-11 items-center justify-center rounded-xl bg-destructive/10 text-destructive">
           <XCircle className="size-5" aria-hidden="true" />
         </span>
-        <p className="mt-4 text-sm text-muted-foreground">
+        <p className="mt-4 text-body-md text-muted-foreground">
           Links can only be used once. If you’ve already confirmed your email, you can sign in now.
         </p>
         <Button asChild variant="outline" className="mt-6 w-full">

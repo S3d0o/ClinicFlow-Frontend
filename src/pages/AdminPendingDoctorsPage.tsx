@@ -88,8 +88,17 @@ export function AdminPendingDoctorsPage() {
   return (
     <Page width="wide">
       <PageHeader
+        eyebrow="Clinic administration"
         title="Doctor approvals"
         description="New doctors appear in search only after you approve them. Review each application below."
+        actions={
+          !loading && doctors.length > 0 ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-warning/25 bg-warning/10 px-3 py-1 text-label-md text-warning">
+              <span className="size-1.5 rounded-full bg-warning" aria-hidden="true" />
+              {doctors.length} awaiting review
+            </span>
+          ) : undefined
+        }
       />
 
       {loading ? (
@@ -99,27 +108,27 @@ export function AdminPendingDoctorsPage() {
       ) : (
         <>
           {/* Desktop: table */}
-          <div className="hidden overflow-hidden rounded-xl border bg-card shadow-card md:block">
+          <div className="hidden overflow-hidden rounded-2xl border border-border/70 bg-card shadow-card md:block">
             <table className="w-full text-sm">
               <caption className="sr-only">Doctors waiting for approval</caption>
-              <thead className="border-b bg-muted/50 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              <thead className="bg-muted text-left text-label-sm uppercase tracking-wider text-muted-foreground">
                 <tr>
-                  <th scope="col" className="px-5 py-3">Doctor</th>
+                  <th scope="col" className="px-5 py-3.5">Doctor</th>
                   <th scope="col" className="px-5 py-3">City</th>
                   <th scope="col" className="px-5 py-3 text-right">Experience</th>
                   <th scope="col" className="px-5 py-3 text-right">Fee</th>
                   <th scope="col" className="px-5 py-3 text-right"><span className="sr-only">Actions</span></th>
                 </tr>
               </thead>
-              <tbody className="divide-y">
+              <tbody className="divide-y divide-border/70">
                 {doctors.map((d) => (
-                  <tr key={d.id} className="transition-colors hover:bg-muted/30">
+                  <tr key={d.id} className="transition-colors hover:bg-muted/50">
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-3">
                         <UserAvatar name={d.fullName} />
                         <div className="min-w-0">
-                          <p className="truncate font-semibold">{d.fullName}</p>
-                          <p className="text-xs text-primary">{d.specialtyName}</p>
+                          <p className="truncate text-label-md">{d.fullName}</p>
+                          <span className="mt-1 inline-flex rounded-full bg-primary/10 px-2 py-0.5 text-label-sm text-primary">{d.specialtyName}</span>
                         </div>
                       </div>
                     </td>
@@ -136,20 +145,20 @@ export function AdminPendingDoctorsPage() {
           {/* Mobile: cards */}
           <ul className="space-y-3 md:hidden">
             {doctors.map((d) => (
-              <li key={d.id} className="rounded-xl border bg-card p-4 shadow-card">
+              <li key={d.id} className="rounded-2xl border border-border/70 bg-card p-5 shadow-card">
                 <div className="flex items-center gap-3">
                   <UserAvatar name={d.fullName} />
                   <div className="min-w-0">
-                    <p className="truncate font-semibold">{d.fullName}</p>
-                    <p className="text-xs text-primary">{d.specialtyName}</p>
+                    <p className="truncate text-label-md">{d.fullName}</p>
+                    <span className="mt-1 inline-flex rounded-full bg-primary/10 px-2 py-0.5 text-label-sm text-primary">{d.specialtyName}</span>
                   </div>
                 </div>
-                <dl className="mt-4 grid grid-cols-3 gap-2 text-sm">
-                  <div><dt className="text-xs text-muted-foreground">City</dt><dd className="truncate font-medium">{d.clinicCity || '—'}</dd></div>
-                  <div><dt className="text-xs text-muted-foreground">Experience</dt><dd className="font-medium tabular-nums">{d.yearsOfExperience} yrs</dd></div>
-                  <div><dt className="text-xs text-muted-foreground">Fee</dt><dd className="font-medium tabular-nums">{formatFee(d.consultationFee)}</dd></div>
+                <dl className="mt-4 grid grid-cols-3 gap-2 rounded-xl bg-muted px-3 py-3 text-sm">
+                  <div><dt className="text-caption uppercase tracking-wider text-muted-foreground">City</dt><dd className="truncate font-medium">{d.clinicCity || '—'}</dd></div>
+                  <div><dt className="text-caption uppercase tracking-wider text-muted-foreground">Experience</dt><dd className="font-medium tabular-nums">{d.yearsOfExperience} yrs</dd></div>
+                  <div><dt className="text-caption uppercase tracking-wider text-muted-foreground">Fee</dt><dd className="font-medium tabular-nums">{formatFee(d.consultationFee)}</dd></div>
                 </dl>
-                <div className="mt-4 border-t pt-4">{actions(d)}</div>
+                <div className="mt-4">{actions(d)}</div>
               </li>
             ))}
           </ul>

@@ -23,7 +23,8 @@ import { Pagination } from '@/components/Pagination';
 import { StatusBadge } from '@/components/StatusBadge';
 import { DateTile } from '@/components/DateTile';
 import { RatingInput } from '@/components/Rating';
-import { CalendarDays, CalendarPlus, Clock, MessageSquareText, Star, X } from 'lucide-react';
+import { CalendarDays, CalendarPlus, Clock, Info, MessageSquareText, Star, X } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
 type StatusFilter = 'all' | AppointmentStatus;
@@ -123,6 +124,7 @@ export function PatientAppointmentsPage() {
   return (
     <Page>
       <PageHeader
+        eyebrow="Patient portal"
         title="My appointments"
         description="Your upcoming visits and appointment history."
         actions={
@@ -153,19 +155,19 @@ export function PatientAppointmentsPage() {
             action={statusFilter === 'all' ? <Button asChild><Link to="/doctors">Find a doctor</Link></Button> : undefined}
           />
         ) : (
-          <ul className="space-y-3">
+          <ul className="space-y-4">
             {appointments.map((apt) => {
               const canReview = apt.status === 'Completed' && !apt.hasReview && !reviewedIds.has(apt.id);
               const inactive = apt.status === 'Cancelled';
               return (
-                <li key={apt.id} className="rounded-xl border bg-card p-4 shadow-card sm:p-5">
+                <li key={apt.id} className="rounded-2xl border border-border/70 bg-card p-5 shadow-card sm:p-6">
                   <div className="flex gap-4">
                     <DateTile date={apt.appointmentDate} muted={inactive} />
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
                         <div className="min-w-0">
-                          <h2 className="truncate font-semibold">{apt.doctorName}</h2>
-                          <p className="mt-0.5 flex items-center gap-1.5 text-sm text-muted-foreground">
+                          <h2 className={cn('truncate font-display text-title-sm', inactive && 'text-muted-foreground line-through decoration-muted-foreground/50')}>{apt.doctorName}</h2>
+                          <p className="mt-1 flex items-center gap-1.5 text-body-md text-muted-foreground">
                             <Clock className="size-3.5" aria-hidden="true" />
                             <span className="tabular-nums">{formatTimeRange(apt.startTime, apt.endTime)}</span>
                           </p>
@@ -173,24 +175,31 @@ export function PatientAppointmentsPage() {
                         <StatusBadge status={apt.status} />
                       </div>
                       {apt.reasonForVisit && (
-                        <p className="mt-2 text-sm text-foreground/80">
+                        <p className="mt-3 text-body-md text-foreground/85">
                           <span className="text-muted-foreground">Reason: </span>
                           {apt.reasonForVisit}
                         </p>
                       )}
 
                       {apt.doctorNotes && (
-                        <div className="mt-3 rounded-lg bg-muted/70 px-3 py-2.5 text-sm">
-                          <p className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
+                        <div className="mt-3 rounded-xl bg-muted px-4 py-3 text-body-md">
+                          <p className="flex items-center gap-1.5 text-label-sm uppercase tracking-wider text-muted-foreground">
                             <MessageSquareText className="size-3.5" aria-hidden="true" /> Doctor’s notes
                           </p>
                           <p className="mt-1 text-foreground/90">{apt.doctorNotes}</p>
                         </div>
                       )}
                       {apt.status === 'Cancelled' && (apt.cancellationReason || apt.cancelledBy) && (
-                        <p className="mt-3 text-sm text-muted-foreground">
+                        <p className="mt-3 rounded-xl bg-muted px-4 py-2.5 text-body-sm text-muted-foreground">
                           Cancelled{apt.cancelledBy ? ` by ${apt.cancelledBy.toLowerCase()}` : ''}
                           {apt.cancellationReason ? ` — “${apt.cancellationReason}”` : ''}
+                        </p>
+                      )}
+
+                      {apt.status === 'Confirmed' && (
+                        <p className="mt-3 flex items-start gap-2 rounded-xl border border-info/15 bg-info/[0.06] px-3 py-2 text-body-sm text-info">
+                          <Info className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
+                          You can cancel up to 2 hours before the start time.
                         </p>
                       )}
 
@@ -241,7 +250,7 @@ export function PatientAppointmentsPage() {
               onChange={(e) => setCancelReason(e.target.value)}
               aria-describedby="cancel-reason-hint"
             />
-            <p id="cancel-reason-hint" className="text-xs text-muted-foreground">Appointments can be cancelled up to 2 hours before they start.</p>
+            <p id="cancel-reason-hint" className="text-body-sm text-muted-foreground">Appointments can be cancelled up to 2 hours before they start.</p>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={closeCancel} disabled={cancelLoading}>Keep appointment</Button>
@@ -260,7 +269,9 @@ export function PatientAppointmentsPage() {
             <DialogTitle>How was your visit?</DialogTitle>
             <DialogDescription>Your review of {reviewAppointment?.doctorName} helps other patients choose with confidence.</DialogDescription>
           </DialogHeader>
-          <RatingInput value={reviewRating} onChange={setReviewRating} />
+          <div className="rounded-xl bg-muted py-4">
+            <RatingInput value={reviewRating} onChange={setReviewRating} />
+          </div>
           <div className="space-y-1.5">
             <Label htmlFor="review-comment">Comment <span className="font-normal text-muted-foreground">(optional)</span></Label>
             <Textarea
@@ -271,7 +282,7 @@ export function PatientAppointmentsPage() {
               maxLength={REVIEW_MAX_LENGTH}
               aria-describedby="review-comment-count"
             />
-            <p id="review-comment-count" className="text-right text-xs text-muted-foreground tabular-nums">
+            <p id="review-comment-count" className="text-right text-body-sm text-muted-foreground tabular-nums">
               {reviewComment.length}/{REVIEW_MAX_LENGTH}
             </p>
           </div>

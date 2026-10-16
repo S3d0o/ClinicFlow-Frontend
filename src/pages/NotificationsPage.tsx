@@ -14,10 +14,10 @@ import { toast } from 'sonner';
 
 const typeConfig: Record<NotificationType, { icon: LucideIcon; className: string }> = {
   AppointmentReminder: { icon: Clock, className: 'bg-warning/10 text-warning' },
-  AppointmentConfirmed: { icon: Check, className: 'bg-primary/10 text-primary' },
+  AppointmentConfirmed: { icon: Check, className: 'bg-success/10 text-success' },
   AppointmentCancelled: { icon: AlertTriangle, className: 'bg-destructive/10 text-destructive' },
-  AppointmentCompleted: { icon: CheckCheck, className: 'bg-success/10 text-success' },
-  SystemAlert: { icon: Info, className: 'bg-info/10 text-info' },
+  AppointmentCompleted: { icon: CheckCheck, className: 'bg-info/10 text-info' },
+  SystemAlert: { icon: Info, className: 'bg-secondary text-secondary-foreground' },
 };
 
 type Filter = 'all' | 'unread';
@@ -69,6 +69,7 @@ export function NotificationsPage() {
   return (
     <Page width="narrow">
       <PageHeader
+        eyebrow="Account"
         title="Notifications"
         description={unreadCount > 0 ? `You have ${unreadCount} unread notification${unreadCount !== 1 ? 's' : ''}.` : 'You’re all caught up.'}
         actions={
@@ -101,27 +102,27 @@ export function NotificationsPage() {
             description="Booking confirmations, reminders and updates will appear here."
           />
         ) : (
-          <ul className="divide-y overflow-hidden rounded-xl border bg-card shadow-card">
+          <ul className="divide-y divide-border/70 overflow-hidden rounded-2xl border border-border/70 bg-card shadow-card">
             {notifications.map((n) => {
               const config = typeConfig[n.type] ?? typeConfig.SystemAlert;
               const Icon = config.icon;
               const created = parseUtc(n.createdAt);
               return (
-                <li key={n.id} className={cn('flex gap-4 px-4 py-4 sm:px-5', !n.isRead && 'bg-secondary/40')}>
-                  <span className={cn('mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-lg', config.className)}>
+                <li key={n.id} className={cn('relative flex gap-4 px-4 py-4 sm:px-5', !n.isRead && 'bg-muted before:absolute before:inset-y-3 before:left-0 before:w-1 before:rounded-r-full before:bg-primary')}>
+                  <span className={cn('mt-0.5 inline-flex size-10 shrink-0 items-center justify-center rounded-xl', config.className)}>
                     <Icon className="size-4" aria-hidden="true" />
                   </span>
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
-                      <h2 className={cn('text-sm', n.isRead ? 'font-medium text-foreground/80' : 'font-semibold text-foreground')}>
+                      <h2 className={cn('text-sm', n.isRead ? 'font-medium text-foreground/80' : 'font-bold text-foreground')}>
                         {!n.isRead && <span className="sr-only">Unread: </span>}
                         {n.title}
                       </h2>
-                      <time dateTime={created.toISOString()} title={format(created, 'PPpp')} className="shrink-0 text-xs text-muted-foreground">
+                      <time dateTime={created.toISOString()} title={format(created, 'PPpp')} className="shrink-0 text-body-sm text-muted-foreground">
                         {formatTimeAgo(n.createdAt)}
                       </time>
                     </div>
-                    <p className="mt-1 text-sm text-muted-foreground">{n.message}</p>
+                    <p className="mt-1 text-body-md text-muted-foreground">{n.message}</p>
                   </div>
                   {!n.isRead ? (
                     <Button

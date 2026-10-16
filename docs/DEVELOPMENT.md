@@ -117,7 +117,7 @@ Compose runs the backend in Production, so there's **no demo data**. Set `ADMIN_
      }
    />
    ```
-3. Add it to the role's entry in `navByRole` in `src/components/Navbar.tsx` if it belongs in the main navigation (it then appears on desktop and in the mobile menu).
+3. Add it to the role's entry in `navByRole` in `src/lib/navigation.ts` if it belongs in the main navigation (with a `lucide-react` icon; it then appears in the sidebar and in the mobile menu).
 
 ### Call a new endpoint
 

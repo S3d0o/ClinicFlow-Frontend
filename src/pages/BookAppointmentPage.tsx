@@ -50,7 +50,7 @@ function Step({ number, title, children, aside }: { number: number; title: strin
     <Card>
       <CardHeader className="flex flex-row items-center justify-between gap-3 space-y-0">
         <CardTitle className="flex items-center gap-3">
-          <span className="inline-flex size-7 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">{number}</span>
+          <span className="inline-flex size-8 items-center justify-center rounded-lg bg-ink text-label-md text-ink-foreground">{number}</span>
           <span>{title}</span>
         </CardTitle>
         {aside}
@@ -174,17 +174,17 @@ export function BookAppointmentPage() {
 
   const summary = (
     <Card className="lg:sticky lg:top-24">
-      <CardHeader className="border-b">
+      <CardHeader className="border-b border-border/70">
         <div className="flex items-center gap-3">
           <UserAvatar name={doctor.fullName} />
           <div className="min-w-0">
-            <p className="truncate font-semibold">{doctor.fullName}</p>
-            <p className="text-sm text-muted-foreground">{doctor.specialtyName}</p>
+            <p className="truncate font-display text-title-sm">{doctor.fullName}</p>
+            <p className="text-label-md text-primary">{doctor.specialtyName}</p>
           </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-4 pt-5 sm:pt-5">
-        <dl className="space-y-3 text-sm">
+        <dl className="space-y-3 rounded-xl bg-muted p-4 text-sm">
           <div className="flex items-start justify-between gap-4">
             <dt className="flex items-center gap-2 text-muted-foreground"><Calendar className="size-4" aria-hidden="true" />Date</dt>
             <dd className="text-right font-medium">{selectedSlot ? format(parseISO(selectedSlot.date), 'EEE, MMM d') : '—'}</dd>
@@ -199,15 +199,15 @@ export function BookAppointmentPage() {
               <dd className="text-right font-medium">{doctor.clinicCity}</dd>
             </div>
           )}
-          <div className="flex items-start justify-between gap-4 border-t pt-3">
+          <div className="flex items-start justify-between gap-4 border-t border-border pt-3">
             <dt className="text-muted-foreground">Consultation fee</dt>
-            <dd className="font-semibold tabular-nums">{formatFee(doctor.consultationFee)}</dd>
+            <dd className="font-display text-title-sm tabular-nums">{formatFee(doctor.consultationFee)}</dd>
           </div>
         </dl>
         <Button size="lg" className="w-full" disabled={!selectedSlot} onClick={() => setShowConfirm(true)}>
           {selectedSlot ? 'Review & confirm' : 'Select a time to continue'}
         </Button>
-        <p className="text-center text-xs text-muted-foreground">You can cancel up to 2 hours before the start time.</p>
+        <p className="text-center text-body-sm text-muted-foreground">You can cancel up to 2 hours before the start time.</p>
       </CardContent>
     </Card>
   );
@@ -228,7 +228,7 @@ export function BookAppointmentPage() {
             title="Choose a date"
             aside={
               <div className="flex items-center gap-1">
-                <span className="mr-1 hidden text-sm text-muted-foreground sm:inline">{rangeLabel}</span>
+                <span className="mr-1 hidden text-body-sm text-muted-foreground sm:inline">{rangeLabel}</span>
                 <Button
                   variant="outline"
                   size="icon-sm"
@@ -263,18 +263,18 @@ export function BookAppointmentPage() {
                     aria-pressed={isSelected}
                     aria-label={format(date, 'EEEE, MMMM d')}
                     className={cn(
-                      'flex flex-col items-center rounded-lg border px-1 py-2.5 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
+                      'flex flex-col items-center rounded-xl border px-1 py-2.5 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
                       isSelected
                         ? 'border-primary bg-primary text-primary-foreground shadow-xs'
                         : isPast
                         ? 'cursor-not-allowed border-transparent text-muted-foreground/50'
-                        : 'border-border bg-card text-foreground hover:border-primary/40 hover:bg-secondary/60'
+                        : 'border-transparent bg-muted text-foreground hover:border-input hover:bg-accent'
                     )}
                   >
-                    <span className={cn('text-[10px] font-medium uppercase sm:text-[11px] sm:tracking-wide', isSelected ? 'text-primary-foreground/80' : 'text-muted-foreground')}>
+                    <span className={cn('text-[10px] font-semibold uppercase sm:text-label-sm sm:tracking-wide', isSelected ? 'text-primary-foreground/80' : 'text-muted-foreground')}>
                       {getDateLabel(date)}
                     </span>
-                    <span className="mt-0.5 text-lg font-semibold leading-tight tabular-nums">{format(date, 'd')}</span>
+                    <span className="mt-0.5 font-display text-headline-md tabular-nums">{format(date, 'd')}</span>
                   </button>
                 );
               })}
@@ -284,20 +284,22 @@ export function BookAppointmentPage() {
           <Step number={2} title={`Choose a time · ${format(selectedDate, 'EEEE, MMM d')}`}>
             <div aria-live="polite" aria-busy={slotsLoading}>
               {slotsLoading ? (
-                <div className="flex items-center justify-center gap-2 py-10 text-sm text-muted-foreground">
+                <div className="flex items-center justify-center gap-2 py-10 text-body-md text-muted-foreground">
                   <Spinner className="text-primary" /> Loading available times…
                 </div>
               ) : slots.length === 0 ? (
-                <div className="rounded-lg border border-dashed px-4 py-10 text-center">
-                  <Clock className="mx-auto mb-3 size-6 text-muted-foreground/60" aria-hidden="true" />
-                  <p className="text-sm font-medium">No open times on this day</p>
-                  <p className="mt-1 text-sm text-muted-foreground">Try another date{lastPage ? '' : ' or the next week'}.</p>
+                <div className="rounded-xl border border-dashed border-input px-4 py-10 text-center">
+                  <span className="mx-auto mb-3 inline-flex size-11 items-center justify-center rounded-xl bg-secondary text-secondary-foreground">
+                    <Clock className="size-5" aria-hidden="true" />
+                  </span>
+                  <p className="font-display text-title-sm">No open times on this day</p>
+                  <p className="mt-1 text-body-md text-muted-foreground">Try another date{lastPage ? '' : ' or the next week'}.</p>
                 </div>
               ) : (
                 <div className="space-y-5">
                   {groupedSlots.map((group) => (
                     <div key={group.label}>
-                      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{group.label}</p>
+                      <p className="eyebrow mb-2">{group.label}</p>
                       <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5" role="group" aria-label={`${group.label} times`}>
                         {group.slots.map((slot) => {
                           const isSelected = selectedSlot?.id === slot.id;
@@ -309,10 +311,10 @@ export function BookAppointmentPage() {
                               aria-pressed={isSelected}
                               aria-label={formatTimeRange(slot.startTime, slot.endTime)}
                               className={cn(
-                                'h-10 rounded-md border text-sm font-medium tabular-nums transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
+                                'h-10 rounded-lg border text-sm font-semibold tabular-nums transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
                                 isSelected
                                   ? 'border-primary bg-primary text-primary-foreground shadow-xs'
-                                  : 'border-border bg-card text-foreground hover:border-primary/40 hover:bg-secondary/60'
+                                  : 'border-info/25 bg-info/[0.06] text-info hover:border-info/50 hover:bg-info/10'
                               )}
                             >
                               {formatTime(slot.startTime)}
@@ -338,7 +340,7 @@ export function BookAppointmentPage() {
               rows={3}
               aria-describedby="visit-reason-hint"
             />
-            <p id="visit-reason-hint" className="mt-1.5 flex justify-between text-xs text-muted-foreground">
+            <p id="visit-reason-hint" className="mt-1.5 flex justify-between text-body-sm text-muted-foreground">
               <span>Shared with your doctor before the visit.</span>
               <span className="tabular-nums">{reason.length}/{REASON_MAX_LENGTH}</span>
             </p>
@@ -355,7 +357,7 @@ export function BookAppointmentPage() {
             <DialogTitle>Confirm your appointment</DialogTitle>
             <DialogDescription>Please check the details below. Your booking is confirmed as soon as you continue.</DialogDescription>
           </DialogHeader>
-          <dl className="divide-y rounded-lg border text-sm">
+          <dl className="divide-y divide-border/70 rounded-xl bg-muted text-sm">
             <div className="flex items-center justify-between gap-4 px-4 py-3">
               <dt className="text-muted-foreground">Doctor</dt>
               <dd className="text-right font-medium">{doctor.fullName}</dd>

@@ -17,7 +17,7 @@ import {
 import { Page, PageHeader } from '@/components/layout/Page';
 import { EmptyState, LoadingState } from '@/components/states';
 import { Field } from '@/components/form/Field';
-import { Pencil, Plus, Shield, Trash2 } from 'lucide-react';
+import { Pencil, Plus, Search, Shield, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const NAME_MAX_LENGTH = 100;
@@ -25,6 +25,7 @@ const DESCRIPTION_MAX_LENGTH = 500;
 
 export function AdminSpecialtiesPage() {
   const [specialties, setSpecialties] = useState<Specialty[]>([]);
+  const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [showEdit, setShowEdit] = useState<Specialty | null>(null);
@@ -122,11 +123,14 @@ export function AdminSpecialtiesPage() {
   };
 
   const activeCount = specialties.filter((s) => s.isActive).length;
+  const q = query.trim().toLowerCase();
+  const visible = q ? specialties.filter((s) => s.name.toLowerCase().includes(q) || s.description?.toLowerCase().includes(q)) : specialties;
   const deleteTarget = specialties.find((s) => s.id === showDelete);
 
   return (
-    <Page>
+    <Page width="wide">
       <PageHeader
+        eyebrow="Clinic administration"
         title="Specialties"
         description={
           loading
@@ -134,7 +138,7 @@ export function AdminSpecialtiesPage() {
             : `${specialties.length} specialties · ${activeCount} active. Doctors choose one when they register.`
         }
         actions={
-          <Button onClick={() => { resetForm(); setShowCreate(true); }}>
+          <Button variant="strong" onClick={() => { resetForm(); setShowCreate(true); }}>
             <Plus aria-hidden="true" /> Add specialty
           </Button>
         }
@@ -150,23 +154,41 @@ export function AdminSpecialtiesPage() {
           action={<Button onClick={() => { resetForm(); setShowCreate(true); }}><Plus aria-hidden="true" /> Add specialty</Button>}
         />
       ) : (
-        <ul className="divide-y rounded-xl border bg-card shadow-card">
-          {specialties.map((s) => (
+        <section aria-labelledby="registry-heading" className="rounded-2xl border border-border/70 bg-card shadow-card">
+          <div className="flex flex-col gap-3 border-b border-border/70 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <h2 id="registry-heading" className="font-display text-headline-md">Specialty registry</h2>
+            <div className="relative sm:w-72">
+              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+              <Input
+                type="search"
+                aria-label="Search specialties"
+                placeholder="Search specialties"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="h-9 bg-muted pl-10"
+              />
+            </div>
+          </div>
+          {visible.length === 0 ? (
+            <p className="px-5 py-10 text-center text-body-md text-muted-foreground">No specialties match “{query.trim()}”.</p>
+          ) : (
+        <ul className="divide-y divide-border/70">
+          {visible.map((s) => (
             <li key={s.id} className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:px-5">
               <div className="flex min-w-0 flex-1 items-start gap-3">
-                <span className="mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
-                  <Shield className="size-4" aria-hidden="true" />
+                <span className="mt-0.5 inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-secondary text-secondary-foreground">
+                  <Shield className="size-[1.125rem]" aria-hidden="true" />
                 </span>
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h2 className="font-semibold">{s.name}</h2>
+                    <h3 className="text-label-md">{s.name}</h3>
                     {s.isActive ? (
-                      <span className="rounded-full bg-success/10 px-2 py-0.5 text-[11px] font-medium text-success">Active</span>
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-success/25 bg-success/10 px-2 py-0.5 text-label-sm text-success"><span className="size-1.5 rounded-full bg-success" aria-hidden="true" />Active</span>
                     ) : (
-                      <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">Inactive</span>
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted px-2 py-0.5 text-label-sm text-muted-foreground"><span className="size-1.5 rounded-full bg-muted-foreground/60" aria-hidden="true" />Inactive</span>
                     )}
                   </div>
-                  <p className="mt-0.5 line-clamp-2 text-sm text-muted-foreground">{s.description || 'No description'}</p>
+                  <p className="mt-1 line-clamp-2 text-body-md text-muted-foreground">{s.description || 'No description'}</p>
                 </div>
               </div>
               <div className="flex gap-1 self-end sm:self-auto">
@@ -186,6 +208,8 @@ export function AdminSpecialtiesPage() {
             </li>
           ))}
         </ul>
+          )}
+        </section>
       )}
 
       {/* Create / edit dialog */}

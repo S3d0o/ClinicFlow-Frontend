@@ -140,12 +140,13 @@ export function DoctorProfilePage() {
 
   return (
     <Page width="narrow">
-      <PageHeader title="Profile" description="Manage your personal details and how your practice appears to patients." />
+      <PageHeader eyebrow="Account" title="Profile" description="Manage your personal details and how your practice appears to patients." />
 
       <ProfileSummary
         name={fullName}
         email={profile?.email}
         role="Doctor"
+        pictureUrl={profile?.profilePictureUrl}
         memberSince={profile?.createdAt ? format(parseUtc(profile.createdAt), 'MMMM yyyy') : undefined}
       />
 
@@ -164,7 +165,7 @@ export function DoctorProfilePage() {
             <CardContent>
               <PersonalInfoFields value={baseForm} onChange={setBaseForm} />
             </CardContent>
-            <CardFooter className="justify-end border-t">
+            <CardFooter className="justify-end border-t border-border/70">
               <Button onClick={handleSaveBase} disabled={saving}>
                 {saving && <Spinner aria-hidden="true" />}
                 {saving ? 'Saving…' : 'Save changes'}
@@ -180,10 +181,10 @@ export function DoctorProfilePage() {
               <CardDescription>Shown to patients on your public profile.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-start gap-3 rounded-lg border border-info/20 bg-info/[0.06] px-4 py-3 text-sm">
+              <div className="flex items-start gap-3 rounded-xl border border-info/15 bg-info/[0.06] px-4 py-3 text-body-md">
                 <Info className="mt-0.5 size-4 shrink-0 text-info" aria-hidden="true" />
                 <p className="text-foreground/85">
-                  Fields you leave blank keep their current values. The consultation fee is required each time you save.
+                  Only the fields you fill in are updated — leave a field blank to keep what patients see today. Enter your consultation fee each time you save.
                 </p>
               </div>
               <Field
@@ -215,7 +216,7 @@ export function DoctorProfilePage() {
                 </Field>
               </div>
             </CardContent>
-            <CardFooter className="justify-end border-t">
+            <CardFooter className="justify-end border-t border-border/70">
               <Button onClick={handleSaveDoctor} disabled={savingDoctor || !isFeeValid}>
                 {savingDoctor && <Spinner aria-hidden="true" />}
                 {savingDoctor ? 'Saving…' : 'Save practice details'}

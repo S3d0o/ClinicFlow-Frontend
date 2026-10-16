@@ -40,7 +40,7 @@ The full feature guide, with every page and its rules, is in [docs/FEATURES.md](
 | Styling | Tailwind CSS 3 |
 | UI components | shadcn/ui (Radix UI primitives), lucide-react icons |
 | HTTP | axios (JWT + refresh-token interceptors) |
-| Animation / charts / toasts | framer-motion, recharts, sonner |
+| Animation / toasts | framer-motion, sonner |
 | Deployment | Docker (Node build → nginx) |
 
 ## Getting started
@@ -100,7 +100,7 @@ ClinicFlow-Frontend/
 ├── docs/                 Documentation (see above)
 ├── src/
 │   ├── api/              axios instance + one module per API resource
-│   ├── components/       Navbar, Footer
+│   ├── components/       Shared UI, app shell (sidebar + top bar), Navbar, Footer
 │   │   └── ui/           shadcn/ui components
 │   ├── context/          AuthContext (session, login, logout)
 │   ├── lib/              Shared helpers (class names, API errors, appointments)

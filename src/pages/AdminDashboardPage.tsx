@@ -2,23 +2,23 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { adminApi } from '@/api';
 import type { AdminOverviewStats, AdminAppointmentStats } from '@/types';
+import { cn } from '@/lib/utils';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Page, PageHeader } from '@/components/layout/Page';
 import { ErrorState, LoadingState } from '@/components/states';
 import { StatCard } from '@/components/StatCard';
 import {
-  AlertCircle, ArrowRight, Calendar, CheckCircle2, ChevronRight, Shield, Star, Stethoscope, Users, XCircle,
+  AlertCircle, ArrowRight, BadgeCheck, Calendar, CheckCircle2, ChevronRight, Shield, Star, Stethoscope, Users, XCircle,
 } from 'lucide-react';
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
-// Chart colors match the theme tokens in index.css (SVG attributes can't read CSS variables)
+// Same status colors as StatusBadge
 const STATUS_SERIES = [
-  { key: 'confirmed', label: 'Confirmed', color: '#2066B6' },
-  { key: 'completed', label: 'Completed', color: '#1E714A' },
-  { key: 'cancelled', label: 'Cancelled', color: '#C12A25' },
-  { key: 'pending', label: 'Pending', color: '#A65707' },
-  { key: 'noShow', label: 'No-show', color: '#A8A29E' },
+  { key: 'confirmed', label: 'Confirmed', bar: 'bg-success' },
+  { key: 'completed', label: 'Completed', bar: 'bg-info' },
+  { key: 'cancelled', label: 'Cancelled', bar: 'bg-destructive' },
+  { key: 'pending', label: 'Pending', bar: 'bg-warning' },
+  { key: 'noShow', label: 'No-show', bar: 'bg-muted-foreground/50' },
 ] as const;
 
 export function AdminDashboardPage() {
@@ -67,24 +67,25 @@ export function AdminDashboardPage() {
   }
 
   const series = STATUS_SERIES.map((s) => ({ ...s, value: appointmentStats[s.key] }));
-  const donutData = series.filter((d) => d.value > 0);
   const totalAppointments = series.reduce((sum, d) => sum + d.value, 0);
-  const pct = (n: number) => (totalAppointments > 0 ? Math.round((n / totalAppointments) * 100) : 0);
+  const share = (n: number) => (totalAppointments > 0 ? (n / totalAppointments) * 100 : 0);
+  const pct = (n: number) => Math.round(share(n));
   const completionRate = pct(appointmentStats.completed);
   const cancellationRate = pct(appointmentStats.cancelled);
 
   return (
-    <Page width="wide">
+    <Page width="full">
       <PageHeader
-        title="Overview"
+        eyebrow="Clinic administration"
+        title="Operations overview"
         description="Platform activity at a glance."
         actions={
           <>
             <Button variant="outline" asChild>
               <Link to="/admin/specialties"><Shield aria-hidden="true" /> Specialties</Link>
             </Button>
-            <Button asChild>
-              <Link to="/admin/pending-doctors">Review doctors</Link>
+            <Button variant="strong" asChild>
+              <Link to="/admin/pending-doctors"><BadgeCheck aria-hidden="true" /> Review doctors</Link>
             </Button>
           </>
         }
@@ -93,7 +94,7 @@ export function AdminDashboardPage() {
       {overview.pendingApprovals > 0 && (
         <Link
           to="/admin/pending-doctors"
-          className="group mb-6 flex items-center gap-3 rounded-xl border border-warning/25 bg-warning/[0.07] px-4 py-3.5 text-sm transition-colors hover:bg-warning/10"
+          className="group mb-6 flex items-center gap-3 rounded-xl border border-warning/25 bg-warning/[0.07] px-4 py-3.5 text-body-md transition-colors hover:bg-warning/10"
         >
           <AlertCircle className="size-5 shrink-0 text-warning" aria-hidden="true" />
           <span className="flex-1">
@@ -104,86 +105,83 @@ export function AdminDashboardPage() {
         </Link>
       )}
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-6">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6">
         <StatCard label="Doctors" value={overview.totalDoctors.toLocaleString()} icon={Stethoscope} />
         <StatCard label="Patients" value={overview.totalPatients.toLocaleString()} icon={Users} />
         <StatCard label="Appointments" value={overview.totalAppointments.toLocaleString()} icon={Calendar} />
         <StatCard label="Reviews" value={overview.totalReviews.toLocaleString()} icon={Star} />
         <StatCard label="Specialties" value={overview.totalSpecialties.toLocaleString()} icon={Shield} />
-        <StatCard label="Pending approvals" value={overview.pendingApprovals.toLocaleString()} icon={AlertCircle} tone={overview.pendingApprovals > 0 ? 'warning' : 'default'} />
+        <StatCard
+          label="Pending approvals"
+          value={overview.pendingApprovals.toLocaleString()}
+          icon={AlertCircle}
+          tone={overview.pendingApprovals > 0 ? 'destructive' : 'default'}
+          highlight={overview.pendingApprovals > 0}
+          hint={overview.pendingApprovals > 0 ? 'Requires action' : 'All caught up'}
+        />
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-        <Card>
+      <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+        <Card className="self-start">
           <CardHeader>
-            <CardTitle>Appointments by status</CardTitle>
-            <CardDescription>{totalAppointments.toLocaleString()} appointments in total</CardDescription>
+            <CardTitle className="text-headline-md">Appointment flow</CardTitle>
+            <CardDescription>{totalAppointments.toLocaleString()} appointments in total, by status</CardDescription>
           </CardHeader>
           <CardContent>
             {totalAppointments === 0 ? (
-              <p className="py-12 text-center text-sm text-muted-foreground">No appointments yet.</p>
+              <p className="rounded-xl bg-muted py-12 text-center text-body-md text-muted-foreground">No appointments yet.</p>
             ) : (
-              <div className="flex flex-col items-center gap-8 sm:flex-row">
-                <div className="relative size-52 shrink-0" aria-hidden="true">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie data={donutData} cx="50%" cy="50%" innerRadius={64} outerRadius={96} paddingAngle={2} dataKey="value" nameKey="label" stroke="none" isAnimationActive={false}>
-                        {donutData.map((entry) => (
-                          <Cell key={entry.key} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip
-                        formatter={(value: number, name: string) => [value.toLocaleString(), name]}
-                        contentStyle={{ borderRadius: 8, border: '1px solid hsl(36 16% 88%)', fontSize: 12, boxShadow: '0 8px 24px -12px rgb(28 25 23 / 0.2)' }}
-                      />
-                    </PieChart>
-                  </ResponsiveContainer>
-                  <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-2xl font-semibold tabular-nums">{completionRate}%</span>
-                    <span className="text-xs text-muted-foreground">completed</span>
-                  </div>
+              <>
+                {/* Decorative: the tiles below carry the same numbers as text */}
+                <div className="flex h-3 w-full overflow-hidden rounded-full bg-secondary" aria-hidden="true">
+                  {series.filter((s) => s.value > 0).map((s) => (
+                    <div key={s.key} className={cn('h-full first:rounded-l-full last:rounded-r-full', s.bar)} style={{ width: `${share(s.value)}%` }} />
+                  ))}
                 </div>
-                {/* Text legend doubles as the accessible version of the chart */}
-                <ul className="w-full space-y-3" aria-label="Appointments by status">
+                <ul className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3" aria-label="Appointments by status">
                   {series.map((s) => (
-                    <li key={s.key} className="flex items-center gap-3 text-sm">
-                      <span className="size-2.5 shrink-0 rounded-full" style={{ background: s.color }} aria-hidden="true" />
-                      <span className="flex-1 text-foreground/85">{s.label}</span>
-                      <span className="font-semibold tabular-nums">{s.value.toLocaleString()}</span>
-                      <span className="w-10 text-right text-xs text-muted-foreground tabular-nums">{pct(s.value)}%</span>
+                    <li key={s.key} className="rounded-xl bg-muted px-4 py-3">
+                      <span className="flex items-center gap-2 text-label-sm uppercase tracking-wider text-muted-foreground">
+                        <span className={cn('size-2 shrink-0 rounded-full', s.bar)} aria-hidden="true" />
+                        {s.label}
+                      </span>
+                      <p className="mt-1 flex items-baseline gap-2">
+                        <span className="font-display text-headline-md tabular-nums">{s.value.toLocaleString()}</span>
+                        <span className="text-body-sm text-muted-foreground tabular-nums">{pct(s.value)}%</span>
+                      </p>
                     </li>
                   ))}
                 </ul>
-              </div>
+              </>
             )}
           </CardContent>
         </Card>
 
-        <div className="grid gap-6">
-          <div className="grid grid-cols-2 gap-4">
-            <StatCard label="Completion rate" value={`${completionRate}%`} icon={CheckCircle2} tone="success" hint="Of all appointments" />
-            <StatCard label="Cancellation rate" value={`${cancellationRate}%`} icon={XCircle} tone="destructive" hint="Of all appointments" />
+        <div className="grid content-start gap-6">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+            <StatCard label="Completion rate" value={`${completionRate}%`} icon={CheckCircle2} tone="success" progress={completionRate} hint="Of all appointments" />
+            <StatCard label="Cancellation rate" value={`${cancellationRate}%`} icon={XCircle} tone="destructive" progress={cancellationRate} hint="Of all appointments" />
           </div>
           <Card>
             <CardHeader>
-              <CardTitle>Quick actions</CardTitle>
+              <CardTitle className="text-headline-md">Quick actions</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               {[
-                { to: '/admin/pending-doctors', icon: Stethoscope, title: 'Review pending doctors', text: `${overview.pendingApprovals} waiting for approval` },
+                { to: '/admin/pending-doctors', icon: BadgeCheck, title: 'Review pending doctors', text: `${overview.pendingApprovals} waiting for approval` },
                 { to: '/admin/specialties', icon: Shield, title: 'Manage specialties', text: `${overview.totalSpecialties} configured` },
               ].map((a) => (
                 <Link
                   key={a.to}
                   to={a.to}
-                  className="group flex items-center gap-3 rounded-lg border px-4 py-3 transition-colors hover:border-primary/30 hover:bg-secondary/40"
+                  className="group flex items-center gap-3 rounded-xl bg-muted px-4 py-3 transition-colors hover:bg-accent"
                 >
-                  <span className="inline-flex size-9 items-center justify-center rounded-lg bg-secondary text-primary">
-                    <a.icon className="size-4" aria-hidden="true" />
+                  <span className="inline-flex size-10 items-center justify-center rounded-lg bg-card text-primary shadow-xs">
+                    <a.icon className="size-[1.125rem]" aria-hidden="true" />
                   </span>
                   <span className="flex-1">
-                    <span className="block text-sm font-medium">{a.title}</span>
-                    <span className="block text-xs text-muted-foreground">{a.text}</span>
+                    <span className="block text-label-md">{a.title}</span>
+                    <span className="mt-0.5 block text-body-sm text-muted-foreground">{a.text}</span>
                   </span>
                   <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
                 </Link>

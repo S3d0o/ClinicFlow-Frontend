@@ -14,7 +14,8 @@ import { Page, PageHeader } from '@/components/layout/Page';
 import { LoadingState } from '@/components/states';
 import { StatCard } from '@/components/StatCard';
 import { StatusBadge } from '@/components/StatusBadge';
-import { CalendarDays, CalendarRange, CheckCircle2, ChevronRight, Clock } from 'lucide-react';
+import { UserAvatar } from '@/components/UserAvatar';
+import { CalendarDays, CalendarRange, CheckCircle2, ChevronRight, Clock, Hourglass } from 'lucide-react';
 import { toast } from 'sonner';
 
 const weekDays: DayOfWeek[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -84,6 +85,8 @@ export function DoctorDashboardPage() {
   const firstName = user?.firstName;
   const scheduleByDay = new Map(schedules.map((s) => [s.dayOfWeek, s]));
   const todayName = format(new Date(), 'EEEE');
+  const remainingToday = todayAppointments.filter((a) => a.status === 'Confirmed');
+  const nextUp = remainingToday.find((a) => !hasAppointmentStarted(a));
 
   return (
     <Page width="wide">
@@ -103,38 +106,57 @@ export function DoctorDashboardPage() {
         }
       />
 
-      <div className="mb-8 grid gap-4 sm:grid-cols-3">
-        <StatCard label="Today’s appointments" value={stats.totalToday} icon={CalendarDays} />
-        <StatCard label="Upcoming (confirmed)" value={stats.totalUpcoming} icon={Clock} hint="Across your 50 most recent bookings" />
-        <StatCard label="Completed today" value={stats.completedToday} icon={CheckCircle2} tone="success" />
+      <div className="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <StatCard label="Today’s patients" value={stats.totalToday} icon={CalendarDays} hint={stats.totalToday === 1 ? '1 visit booked' : `${stats.totalToday} visits booked`} />
+        <StatCard
+          label="Completed"
+          value={stats.completedToday}
+          suffix={`/ ${stats.totalToday}`}
+          progress={stats.totalToday ? (stats.completedToday / stats.totalToday) * 100 : 0}
+          icon={CheckCircle2}
+          tone="success"
+        />
+        <StatCard
+          label="Remaining today"
+          value={remainingToday.length}
+          icon={Hourglass}
+          tone="info"
+          hint={nextUp ? `Next up at ${formatTime(nextUp.startTime)}` : 'Nothing else scheduled'}
+        />
+        <StatCard label="Upcoming" value={stats.totalUpcoming} icon={Clock} hint="Confirmed visits ahead" />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
-        <Card>
-          <CardHeader className="border-b">
-            <CardTitle>Today’s agenda</CardTitle>
+        <Card className="self-start">
+          <CardHeader className="border-b border-border/70">
+            <CardTitle className="text-headline-md">Today’s queue</CardTitle>
             <CardDescription>{format(new Date(), 'EEEE, MMMM d, yyyy')}</CardDescription>
           </CardHeader>
           <CardContent className="pt-0 sm:pt-0">
             {todayAppointments.length === 0 ? (
               <div className="py-12 text-center">
-                <CalendarDays className="mx-auto mb-3 size-6 text-muted-foreground/60" aria-hidden="true" />
-                <p className="text-sm font-medium">No appointments today</p>
-                <p className="mt-1 text-sm text-muted-foreground">Enjoy the quiet — new bookings will appear here.</p>
+                <span className="mx-auto mb-3 inline-flex size-11 items-center justify-center rounded-xl bg-secondary text-secondary-foreground">
+                  <CalendarDays className="size-5" aria-hidden="true" />
+                </span>
+                <p className="font-display text-title-sm">No appointments today</p>
+                <p className="mt-1 text-body-md text-muted-foreground">Enjoy the quiet — new bookings will appear here.</p>
               </div>
             ) : (
-              <ol className="divide-y">
+              <ol className="divide-y divide-border/70">
                 {todayAppointments.map((apt) => {
                   const canComplete = apt.status === 'Confirmed' && hasAppointmentStarted(apt);
                   return (
                     <li key={apt.id} className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center">
                       <div className="w-24 shrink-0">
                         <p className="text-sm font-semibold tabular-nums">{formatTime(apt.startTime)}</p>
-                        <p className="text-xs text-muted-foreground tabular-nums">until {formatTime(apt.endTime)}</p>
+                        <p className="text-body-sm text-muted-foreground tabular-nums">until {formatTime(apt.endTime)}</p>
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate font-medium">{apt.patientName}</p>
-                        <p className="truncate text-sm text-muted-foreground">{apt.reasonForVisit || 'No reason given'}</p>
+                      <div className="flex min-w-0 flex-1 items-center gap-3">
+                        <UserAvatar name={apt.patientName} size="sm" />
+                        <div className="min-w-0">
+                          <p className={cn('truncate text-label-md', apt.status === 'Cancelled' && 'text-muted-foreground line-through')}>{apt.patientName}</p>
+                          <p className="truncate text-body-sm text-muted-foreground">{apt.reasonForVisit || 'No reason given'}</p>
+                        </div>
                       </div>
                       <div className="flex items-center gap-2">
                         <StatusBadge status={apt.status} />
@@ -153,25 +175,25 @@ export function DoctorDashboardPage() {
         </Card>
 
         <Card className="self-start">
-          <CardHeader className="border-b">
-            <CardTitle>Weekly availability</CardTitle>
+          <CardHeader className="border-b border-border/70">
+            <CardTitle className="text-headline-md">Weekly availability</CardTitle>
             <CardDescription>Slots are generated for the next 14 days.</CardDescription>
           </CardHeader>
           <CardContent className="pt-0 sm:pt-0">
-            <ul className="divide-y">
+            <ul className="divide-y divide-border/70">
               {weekDays.map((day) => {
                 const s = scheduleByDay.get(day);
                 const isToday = day === todayName;
                 return (
                   <li key={day} className="flex items-center justify-between gap-3 py-3 text-sm">
-                    <span className={cn('font-medium', isToday && 'text-primary')}>
+                    <span className={cn('font-medium', isToday && 'font-semibold text-primary')}>
                       {day}
                       {isToday && <span className="sr-only"> (today)</span>}
                     </span>
                     {s ? (
                       <span className="flex items-center gap-2">
                         {!s.isActive && (
-                          <span className="rounded bg-muted px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground">Paused</span>
+                          <span className="rounded-full bg-muted px-2 py-0.5 text-label-sm text-muted-foreground">Paused</span>
                         )}
                         <span className={cn('tabular-nums', s.isActive ? 'text-foreground' : 'text-muted-foreground')}>
                           {formatTimeRange(s.startTime, s.endTime)}
@@ -184,7 +206,7 @@ export function DoctorDashboardPage() {
                 );
               })}
             </ul>
-            <Link to="/doctor/schedules" className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
+            <Link to="/doctor/schedules" className="mt-2 inline-flex items-center gap-1 text-label-md text-primary hover:underline">
               Edit availability <ChevronRight className="size-4" aria-hidden="true" />
             </Link>
           </CardContent>

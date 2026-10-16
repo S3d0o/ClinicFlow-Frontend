@@ -16,7 +16,7 @@ How the React app is put together: startup, routing, the API layer, authenticati
 | Components | shadcn/ui ("new-york" style) on Radix UI primitives |
 | HTTP | axios, with interceptors for auth and token refresh |
 | Feedback | sonner toasts |
-| Animation / charts / icons | framer-motion, recharts, lucide-react |
+| Animation / icons | framer-motion, lucide-react |
 | Dates | date-fns |
 
 There is no global state library and no data-fetching library. Authentication is the only shared state (a React context); every page loads its own data.
@@ -26,14 +26,15 @@ There is no global state library and no data-fetching library. Authentication is
 ```
 src/
 ├── main.tsx           Entry point: HashRouter, global CSS, Radix body-style workaround
-├── App.tsx            All routes, ProtectedRoute, AppLayout (Navbar + Footer)
+├── App.tsx            All routes, ProtectedRoute, AppLayout (picks the shell)
 ├── index.css          Tailwind layers, theme tokens, global layout rules
 ├── api/               axios instance + one module per API resource
 ├── context/           AuthContext (session state, login/logout)
-├── components/        App components (Navbar, Footer)
+├── components/        Shared components (Navbar and Footer for visitors, StatusBadge, …)
+│   ├── shell/         Signed-in app shell: AppShell (sidebar + top bar), NotificationsMenu
 │   └── ui/            shadcn/ui components (generated; only some are used)
-├── hooks/             use-mobile (from shadcn)
-├── lib/               Shared helpers: utils (cn), api-error, appointments
+├── hooks/             use-unread-notifications, use-mobile (from shadcn)
+├── lib/               Shared helpers: utils (cn), api-error, appointments, navigation
 ├── pages/             One component per route
 └── types/             TypeScript types for API requests and responses
 ```
@@ -50,13 +51,13 @@ src/
 
 All routes are declared in `src/App.tsx`. Every route is wrapped in `AppLayout`:
 - a "Skip to content" link (visible on keyboard focus);
-- the sticky `Navbar` (`position: sticky`, so no padding hack is needed);
-- the page inside `<main id="main-content">`, wrapped in `Suspense`;
-- the `Footer` (full for visitors, a slim bar for signed-in users).
+- for **signed-in users**, `components/shell/AppShell`: a fixed sidebar (a slide-in sheet below `lg`), a sticky top bar with the notification bell and account menu, and a slim footer ([§9](#app-shell));
+- for **visitors**, the sticky top `Navbar` and the full `Footer`;
+- the page inside `<main id="main-content">`, wrapped in an `ErrorBoundary` (keyed by route, so navigating away clears a crash) and `Suspense`.
 
-`AppLayout` also scrolls to the top on every route change, because hash routing keeps the previous scroll position.
+While the session is being restored, `AppLayout` shows a loading state instead of either shell. `AppLayout` also scrolls to the top on every route change, because hash routing keeps the previous scroll position.
 
-**Code splitting:** `LandingPage` is imported eagerly for the fastest first paint. Every other page is loaded with `React.lazy` through the small `page()` helper in `App.tsx`, so each page is its own chunk. recharts, for example, only loads with the admin dashboard. When adding a page, register it the same way.
+**Code splitting:** `LandingPage` is imported eagerly for the fastest first paint. Every other page is loaded with `React.lazy` through the small `page()` helper in `App.tsx`, so each page is its own chunk. When adding a page, register it the same way.
 
 | Path | Page component | Access | Purpose |
 |---|---|---|---|
@@ -264,11 +265,12 @@ When the backend adds an error code, add its message to `messagesByCode` in `api
 
 | File | Contents |
 |---|---|
-| `src/lib/utils.ts` | `cn(...classes)`: merges Tailwind class names (clsx + tailwind-merge) |
+| `src/lib/utils.ts` | `cn(...classes)`: merges Tailwind class names (clsx + tailwind-merge, extended with the custom type scale and shadows) |
 | `src/lib/api-error.ts` | API error helpers ([§6](#6-error-handling)) |
 | `src/lib/appointments.ts` | `hasAppointmentStarted(appointment)`: whether the start time has passed; used to decide when "Complete" is offered |
 | `src/lib/format.ts` | Display helpers: `formatTime` ("9:30 AM"), `formatTimeRange`, `formatDate`, `parseUtc` (adds the missing `Z`), `formatTimeAgo`, `formatFee` ("650 EGP"), `getInitials` (ignores "Dr.") |
-| `src/lib/notifications.ts` | `notifyNotificationsChanged()`: tells the Navbar bell to refresh after notifications are marked read |
+| `src/lib/notifications.ts` | `notifyNotificationsChanged()`: tells the notification bell to refresh after notifications are marked read |
+| `src/lib/navigation.ts` | Navigation per role (`navByRole`, `profileNavByRole`, `notificationsNavItem`), `appointmentsRouteByRole`, `workspaceLabelByRole` |
 | `src/lib/password.ts` | The server's password rules (`passwordRules`, `meetsPasswordRules`) for live checklists |
 | `src/types/index.ts` | Request/response types and enums (`UserRole`, `AppointmentStatus`, `DayOfWeek`, `BloodType`, …) |
 
@@ -286,25 +288,89 @@ The types follow contract [§6–§7](API_CONTRACT.md#6-data-types). Enums are *
 
 ## 9. UI system
 
-The visual direction is calm, clinical and warm: a deep teal brand color on a warm paper-white background, a serif display face for titles, and restrained depth (thin borders and soft shadows rather than gradients).
+The design system is **Clinical Sanctuary**, from the Stitch design export (`clinical_sanctuary/DESIGN.md` plus four reference screens), kept locally in `design/` and git-ignored. It aims for a calm, low-friction clinical workspace:
+- a cool, softly blue-tinted canvas;
+- **tonal layering**: surfaces step from `background` to `muted` to `accent` to `secondary` instead of relying on heavy shadows;
+- white cards with a hairline border and an ambient shadow;
+- eucalyptus green for actions and deep slate for structure.
+
+The Stitch HTML is a visual reference only. None of it is copied into the app.
 
 ### Design tokens
 
-All colors are HSL channel triplets in `src/index.css` (`:root`), mapped in `tailwind.config.js` as `hsl(var(--name) / <alpha-value>)`, so **every color supports opacity modifiers** (`bg-primary/90`, `ring-ring/20`, `bg-destructive/[0.06]`). Use the tokens, not raw Tailwind palettes (`teal-600`, `slate-500`).
+All colors are HSL channel triplets in `src/index.css` (`:root`), mapped in `tailwind.config.js` as `hsl(var(--name) / <alpha-value>)`, so **every color supports opacity modifiers** (`bg-primary/90`, `ring-ring/20`, `bg-destructive/[0.06]`). Use the tokens, not raw Tailwind palettes (`teal-600`, `slate-500`), and no decorative gradients.
 
-| Token | Use |
-|---|---|
-| `primary` (deep teal) | Primary buttons, links, active navigation, selected states |
-| `secondary` | Soft teal tint: avatar backgrounds, icon tiles, selected rows |
-| `background` / `card` / `muted` | Warm page background / white surfaces / subtle fills |
-| `foreground` / `muted-foreground` | Body text / secondary text |
-| `border` / `input` / `ring` | Dividers / form control borders / focus rings |
-| `success` / `warning` / `info` / `destructive` | Semantic states; use as text on a 6–10% tint of themselves (e.g. `bg-success/10 text-success`) |
+| Token | Value | Use |
+|---|---|---|
+| `primary` | Eucalyptus `#006C4A` | Primary buttons, links, selected chips and dates, focus, the "active" dot. Stitch calls this its *secondary* color. It is our `primary` because it is the interactive color everywhere in the screens |
+| `ink` | Deep medical slate `#0F172A` | Logo mark, `strong` buttons for structural "create" actions, step numbers, the Doctor role badge, the landing call-to-action panel |
+| `background` | `#F8F9FF` | App canvas |
+| `card` / `popover` | `#FFFFFF` | Cards, dialogs, menus |
+| `muted` | `#EFF4FF` | Tonal fills inside cards (fact tiles, notes, sidebar background) |
+| `accent` | `#E5EEFF` | Hover fill |
+| `secondary` | `#DCE9FF` + `#131B2E` text | Icon tiles, avatars, tonal (`secondary`) buttons, date tiles |
+| `foreground` / `muted-foreground` | `#0B1C30` / `#475569` | Body text / secondary text (7.6:1 on white) |
+| `border` / `input` / `ring` | `#E2E8F0` / `#CBD5E1` / `#059669` | Hairlines (cards use `border-border/70`) / control borders / focus ring |
+| `success` / `warning` / `info` / `destructive` | `#047857` / `#92400E` / `#0369A1` / `#BA1A1A` | Semantic states. Use as text on a 6–10% tint of themselves (`bg-success/10 text-success`); all pass WCAG AA on their own tint |
+| `violet` | `#6B21A8` | Admin role badge only |
+| `sidebar-*` | `muted` background, `#D3E4FE` active item | App shell sidebar |
 
-- **Typography:** Inter for UI text; **Fraunces** (`font-display`) for page titles and marketing headlines only. Both are loaded in `index.html` with `preconnect`.
-- **Radius:** `--radius` is 10px. Cards use `rounded-xl`, controls `rounded-md`.
-- **Shadows:** `shadow-xs` (controls), `shadow-card` (cards), `shadow-elevated` (menus, dialogs, hover).
+`.dark` holds a matching dark palette, but nothing switches it on yet.
+
+### Typography
+
+- **Plus Jakarta Sans** (`font-display`, weights 600/700) for page titles, card and panel headings, names and big numbers.
+- **Inter** (`font-sans`, the body default) for everything else.
+- Both fonts are loaded in `index.html` with `preconnect`.
+
+The Stitch type scale is available as Tailwind font sizes. Each size sets its own line height, letter spacing and default weight; a `font-*` class can still override the weight.
+
+| Class | Size / line height | Typical use |
+|---|---|---|
+| `text-display-lg`, `text-display-md` | 40/48, 32/40, bold | Landing hero, 404 |
+| `text-headline-xl` | 30/38, bold | Page titles (`PageHeader`) on desktop, big stat values |
+| `text-headline-lg` | 24/32, semibold | Page titles on mobile, profile names |
+| `text-headline-md` | 20/28, semibold | Section and panel headings (`Section`, dialog titles) |
+| `text-title-sm` | 16/24, semibold | Card titles (`CardTitle`), list item names |
+| `text-body-lg` / `-md` / `-sm` | 16/26, 14/22, 12/18 | Body copy, descriptions, hints |
+| `text-label-md` | 13/16, semibold | Form labels, nav items, filter tabs |
+| `text-label-sm` | 11/14, semibold, tracked | Status chips, eyebrows |
+| `text-caption` | 11/16 | Fine print, fact-tile labels |
+
+- The `.eyebrow` class is the small uppercase section label ("TODAY'S PATIENTS"). It's a component-layer class, so put it on plain elements. On `Label`, which sets its own size, use `text-label-sm uppercase tracking-[0.08em] text-muted-foreground` instead.
+- `cn()` (`src/lib/utils.ts`) is configured with these font sizes and the custom shadows. Without that, tailwind-merge would read `text-label-md` as a text color and drop it next to `text-foreground`. Add any new scale step there too.
+- Tables and `<time>` elements use tabular figures globally. Add `tabular-nums` to other numbers that change or line up.
+
+### Shape, depth and motion
+
+- **Radius** (`--radius` is 10px):
+  - controls and buttons use `rounded-lg` (10px);
+  - inner panels and tiles use `rounded-xl` (12px);
+  - cards and dialogs use `rounded-2xl` (16px);
+  - chips, badges and pills use `rounded-full`.
+- **Shadows** are slate-tinted and low-opacity:
+  - `shadow-xs` for controls;
+  - `shadow-card` for cards;
+  - `shadow-hover` for hovered link cards;
+  - `shadow-elevated` for menus and dialogs.
+- **Overlays:** dialogs and sheets use a blurred `bg-ink/40` overlay.
 - **Motion:** `App` wraps everything in `<MotionConfig reducedMotion="user">`, and `index.css` neutralizes CSS animations under `prefers-reduced-motion`. The landing page's scroll reveal renders statically when reduced motion is preferred.
+
+### App shell
+
+`AppLayout` in `App.tsx` chooses the shell. It waits for the session restore first, so signed-in users don't see the visitor navbar flash.
+
+- **Signed-in users:** `components/shell/AppShell`.
+  - A fixed 256px sidebar (`w-sidebar`) on `lg` and up. It holds the logo, the role navigation, an "Account" group with Notifications (unread count) and Profile, and a user card with role badge and Sign out.
+  - Below `lg`, the same sidebar opens in a left `Sheet` from the top bar's menu button.
+  - The sticky, translucent top bar shows the workspace name and role pill, the notification bell (`shell/NotificationsMenu`) and the account menu. A slim footer closes the column.
+- **Visitors:** the top `Navbar` (Find doctors, Sign in, Create account, mobile sheet) and the full `Footer`.
+- **Navigation data** lives in `src/lib/navigation.ts`:
+  - `navByRole`, `profileNavByRole`, `notificationsNavItem`;
+  - `appointmentsRouteByRole`, where a notification about an appointment takes each role;
+  - `workspaceLabelByRole`.
+- **Unread notifications:** `src/hooks/use-unread-notifications.ts` polls them. It refreshes on navigation, on focus, every 60 seconds and on `notifyNotificationsChanged()`.
+- **Errors:** every page is wrapped in an `ErrorBoundary`, keyed by route. A render crash shows a recoverable error instead of a blank screen, and navigating away clears it.
 
 ### Shared components
 
@@ -312,26 +378,59 @@ Build pages from these instead of re-styling raw elements:
 
 | Component | Purpose |
 |---|---|
-| `layout/Page` — `Page`, `PageHeader`, `Section` | Page container (widths `narrow`/`default`/`wide`/`full`), title block with optional back link, eyebrow, description and actions |
-| `layout/AuthLayout` | Split layout for sign-in, registration and account recovery |
+| `layout/Page` — `Page`, `PageHeader`, `Section` | Page container (widths `narrow`/`default`/`wide`/`full`). The title block has an optional back link, an uppercase eyebrow in `primary`, a display title, a description and actions |
+| `layout/AuthLayout` | Two cards on the canvas, as in the Stitch sign-in screen. The brand card (sticky, `lg` and up) holds the logo, tagline and "Why ClinicFlow" points; the form card holds title, form and footer links |
 | `states` — `LoadingState`, `EmptyState`, `ErrorState` | Loading, "nothing here" with a next step, and failed loads with retry |
-| `form/Field`, `FieldGroup` | Label + control + hint/error, wiring `id`, `aria-describedby` and `aria-invalid` to the control |
-| `form/PasswordInput`, `form/PasswordRequirements` | Password with an accessible show/hide toggle; live rules checklist |
-| `StatusBadge` | Appointment status with icon + text (never color alone) |
-| `UserAvatar` | Initials avatar |
-| `DateTile` | Calendar-style date for appointment lists |
-| `FilterTabs` | Segmented filter (toggle buttons with `aria-pressed`) |
+| `ErrorBoundary` | Route-level crash fallback (used by `AppLayout`) |
+| `form/Field`, `FieldGroup` | Label + control + hint/error (with an icon). Wires `id`, `aria-describedby` and `aria-invalid` to the control |
+| `form/IconInput` | Input with a decorative leading icon (mail, phone). Works as a `Field` child |
+| `form/PasswordInput`, `form/PasswordRequirements` | Password with a lock icon and an accessible show/hide toggle; live rules checklist |
+| `form/FormAlert` | Form-level error (`role="alert"`) |
+| `StatusBadge` | Appointment status pill: dot + text. Confirmed is green, Completed blue, Pending amber, Cancelled red, No-show grey |
+| `RoleBadge` | Role pill: Doctor slate, Patient cyan, Admin violet |
+| `UserAvatar` | Initials avatar; shows `src` (profile picture) when given and falls back to initials if it fails to load |
+| `DateTile` | Calendar-style date (`<time>`) for appointment lists |
+| `FilterTabs` | Segmented filter (toggle buttons with `aria-pressed`, optional counts) |
 | `Pagination` | Previous/next paging for lists without a total count |
-| `StatCard` | Dashboard metric |
-| `Rating` — `RatingStars`, `RatingSummary`, `RatingInput` | Read-only stars, "★ 4.8 / New" summary, accessible 1–5 radio input |
-| `Logo` | Mark + wordmark |
+| `StatCard` | Dashboard metric: uppercase label, display-size value, optional `suffix`, `hint`, `progress` bar, `tone`, and `highlight` (accent bottom edge for "needs action") |
+| `Rating` — `RatingStars`, `RatingSummary`, `RatingInput` | Read-only stars (eucalyptus), "★ 4.8 / New" summary, accessible 1–5 radio input |
+| `Logo` | Slate mark + Plus Jakarta wordmark |
 | `profile/PersonalInfoFields`, `profile/ProfileSummary` | Shared parts of the two profile pages |
 
-shadcn/ui primitives live in `src/components/ui/`. The ones in use (button, card, dialog, dropdown-menu, input, label, select, sheet, skeleton, sonner, spinner, switch, tabs, textarea) have been adapted to the tokens and to **Tailwind 3**. They were generated for Tailwind v4, so v4-only syntax such as `outline-hidden`, `aria-invalid:` and `max-h-(--var)` was converted or given a compatibility utility in `index.css`. The other files in `ui/` are unused template components.
+### Patterns
 
-- **Buttons:** `default` (primary action, one per area), `outline` (secondary), `ghost` (tertiary/icon), `destructive` (confirming a destructive action), `destructive-outline` (opening a destructive flow, e.g. "Cancel appointment"), `link`. Sizes `sm` (36px), `default` (40px), `lg` (44px), and `icon*`.
+- **Cards:** `Card` (or `rounded-2xl border border-border/70 bg-card shadow-card`). Inside a card, group secondary information in tonal tiles (`rounded-xl bg-muted`) rather than nested bordered cards.
+- **Chips:** pills with a 1px border on a tint: `rounded-full border border-success/25 bg-success/10 text-label-sm text-success`.
+- **Available slots** use the cyan "open slot" tint (`border-info/25 bg-info/[0.06] text-info`); the selected slot or date is solid `primary`.
+- **Info banners:** `rounded-xl border border-info/15 bg-info/[0.06] text-info`, with an `Info` icon. Warnings use the same recipe with `warning`.
+
+### shadcn/ui primitives
+
+shadcn/ui primitives live in `src/components/ui/`. The ones in use have been restyled to these tokens and adapted to **Tailwind 3**:
+- button, card, dialog, alert-dialog, dropdown-menu;
+- input, textarea, label, select, switch;
+- sheet, skeleton, sonner, spinner, tabs, badge.
+
+They were generated for Tailwind v4, so v4-only syntax was converted or given a compatibility utility in `index.css`. Examples: `outline-hidden`, `aria-invalid:`, `max-h-(--var)`, `*:[span]:last:`, `*:[svg]:`. The other files in `ui/` are unused template components.
+
+- **Buttons:** all are `rounded-lg` and semibold.
+
+  | Variant | Use |
+  |---|---|
+  | `default` | Eucalyptus; the primary action, one per area |
+  | `strong` | Slate; high-emphasis structural actions such as "Add specialty" and "Add hours" |
+  | `outline` | Secondary action |
+  | `secondary` | Tonal blue, e.g. "Add notes" |
+  | `ghost` | Tertiary action or icon button |
+  | `destructive` | Confirming a destructive action |
+  | `destructive-outline` | Opening a destructive flow, e.g. "Cancel appointment" |
+  | `link` | Inline link styled as a button |
+
+  Sizes: `sm` (36px), `default` (40px), `lg` (44px), and `icon*`.
+- **Inputs:** 40px high, `rounded-lg`, a `#CBD5E1` border, and a crisp eucalyptus focus ring (border + 1px ring).
+- **Switch:** 44×24px, eucalyptus when on.
 - **Icons:** `lucide-react`. Icons next to text are `aria-hidden`; icon-only buttons need an `aria-label`.
-- **Charts:** `recharts`, only on the admin dashboard. Chart colors are hex copies of the tokens, because SVG attributes can't read CSS variables.
+- **Charts:** none. The admin dashboard's appointment breakdown is a stacked bar built from `div`s with token classes, and its numbers are repeated as text tiles. recharts is still in `package.json` (only the unused `ui/chart.tsx` imports it) and can be removed.
 
 ## 10. Build and deployment
 
@@ -340,7 +439,7 @@ shadcn/ui primitives live in `src/components/ui/`. The ones in use (button, card
   - React plugin;
   - dev server port `3000`;
   - alias `@` → `src` (mirrored in `tsconfig.app.json` `paths`).
-- **`npm run build`:** runs `tsc -b` (type check), then `vite build` into `dist/`. The main bundle is about 610 kB (≈ 200 kB gzipped). Each other page is its own chunk; the largest is the admin dashboard (about 375 kB, mostly recharts).
+- **`npm run build`:** runs `tsc -b` (type check), then `vite build` into `dist/`. The main bundle is about 615 kB (≈ 200 kB gzipped). Each other page is its own small chunk (the admin dashboard is about 6 kB now that it draws its breakdown without recharts).
 - **`DockerFile`:** two stages. Stage 1 uses `node:20-alpine` to run `npm ci` and `npm run build`. Stage 2 uses `nginx:alpine` to serve `dist/` on port 80.
 - **`nginx.conf`:**
   - serves the app with an SPA fallback (`try_files … /index.html`);

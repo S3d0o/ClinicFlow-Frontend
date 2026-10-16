@@ -24,6 +24,7 @@ import { StatusBadge } from '@/components/StatusBadge';
 import { DateTile } from '@/components/DateTile';
 import { UserAvatar } from '@/components/UserAvatar';
 import { CalendarDays, CheckCircle2, Clock, MessageSquareText, NotebookPen } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
 type StatusFilter = 'all' | AppointmentStatus;
@@ -108,7 +109,7 @@ export function DoctorAppointmentsPage() {
 
   return (
     <Page>
-      <PageHeader title="Appointments" description="Your patient visits, newest first. Complete visits after they start and keep clinical notes." />
+      <PageHeader eyebrow="Clinic workspace" title="Appointments" description="Your patient visits, newest first. Complete visits after they start and keep clinical notes." />
 
       <FilterTabs
         label="Filter appointments by status"
@@ -128,12 +129,12 @@ export function DoctorAppointmentsPage() {
             description={statusFilter === 'all' ? 'Bookings will appear here once patients book your open slots.' : 'No appointments match this filter.'}
           />
         ) : (
-          <ul className="space-y-3">
+          <ul className="space-y-4">
             {appointments.map((apt) => {
               const canComplete = apt.status === 'Confirmed' && hasAppointmentStarted(apt);
               const canEditNotes = apt.status === 'Confirmed' || apt.status === 'Completed';
               return (
-                <li key={apt.id} className="rounded-xl border bg-card p-4 shadow-card sm:p-5">
+                <li key={apt.id} className="rounded-2xl border border-border/70 bg-card p-5 shadow-card sm:p-6">
                   <div className="flex gap-4">
                     <DateTile date={apt.appointmentDate} muted={apt.status === 'Cancelled'} />
                     <div className="min-w-0 flex-1">
@@ -141,8 +142,8 @@ export function DoctorAppointmentsPage() {
                         <div className="flex min-w-0 items-center gap-3">
                           <UserAvatar name={apt.patientName} size="sm" />
                           <div className="min-w-0">
-                            <h2 className="truncate font-semibold">{apt.patientName}</h2>
-                            <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                            <h2 className={cn('truncate font-display text-title-sm', apt.status === 'Cancelled' && 'text-muted-foreground line-through decoration-muted-foreground/50')}>{apt.patientName}</h2>
+                            <p className="flex items-center gap-1.5 text-body-md text-muted-foreground">
                               <Clock className="size-3.5" aria-hidden="true" />
                               <span className="tabular-nums">{formatTimeRange(apt.startTime, apt.endTime)}</span>
                             </p>
@@ -151,21 +152,21 @@ export function DoctorAppointmentsPage() {
                         <StatusBadge status={apt.status} />
                       </div>
                       {apt.reasonForVisit && (
-                        <p className="mt-2 text-sm text-foreground/80">
+                        <p className="mt-3 text-body-md text-foreground/85">
                           <span className="text-muted-foreground">Reason: </span>
                           {apt.reasonForVisit}
                         </p>
                       )}
                       {apt.doctorNotes && (
-                        <div className="mt-3 rounded-lg bg-muted/70 px-3 py-2.5 text-sm">
-                          <p className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
+                        <div className="mt-3 rounded-xl bg-muted px-4 py-3 text-body-md">
+                          <p className="flex items-center gap-1.5 text-label-sm uppercase tracking-wider text-muted-foreground">
                             <MessageSquareText className="size-3.5" aria-hidden="true" /> Your notes
                           </p>
                           <p className="mt-1 text-foreground/90">{apt.doctorNotes}</p>
                         </div>
                       )}
                       {apt.status === 'Cancelled' && (apt.cancellationReason || apt.cancelledBy) && (
-                        <p className="mt-3 text-sm text-muted-foreground">
+                        <p className="mt-3 rounded-xl bg-muted px-4 py-2.5 text-body-sm text-muted-foreground">
                           Cancelled{apt.cancelledBy ? ` by ${apt.cancelledBy.toLowerCase()}` : ''}
                           {apt.cancellationReason ? ` — “${apt.cancellationReason}”` : ''}
                         </p>
@@ -178,7 +179,7 @@ export function DoctorAppointmentsPage() {
                             </Button>
                           )}
                           {canEditNotes && (
-                            <Button variant="outline" size="sm" onClick={() => { setNotesId(apt.id); setNotes(apt.doctorNotes || ''); }}>
+                            <Button variant="secondary" size="sm" onClick={() => { setNotesId(apt.id); setNotes(apt.doctorNotes || ''); }}>
                               <NotebookPen aria-hidden="true" /> {apt.doctorNotes ? 'Edit notes' : 'Add notes'}
                             </Button>
                           )}

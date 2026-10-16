@@ -29,9 +29,9 @@ Open problems in the frontend, the improvements planned for them, and recent fix
 | Dates and times | Times show as "9:30 AM", not "09:30:00". UTC timestamps without a `Z` are parsed correctly (`parseUtc`), so notification and review times are no longer shifted |
 | Load failures | Doctor details, profile pages and the admin dashboard show an error with **Try again** instead of a misleading empty or "not found" state |
 | Forms | Labels are linked to their controls. Required fields are marked. Registration checks gender and specialty and shows a live password checklist. Reset password shows the rules and a "passwords don't match" message. The registration form now renders the emergency-contact fields it was already sending |
-| Accessibility | Accessible names on icon-only buttons, a keyboard-operable star rating, status shown with icon + text, a skip link, visible focus rings, and reduced-motion support |
+| Accessibility | Accessible names on icon-only buttons, a keyboard-operable star rating, status shown with text (never color alone), a skip link, visible focus rings, and reduced-motion support |
 | Avatars | Initials ignore "Dr." (doctors previously all showed "D", and patient appointment cards showed a blank avatar) |
-| Performance | Each page except the landing page is its own chunk: the main bundle dropped from 1.19 MB to 611 kB (198 kB gzipped), and recharts loads only for the admin dashboard. Fonts load with `preconnect` instead of a CSS `@import` |
+| Performance | Each page except the landing page is its own chunk: the main bundle dropped from 1.19 MB to 611 kB (198 kB gzipped), and the admin dashboard no longer loads recharts (its chunk is about 6 kB). Fonts load with `preconnect` instead of a CSS `@import` |
 | Content | The landing page no longer shows invented statistics. The "Live data" badge, the unused "Pending" filter and the misleading bar chart were removed. "Reject" clearly says it suspends the account |
 | Dead code | `src/pages/Home.tsx` and `src/App.css` removed |
 
@@ -62,7 +62,7 @@ Open problems in the frontend, the improvements planned for them, and recent fix
 ### Performance and security — P2
 - `nginx.conf` sets no security headers (CSP, `X-Content-Type-Options`, `Referrer-Policy`, frame ancestors).
 - Tokens are stored in `localStorage`, so an XSS bug could steal them. Moving to cookies needs backend changes.
-- The admin dashboard chunk is about 376 kB, mostly recharts.
+- `recharts` is still a dependency but no page uses it (only the unused `components/ui/chart.tsx` template). It can be removed together with that file.
 
 ### Code health — P3
 - **Lint:** 22 known errors. 13 are `react-hooks/set-state-in-effect` from loading data inside `useEffect` (a shared data-loading hook would fix them). 8 are `only-export-components` and 1 is `purity`, both in the generated `components/ui` files.

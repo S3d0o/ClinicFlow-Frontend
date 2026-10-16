@@ -42,7 +42,7 @@ export function PersonalInfoFields({ value, onChange }: PersonalInfoFieldsProps)
         <Input type="date" autoComplete="bday" value={value.dateOfBirth} onChange={(e) => set({ dateOfBirth: e.target.value })} />
       </Field>
       <div className="space-y-1.5">
-        <Label htmlFor="profile-gender" className="text-[0.8125rem]">Gender</Label>
+        <Label htmlFor="profile-gender" className="text-label-md">Gender</Label>
         <Select value={value.gender} onValueChange={(v) => set({ gender: v as Gender })}>
           <SelectTrigger id="profile-gender" className="w-full"><SelectValue placeholder="Select" /></SelectTrigger>
           <SelectContent>
