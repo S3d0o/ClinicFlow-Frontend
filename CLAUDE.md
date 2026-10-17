@@ -24,7 +24,7 @@ Human-facing docs live in `docs/`: `ARCHITECTURE.md`, `FEATURES.md`, `DEVELOPMEN
 - Base URL comes from `VITE_API_URL` (`src/api/axios.ts`); the axios instance uses `${VITE_API_URL}/api`. `.env` and `.env.production` leave it empty, so requests are relative `/api/...`:
   - In Docker, `nginx.conf` proxies `/api` to `http://backend:8080`.
   - `vite.config.ts` has **no dev proxy**, so for local dev set `VITE_API_URL` (e.g. `https://localhost:7129` or `http://localhost:5143`) in `.env.local`.
-- Contract conventions that bite: enums are strings; `DateOnly` = `yyyy-MM-dd`; slot/schedule times are clinic wall-clock (don't timezone-convert); DB timestamps are UTC but may lack the `Z` suffix; list endpoints return bare arrays; business errors are ProblemDetails where `title` is the error code (e.g. `Doctor.NotFound`) — branch on the code (`getApiErrorCode`), not status. Validation errors (400) have PascalCase keys under `errors`.
+- Contract conventions that bite: enums are strings; `DateOnly` = `yyyy-MM-dd`; slot/schedule times are clinic wall-clock (don't timezone-convert); DB timestamps are UTC but may lack the `Z` suffix; list endpoints return bare arrays (notifications and pending doctors add an `X-Total-Count` header); every error body is ProblemDetails (401/403/404/500 have no code in `title`); business errors are ProblemDetails where `title` is the error code (e.g. `Doctor.NotFound`) — branch on the code (`getApiErrorCode`), not status. Validation errors (400) have PascalCase keys under `errors`.
 
 ## Architecture
 

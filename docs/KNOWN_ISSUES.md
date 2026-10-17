@@ -54,6 +54,16 @@ Open problems in the frontend, the improvements planned for them, and recent fix
 
 ## Open issues
 
+### Contract 3.0.0 follow-ups — P2
+The backend moved to contract 3.0.0 (see [API_CONTRACT.md §10](API_CONTRACT.md#10-changelog)). The app keeps working: error bodies on 401/403/404/500 have no `Feature.Reason` code, so `api-error.ts` falls back to its generic text as before, and every list request already sends valid paging. These gaps remain:
+
+| Issue | Impact | Fix |
+|---|---|---|
+| The unread badge counts the items `GET /notifications/my?unreadOnly=true` returns, and that list is now capped at 50 per page | The badge shows at most 50 | Request `unreadOnly=true&pageSize=1` and read the `X-Total-Count` header (`readTotalCount` in contract §12) |
+| The Notifications page shows only the newest 50 notifications | Older ones can't be reached | Add paging (`pageNumber`, `pageSize` ≤ 100) driven by `X-Total-Count` |
+| No "Mark as no-show" action for doctors or admins | The new `POST /appointments/{id}/no-show` (#24b) is unused. `DoctorAppointmentsPage` still says `NoShow` is never set | Add the action (from 15 minutes after the start, `Confirmed` only) and messages for `Appointment.NoShowTooEarly` and `Appointment.AlreadyNoShow` in `api-error.ts` |
+| Admin specialties can't be deactivated or reactivated | `SpecialtyRequest.isActive` (#42) is unused | Add an active switch to the edit dialog and send `isActive` |
+
 ### Data correctness — P2
 | Issue | Impact |
 |---|---|

@@ -238,7 +238,7 @@ stateDiagram-v2
     Cancelled --> [*]: slot becomes available again
 ```
 
-`Pending` and `NoShow` exist in the API's status list, but the backend never sets them today.
+`Pending` exists in the API's status list but is never set. `NoShow` is set when a doctor or admin marks a missed visit (contract #24b); the app shows the badge but has no action for it yet.
 
 ### Email-driven flows
 

@@ -233,7 +233,7 @@ More rules:
 The API returns errors in several shapes (contract [§3](API_CONTRACT.md#3-errors)):
 - **ProblemDetails:** `title` is an *error code* such as `Appointment.SlotAlreadyBooked`, and `detail` is a sentence.
 - **Validation errors:** `title` is a generic "One or more validation errors occurred.", and `errors` maps field names or error codes to messages.
-- **Empty bodies:** for 401, 403 and some 500s.
+- **ProblemDetails without a code** (since contract 3.0.0, before that an empty body): for 401 and 403 from the middleware, unknown routes and unhandled 500s. `title` is a reason phrase such as `"Unauthorized"`, which `api-error.ts` doesn't treat as a code, so the caller's fallback text is shown.
 
 **Never show `err.response.data.title` to users.** Use the helpers in `src/lib/api-error.ts`:
 
@@ -288,7 +288,7 @@ When the backend adds an error code, add its message to `messagesByCode` in `api
   };
   ```
 - **Feedback:** success and failure messages use `toast` from `sonner`.
-- **Paging:** list endpoints return a bare array with no total count. Pages ask for a fixed `pageSize` and assume there's another page when the array is full.
+- **Paging:** list endpoints return a bare array. Pages ask for a fixed `pageSize` and assume there's another page when the array is full. Notifications and pending doctors also send the total in an `X-Total-Count` header (contract 3.0.0), which the app doesn't read yet ([KNOWN_ISSUES.md](KNOWN_ISSUES.md)).
 
 ## 8. Shared helpers and types
 

@@ -76,7 +76,7 @@ Specialty    unique name, description, icon URL, active flag
 | Reminders | Hourly job: email and notification for confirmed appointments starting within 24 hours | Reminder notifications |
 | Times | Slot dates and times are clinic wall-clock time; timestamps are UTC, often without a `Z` | Date handling in [ARCHITECTURE.md §8](ARCHITECTURE.md#8-shared-helpers-and-types) |
 
-`Pending` and `NoShow` appointment statuses exist but aren't used. A booking is `Confirmed` immediately.
+A booking is `Confirmed` immediately; `Pending` is never used. Since contract 3.0.0 the owning doctor or an admin can mark a missed visit as `NoShow`, 15 minutes after its start (#24b).
 
 ## 4. How the two apps connect
 
@@ -99,7 +99,7 @@ If the frontend moves to another URL, update this setting.
 ## 5. Known backend issues that affect the frontend
 
 These are tracked in the backend's `docs/REVIEW.md` and contract [§9](API_CONTRACT.md#9-pending-contract-changes):
-- Some expected errors (duplicate email, duplicate schedule day, specialty in use, …) return **500** instead of 409/400. The frontend relies on the error **code**, so its messages are still correct.
 - Unapproved doctors can sign in. They just don't appear in search.
-- Slot generation uses the UTC date as "today". Shortly after midnight in Egypt (UTC+2/+3), the 14-day window can be off by one day.
 - There's no endpoint for a doctor to read their own professional profile, so the frontend's Professional tab starts blank.
+
+Fixed since: expected errors return 400/404/409 instead of 500 (contract 2.0.0); time rules use the clinic's time zone instead of UTC, and slots no longer run out after 14 days (3.0.0).
