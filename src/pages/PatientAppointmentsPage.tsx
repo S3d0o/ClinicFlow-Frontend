@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { appointmentsApi, reviewsApi } from '@/api';
 import type { Appointment, AppointmentStatus } from '@/types';
 import { getApiErrorMessage } from '@/lib/api-error';
+import { canPatientCancel, hasAppointmentStarted, PATIENT_CANCELLATION_WINDOW_HOURS } from '@/lib/appointments';
 import { formatTimeRange } from '@/lib/format';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -17,7 +18,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Page, PageHeader } from '@/components/layout/Page';
-import { EmptyState, LoadingState } from '@/components/states';
+import { EmptyState, ErrorState, LoadingState } from '@/components/states';
+import { useApiQuery } from '@/hooks/use-api-query';
 import { FilterTabs } from '@/components/FilterTabs';
 import { Pagination } from '@/components/Pagination';
 import { StatusBadge } from '@/components/StatusBadge';
@@ -37,10 +39,9 @@ const filterOptions: { value: StatusFilter; label: string }[] = [
 ];
 
 const REVIEW_MAX_LENGTH = 300;
+const PAGE_SIZE = 10;
 
 export function PatientAppointmentsPage() {
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [pageNumber, setPageNumber] = useState(1);
   const [cancelId, setCancelId] = useState<number | null>(null);
@@ -50,29 +51,21 @@ export function PatientAppointmentsPage() {
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewComment, setReviewComment] = useState('');
   const [reviewLoading, setReviewLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
   const [reviewedIds, setReviewedIds] = useState<Set<number>>(new Set());
 
-  const fetchAppointments = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await appointmentsApi.getMyAppointments({
-        ...(statusFilter !== 'all' ? { status: statusFilter } : {}),
-        pageNumber,
-        pageSize: 10,
-      });
-      setAppointments(res.data);
-      setHasMore(res.data.length === 10);
-    } catch {
-      toast.error('Failed to load appointments');
-    } finally {
-      setLoading(false);
-    }
-  }, [statusFilter, pageNumber]);
-
-  useEffect(() => {
-    fetchAppointments();
-  }, [fetchAppointments]);
+  const { data, loading, error, reload } = useApiQuery(
+    () =>
+      appointmentsApi
+        .getMyAppointments({
+          ...(statusFilter !== 'all' ? { status: statusFilter } : {}),
+          pageNumber,
+          pageSize: PAGE_SIZE,
+        })
+        .then((res) => res.data),
+    `${statusFilter}|${pageNumber}`
+  );
+  const appointments: Appointment[] = data ?? [];
+  const hasMore = appointments.length === PAGE_SIZE;
 
   const closeCancel = () => {
     setCancelId(null);
@@ -92,7 +85,7 @@ export function PatientAppointmentsPage() {
       await appointmentsApi.cancel(cancelId, { cancellationReason: cancelReason || undefined });
       toast.success('Appointment cancelled');
       closeCancel();
-      fetchAppointments();
+      reload();
     } catch (err) {
       toast.error(getApiErrorMessage(err, 'Failed to cancel'));
     } finally {
@@ -147,6 +140,8 @@ export function PatientAppointmentsPage() {
       <div aria-live="polite" aria-busy={loading}>
         {loading ? (
           <LoadingState label="Loading appointments…" />
+        ) : error ? (
+          <ErrorState title="Couldn’t load your appointments" message={getApiErrorMessage(error, 'Please try again in a moment.')} onRetry={reload} />
         ) : appointments.length === 0 ? (
           <EmptyState
             icon={CalendarDays}
@@ -159,6 +154,8 @@ export function PatientAppointmentsPage() {
             {appointments.map((apt) => {
               const canReview = apt.status === 'Completed' && !apt.hasReview && !reviewedIds.has(apt.id);
               const inactive = apt.status === 'Cancelled';
+              const canCancel = canPatientCancel(apt);
+              const windowClosed = apt.status === 'Confirmed' && !canCancel && !hasAppointmentStarted(apt);
               return (
                 <li key={apt.id} className="rounded-2xl border border-border/70 bg-card p-5 shadow-card sm:p-6">
                   <div className="flex gap-4">
@@ -196,16 +193,18 @@ export function PatientAppointmentsPage() {
                         </p>
                       )}
 
-                      {apt.status === 'Confirmed' && (
+                      {(canCancel || windowClosed) && (
                         <p className="mt-3 flex items-start gap-2 rounded-xl border border-info/15 bg-info/[0.06] px-3 py-2 text-body-sm text-info">
                           <Info className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
-                          You can cancel up to 2 hours before the start time.
+                          {canCancel
+                            ? `You can cancel up to ${PATIENT_CANCELLATION_WINDOW_HOURS} hours before the start time.`
+                            : `This visit starts in less than ${PATIENT_CANCELLATION_WINDOW_HOURS} hours, so it can no longer be cancelled.`}
                         </p>
                       )}
 
-                      {(apt.status === 'Confirmed' || canReview) && (
+                      {(canCancel || canReview) && (
                         <div className="mt-4 flex flex-wrap gap-2">
-                          {apt.status === 'Confirmed' && (
+                          {canCancel && (
                             <Button variant="destructive-outline" size="sm" onClick={() => setCancelId(apt.id)}>
                               <X aria-hidden="true" /> Cancel appointment
                             </Button>

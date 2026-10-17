@@ -8,7 +8,7 @@ How to set up, run, change and check the frontend. For how the code is organized
 
 | Tool | Why |
 |---|---|
-| Node.js 20+ and npm | Install, run and build the app (the Docker build uses Node 20) |
+| Node.js 22+ and npm | Install, run, build and test the app (Vitest needs Node 22; the Docker build uses it too) |
 | The ClinicFlow backend | The app has no mock data; every page talks to the API. See [BACKEND_OVERVIEW.md](BACKEND_OVERVIEW.md) and the backend repo's `docs/SETUP_AND_DEPLOYMENT.md` |
 | Docker Desktop (optional) | Running the full stack (database + backend + frontend) in containers |
 
@@ -78,11 +78,20 @@ Compose runs the backend in Production, so there's **no demo data**. Set `ADMIN_
 | `npm run dev` | Vite dev server on http://localhost:3000 with hot reload |
 | `npm run build` | `tsc -b` type check, then production build to `dist/` |
 | `npm run lint` | ESLint over the project |
+| `npm test` | Runs the Vitest suite once (`npm run test:watch` re-runs on change) |
 | `npm run preview` | Serves the built `dist/` locally |
 
-- **`npm run build` is the only type check.** Run it before committing.
-- **There is no test framework yet.** Check changes by hand in the browser against a running backend.
-- **Lint baseline:** `npm run lint` currently reports **22 known errors**. They're mainly the React Compiler rule `react-hooks/set-state-in-effect` (data loading inside `useEffect`) and `react-refresh/only-export-components` in `components/ui`. Treat any error *beyond* those as yours to fix. They're tracked in [KNOWN_ISSUES.md](KNOWN_ISSUES.md). To keep `only-export-components` happy, put non-component exports (constants, helpers) in `src/lib/`, not in `.tsx` component files.
+- **`npm run build` is the only type check.** Run it before committing. It type-checks the tests too.
+- **Tests:** Vitest with jsdom and Testing Library. Test files sit next to the code they cover (`src/lib/format.test.ts`, `src/pages/DoctorsPage.test.tsx`), and import `describe`/`it`/`expect` from `vitest`. What's covered so far:
+  - the token refresh in `src/api/axios.test.ts`: one refresh for concurrent 401s, reusing another tab's token, which failures end the session, cross-tab sign-out. It swaps axios's adapter, so the real interceptors run;
+  - restoring the session on load and following a sign-in made in another tab (`src/context/AuthContext.test.tsx`);
+  - `useApiQuery` (errors, retry, out-of-date responses);
+  - the `src/lib` helpers (redirect after sign-in, the cancellation window, time formatting, API error messages);
+  - `DoctorsPage` as an example page test: it mocks `@/api` with `vi.mock` and renders inside a `MemoryRouter`.
+
+  For a new page test, copy that pattern. Still check UI changes by hand in the browser against a running backend.
+- **Lint:** `npm run lint` reports **0 errors**; keep it that way. To keep `only-export-components` happy, put non-component exports (constants, helpers, hooks, contexts) in a `.ts` file, not in a `.tsx` component file: usually `src/lib/`, or next to the component it belongs to (`ui/button-variants.ts`, `context/auth-context.ts`).
+- **CI:** `.github/workflows/ci.yml` runs on every push and on pull requests to `main`. One job runs `npm ci`, lint, tests and build on Node 22. Another builds the Docker image (`docker build -f DockerFile`). A red run means one of the commands above fails, so run them locally first.
 
 ## 5. How to…
 
@@ -103,19 +112,17 @@ Compose runs the backend in Production, so there's **no demo data**. Set `ADMIN_
      );
    }
    ```
-2. Register it as a lazy page in `src/App.tsx`, then add a route wrapped in `AppLayout`, and in `ProtectedRoute` if it needs sign-in:
+   Load its data with `useApiQuery` and render `ErrorState` with `onRetry={reload}` when `error` is set ([ARCHITECTURE.md §7](ARCHITECTURE.md#7-data-fetching-and-state)).
+2. Register it as a lazy page in `src/App.tsx`, then add its `<Route>` inside the `AppLayout` layout route. Put it under the matching `ProtectedRoute` group if it needs sign-in (for a new role-only group, `<Route element={<ProtectedRoute roles={['Doctor']} />}>`):
 
    ```tsx
    const MyPage = page(() => import('@/pages/MyPage'), 'MyPage');
 
-   <Route
-     path="/doctor/reports"
-     element={
-       <ProtectedRoute allowedRoles={['Doctor']}>
-         <AppLayout><MyPage /></AppLayout>
-       </ProtectedRoute>
-     }
-   />
+   {/* Doctor routes */}
+   <Route element={<ProtectedRoute roles={['Doctor']} />}>
+     …
+     <Route path="/doctor/reports" element={<MyPage />} />
+   </Route>
    ```
 3. Add it to the role's entry in `navByRole` in `src/lib/navigation.ts` if it belongs in the main navigation (with a `lucide-react` icon; it then appears in the sidebar and in the mobile menu).
 
@@ -138,11 +145,11 @@ Compose runs the backend in Production, so there's **no demo data**. Set `ADMIN_
 
 ### Ignore out-of-date responses
 
-If the user can start a new request before the previous one finishes (filters, pickers), use the request-id pattern from [ARCHITECTURE.md §7](ARCHITECTURE.md#7-data-fetching-and-state).
+If the user can start a new request before the previous one finishes (filters, pickers), load the data with `useApiQuery` and put every request input in its key: responses for an older key are ignored ([ARCHITECTURE.md §7](ARCHITECTURE.md#7-data-fetching-and-state)).
 
 ### Add a shadcn/ui component
 
-The project is configured for the shadcn CLI (`components.json`: style "new-york", aliases under `@/components/ui`). Most common components already exist in `src/components/ui/`, so check there first. Use `cn()` from `@/lib/utils` to merge class names.
+The project is configured for the shadcn CLI (`components.json`: style "new-york", aliases under `@/components/ui`). Only the primitives the app uses are kept in `src/components/ui/`, so check there first. A newly generated component uses Tailwind v4 syntax; convert it as described in [ARCHITECTURE.md §9](ARCHITECTURE.md#shadcnui-primitives), and add any dependency it needs. Use `cn()` from `@/lib/utils` to merge class names.
 
 ### Change the API contract
 
@@ -178,7 +185,7 @@ The contract is shared with the backend. Follow [API_CONTRACT.md §11](API_CONTR
 | Requests go to `http://localhost:3000/api/...` and return 404 | `VITE_API_URL` isn't set for development. Create `.env.local` ([§2](#2-configuration)) and restart `npm run dev` |
 | CORS error in the browser console | The frontend isn't on `http://localhost:3000`, or the backend's `Frontend:BaseUrl` was changed. Use port 3000 or update the backend setting |
 | `https://localhost:7129` requests fail with a certificate error | Trust the .NET dev certificate (`dotnet dev-certs https --trust`) or use `http://localhost:5143` |
-| Signed out unexpectedly | The refresh token was rejected: it expired after 7 days, was used in another tab or device and then reused, the password was reset, or the account was suspended. See [ARCHITECTURE.md §5](ARCHITECTURE.md#5-authentication-and-session) |
+| Signed out unexpectedly | The refresh token was rejected: it expired after 7 days, the password was reset, the account was suspended, or the user signed out in another tab (tabs share one session). See [ARCHITECTURE.md §5](ARCHITECTURE.md#5-authentication-and-session) |
 | Email link opens the 404 page | The link must use the hash routes `/#/confirm-email` and `/#/reset-password`. Check the backend's `Frontend:BaseUrl` |
 | Blank page after deploying `dist/` to a sub-path | Assets use relative paths (`base: './'`); serve `index.html` for unknown paths (see `nginx.conf`) |
 | `docker build` can't find a Dockerfile on Linux/CI | The file is named `DockerFile` (capital F). Use `docker build -f DockerFile …` |

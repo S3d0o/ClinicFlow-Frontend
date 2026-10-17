@@ -92,8 +92,9 @@ It calls no API and shows no invented statistics.
 
 ### Sign in — `/login`
 - Email and password, with an accessible show/hide toggle and a "Forgot password?" link next to the password label.
-- **On success,** users return to the page they were trying to open (for example the booking page). Otherwise they go to their home page: Admin → `/admin/dashboard`, Doctor → `/doctor/dashboard`, Patient → `/patient/appointments`.
-- **Errors** appear inline above the form and as a toast. They explain the cause: wrong credentials, account locked for 15 minutes after 5 failed attempts, account suspended, or email not confirmed.
+- **On success,** users return to the page they were trying to open (for example the booking page), if their role can open it. Otherwise they go to their home page: Admin → `/admin/dashboard`, Doctor → `/doctor/dashboard`, Patient → `/patient/appointments`.
+- Signed-in users who open the sign-in, registration or forgot-password pages are sent straight to their home page. A signed-in user who opens another role's page also lands on their own home page.
+- **Errors** appear inline above the form. They explain the cause: wrong credentials, account locked for 15 minutes after 5 failed attempts, account suspended, or email not confirmed.
 - Links: create a patient account, join as a doctor.
 
 ### Forgot password — `/forgot-password`
@@ -142,7 +143,7 @@ The page is laid out as three numbered steps (date, time, reason), next to a **b
   - a status badge (dot + text, so the state never depends on color alone);
   - the doctor's notes (if any);
   - who cancelled, and why.
-- **Cancel appointment** (Confirmed appointments): opens a dialog naming the visit, with an optional reason. Patients can cancel **up to 2 hours before** the start; after that the API refuses with an explanatory message. Cancelling frees the slot for others.
+- **Cancel appointment** (Confirmed appointments): opens a dialog naming the visit, with an optional reason. Patients can cancel **up to 2 hours before** the start. Inside that window the button is hidden and the card says the visit can no longer be cancelled. Cancelling frees the slot for others.
 - **Leave a review** (Completed appointments not yet reviewed): a 1–5 star rating (a keyboard-accessible radio group with labels such as "Excellent") and an optional comment of up to 300 characters, with a counter. One review per appointment. The doctor's average rating updates.
 - **Book an appointment** goes to Find a doctor.
 
@@ -161,7 +162,7 @@ Limitation: a medical field can't be cleared. Emptying it leaves the old value i
 
 ### Dashboard — `/doctor/dashboard`
 - **Greeting** with today's date, plus quick links to Manage schedule and All appointments.
-- **Stats:** today's patients, completed today (with a progress bar), remaining today (with the next start time), and upcoming confirmed visits. They're based on the doctor's 50 most recent appointments.
+- **Stats:** today's patients, completed today (with a progress bar), remaining today (with the next start time), and upcoming confirmed visits (only visits that haven't started). They're based on the doctor's 50 most recent appointments.
 - **Today's queue:** today's appointments in time order, with patient, reason and status. A **Complete** button appears once the appointment's start time has passed.
 - **Weekly availability:** all seven days, showing each day's hours, "Off", or a **Paused** label for inactive schedules. Today is highlighted.
 
@@ -224,7 +225,7 @@ Both actions ask for confirmation first.
 
 The backend creates notifications for bookings, cancellations, completions, reminders (24 hours before), and doctor approval or suspension.
 
-**There's no real-time push.** The app shell refreshes unread notifications on navigation, on window focus and every 60 seconds (see [Navigation](#navigation)).
+**There's no real-time push.** The app shell refreshes unread notifications on navigation, on window focus, when the tab becomes visible, and every 60 seconds while it is visible (see [Navigation](#navigation)).
 
 ### Appointment lifecycle
 

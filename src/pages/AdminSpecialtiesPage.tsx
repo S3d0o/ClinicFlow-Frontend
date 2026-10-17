@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { adminApi } from '@/api';
 import type { Specialty, CreateSpecialtyRequest } from '@/types';
 import { getApiErrorMessage } from '@/lib/api-error';
@@ -15,7 +15,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Page, PageHeader } from '@/components/layout/Page';
-import { EmptyState, LoadingState } from '@/components/states';
+import { EmptyState, ErrorState, LoadingState } from '@/components/states';
+import { useApiQuery } from '@/hooks/use-api-query';
 import { Field } from '@/components/form/Field';
 import { Pencil, Plus, Search, Shield, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -24,9 +25,11 @@ const NAME_MAX_LENGTH = 100;
 const DESCRIPTION_MAX_LENGTH = 500;
 
 export function AdminSpecialtiesPage() {
-  const [specialties, setSpecialties] = useState<Specialty[]>([]);
+  const { data, loading, error, reload: fetchSpecialties } = useApiQuery(() =>
+    adminApi.getAllSpecialties().then((res) => res.data)
+  );
+  const specialties: Specialty[] = data ?? [];
   const [query, setQuery] = useState('');
-  const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [showEdit, setShowEdit] = useState<Specialty | null>(null);
   const [showDelete, setShowDelete] = useState<number | null>(null);
@@ -37,22 +40,6 @@ export function AdminSpecialtiesPage() {
     description: '',
     iconUrl: '',
   });
-
-  const fetchSpecialties = async () => {
-    setLoading(true);
-    try {
-      const res = await adminApi.getAllSpecialties();
-      setSpecialties(res.data);
-    } catch {
-      toast.error('Failed to load specialties');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchSpecialties();
-  }, []);
 
   const resetForm = () => {
     setForm({ name: '', description: '', iconUrl: '' });
@@ -133,7 +120,7 @@ export function AdminSpecialtiesPage() {
         eyebrow="Clinic administration"
         title="Specialties"
         description={
-          loading
+          loading || error
             ? 'The medical specialties doctors can register under.'
             : `${specialties.length} specialties · ${activeCount} active. Doctors choose one when they register.`
         }
@@ -146,6 +133,8 @@ export function AdminSpecialtiesPage() {
 
       {loading ? (
         <LoadingState label="Loading specialties…" />
+      ) : error ? (
+        <ErrorState title="Couldn’t load specialties" message={getApiErrorMessage(error, 'Please try again in a moment.')} onRetry={fetchSpecialties} />
       ) : specialties.length === 0 ? (
         <EmptyState
           icon={Shield}

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/auth-context';
 import { getApiErrorMessage } from '@/lib/api-error';
+import { postLoginPath } from '@/lib/navigation';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { AuthLayout } from '@/components/layout/AuthLayout';
@@ -11,12 +12,6 @@ import { IconInput } from '@/components/form/IconInput';
 import { FormAlert } from '@/components/form/FormAlert';
 import { ArrowRight, Mail } from 'lucide-react';
 import { toast } from 'sonner';
-
-const homeByRole: Record<string, string> = {
-  Admin: '/admin/dashboard',
-  Doctor: '/doctor/dashboard',
-  Patient: '/patient/appointments',
-};
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -35,14 +30,11 @@ export function LoginPage() {
     setLoading(true);
     setError(null);
     try {
-      await login(email, password);
+      const role = await login(email, password);
       toast.success('Welcome back!');
-      const role = localStorage.getItem('userRole') ?? 'Patient';
-      navigate(from ?? homeByRole[role] ?? '/', { replace: true });
+      navigate(postLoginPath(role, from), { replace: true });
     } catch (err) {
-      const message = getApiErrorMessage(err, 'Sign in failed. Please try again.');
-      setError(message);
-      toast.error(message);
+      setError(getApiErrorMessage(err, 'Sign in failed. Please try again.'));
     } finally {
       setLoading(false);
     }

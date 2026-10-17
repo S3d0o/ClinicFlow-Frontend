@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { appointmentsApi, doctorsApi } from '@/api';
-import type { Appointment, DayOfWeek, Schedule } from '@/types';
-import { useAuth } from '@/context/AuthContext';
+import type { DayOfWeek } from '@/types';
+import { useAuth } from '@/context/auth-context';
 import { getApiErrorMessage } from '@/lib/api-error';
 import { hasAppointmentStarted } from '@/lib/appointments';
 import { formatTime, formatTimeRange } from '@/lib/format';
@@ -11,7 +11,8 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Page, PageHeader } from '@/components/layout/Page';
-import { LoadingState } from '@/components/states';
+import { ErrorState, LoadingState } from '@/components/states';
+import { useApiQuery } from '@/hooks/use-api-query';
 import { StatCard } from '@/components/StatCard';
 import { StatusBadge } from '@/components/StatusBadge';
 import { UserAvatar } from '@/components/UserAvatar';
@@ -29,48 +30,24 @@ const greeting = () => {
 
 export function DoctorDashboardPage() {
   const { user } = useAuth();
-  const [todayAppointments, setTodayAppointments] = useState<Appointment[]>([]);
-  const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const [stats, setStats] = useState({ totalToday: 0, totalUpcoming: 0, completedToday: 0 });
-  const [loading, setLoading] = useState(true);
   const [completingId, setCompletingId] = useState<number | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [aptRes, schedRes] = await Promise.all([
-          // The API requires both paging parameters (contract §5.4 #20); 50 is the documented maximum
-          appointmentsApi.getDoctorAppointments({ pageNumber: 1, pageSize: 50 }),
-          doctorsApi.getSchedules(),
-        ]);
-        const allApts = aptRes.data;
-        const today = format(new Date(), 'yyyy-MM-dd');
-        const todays = allApts
-          .filter((a) => a.appointmentDate === today)
-          .sort((a, b) => a.startTime.localeCompare(b.startTime));
-        setTodayAppointments(todays);
-        setSchedules(schedRes.data);
-        setStats({
-          totalToday: todays.length,
-          totalUpcoming: allApts.filter((a) => a.status === 'Confirmed' || a.status === 'Pending').length,
-          completedToday: todays.filter((a) => a.status === 'Completed').length,
-        });
-      } catch {
-        toast.error('Failed to load dashboard data');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  const { data, loading, error, reload, setData } = useApiQuery(() =>
+    Promise.all([
+      // The API requires both paging parameters (contract §5.4 #20); 50 is the documented maximum
+      appointmentsApi.getDoctorAppointments({ pageNumber: 1, pageSize: 50 }),
+      doctorsApi.getSchedules(),
+    ]).then(([aptRes, schedRes]) => ({ appointments: aptRes.data, schedules: schedRes.data }))
+  );
 
   const handleComplete = async (id: number) => {
     setCompletingId(id);
     try {
       await appointmentsApi.complete(id);
       toast.success('Appointment marked as completed');
-      setTodayAppointments((prev) => prev.map((a) => (a.id === id ? { ...a, status: 'Completed' as const } : a)));
-      setStats((s) => ({ ...s, completedToday: s.completedToday + 1 }));
+      setData((d) => ({
+        ...d,
+        appointments: d.appointments.map((a) => (a.id === id ? { ...a, status: 'Completed' as const } : a)),
+      }));
     } catch (err) {
       toast.error(getApiErrorMessage(err, 'Failed to complete'));
     } finally {
@@ -81,6 +58,31 @@ export function DoctorDashboardPage() {
   if (loading) {
     return <LoadingState label="Loading your dashboard…" className="min-h-[60vh]" />;
   }
+
+  if (error || !data) {
+    return (
+      <Page width="wide">
+        <ErrorState
+          title="Couldn’t load your dashboard"
+          message={getApiErrorMessage(error, 'Please try again in a moment.')}
+          onRetry={reload}
+          className="min-h-[50vh]"
+        />
+      </Page>
+    );
+  }
+
+  const { appointments, schedules } = data;
+  const today = format(new Date(), 'yyyy-MM-dd');
+  const todayAppointments = appointments
+    .filter((a) => a.appointmentDate === today)
+    .sort((a, b) => a.startTime.localeCompare(b.startTime));
+  const stats = {
+    totalToday: todayAppointments.length,
+    completedToday: todayAppointments.filter((a) => a.status === 'Completed').length,
+    // Visits still ahead: past ones that were never completed don't count
+    totalUpcoming: appointments.filter((a) => a.status === 'Confirmed' && !hasAppointmentStarted(a)).length,
+  };
 
   const firstName = user?.firstName;
   const scheduleByDay = new Map(schedules.map((s) => [s.dayOfWeek, s]));

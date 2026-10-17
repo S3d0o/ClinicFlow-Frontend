@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { profileApi, doctorsApi } from '@/api';
 import type { UserProfile, Gender } from '@/types';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/auth-context';
 import { getApiErrorMessage } from '@/lib/api-error';
 import { parseUtc } from '@/lib/format';
 import { Button } from '@/components/ui/button';

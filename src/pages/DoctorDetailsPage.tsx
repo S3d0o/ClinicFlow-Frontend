@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { isAxiosError } from 'axios';
 import { doctorsApi, reviewsApi } from '@/api';
 import type { DoctorDetails as DoctorDetailsType, Review } from '@/types';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/auth-context';
 import { getApiErrorMessage } from '@/lib/api-error';
 import { formatFee, parseUtc } from '@/lib/format';
 import { format } from 'date-fns';
@@ -13,54 +12,51 @@ import { Page } from '@/components/layout/Page';
 import { EmptyState, ErrorState, LoadingState } from '@/components/states';
 import { UserAvatar } from '@/components/UserAvatar';
 import { RatingStars, RatingSummary } from '@/components/Rating';
+import { useApiQuery } from '@/hooks/use-api-query';
 import { ArrowLeft, Banknote, Briefcase, CalendarPlus, MapPin, MessageSquare, Stethoscope } from 'lucide-react';
 
 export function DoctorDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { isAuthenticated, role } = useAuth();
-  const [doctor, setDoctor] = useState<DoctorDetailsType | null>(null);
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [reviewsLoading, setReviewsLoading] = useState(true);
-  const [loadError, setLoadError] = useState<string | null>(null);
-  const [reloadKey, setReloadKey] = useState(0);
-
-  useEffect(() => {
-    if (!id) return;
-    setLoading(true);
-    setLoadError(null);
-    doctorsApi
-      .getById(Number(id))
-      .then((res) => setDoctor(res.data))
-      .catch((err) => {
-        setDoctor(null);
-        // A 404 means "no such doctor"; anything else is a failure worth retrying
-        if (!(isAxiosError(err) && err.response?.status === 404)) {
-          setLoadError(getApiErrorMessage(err, 'Failed to load this doctor'));
-        }
-      })
-      .finally(() => setLoading(false));
-  }, [id, reloadKey]);
-
-  useEffect(() => {
-    if (!id) return;
-    setReviewsLoading(true);
-    reviewsApi
-      .getDoctorReviews(Number(id), { pageNumber: 1, pageSize: 10 })
-      .then((res) => setReviews(res.data))
-      .catch(() => {})
-      .finally(() => setReviewsLoading(false));
-  }, [id, reloadKey]);
+  const doctorQuery = useApiQuery(
+    (): Promise<DoctorDetailsType | null> =>
+      doctorsApi
+        .getById(Number(id))
+        .then((res) => res.data)
+        .catch((err) => {
+          // A 404 means "no such doctor"; anything else is a failure worth retrying
+          if (isAxiosError(err) && err.response?.status === 404) return null;
+          throw err;
+        }),
+    id
+  );
+  // Reviews are secondary: if they fail to load, the profile still shows with "No reviews yet"
+  const reviewsQuery = useApiQuery(
+    (): Promise<Review[]> =>
+      reviewsApi
+        .getDoctorReviews(Number(id), { pageNumber: 1, pageSize: 10 })
+        .then((res) => res.data)
+        .catch(() => []),
+    id
+  );
+  const { loading, error } = doctorQuery;
+  const doctor = doctorQuery.data ?? null;
+  const reviews = reviewsQuery.data ?? [];
+  const reviewsLoading = reviewsQuery.loading;
+  const retry = () => {
+    doctorQuery.reload();
+    reviewsQuery.reload();
+  };
 
   if (loading) {
     return <LoadingState label="Loading doctor profile…" className="min-h-[60vh]" />;
   }
 
-  if (loadError) {
+  if (error) {
     return (
       <Page width="narrow">
-        <ErrorState title="Couldn’t load this doctor" message={loadError} onRetry={() => setReloadKey((k) => k + 1)} />
+        <ErrorState title="Couldn’t load this doctor" message={getApiErrorMessage(error, 'Failed to load this doctor')} onRetry={retry} />
       </Page>
     );
   }

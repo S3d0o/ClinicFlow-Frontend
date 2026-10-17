@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { doctorsApi, specialtiesApi } from '@/api';
 import type { DoctorSummary, Specialty, DoctorSortBy } from '@/types';
@@ -22,13 +22,11 @@ import { UserAvatar } from '@/components/UserAvatar';
 import { RatingSummary } from '@/components/Rating';
 import { ArrowRight, Briefcase, MapPin, Search, Stethoscope } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useApiQuery } from '@/hooks/use-api-query';
 
 const PAGE_SIZE = 12;
 
 export function DoctorsPage() {
-  const [doctors, setDoctors] = useState<DoctorSummary[]>([]);
-  const [specialties, setSpecialties] = useState<Specialty[]>([]);
-  const [loading, setLoading] = useState(true);
   const [specialtyId, setSpecialtyId] = useState<string>('all');
   const [city, setCity] = useState('');
   const [cityInput, setCityInput] = useState('');
@@ -36,44 +34,28 @@ export function DoctorsPage() {
   const [name, setName] = useState('');
   const [sortBy, setSortBy] = useState<DoctorSortBy>('Rating');
   const [pageNumber, setPageNumber] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const requestId = useRef(0);
 
-  const fetchDoctors = useCallback(async () => {
-    // Ignore responses that arrive after a newer request (fast filter changes)
-    const currentRequest = ++requestId.current;
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await doctorsApi.list({
-        ...(specialtyId !== 'all' ? { specialtyId: Number(specialtyId) } : {}),
-        ...(city ? { city } : {}),
-        ...(name ? { name } : {}),
-        sortBy,
-        pageNumber,
-        pageSize: PAGE_SIZE,
-      });
-      if (currentRequest !== requestId.current) return;
-      setDoctors(res.data);
-      setHasMore(res.data.length === PAGE_SIZE);
-    } catch (err) {
-      if (currentRequest !== requestId.current) return;
-      setDoctors([]);
-      setHasMore(false);
-      setError(getApiErrorMessage(err, 'Failed to load doctors'));
-    } finally {
-      if (currentRequest === requestId.current) setLoading(false);
-    }
-  }, [specialtyId, city, name, sortBy, pageNumber]);
+  // Fast filter changes are safe: useApiQuery ignores responses for an older key
+  const { data, loading, error, reload: fetchDoctors } = useApiQuery(
+    () =>
+      doctorsApi
+        .list({
+          ...(specialtyId !== 'all' ? { specialtyId: Number(specialtyId) } : {}),
+          ...(city ? { city } : {}),
+          ...(name ? { name } : {}),
+          sortBy,
+          pageNumber,
+          pageSize: PAGE_SIZE,
+        })
+        .then((res) => res.data),
+    `${specialtyId}|${city}|${name}|${sortBy}|${pageNumber}`
+  );
+  const doctors: DoctorSummary[] = data ?? [];
+  const hasMore = doctors.length === PAGE_SIZE;
 
-  useEffect(() => {
-    fetchDoctors();
-  }, [fetchDoctors]);
-
-  useEffect(() => {
-    specialtiesApi.getAll().then((res) => setSpecialties(res.data)).catch(() => {});
-  }, []);
+  // The chips are a convenience; if specialties fail to load, "All specialties" still works
+  const { data: specialtiesData } = useApiQuery(() => specialtiesApi.getAll().then((res) => res.data));
+  const specialties: Specialty[] = specialtiesData ?? [];
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -200,7 +182,7 @@ export function DoctorsPage() {
             <span className="sr-only">Loading doctors…</span>
           </div>
         ) : error ? (
-          <ErrorState title="Couldn’t load doctors" message={error} onRetry={fetchDoctors} />
+          <ErrorState title="Couldn’t load doctors" message={getApiErrorMessage(error, 'Please try again in a moment.')} onRetry={fetchDoctors} />
         ) : doctors.length === 0 ? (
           pageNumber > 1 ? (
             <EmptyState icon={Stethoscope} title="No more doctors" description="You’ve reached the end of the results." />

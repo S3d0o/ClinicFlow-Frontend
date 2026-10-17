@@ -1,16 +1,18 @@
 import { lazy, Suspense, useEffect } from 'react';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { MotionConfig } from 'framer-motion';
-import { AuthProvider, useAuth } from '@/context/AuthContext';
+import { Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
+import { AuthProvider } from '@/context/AuthContext';
+import { useAuth } from '@/context/auth-context';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { AppShell } from '@/components/shell/AppShell';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Toaster } from '@/components/ui/sonner';
 import { LoadingState } from '@/components/states';
+import { homeByRole, postLoginPath } from '@/lib/navigation';
+import type { UserRole } from '@/types';
 
 // The landing page loads eagerly for the fastest first paint; every other page is split into its
-// own chunk and loaded on first visit (recharts, for example, only loads for the admin dashboard).
+// own chunk and loaded on first visit.
 import { LandingPage } from '@/pages/LandingPage';
 
 const page = <K extends string>(load: () => Promise<Record<K, React.ComponentType>>, name: K) =>
@@ -48,28 +50,39 @@ const AdminSpecialtiesPage = page(() => import('@/pages/AdminSpecialtiesPage'), 
 const NotificationsPage = page(() => import('@/pages/NotificationsPage'), 'NotificationsPage');
 const NotFoundPage = page(() => import('@/pages/NotFoundPage'), 'NotFoundPage');
 
-function ProtectedRoute({ children, allowedRoles }: { children: React.ReactNode; allowedRoles?: string[] }) {
-  const { isAuthenticated, role, isLoading } = useAuth();
+/** Layout route for signed-in pages. `roles` limits it to those roles; others go to their own home. */
+function ProtectedRoute({ roles }: { roles?: UserRole[] }) {
+  const { isAuthenticated, role } = useAuth();
   const location = useLocation();
-
-  if (isLoading) {
-    return <LoadingState label="Checking your session…" className="min-h-[60vh]" />;
-  }
 
   if (!isAuthenticated) {
     // Remember where the user was going so LoginPage can send them back afterwards
     return <Navigate to="/login" replace state={{ from: location.pathname + location.search }} />;
   }
 
-  if (allowedRoles && role && !allowedRoles.includes(role)) {
-    return <Navigate to="/" replace />;
+  if (roles && role && !roles.includes(role)) {
+    return <Navigate to={homeByRole[role]} replace />;
   }
 
-  return <>{children}</>;
+  return <Outlet />;
 }
 
-// Signed-in users get the sidebar shell; visitors get the top navbar and full footer.
-function AppLayout({ children }: { children: React.ReactNode }) {
+/** Layout route for sign-in and sign-up pages: signed-in users are sent on to where they belong. */
+function GuestOnlyRoute() {
+  const { isAuthenticated, role } = useAuth();
+  const location = useLocation();
+
+  if (isAuthenticated && role) {
+    const from = (location.state as { from?: string } | null)?.from;
+    return <Navigate to={postLoginPath(role, from)} replace />;
+  }
+
+  return <Outlet />;
+}
+
+// Wraps every route and stays mounted across navigation. Signed-in users get the sidebar shell;
+// visitors get the top navbar and full footer.
+function AppLayout() {
   const { pathname } = useLocation();
   const { isAuthenticated, role, isLoading } = useAuth();
 
@@ -78,14 +91,17 @@ function AppLayout({ children }: { children: React.ReactNode }) {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  // Wait for the session restore so signed-in users don't see the visitor navbar flash first
+  // Wait for the session restore so signed-in users don't see the visitor navbar flash first, and
+  // route guards don't redirect before the session is known
   if (isLoading) {
     return <LoadingState label="Loading…" className="min-h-screen" />;
   }
 
   const content = (
     <ErrorBoundary key={pathname}>
-      <Suspense fallback={<LoadingState label="Loading…" className="min-h-[50vh]" />}>{children}</Suspense>
+      <Suspense fallback={<LoadingState label="Loading…" className="min-h-[50vh]" />}>
+        <Outlet />
+      </Suspense>
     </ErrorBoundary>
   );
 
@@ -119,129 +135,63 @@ function AppLayout({ children }: { children: React.ReactNode }) {
 function AppRoutes() {
   return (
     <Routes>
-      {/* Public routes */}
-      <Route path="/" element={<AppLayout><LandingPage /></AppLayout>} />
-      <Route path="/doctors" element={<AppLayout><DoctorsPage /></AppLayout>} />
-      <Route path="/doctors/:id" element={<AppLayout><DoctorDetailsPage /></AppLayout>} />
+      <Route element={<AppLayout />}>
+        {/* Public routes */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/doctors" element={<DoctorsPage />} />
+        <Route path="/doctors/:id" element={<DoctorDetailsPage />} />
 
-      {/* Auth routes */}
-      <Route path="/login" element={<AppLayout><LoginPage /></AppLayout>} />
-      <Route path="/register/patient" element={<AppLayout><RegisterPatientPage /></AppLayout>} />
-      <Route path="/register/doctor" element={<AppLayout><RegisterDoctorPage /></AppLayout>} />
-      <Route path="/forgot-password" element={<AppLayout><ForgotPasswordPage /></AppLayout>} />
-      <Route path="/reset-password" element={<AppLayout><ResetPasswordPage /></AppLayout>} />
-      <Route path="/confirm-email" element={<AppLayout><ConfirmEmailPage /></AppLayout>} />
+        {/* Auth routes */}
+        <Route element={<GuestOnlyRoute />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register/patient" element={<RegisterPatientPage />} />
+          <Route path="/register/doctor" element={<RegisterDoctorPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        </Route>
+        {/* Opened from email links, so they work whether or not someone is signed in */}
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route path="/confirm-email" element={<ConfirmEmailPage />} />
 
-      {/* Patient routes */}
-      <Route
-        path="/patient/appointments"
-        element={
-          <ProtectedRoute allowedRoles={['Patient']}>
-            <AppLayout><PatientAppointmentsPage /></AppLayout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/patient/book/:doctorId"
-        element={
-          <ProtectedRoute allowedRoles={['Patient']}>
-            <AppLayout><BookAppointmentPage /></AppLayout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/patient/profile"
-        element={
-          <ProtectedRoute allowedRoles={['Patient']}>
-            <AppLayout><PatientProfilePage /></AppLayout>
-          </ProtectedRoute>
-        }
-      />
+        {/* Patient routes */}
+        <Route element={<ProtectedRoute roles={['Patient']} />}>
+          <Route path="/patient/appointments" element={<PatientAppointmentsPage />} />
+          <Route path="/patient/book/:doctorId" element={<BookAppointmentPage />} />
+          <Route path="/patient/profile" element={<PatientProfilePage />} />
+        </Route>
 
-      {/* Doctor routes */}
-      <Route
-        path="/doctor/dashboard"
-        element={
-          <ProtectedRoute allowedRoles={['Doctor']}>
-            <AppLayout><DoctorDashboardPage /></AppLayout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/doctor/appointments"
-        element={
-          <ProtectedRoute allowedRoles={['Doctor']}>
-            <AppLayout><DoctorAppointmentsPage /></AppLayout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/doctor/schedules"
-        element={
-          <ProtectedRoute allowedRoles={['Doctor']}>
-            <AppLayout><DoctorSchedulesPage /></AppLayout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/doctor/profile"
-        element={
-          <ProtectedRoute allowedRoles={['Doctor']}>
-            <AppLayout><DoctorProfilePage /></AppLayout>
-          </ProtectedRoute>
-        }
-      />
+        {/* Doctor routes */}
+        <Route element={<ProtectedRoute roles={['Doctor']} />}>
+          <Route path="/doctor/dashboard" element={<DoctorDashboardPage />} />
+          <Route path="/doctor/appointments" element={<DoctorAppointmentsPage />} />
+          <Route path="/doctor/schedules" element={<DoctorSchedulesPage />} />
+          <Route path="/doctor/profile" element={<DoctorProfilePage />} />
+        </Route>
 
-      {/* Admin routes */}
-      <Route
-        path="/admin/dashboard"
-        element={
-          <ProtectedRoute allowedRoles={['Admin']}>
-            <AppLayout><AdminDashboardPage /></AppLayout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/pending-doctors"
-        element={
-          <ProtectedRoute allowedRoles={['Admin']}>
-            <AppLayout><AdminPendingDoctorsPage /></AppLayout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/specialties"
-        element={
-          <ProtectedRoute allowedRoles={['Admin']}>
-            <AppLayout><AdminSpecialtiesPage /></AppLayout>
-          </ProtectedRoute>
-        }
-      />
+        {/* Admin routes */}
+        <Route element={<ProtectedRoute roles={['Admin']} />}>
+          <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+          <Route path="/admin/pending-doctors" element={<AdminPendingDoctorsPage />} />
+          <Route path="/admin/specialties" element={<AdminSpecialtiesPage />} />
+        </Route>
 
-      {/* Shared routes */}
-      <Route
-        path="/notifications"
-        element={
-          <ProtectedRoute>
-            <AppLayout><NotificationsPage /></AppLayout>
-          </ProtectedRoute>
-        }
-      />
+        {/* Shared routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/notifications" element={<NotificationsPage />} />
+        </Route>
 
-      {/* 404 */}
-      <Route path="*" element={<AppLayout><NotFoundPage /></AppLayout>} />
+        {/* 404 */}
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
     </Routes>
   );
 }
 
 function App() {
   return (
-    <MotionConfig reducedMotion="user">
-      <AuthProvider>
-        <AppRoutes />
-        <Toaster position="top-right" richColors closeButton />
-      </AuthProvider>
-    </MotionConfig>
+    <AuthProvider>
+      <AppRoutes />
+      <Toaster position="top-right" richColors closeButton />
+    </AuthProvider>
   );
 }
 

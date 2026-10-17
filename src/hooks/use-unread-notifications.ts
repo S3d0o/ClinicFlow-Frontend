@@ -8,7 +8,8 @@ const NOTIFICATION_POLL_MS = 60_000;
 
 /**
  * Unread notifications for the signed-in user. Refreshes on sign-in, on navigation, when the window
- * regains focus, periodically, and whenever a page reports that notifications changed.
+ * regains focus or becomes visible, every minute while visible, and whenever a page reports that
+ * notifications changed.
  */
 export function useUnreadNotifications(enabled: boolean) {
   const location = useLocation();
@@ -29,12 +30,21 @@ export function useUnreadNotifications(enabled: boolean) {
   useEffect(() => {
     if (!enabled) return;
     const onChange = () => fetchUnread();
+    // Background tabs don't poll; they catch up as soon as they're visible again
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible') fetchUnread();
+    };
+    const poll = () => {
+      if (document.visibilityState === 'visible') fetchUnread();
+    };
     window.addEventListener('focus', onChange);
     window.addEventListener(NOTIFICATIONS_CHANGED_EVENT, onChange);
-    const timer = window.setInterval(fetchUnread, NOTIFICATION_POLL_MS);
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    const timer = window.setInterval(poll, NOTIFICATION_POLL_MS);
     return () => {
       window.removeEventListener('focus', onChange);
       window.removeEventListener(NOTIFICATIONS_CHANGED_EVENT, onChange);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
       window.clearInterval(timer);
     };
   }, [enabled, fetchUnread]);

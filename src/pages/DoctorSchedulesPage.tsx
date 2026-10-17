@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { doctorsApi } from '@/api';
 import type { Schedule, CreateScheduleRequest, DayOfWeek } from '@/types';
 import { getApiErrorMessage } from '@/lib/api-error';
@@ -24,7 +24,8 @@ import {
 } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
 import { Page, PageHeader } from '@/components/layout/Page';
-import { LoadingState } from '@/components/states';
+import { ErrorState, LoadingState } from '@/components/states';
+import { useApiQuery } from '@/hooks/use-api-query';
 import { Field } from '@/components/form/Field';
 import { FormAlert } from '@/components/form/FormAlert';
 import { cn } from '@/lib/utils';
@@ -62,8 +63,10 @@ const slotCount = (s: Pick<Schedule, 'startTime' | 'endTime' | 'slotDurationMinu
   Math.max(0, Math.floor((toMinutes(s.endTime) - toMinutes(s.startTime)) / s.slotDurationMinutes));
 
 export function DoctorSchedulesPage() {
-  const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, loading, error, reload: fetchSchedules } = useApiQuery(() =>
+    doctorsApi.getSchedules().then((res) => res.data)
+  );
+  const schedules: Schedule[] = data ?? [];
   const [showCreate, setShowCreate] = useState(false);
   const [showEdit, setShowEdit] = useState<Schedule | null>(null);
   const [showDelete, setShowDelete] = useState<number | null>(null);
@@ -89,22 +92,6 @@ export function DoctorSchedulesPage() {
     setCreateForm({ dayOfWeek, ...defaultCreateForm });
     setShowCreate(true);
   };
-
-  const fetchSchedules = async () => {
-    setLoading(true);
-    try {
-      const res = await doctorsApi.getSchedules();
-      setSchedules(res.data);
-    } catch {
-      toast.error('Failed to load schedules');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchSchedules();
-  }, []);
 
   const handleCreate = async () => {
     if (createError || scheduledDays.has(createForm.dayOfWeek)) return;
@@ -168,7 +155,7 @@ export function DoctorSchedulesPage() {
           <Button
             variant="strong"
             onClick={() => openCreate()}
-            disabled={loading || availableDays.length === 0}
+            disabled={loading || !!error || availableDays.length === 0}
             title={availableDays.length === 0 ? 'Every day already has a schedule' : undefined}
           >
             <Plus aria-hidden="true" /> Add hours
@@ -178,6 +165,8 @@ export function DoctorSchedulesPage() {
 
       {loading ? (
         <LoadingState label="Loading your schedule…" />
+      ) : error ? (
+        <ErrorState title="Couldn’t load your schedule" message={getApiErrorMessage(error, 'Please try again in a moment.')} onRetry={fetchSchedules} />
       ) : (
         <>
           {schedules.length === 0 && (

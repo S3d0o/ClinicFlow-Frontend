@@ -16,8 +16,9 @@ How the React app is put together: startup, routing, the API layer, authenticati
 | Components | shadcn/ui ("new-york" style) on Radix UI primitives |
 | HTTP | axios, with interceptors for auth and token refresh |
 | Feedback | sonner toasts |
-| Animation / icons | framer-motion, lucide-react |
+| Icons | lucide-react |
 | Dates | date-fns |
+| Tests | Vitest, Testing Library, jsdom |
 
 There is no global state library and no data-fetching library. Authentication is the only shared state (a React context); every page loads its own data.
 
@@ -26,15 +27,15 @@ There is no global state library and no data-fetching library. Authentication is
 ```
 src/
 ├── main.tsx           Entry point: HashRouter, global CSS, Radix body-style workaround
-├── App.tsx            All routes, ProtectedRoute, AppLayout (picks the shell)
+├── App.tsx            All routes and the layout routes: AppLayout (picks the shell), ProtectedRoute, GuestOnlyRoute
 ├── index.css          Tailwind layers, theme tokens, global layout rules
 ├── api/               axios instance + one module per API resource
 ├── context/           AuthContext (session state, login/logout)
 ├── components/        Shared components (Navbar and Footer for visitors, StatusBadge, …)
 │   ├── shell/         Signed-in app shell: AppShell (sidebar + top bar), NotificationsMenu
-│   └── ui/            shadcn/ui components (generated; only some are used)
-├── hooks/             use-unread-notifications, use-mobile (from shadcn)
-├── lib/               Shared helpers: utils (cn), api-error, appointments, navigation
+│   └── ui/            shadcn/ui primitives, restyled for the design system
+├── hooks/             use-api-query (page data loading), use-unread-notifications
+├── lib/               Shared helpers: utils (cn), api-error, appointments, navigation, chunk-reload
 ├── pages/             One component per route
 └── types/             TypeScript types for API requests and responses
 ```
@@ -44,18 +45,21 @@ src/
 1. **`index.html`** loads `src/main.tsx`.
 2. **`src/main.tsx`**:
    - renders `<App />` inside `<React.StrictMode>` and `<HashRouter>`, and imports `index.css`;
+   - reloads the page once when a lazy chunk from an older deploy can't be fetched (`vite:preloadError`, see `lib/chunk-reload.ts`);
    - installs a `MutationObserver` on `<body>`. Radix menus and dialogs set `pointer-events: none` and `padding-right` on the body while open, which shifted the page layout. The observer removes those two styles. `index.css` adds matching rules (an always-visible scrollbar gutter, and `body[style] { padding-right: 0 }`). Keep both if you change dialogs or menus.
 3. **`src/App.tsx`** wraps everything in `<AuthProvider>`, renders the routes, and mounts the global `<Toaster position="top-right" richColors />`.
 
 ## 3. Routing
 
-All routes are declared in `src/App.tsx`. Every route is wrapped in `AppLayout`:
+All routes are declared in `src/App.tsx`, nested under one **layout route**, `AppLayout`, which renders the matched page through `<Outlet />`. Because it is a parent route, the shell stays mounted while the user navigates: the sidebar, the account menu and the unread-notification state aren't rebuilt on every page change. `AppLayout` provides:
 - a "Skip to content" link (visible on keyboard focus);
 - for **signed-in users**, `components/shell/AppShell`: a fixed sidebar (a slide-in sheet below `lg`), a sticky top bar with the notification bell and account menu, and a slim footer ([§9](#app-shell));
 - for **visitors**, the sticky top `Navbar` and the full `Footer`;
 - the page inside `<main id="main-content">`, wrapped in an `ErrorBoundary` (keyed by route, so navigating away clears a crash) and `Suspense`.
 
-While the session is being restored, `AppLayout` shows a loading state instead of either shell. `AppLayout` also scrolls to the top on every route change, because hash routing keeps the previous scroll position.
+Access rules are nested layout routes inside it: `ProtectedRoute` (signed-in pages, optionally limited to roles) and `GuestOnlyRoute` (sign-in and sign-up pages).
+
+While the session is being restored, `AppLayout` shows a loading state instead of either shell and doesn't render the routes, so the guards below never redirect before the session is known. `AppLayout` also scrolls to the top on every route change, because hash routing keeps the previous scroll position.
 
 **Code splitting:** `LandingPage` is imported eagerly for the fastest first paint. Every other page is loaded with `React.lazy` through the small `page()` helper in `App.tsx`, so each page is its own chunk. When adding a page, register it the same way.
 
@@ -64,10 +68,10 @@ While the session is being restored, `AppLayout` shows a loading state instead o
 | `/` | `LandingPage` | Public | Marketing landing page |
 | `/doctors` | `DoctorsPage` | Public | Search and filter doctors |
 | `/doctors/:id` | `DoctorDetailsPage` | Public | Doctor profile and reviews |
-| `/login` | `LoginPage` | Public | Sign in |
-| `/register/patient` | `RegisterPatientPage` | Public | Patient registration |
-| `/register/doctor` | `RegisterDoctorPage` | Public | Doctor registration (needs admin approval) |
-| `/forgot-password` | `ForgotPasswordPage` | Public | Request a reset email |
+| `/login` | `LoginPage` | Signed-out only | Sign in |
+| `/register/patient` | `RegisterPatientPage` | Signed-out only | Patient registration |
+| `/register/doctor` | `RegisterDoctorPage` | Signed-out only | Doctor registration (needs admin approval) |
+| `/forgot-password` | `ForgotPasswordPage` | Signed-out only | Request a reset email |
 | `/reset-password` | `ResetPasswordPage` | Public | Set a new password from the email link |
 | `/confirm-email` | `ConfirmEmailPage` | Public | Confirm the account from the email link |
 | `/patient/appointments` | `PatientAppointmentsPage` | Patient | List, cancel and review appointments |
@@ -87,16 +91,22 @@ While the session is being restored, `AppLayout` shows a loading state instead o
 
 The app uses `HashRouter`, so URLs look like `http://localhost:3000/#/doctors`. **Don't switch to `BrowserRouter` on its own.** The backend builds the links in its emails as `/#/confirm-email?userId=…&token=…` and `/#/reset-password?userId=…&token=…` (contract [§8](API_CONTRACT.md#8-frontend-routes-the-backend-depends-on)). Changing the routing means changing the backend's `EmailService` at the same time.
 
-### `ProtectedRoute`
+### `ProtectedRoute` and `GuestOnlyRoute`
 
 ```tsx
-<ProtectedRoute allowedRoles={['Doctor']}> … </ProtectedRoute>
+<Route element={<ProtectedRoute roles={['Doctor']} />}>
+  <Route path="/doctor/dashboard" element={<DoctorDashboardPage />} />
+</Route>
 ```
 
-- While `AuthContext` is still restoring the session (`isLoading`), it shows a spinner.
-- If the user isn't signed in, it redirects to `/login` with `state.from` set to the requested path. After signing in, `LoginPage` sends the user back there (otherwise to their role's home page).
-- If `allowedRoles` is given and the user's role isn't in it, it redirects to `/`.
-- With no `allowedRoles`, any signed-in user is allowed (used for `/notifications`).
+`ProtectedRoute`:
+- If the user isn't signed in, it redirects to `/login` with `state.from` set to the requested path.
+- If `roles` is given and the user's role isn't in it, it redirects to that role's home page (`homeByRole` in `src/lib/navigation.ts`).
+- With no `roles`, any signed-in user is allowed (used for `/notifications`).
+
+`GuestOnlyRoute` wraps `/login`, `/register/*` and `/forgot-password`. A signed-in user who opens one of them is sent on to where they belong. `/reset-password` and `/confirm-email` stay open to everyone because they are opened from email links.
+
+Both use `postLoginPath(role, from)`: it returns `from` (the page the user originally asked for) when their role can open it, and otherwise their role's home: Admin → `/admin/dashboard`, Doctor → `/doctor/dashboard`, Patient → `/patient/appointments`.
 
 The role check only controls what the UI shows. The backend enforces every permission itself.
 
@@ -105,6 +115,7 @@ The role check only controls what the UI shows. The backend enforces every permi
 ### The axios instance (`src/api/axios.ts`)
 
 - **Base URL:** `` `${import.meta.env.VITE_API_URL ?? ''}/api` ``. When `VITE_API_URL` is empty, requests go to the same origin (`/api/...`), which is what the Docker/nginx setup expects. See [DEVELOPMENT.md](DEVELOPMENT.md#2-configuration) for local values.
+- **Timeout:** 20 seconds, so a hung backend ends in an error the page can show instead of an endless spinner.
 - **Request interceptor:** adds `Authorization: Bearer <accessToken>` when a token exists.
 - **Response interceptor:** handles 401s by refreshing the token (see [§5](#5-authentication-and-session)).
 
@@ -152,10 +163,10 @@ Two helpers in `axios.ts` keep these in sync. Always use them instead of touchin
 `AuthContext.login(email, password)`:
 1. calls `authApi.login`;
 2. calls `saveSession(response)`;
-3. loads the user's profile with `profileApi.getMyProfile()`;
-4. sets `isAuthenticated`, `role` and `user`.
+3. loads the user's profile with `profileApi.getMyProfile()`. If that fails with a 4xx, the session is cleared again and the error is shown. If it fails with a network error or 5xx, the sign-in still succeeds with `user = null`, as on page load;
+4. sets `isAuthenticated`, `role` and `user`, and returns the role.
 
-`LoginPage` then sends the user to their home page: Admin → `/admin/dashboard`, Doctor → `/doctor/dashboard`, Patient → `/patient/appointments`.
+`LoginPage` then navigates to `postLoginPath(role, from)` ([§3](#protectedroute-and-guestonlyroute)).
 
 ### Restoring the session on page load
 
@@ -166,7 +177,7 @@ Two helpers in `axios.ts` keep these in sync. Always use them instead of touchin
   - **Network error or 5xx:** the session is **kept**. The user stays signed in with `user = null`, and the profile loads with a later request.
 - Otherwise the user is signed out.
 
-`isLoading` stays `true` until this finishes, which is why `ProtectedRoute` shows a spinner first.
+`isLoading` stays `true` until this finishes, and `AppLayout` shows a spinner until then.
 
 ### Token refresh (single-flight)
 
@@ -194,6 +205,13 @@ sequenceDiagram
         end
     end
 ```
+
+### Several tabs
+
+All tabs share `localStorage`, but each keeps its own copy of the tokens in memory. Without coordination, two tabs refreshing with the same token would make one of them reuse an already-rotated refresh token. The API rejects that, and reuse from another IP or more than 5 minutes later **revokes every session of the user** (contract [§2.3](API_CONTRACT.md#23-refresh-rules-frontend-must-follow-these)). So:
+- **One refresh at a time across tabs:** the refresh runs inside a Web Lock (`navigator.locks`, lock name `clinicflow:refresh-token`).
+- **Reuse another tab's refresh:** inside the lock, the tab reads the tokens from `localStorage` again. If another tab has already stored a newer access token that hasn't expired, it uses that one and doesn't call the API. Otherwise it refreshes with the stored refresh token, which is always the newest.
+- **Stay in sync:** a `storage` listener in `axios.ts` copies new tokens into memory when another tab signs in or refreshes, and ends this tab's session when another tab signs out. `AuthContext` re-runs `initAuth` when another tab signs in.
 
 More rules:
 - A request is retried **once**. If the retry also gets a 401, the session is ended.
@@ -245,9 +263,20 @@ When the backend adds an error code, add its message to `messagesByCode` in `api
 
 ## 7. Data fetching and state
 
-- **Page-local state:** pages load data in `useEffect` and keep it in `useState`, with `loading` and sometimes `error` flags. After a change (cancel, create, etc.) they simply load the list again.
-- **Shared state:** only `AuthContext` (`useAuth()` returns `isAuthenticated`, `role`, `user`, `userName`, `isLoading`, `login`, `logout`, `refreshUser`).
-- **Ignoring out-of-date responses:** where the user can trigger requests faster than they finish (doctor filters in `DoctorsPage`, the date picker in `BookAppointmentPage`), the page numbers each request with a `useRef` counter and ignores any response that isn't the latest:
+- **Page-local state:** pages load their data with `useApiQuery` (`src/hooks/use-api-query.ts`) and keep form and dialog state in `useState`:
+
+  ```ts
+  const { data, loading, error, reload, setData } = useApiQuery(
+    () => appointmentsApi.getMyAppointments({ status, pageNumber, pageSize: 10 }).then((res) => res.data),
+    `${status}|${pageNumber}` // key: every input of the request; a new key loads again
+  );
+  ```
+
+  - `loading` is true until the response for the current key arrives. Responses for an older key are ignored, so fast filter or date changes can't show stale data.
+  - `error` is set when the request fails. Show `<ErrorState message={getApiErrorMessage(error, …)} onRetry={reload} />`, never an empty state, so a failed load doesn't look like "no data".
+  - After a change (cancel, create, etc.) call `reload()`, or update the loaded data locally with `setData`.
+- **Shared state:** only the auth context (`AuthProvider` in `context/AuthContext.tsx`; `useAuth()` from `context/auth-context.ts` returns `isAuthenticated`, `role`, `user`, `userName`, `isLoading`, `login`, `logout`, `refreshUser`).
+- **Ignoring out-of-date responses:** `useApiQuery` does this for you. `DoctorsPage` still uses the older manual pattern, numbering each request with a `useRef` counter and ignoring any response that isn't the latest:
 
   ```ts
   const requestId = useRef(0);
@@ -267,10 +296,11 @@ When the backend adds an error code, add its message to `messagesByCode` in `api
 |---|---|
 | `src/lib/utils.ts` | `cn(...classes)`: merges Tailwind class names (clsx + tailwind-merge, extended with the custom type scale and shadows) |
 | `src/lib/api-error.ts` | API error helpers ([§6](#6-error-handling)) |
-| `src/lib/appointments.ts` | `hasAppointmentStarted(appointment)`: whether the start time has passed; used to decide when "Complete" is offered |
+| `src/lib/appointments.ts` | `hasAppointmentStarted(appointment)`: whether the start time has passed (decides when "Complete" is offered). `canPatientCancel(appointment)`: confirmed and at least `PATIENT_CANCELLATION_WINDOW_HOURS` (2) before the start |
+| `src/lib/chunk-reload.ts` | `isChunkLoadError`, `reloadOnceForChunkError()`: reload once (at most every 30 seconds) when a chunk from an older deploy is missing |
 | `src/lib/format.ts` | Display helpers: `formatTime` ("9:30 AM"), `formatTimeRange`, `formatDate`, `parseUtc` (adds the missing `Z`), `formatTimeAgo`, `formatFee` ("650 EGP"), `getInitials` (ignores "Dr.") |
 | `src/lib/notifications.ts` | `notifyNotificationsChanged()`: tells the notification bell to refresh after notifications are marked read |
-| `src/lib/navigation.ts` | Navigation per role (`navByRole`, `profileNavByRole`, `notificationsNavItem`), `appointmentsRouteByRole`, `workspaceLabelByRole` |
+| `src/lib/navigation.ts` | Navigation per role (`navByRole`, `profileNavByRole`, `notificationsNavItem`), `appointmentsRouteByRole`, `workspaceLabelByRole`, `homeByRole`, `postLoginPath(role, from)` |
 | `src/lib/password.ts` | The server's password rules (`passwordRules`, `meetsPasswordRules`) for live checklists |
 | `src/types/index.ts` | Request/response types and enums (`UserRole`, `AppointmentStatus`, `DayOfWeek`, `BloodType`, …) |
 
@@ -354,7 +384,7 @@ The Stitch type scale is available as Tailwind font sizes. Each size sets its ow
   - `shadow-hover` for hovered link cards;
   - `shadow-elevated` for menus and dialogs.
 - **Overlays:** dialogs and sheets use a blurred `bg-ink/40` overlay.
-- **Motion:** `App` wraps everything in `<MotionConfig reducedMotion="user">`, and `index.css` neutralizes CSS animations under `prefers-reduced-motion`. The landing page's scroll reveal renders statically when reduced motion is preferred.
+- **Motion:** there is no animation library. `index.css` neutralizes CSS animations under `prefers-reduced-motion`. The landing page's scroll reveal (`Reveal`) uses an `IntersectionObserver` and keeps its hidden start state behind `motion-safe:`, so content is simply visible when reduced motion is preferred.
 
 ### App shell
 
@@ -369,8 +399,8 @@ The Stitch type scale is available as Tailwind font sizes. Each size sets its ow
   - `navByRole`, `profileNavByRole`, `notificationsNavItem`;
   - `appointmentsRouteByRole`, where a notification about an appointment takes each role;
   - `workspaceLabelByRole`.
-- **Unread notifications:** `src/hooks/use-unread-notifications.ts` polls them. It refreshes on navigation, on focus, every 60 seconds and on `notifyNotificationsChanged()`.
-- **Errors:** every page is wrapped in an `ErrorBoundary`, keyed by route. A render crash shows a recoverable error instead of a blank screen, and navigating away clears it.
+- **Unread notifications:** `src/hooks/use-unread-notifications.ts` polls them. It refreshes on navigation, on focus, when the tab becomes visible, every 60 seconds while it is visible (hidden tabs don't poll), and on `notifyNotificationsChanged()`.
+- **Errors:** every page is wrapped in an `ErrorBoundary`, keyed by route. A render crash shows a recoverable error instead of a blank screen, and navigating away clears it. A failed page-chunk download (an open tab after a new deploy) reloads the app once instead.
 
 ### Shared components
 
@@ -406,12 +436,12 @@ Build pages from these instead of re-styling raw elements:
 
 ### shadcn/ui primitives
 
-shadcn/ui primitives live in `src/components/ui/`. The ones in use have been restyled to these tokens and adapted to **Tailwind 3**:
+shadcn/ui primitives live in `src/components/ui/`. All of them have been restyled to these tokens and adapted to **Tailwind 3**:
 - button, card, dialog, alert-dialog, dropdown-menu;
 - input, textarea, label, select, switch;
 - sheet, skeleton, sonner, spinner, tabs, badge.
 
-They were generated for Tailwind v4, so v4-only syntax was converted or given a compatibility utility in `index.css`. Examples: `outline-hidden`, `aria-invalid:`, `max-h-(--var)`, `*:[span]:last:`, `*:[svg]:`. The other files in `ui/` are unused template components.
+They were generated for Tailwind v4, so v4-only syntax was converted or given a compatibility utility in `index.css`. Examples: `outline-hidden`, `aria-invalid:`, `max-h-(--var)`, `*:[span]:last:`, `*:[svg]:`. The unused template components that shadcn generated were removed with their dependencies. To add one back, generate it with the shadcn CLI and convert its v4 syntax.
 
 - **Buttons:** all are `rounded-lg` and semibold.
 
@@ -430,7 +460,7 @@ They were generated for Tailwind v4, so v4-only syntax was converted or given a 
 - **Inputs:** 40px high, `rounded-lg`, a `#CBD5E1` border, and a crisp eucalyptus focus ring (border + 1px ring).
 - **Switch:** 44×24px, eucalyptus when on.
 - **Icons:** `lucide-react`. Icons next to text are `aria-hidden`; icon-only buttons need an `aria-label`.
-- **Charts:** none. The admin dashboard's appointment breakdown is a stacked bar built from `div`s with token classes, and its numbers are repeated as text tiles. recharts is still in `package.json` (only the unused `ui/chart.tsx` imports it) and can be removed.
+- **Charts:** none. The admin dashboard's appointment breakdown is a stacked bar built from `div`s with token classes, and its numbers are repeated as text tiles.
 
 ## 10. Build and deployment
 
@@ -438,12 +468,17 @@ They were generated for Tailwind v4, so v4-only syntax was converted or given a 
   - `base: './'` (relative asset paths);
   - React plugin;
   - dev server port `3000`;
-  - alias `@` → `src` (mirrored in `tsconfig.app.json` `paths`).
-- **`npm run build`:** runs `tsc -b` (type check), then `vite build` into `dist/`. The main bundle is about 615 kB (≈ 200 kB gzipped). Each other page is its own small chunk (the admin dashboard is about 6 kB now that it draws its breakdown without recharts).
-- **`DockerFile`:** two stages. Stage 1 uses `node:20-alpine` to run `npm ci` and `npm run build`. Stage 2 uses `nginx:alpine` to serve `dist/` on port 80.
+  - alias `@` → `src` (mirrored in `tsconfig.app.json` `paths`);
+  - `manualChunks` puts React, React DOM and the router in a `react` chunk, which changes far less often than app code and so stays cached across deploys.
+- **`vitest.config.ts`:** reuses the Vite config and adds the jsdom environment and `src/test/setup.ts` (jest-dom matchers, cleanup, a fresh `localStorage` per test). `npm test` runs the suite.
+- **`npm run build`:** runs `tsc -b` (type check, test files included), then `vite build` into `dist/`. The entry chunk is about 261 kB (≈ 86 kB gzipped) plus the 232 kB `react` chunk (≈ 74 kB gzipped). Each other page is its own small chunk (the admin dashboard is about 6 kB now that it draws its breakdown without recharts).
+- **`DockerFile`:** two stages. Stage 1 uses `node:22-alpine` to run `npm ci` and `npm run build`. Stage 2 uses `nginx:alpine` to serve `dist/` on port 80.
 - **`nginx.conf`:**
-  - serves the app with an SPA fallback (`try_files … /index.html`);
-  - proxies `/api` to `http://backend:8080`, the backend's service name and port in the backend repo's `docker-compose.yml`.
+  - serves the app with an SPA fallback (`try_files … /index.html`). Missing files under `/assets/` return a real 404 instead;
+  - **caching:** `/assets/*` (fingerprinted by Vite) is cached for a year as `immutable`; `index.html` and every other route are `no-cache`, so browsers pick up a new deploy at once. `/api` responses keep the backend's own headers;
+  - **gzip** for JS, CSS, JSON and SVG;
+  - **security headers:** a Content Security Policy (scripts from `'self'` only, styles and fonts also from Google Fonts, `connect-src 'self'`, no framing), `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy` and `Permissions-Policy`. If the app is ever built with `VITE_API_URL` pointing at another origin, add that origin to `connect-src`;
+  - proxies `/api` to `http://backend:8080`, the backend's service name and port in the backend repo's `docker-compose.yml`, passing `X-Real-IP`, `X-Forwarded-For` and `X-Forwarded-Proto`.
 
   That's why `VITE_API_URL` is left empty for Docker builds.
 

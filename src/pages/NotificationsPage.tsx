@@ -1,13 +1,15 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import { format } from 'date-fns';
 import { notificationsApi } from '@/api';
 import type { Notification, NotificationType } from '@/types';
+import { getApiErrorMessage } from '@/lib/api-error';
 import { formatTimeAgo, parseUtc } from '@/lib/format';
 import { notifyNotificationsChanged } from '@/lib/notifications';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Page, PageHeader } from '@/components/layout/Page';
-import { EmptyState, LoadingState } from '@/components/states';
+import { EmptyState, ErrorState, LoadingState } from '@/components/states';
+import { useApiQuery } from '@/hooks/use-api-query';
 import { FilterTabs } from '@/components/FilterTabs';
 import { AlertTriangle, Bell, Check, CheckCheck, Clock, Info, type LucideIcon } from 'lucide-react';
 import { toast } from 'sonner';
@@ -23,25 +25,12 @@ const typeConfig: Record<NotificationType, { icon: LucideIcon; className: string
 type Filter = 'all' | 'unread';
 
 export function NotificationsPage() {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<Filter>('all');
-
-  const fetchNotifications = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await notificationsApi.getMyNotifications(filter === 'unread');
-      setNotifications(res.data);
-    } catch {
-      toast.error('Failed to load notifications');
-    } finally {
-      setLoading(false);
-    }
-  }, [filter]);
-
-  useEffect(() => {
-    fetchNotifications();
-  }, [fetchNotifications]);
+  const { data, loading, error, reload, setData: setNotifications } = useApiQuery(
+    () => notificationsApi.getMyNotifications(filter === 'unread').then((res) => res.data),
+    filter
+  );
+  const notifications: Notification[] = data ?? [];
 
   const handleMarkRead = async (id: number) => {
     try {
@@ -71,7 +60,13 @@ export function NotificationsPage() {
       <PageHeader
         eyebrow="Account"
         title="Notifications"
-        description={unreadCount > 0 ? `You have ${unreadCount} unread notification${unreadCount !== 1 ? 's' : ''}.` : 'You’re all caught up.'}
+        description={
+          loading || error
+            ? 'Booking confirmations, reminders and updates.'
+            : unreadCount > 0
+              ? `You have ${unreadCount} unread notification${unreadCount !== 1 ? 's' : ''}.`
+              : 'You’re all caught up.'
+        }
         actions={
           unreadCount > 0 ? (
             <Button variant="outline" onClick={handleMarkAllRead}>
@@ -95,6 +90,8 @@ export function NotificationsPage() {
       <div aria-live="polite" aria-busy={loading}>
         {loading ? (
           <LoadingState label="Loading notifications…" />
+        ) : error ? (
+          <ErrorState title="Couldn’t load notifications" message={getApiErrorMessage(error, 'Please try again in a moment.')} onRetry={reload} />
         ) : notifications.length === 0 ? (
           <EmptyState
             icon={Bell}

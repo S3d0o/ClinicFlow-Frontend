@@ -2,7 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
 import App from './App';
+import { reloadOnceForChunkError } from './lib/chunk-reload';
 import './index.css';
+
+// A preloaded chunk from an older deploy is gone: reload to pick up the new version
+window.addEventListener('vite:preloadError', (event) => {
+  if (reloadOnceForChunkError()) event.preventDefault();
+});
 
 // Prevent Radix UI from shifting the page when dropdowns open
 const observer = new MutationObserver(() => {

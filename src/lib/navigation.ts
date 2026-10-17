@@ -48,3 +48,29 @@ export const workspaceLabelByRole: Record<UserRole, string> = {
   Doctor: 'Clinic workspace',
   Admin: 'Clinic administration',
 };
+
+/** Where each role lands after signing in */
+export const homeByRole: Record<UserRole, string> = {
+  Patient: '/patient/appointments',
+  Doctor: '/doctor/dashboard',
+  Admin: '/admin/dashboard',
+};
+
+// Route prefixes that only one role can open
+const rolePrefixes: [string, UserRole][] = [
+  ['/patient/', 'Patient'],
+  ['/doctor/', 'Doctor'],
+  ['/admin/', 'Admin'],
+];
+
+/**
+ * Where to send a user who just signed in: back to the page they asked for (`from`) if their role
+ * can open it, otherwise to their role's home.
+ */
+export function postLoginPath(role: UserRole, from?: string): string {
+  if (from) {
+    const owner = rolePrefixes.find(([prefix]) => from.startsWith(prefix))?.[1];
+    if (!owner || owner === role) return from;
+  }
+  return homeByRole[role];
+}

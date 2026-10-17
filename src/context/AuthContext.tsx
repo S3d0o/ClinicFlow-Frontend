@@ -1,80 +1,75 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { isAxiosError } from 'axios';
 import type { UserRole, LoginResponse, UserProfile } from '@/types';
 import { authApi, profileApi, setTokens, saveSession, clearSession } from '@/api';
+import { AuthContext, type AuthState } from '@/context/auth-context';
 
-interface AuthState {
-  isAuthenticated: boolean;
-  role: UserRole | null;
-  user: UserProfile | null;
-  userName: string;
-  isLoading: boolean;
-}
+const signedOut: AuthState = { isAuthenticated: false, role: null, user: null, userName: '', isLoading: false };
 
-interface AuthContextType extends AuthState {
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
-  refreshUser: () => Promise<void>;
-}
+/** The session saved by `saveSession()`, if a complete one is stored */
+const readStoredSession = () => {
+  const accessToken = localStorage.getItem('accessToken');
+  const refreshToken = localStorage.getItem('refreshToken');
+  const role = localStorage.getItem('userRole') as UserRole | null;
+  if (!accessToken || !refreshToken || !role) return null;
+  return { accessToken, refreshToken, role, userName: localStorage.getItem('userName') || '' };
+};
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+/**
+ * Checks the stored session against the API and returns the auth state it gives, or null when no
+ * session is stored. Only a 4xx clears the session; network errors and 5xx keep it.
+ */
+const restoreSession = async (): Promise<AuthState | null> => {
+  const stored = readStoredSession();
+  if (!stored) return null;
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) throw new Error('useAuth must be used within AuthProvider');
-  return context;
+  setTokens({ accessToken: stored.accessToken, refreshToken: stored.refreshToken });
+  try {
+    const profileRes = await profileApi.getMyProfile();
+    return { isAuthenticated: true, role: stored.role, user: profileRes.data, userName: stored.userName, isLoading: false };
+  } catch (error) {
+    const status = isAxiosError(error) ? error.response?.status : undefined;
+    if (status !== undefined && status >= 400 && status < 500) {
+      clearSession();
+      return signedOut;
+    }
+    // Server unreachable or 5xx: keep the session; the profile loads on a later request.
+    return { isAuthenticated: true, role: stored.role, user: null, userName: stored.userName, isLoading: false };
+  }
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const navigate = useNavigate();
-  const [state, setState] = useState<AuthState>({
-    isAuthenticated: false,
-    role: null,
-    user: null,
-    userName: '',
-    isLoading: true,
-  });
+  // Only a stored session needs restoring; without one the user is signed out from the first render
+  const [state, setState] = useState<AuthState>(() => ({ ...signedOut, isLoading: readStoredSession() !== null }));
 
-  const initAuth = useCallback(async () => {
-    const storedAccessToken = localStorage.getItem('accessToken');
-    const storedRefreshToken = localStorage.getItem('refreshToken');
-    const storedRole = localStorage.getItem('userRole') as UserRole | null;
-    const storedName = localStorage.getItem('userName') || '';
+  useEffect(() => {
+    let active = true;
+    restoreSession().then((next) => {
+      if (active && next) setState(next);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
-    if (storedAccessToken && storedRefreshToken && storedRole) {
-      setTokens({ accessToken: storedAccessToken, refreshToken: storedRefreshToken });
-      try {
-        const profileRes = await profileApi.getMyProfile();
-        setState({
-          isAuthenticated: true,
-          role: storedRole,
-          user: profileRes.data,
-          userName: storedName,
-          isLoading: false,
+  // Follow a sign-in made in another tab (sign-outs arrive as `auth:logout` from the API layer)
+  useEffect(() => {
+    const handleStorage = (e: StorageEvent) => {
+      if ((e.key === 'userRole' || e.key === 'userEmail') && e.newValue) {
+        restoreSession().then((next) => {
+          if (next) setState(next);
         });
-      } catch (error) {
-        const status = isAxiosError(error) ? error.response?.status : undefined;
-        if (status !== undefined && status >= 400 && status < 500) {
-          clearSession();
-          setState({ isAuthenticated: false, role: null, user: null, userName: '', isLoading: false });
-        } else {
-          // Server unreachable or 5xx: keep the session; the profile loads on a later request.
-          setState({ isAuthenticated: true, role: storedRole, user: null, userName: storedName, isLoading: false });
-        }
       }
-    } else {
-      setState((s) => ({ ...s, isLoading: false }));
-    }
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
   }, []);
 
   useEffect(() => {
-    initAuth();
-  }, [initAuth]);
-
-  useEffect(() => {
     const handleLogout = () => {
-      setState({ isAuthenticated: false, role: null, user: null, userName: '', isLoading: false });
+      setState(signedOut);
       navigate('/login');
     };
     window.addEventListener('auth:logout', handleLogout);
@@ -87,14 +82,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     saveSession(data);
 
-    const profileRes = await profileApi.getMyProfile();
+    let user: UserProfile | null = null;
+    try {
+      user = (await profileApi.getMyProfile()).data;
+    } catch (error) {
+      const status = isAxiosError(error) ? error.response?.status : undefined;
+      if (status !== undefined && status >= 400 && status < 500) {
+        // The account can't be used: don't leave a half-signed-in session behind
+        clearSession();
+        throw error;
+      }
+      // Server hiccup: the sign-in itself worked, so continue; the profile loads on a later request
+    }
     setState({
       isAuthenticated: true,
       role: data.role,
-      user: profileRes.data,
+      user,
       userName: data.fullName,
       isLoading: false,
     });
+    return data.role;
   }, []);
 
   const logout = useCallback(async () => {
@@ -107,7 +114,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     }
     clearSession();
-    setState({ isAuthenticated: false, role: null, user: null, userName: '', isLoading: false });
+    setState(signedOut);
     navigate('/');
   }, [navigate]);
 
@@ -120,8 +127,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
+  const value = useMemo(() => ({ ...state, login, logout, refreshUser }), [state, login, logout, refreshUser]);
+
   return (
-    <AuthContext.Provider value={{ ...state, login, logout, refreshUser }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

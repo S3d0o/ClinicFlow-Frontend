@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import { appointmentsApi } from '@/api';
 import type { Appointment, AppointmentStatus } from '@/types';
 import { getApiErrorMessage } from '@/lib/api-error';
@@ -17,7 +17,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Page, PageHeader } from '@/components/layout/Page';
-import { EmptyState, LoadingState } from '@/components/states';
+import { EmptyState, ErrorState, LoadingState } from '@/components/states';
+import { useApiQuery } from '@/hooks/use-api-query';
 import { FilterTabs } from '@/components/FilterTabs';
 import { Pagination } from '@/components/Pagination';
 import { StatusBadge } from '@/components/StatusBadge';
@@ -37,37 +38,29 @@ const filterOptions: { value: StatusFilter; label: string }[] = [
   { value: 'Cancelled', label: 'Cancelled' },
 ];
 
+const PAGE_SIZE = 10;
+
 export function DoctorAppointmentsPage() {
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [pageNumber, setPageNumber] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
   const [completeId, setCompleteId] = useState<number | null>(null);
   const [notesId, setNotesId] = useState<number | null>(null);
   const [notes, setNotes] = useState('');
   const [actionLoading, setActionLoading] = useState(false);
 
-  const fetchAppointments = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await appointmentsApi.getDoctorAppointments({
-        ...(statusFilter !== 'all' ? { status: statusFilter } : {}),
-        pageNumber,
-        pageSize: 10,
-      });
-      setAppointments(res.data);
-      setHasMore(res.data.length === 10);
-    } catch {
-      toast.error('Failed to load appointments');
-    } finally {
-      setLoading(false);
-    }
-  }, [statusFilter, pageNumber]);
-
-  useEffect(() => {
-    fetchAppointments();
-  }, [fetchAppointments]);
+  const { data, loading, error, reload: fetchAppointments } = useApiQuery(
+    () =>
+      appointmentsApi
+        .getDoctorAppointments({
+          ...(statusFilter !== 'all' ? { status: statusFilter } : {}),
+          pageNumber,
+          pageSize: PAGE_SIZE,
+        })
+        .then((res) => res.data),
+    `${statusFilter}|${pageNumber}`
+  );
+  const appointments: Appointment[] = data ?? [];
+  const hasMore = appointments.length === PAGE_SIZE;
 
   const handleComplete = async () => {
     if (!completeId) return;
@@ -122,6 +115,8 @@ export function DoctorAppointmentsPage() {
       <div aria-live="polite" aria-busy={loading}>
         {loading ? (
           <LoadingState label="Loading appointments…" />
+        ) : error ? (
+          <ErrorState title="Couldn’t load appointments" message={getApiErrorMessage(error, 'Please try again in a moment.')} onRetry={fetchAppointments} />
         ) : appointments.length === 0 ? (
           <EmptyState
             icon={CalendarDays}

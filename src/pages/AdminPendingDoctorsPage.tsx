@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { adminApi } from '@/api';
 import type { DoctorSummary } from '@/types';
 import { getApiErrorMessage } from '@/lib/api-error';
@@ -14,33 +14,20 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Page, PageHeader } from '@/components/layout/Page';
-import { EmptyState, LoadingState } from '@/components/states';
+import { EmptyState, ErrorState, LoadingState } from '@/components/states';
+import { useApiQuery } from '@/hooks/use-api-query';
 import { UserAvatar } from '@/components/UserAvatar';
 import { Check, CheckCircle2, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 export function AdminPendingDoctorsPage() {
-  const [doctors, setDoctors] = useState<DoctorSummary[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, loading, error, reload: fetchDoctors } = useApiQuery(() =>
+    adminApi.getPendingDoctors().then((res) => res.data)
+  );
+  const doctors: DoctorSummary[] = data ?? [];
   const [actionId, setActionId] = useState<number | null>(null);
   const [actionType, setActionType] = useState<'approve' | 'suspend' | null>(null);
   const [submitting, setSubmitting] = useState(false);
-
-  const fetchDoctors = async () => {
-    setLoading(true);
-    try {
-      const res = await adminApi.getPendingDoctors();
-      setDoctors(res.data);
-    } catch {
-      toast.error('Failed to load pending doctors');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchDoctors();
-  }, []);
 
   const closeDialog = () => {
     setActionId(null);
@@ -103,6 +90,8 @@ export function AdminPendingDoctorsPage() {
 
       {loading ? (
         <LoadingState label="Loading applications…" />
+      ) : error ? (
+        <ErrorState title="Couldn’t load applications" message={getApiErrorMessage(error, 'Please try again in a moment.')} onRetry={fetchDoctors} />
       ) : doctors.length === 0 ? (
         <EmptyState icon={CheckCircle2} title="All caught up" description="There are no doctors waiting for approval." />
       ) : (

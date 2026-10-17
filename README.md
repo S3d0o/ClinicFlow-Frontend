@@ -40,7 +40,8 @@ The full feature guide, with every page and its rules, is in [docs/FEATURES.md](
 | Styling | Tailwind CSS 3 |
 | UI components | shadcn/ui (Radix UI primitives), lucide-react icons |
 | HTTP | axios (JWT + refresh-token interceptors) |
-| Animation / toasts | framer-motion, sonner |
+| Toasts | sonner |
+| Tests | Vitest, Testing Library (jsdom) |
 | Deployment | Docker (Node build → nginx) |
 
 ## Getting started
@@ -80,6 +81,7 @@ To run the whole stack (SQL Server + backend + frontend) with Docker, see [docs/
 | `npm run dev` | Dev server on http://localhost:3000 |
 | `npm run build` | Type check (`tsc -b`) and production build to `dist/` |
 | `npm run lint` | ESLint |
+| `npm test` | Run the unit and component tests (Vitest) |
 | `npm run preview` | Serve the production build |
 
 ## Documentation

@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback, useRef, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
+import { isAxiosError } from 'axios';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { format, addDays, isToday, isTomorrow, parseISO } from 'date-fns';
 import { doctorsApi, appointmentsApi } from '@/api';
@@ -20,7 +21,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Page, PageHeader } from '@/components/layout/Page';
-import { EmptyState, LoadingState } from '@/components/states';
+import { EmptyState, ErrorState, LoadingState } from '@/components/states';
+import { useApiQuery } from '@/hooks/use-api-query';
 import { UserAvatar } from '@/components/UserAvatar';
 import { Calendar, ChevronLeft, ChevronRight, Clock, MapPin, Stethoscope } from 'lucide-react';
 import { toast } from 'sonner';
@@ -63,51 +65,39 @@ function Step({ number, title, children, aside }: { number: number; title: strin
 export function BookAppointmentPage() {
   const { doctorId } = useParams<{ doctorId: string }>();
   const navigate = useNavigate();
-  const [doctor, setDoctor] = useState<DoctorDetails | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [slots, setSlots] = useState<Slot[]>([]);
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
   const [reason, setReason] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [slotsLoading, setSlotsLoading] = useState(false);
   const [bookingLoading, setBookingLoading] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [dateOffset, setDateOffset] = useState(0);
-  const slotsRequestId = useRef(0);
 
   const datesPerPage = 7;
   const today = new Date();
 
-  useEffect(() => {
-    if (!doctorId) return;
-    doctorsApi
-      .getById(Number(doctorId))
-      .then((res) => setDoctor(res.data))
-      .catch(() => toast.error('Failed to load doctor details'))
-      .finally(() => setLoading(false));
-  }, [doctorId]);
+  const doctorQuery = useApiQuery(
+    (): Promise<DoctorDetails | null> =>
+      doctorsApi
+        .getById(Number(doctorId))
+        .then((res) => res.data)
+        .catch((err) => {
+          // A 404 means "no such doctor"; anything else is a failure worth retrying
+          if (isAxiosError(err) && err.response?.status === 404) return null;
+          throw err;
+        }),
+    doctorId
+  );
+  const { loading } = doctorQuery;
+  const doctor = doctorQuery.data ?? null;
 
-  const fetchSlots = useCallback(async (date: Date) => {
-    if (!doctorId) return;
-    // Ignore responses that arrive after a newer request (fast date switching)
-    const requestId = ++slotsRequestId.current;
-    setSlotsLoading(true);
-    try {
-      const dateStr = format(date, 'yyyy-MM-dd');
-      const res = await doctorsApi.getSlots(Number(doctorId), dateStr);
-      if (requestId === slotsRequestId.current) setSlots(res.data);
-    } catch (err) {
-      if (requestId !== slotsRequestId.current) return;
-      setSlots([]);
-      toast.error(getApiErrorMessage(err, 'Failed to load available slots'));
-    } finally {
-      if (requestId === slotsRequestId.current) setSlotsLoading(false);
-    }
-  }, [doctorId]);
-
-  useEffect(() => {
-    fetchSlots(selectedDate);
-  }, [selectedDate, fetchSlots]);
+  // Responses for a date the user has already moved away from are ignored by useApiQuery
+  const selectedDateStr = format(selectedDate, 'yyyy-MM-dd');
+  const slotsQuery = useApiQuery(
+    (): Promise<Slot[]> => doctorsApi.getSlots(Number(doctorId), selectedDateStr).then((res) => res.data),
+    `${doctorId}|${selectedDateStr}`
+  );
+  const slots = slotsQuery.data ?? [];
+  const slotsLoading = slotsQuery.loading;
 
   const visibleDates = Array.from({ length: datesPerPage }, (_, i) =>
     addDays(today, dateOffset + i)
@@ -134,7 +124,7 @@ export function BookAppointmentPage() {
       const code = getApiErrorCode(err);
       if (code && STALE_SLOT_ERRORS.has(code)) {
         setSelectedSlot(null);
-        fetchSlots(selectedDate);
+        slotsQuery.reload();
       }
     } finally {
       setBookingLoading(false);
@@ -150,6 +140,18 @@ export function BookAppointmentPage() {
 
   if (loading) {
     return <LoadingState label="Loading booking…" className="min-h-[60vh]" />;
+  }
+
+  if (doctorQuery.error) {
+    return (
+      <Page width="narrow">
+        <ErrorState
+          title="Couldn’t load booking"
+          message={getApiErrorMessage(doctorQuery.error, 'Failed to load doctor details')}
+          onRetry={doctorQuery.reload}
+        />
+      </Page>
+    );
   }
 
   if (!doctor) {
@@ -287,6 +289,13 @@ export function BookAppointmentPage() {
                 <div className="flex items-center justify-center gap-2 py-10 text-body-md text-muted-foreground">
                   <Spinner className="text-primary" /> Loading available times…
                 </div>
+              ) : slotsQuery.error ? (
+                <ErrorState
+                  title="Couldn’t load available times"
+                  message={getApiErrorMessage(slotsQuery.error, 'Failed to load available slots')}
+                  onRetry={slotsQuery.reload}
+                  className="py-10"
+                />
               ) : slots.length === 0 ? (
                 <div className="rounded-xl border border-dashed border-input px-4 py-10 text-center">
                   <span className="mx-auto mb-3 inline-flex size-11 items-center justify-center rounded-xl bg-secondary text-secondary-foreground">

@@ -35,6 +35,23 @@ Open problems in the frontend, the improvements planned for them, and recent fix
 | Content | The landing page no longer shows invented statistics. The "Live data" badge, the unused "Pending" filter and the misleading bar chart were removed. "Reject" clearly says it suspends the account |
 | Dead code | `src/pages/Home.tsx` and `src/App.css` removed |
 
+### Code review fixes (branch `feature/stitch-redesign`)
+| Area | What changed |
+|---|---|
+| Session across tabs | Two tabs refreshing at once used the same single-use refresh token: one tab was signed out, and the reuse could revoke every session of the user. Refreshes now run one at a time across tabs (Web Locks), a tab reuses a token another tab just obtained, and sign-in and sign-out follow across tabs |
+| Sign-in | If loading the profile failed right after signing in, the tokens stayed stored while the page said "Sign in failed". A 4xx now clears the session; a server hiccup still signs the user in. The error shows once (inline), not also as a toast |
+| Redirects | After signing in, a page that belongs to another role is ignored (no more bounce to `/`). A user on a page of another role goes to their own home. Signed-in users opening sign-in or sign-up pages are sent on |
+| Load failures | Eight pages showed "No appointments yet", zeros or "Doctor not found" when loading failed. They now show "Couldn’t load …" with **Try again**. Loading uses the shared `useApiQuery` hook |
+| Doctor dashboard | "Upcoming" counted past confirmed visits; it now counts only visits that haven't started |
+| Patient cancel | "Cancel appointment" is hidden inside the 2-hour window, with an explanation, instead of failing on the server |
+| App shell | The shell is a layout route, so it is no longer rebuilt when moving between public and signed-in pages |
+| Deployment | nginx: long-term caching for fingerprinted assets, `no-cache` for `index.html`, gzip, security headers (CSP and others), forwarded-IP headers, real 404s for missing assets. Requests time out after 20 seconds. A tab left open across a deploy reloads once instead of failing to load a page. Favicon and Open Graph tags added |
+| Polling | Hidden tabs no longer poll notifications; they refresh when shown again |
+| Cleanup | 37 unused `components/ui` templates, `use-mobile`, `info.md` and 32 unused dependencies (including recharts, zod, react-hook-form) removed. Package renamed to `clinicflow-frontend`. `DoctorsPage` moved to `useApiQuery`. Lint errors went from 22 to 4 |
+| Bundle | framer-motion removed (the landing page's scroll reveal is now an `IntersectionObserver` and a CSS transition), and React and the router get their own long-cached chunk. JavaScript loaded on first visit went from 617 kB (201 kB gzipped) to 493 kB (161 kB gzipped), split into a 261 kB entry chunk and a 232 kB `react` chunk |
+| Tests | Vitest + Testing Library added (`npm test`): the token refresh and cross-tab sync, `useApiQuery`, the `src/lib` helpers and `DoctorsPage`. The cross-tab tests fail against the old `axios.ts`. The Docker build moved to Node 22, which Vitest needs (Node 20 is past end of life) |
+| Lint and CI | The last 4 lint errors fixed: `buttonVariants` moved to `ui/button-variants.ts`, `badgeVariants` no longer exported, `useAuth` and the context moved to `context/auth-context.ts`, and the session restore no longer sets state synchronously in an effect (signed-out users skip the loading state). GitHub Actions (`.github/workflows/ci.yml`) runs lint, tests, build and a Docker build on every push |
+
 ## Open issues
 
 ### Data correctness — P2
@@ -60,16 +77,11 @@ Open problems in the frontend, the improvements planned for them, and recent fix
 | No real-time notifications (polling only) | The contract has no push channel |
 
 ### Performance and security — P2
-- `nginx.conf` sets no security headers (CSP, `X-Content-Type-Options`, `Referrer-Policy`, frame ancestors).
-- Tokens are stored in `localStorage`, so an XSS bug could steal them. Moving to cookies needs backend changes.
-- `recharts` is still a dependency but no page uses it (only the unused `components/ui/chart.tsx` template). It can be removed together with that file.
+- Tokens are stored in `localStorage`, so an XSS bug could steal them (the CSP now limits scripts to the app's own origin). Moving to cookies needs backend changes.
+- The entry chunk is about 261 kB (≈ 86 kB gzipped) and the `react` chunk about 232 kB (≈ 74 kB gzipped). What's left is mostly React DOM, axios, sonner and tailwind-merge, which are all in use.
 
 ### Code health — P3
-- **Lint:** 22 known errors. 13 are `react-hooks/set-state-in-effect` from loading data inside `useEffect` (a shared data-loading hook would fix them). 8 are `only-export-components` and 1 is `purity`, both in the generated `components/ui` files.
-- **Unused code:**
-  - about 40 unused `components/ui` files;
-  - unused dependencies (`zod`, `@hookform/resolvers`, `kimi-plugin-inspect-react`, `tw-animate-css`, and libraries only used by unused ui files).
-- **No automated tests and no CI.** Visual checks so far have been screenshot runs with stubbed API data.
+- **Tests cover the core, not every page.** `npm test` covers auth refresh, session restore, `useApiQuery`, the `src/lib` helpers and `DoctorsPage`. The other pages (booking, appointments, schedules, profiles, admin) have no tests yet.
 - **Docker file name:** git tracks the file as `DockerFile` (capital F), so Linux builds need `-f DockerFile`.
 
 ## Roadmap
@@ -80,12 +92,10 @@ Open problems in the frontend, the improvements planned for them, and recent fix
 | 1 | Critical correctness and contract compliance | Done |
 | 2 | Navigation, return-after-login, notification polling | Done in the redesign |
 | 3 | Types aligned with the contract, date/time helpers, form validation, profile load errors | Mostly done (types and phone validation remain) |
-| 4 | Shared components, dead-code removal | Done (unused ui files and dependencies remain) |
+| 4 | Shared components, dead-code removal | Done |
 | 5 | Accessibility and UI polish, landing page content | Done; doctor cancel UI remains (to confirm) |
-| 6 | Code splitting, font loading, nginx security headers | Code splitting and fonts done; headers remain |
-| 7 | Tests (Vitest + Testing Library) and documentation upkeep | Planned |
+| 6 | Code splitting, font loading, nginx security headers | Done |
+| 7 | Tests (Vitest + Testing Library), CI and documentation upkeep | Mostly done: core tests and CI in place; page tests remain |
 
 Open questions for the maintainer:
-- Should test tooling be added?
-- Should unused dependencies and ui files be removed?
 - Should doctors be able to cancel from the UI?
