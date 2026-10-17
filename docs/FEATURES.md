@@ -27,7 +27,7 @@ Signed-in users work inside an **app shell** (`src/components/shell/AppShell.tsx
 Signed-in users also get:
 - **Sidebar "Account" group:** Notifications (with the unread count) and Profile (patients and doctors), plus a user card with the role badge and **Sign out**.
 - **Top bar:** the workspace name ("Patient portal", "Clinic workspace", "Clinic administration") with a role pill.
-- **Notification bell:** shows the unread count and lists up to 5 unread notifications with how long ago they arrived. Clicking one marks it as read and opens the related appointments page. "Mark all read" clears them, and **"View all notifications"** is always available. The unread list refreshes on navigation, when the window regains focus, every 60 seconds, and when the Notifications page changes something.
+- **Notification bell:** shows the total unread count (from the API's `X-Total-Count` header, so it isn't capped by paging) and lists the 5 newest unread notifications with how long ago they arrived. Clicking one marks it as read and opens the related appointments page. "Mark all read" clears them, and **"View all notifications"** is always available. The unread list refreshes on navigation, when the window regains focus, every 60 seconds, and when the Notifications page changes something.
 - **Account menu:** name, email and role badge, with Profile (patients and doctors), Notifications and Sign out.
 
 A "Skip to content" link appears on keyboard focus. The footer is full for visitors and a slim line for signed-in users. If a page crashes while rendering, it shows "This page couldn’t be displayed" with a reload button instead of a blank screen.
@@ -167,9 +167,10 @@ Limitation: a medical field can't be cleared. Emptying it leaves the old value i
 - **Weekly availability:** all seven days, showing each day's hours, "Off", or a **Paused** label for inactive schedules. Today is highlighted.
 
 ### Appointments — `/doctor/appointments`
-- **List:** newest first, 10 per page. A segmented filter offers All, Confirmed, Completed and Cancelled. "Pending" was removed because the backend never uses it.
+- **List:** newest first, 10 per page. A segmented filter offers All, Confirmed, Completed, Cancelled and No-show. "Pending" was removed because the backend never uses it.
 - **Mark as completed:** offered for Confirmed appointments **after their start time**, with a confirmation dialog naming the patient. Completing lets the patient leave a review.
-- **Add / Edit notes:** clinical notes on Confirmed or Completed appointments. The patient can see them.
+- **Mark as no-show:** offered for Confirmed appointments from **15 minutes after their start time**, with a confirmation dialog. The patient is notified, and the visit can no longer be completed, cancelled or reviewed.
+- **Add / Edit notes:** clinical notes on Confirmed, Completed or No-show appointments (up to 4,000 characters). The patient can see them.
 
 There is no cancel button for doctors yet, although the API allows doctors to cancel.
 
@@ -211,7 +212,7 @@ Both actions ask for confirmation first.
 
 ### Specialties — `/admin/specialties`
 - **List:** all specialties, including inactive ones, with an Active/Inactive badge and a count in the page description. A search box filters the list by name or description.
-- **Add / Edit:** name (required, ≤ 100 characters, must be unique), description (≤ 500, with a counter), icon URL (an absolute URL, optional). Enter submits the form.
+- **Add / Edit:** name (required, ≤ 100 characters, must be unique), description (≤ 500, with a counter), icon URL (an absolute URL, optional), and an **Active** switch (on for a new specialty). Turning it off hides the specialty from patients and doctor registration; turning it on again reactivates it. Enter submits the form.
 - **Delete:** with confirmation. The API refuses if any doctor uses the specialty.
 
 ---
@@ -219,8 +220,9 @@ Both actions ask for confirmation first.
 ## Shared features
 
 ### Notifications — `/notifications`
-- **Inbox:** every notification, newest first, with an icon per type (reminder, confirmed, cancelled, completed, system) and a relative time ("3 hours ago"; hover for the exact time). Unread items are highlighted and announced as "Unread" to screen readers.
-- **Filter:** All or Unread.
+- **Inbox:** newest first, 20 per page with "Page 2 of 5" paging, with an icon per type (reminder, confirmed, cancelled, completed, system) and a relative time ("3 hours ago"; hover for the exact time). Unread items are highlighted and announced as "Unread" to screen readers.
+- **Unread count:** the header counts unread notifications on every page, not only the one shown.
+- **Filter:** All or Unread. Changing it goes back to page 1.
 - **Actions:** mark one as read (✓, labelled with the notification's title), or "Mark all as read". Both refresh the notification bell.
 
 The backend creates notifications for bookings, cancellations, completions, reminders (24 hours before), and doctor approval or suspension.
@@ -234,11 +236,12 @@ stateDiagram-v2
     [*] --> Confirmed: patient books an available slot
     Confirmed --> Cancelled: cancelled (patient ≥ 2h before start, doctor or admin any time)
     Confirmed --> Completed: doctor marks complete
+    Confirmed --> NoShow: doctor marks no-show (≥ 15 min after start)
     Completed --> Reviewed: patient leaves one review
     Cancelled --> [*]: slot becomes available again
 ```
 
-`Pending` exists in the API's status list but is never set. `NoShow` is set when a doctor or admin marks a missed visit (contract #24b); the app shows the badge but has no action for it yet.
+`Pending` exists in the API's status list but is never set. Admins can also mark a no-show through the API (contract #24b), but the app has no admin appointment list.
 
 ### Email-driven flows
 

@@ -62,4 +62,19 @@ describe('getApiErrorMessage', () => {
     expect(getApiErrorMessage(apiError(500, ''), 'fallback')).toBe('fallback');
     expect(getApiErrorMessage(new Error('boom'), 'fallback')).toBe('fallback');
   });
+
+  it('treats a ProblemDetails body without a code (contract 3.0.0, shape E) like an empty one', () => {
+    const shapeE = (status: number, title: string) =>
+      apiError(status, { type: 'https://tools.ietf.org/html/rfc9110', title, status, traceId: '00-1-00' });
+    expect(getApiErrorCode(shapeE(403, 'Forbidden'))).toBeUndefined();
+    expect(getApiErrorMessage(shapeE(403, 'Forbidden'), 'fallback')).toBe('You do not have permission to do that.');
+    expect(getApiErrorMessage(shapeE(500, 'An error occurred while processing your request.'), 'fallback')).toBe('fallback');
+  });
+
+  it('maps the no-show codes', () => {
+    expect(getApiErrorMessage(apiError(400, { title: 'One or more validation errors occurred.', errors: { 'Appointment.NoShowTooEarly': ['x'] } }), 'fallback'))
+      .toMatch(/15 minutes/);
+    expect(getApiErrorMessage(apiError(409, { title: 'Appointment.AlreadyNoShow', detail: 'x' }), 'fallback'))
+      .toMatch(/already been marked as a no-show/);
+  });
 });

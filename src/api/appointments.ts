@@ -12,6 +12,8 @@ export const appointmentsApi = {
   cancel: (id: number, data?: CancelAppointmentRequest) =>
     api.post(`/appointments/${id}/cancel`, data),
   complete: (id: number) => api.post(`/appointments/${id}/complete`),
+  /** Owning doctor or admin, 15 minutes after the start (API contract #24b) */
+  markNoShow: (id: number) => api.post(`/appointments/${id}/no-show`),
   addNotes: (id: number, data: AddDoctorNotesRequest) =>
     api.put(`/appointments/${id}/notes`, data),
 };

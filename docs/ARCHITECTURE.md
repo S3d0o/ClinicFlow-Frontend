@@ -132,9 +132,9 @@ const res = await appointmentsApi.getMyAppointments({ pageNumber: 1, pageSize: 1
 |---|---|---|
 | `authApi` | `auth.ts` | `auth/login`, `auth/register/patient`, `auth/register/doctor`, `auth/confirm-email`, `auth/refresh-token`*, `auth/logout`, `auth/forgot-password`, `auth/reset-password` |
 | `doctorsApi` | `doctors.ts` | `GET doctors`, `GET doctors/{id}`, `GET doctors/{id}/slots`, `GET doctors/{id}/reviews`*, `PUT doctors/profile`, `GET/POST doctors/schedule`, `PUT/DELETE doctors/schedule/{id}` |
-| `appointmentsApi` | `appointments.ts` | `POST appointments`, `GET appointments/my`, `GET appointments/doctor/my`, `GET appointments/{id}`*, `POST appointments/{id}/cancel`, `POST appointments/{id}/complete`, `PUT appointments/{id}/notes` |
+| `appointmentsApi` | `appointments.ts` | `POST appointments`, `GET appointments/my`, `GET appointments/doctor/my`, `GET appointments/{id}`*, `POST appointments/{id}/cancel`, `POST appointments/{id}/complete`, `POST appointments/{id}/no-show`, `PUT appointments/{id}/notes` |
 | `reviewsApi` | `reviews.ts` | `POST reviews`, `GET reviews/doctor/{doctorId}`, `DELETE reviews/{id}`* |
-| `notificationsApi` | `notifications.ts` | `GET notifications/my?unreadOnly=`, `POST notifications/{id}/read`, `POST notifications/read-all` |
+| `notificationsApi` | `notifications.ts` | `GET notifications/my?unreadOnly=&pageNumber=&pageSize=` (total in `X-Total-Count`), `POST notifications/{id}/read`, `POST notifications/read-all` |
 | `specialtiesApi` | `specialties.ts` | `GET specialty`, `GET specialty/{id}`* |
 | `adminApi` | `admin.ts` | `GET admin/doctors/pending`, `POST admin/doctors/{id}/approve`, `POST admin/doctors/{id}/suspend`, `GET/POST admin/specialties`, `PUT/DELETE admin/specialties/{id}`, `GET admin/stats/overview`, `GET admin/stats/appointments` |
 | `profileApi` | `profile.ts` | `GET profile/me`, `PATCH profile/me` |
@@ -288,7 +288,7 @@ When the backend adds an error code, add its message to `messagesByCode` in `api
   };
   ```
 - **Feedback:** success and failure messages use `toast` from `sonner`.
-- **Paging:** list endpoints return a bare array. Pages ask for a fixed `pageSize` and assume there's another page when the array is full. Notifications and pending doctors also send the total in an `X-Total-Count` header (contract 3.0.0), which the app doesn't read yet ([KNOWN_ISSUES.md](KNOWN_ISSUES.md)).
+- **Paging:** list endpoints return a bare array. Pages ask for a fixed `pageSize` and assume there's another page when the array is full. Notifications and pending doctors also send the total in an `X-Total-Count` header (contract 3.0.0): read it with `readTotalCount(res.headers)` and pass `pageCount` to `Pagination` for "Page 2 of 5". The notification bell and the Notifications page use it.
 
 ## 8. Shared helpers and types
 
@@ -296,9 +296,10 @@ When the backend adds an error code, add its message to `messagesByCode` in `api
 |---|---|
 | `src/lib/utils.ts` | `cn(...classes)`: merges Tailwind class names (clsx + tailwind-merge, extended with the custom type scale and shadows) |
 | `src/lib/api-error.ts` | API error helpers ([§6](#6-error-handling)) |
-| `src/lib/appointments.ts` | `hasAppointmentStarted(appointment)`: whether the start time has passed (decides when "Complete" is offered). `canPatientCancel(appointment)`: confirmed and at least `PATIENT_CANCELLATION_WINDOW_HOURS` (2) before the start |
+| `src/lib/appointments.ts` | `hasAppointmentStarted(appointment)`: whether the start time has passed (decides when "Complete" is offered). `canPatientCancel(appointment)`: confirmed and at least `PATIENT_CANCELLATION_WINDOW_HOURS` (2) before the start. `canMarkNoShow(appointment)`: confirmed and at least `NO_SHOW_GRACE_MINUTES` (15) after the start |
 | `src/lib/chunk-reload.ts` | `isChunkLoadError`, `reloadOnceForChunkError()`: reload once (at most every 30 seconds) when a chunk from an older deploy is missing |
 | `src/lib/format.ts` | Display helpers: `formatTime` ("9:30 AM"), `formatTimeRange`, `formatDate`, `parseUtc` (adds the missing `Z`), `formatTimeAgo`, `formatFee` ("650 EGP"), `getInitials` (ignores "Dr.") |
+| `src/lib/paging.ts` | `readTotalCount(headers)`: the `X-Total-Count` total, or `null`. `pageCount(total, pageSize)` |
 | `src/lib/notifications.ts` | `notifyNotificationsChanged()`: tells the notification bell to refresh after notifications are marked read |
 | `src/lib/navigation.ts` | Navigation per role (`navByRole`, `profileNavByRole`, `notificationsNavItem`), `appointmentsRouteByRole`, `workspaceLabelByRole`, `homeByRole`, `postLoginPath(role, from)` |
 | `src/lib/password.ts` | The server's password rules (`passwordRules`, `meetsPasswordRules`) for live checklists |

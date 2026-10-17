@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { canPatientCancel, hasAppointmentStarted } from './appointments';
+import { canMarkNoShow, canPatientCancel, hasAppointmentStarted } from './appointments';
 
 // Appointment times are clinic wall-clock time, read as local time
 const NOW = new Date('2026-10-17T12:00:00');
@@ -35,5 +35,23 @@ describe('canPatientCancel', () => {
   it('blocks cancelling appointments that are not confirmed', () => {
     expect(canPatientCancel({ appointmentDate: '2026-10-20', startTime: '10:00:00', status: 'Cancelled' })).toBe(false);
     expect(canPatientCancel({ appointmentDate: '2026-10-20', startTime: '10:00:00', status: 'Completed' })).toBe(false);
+  });
+});
+
+describe('canMarkNoShow', () => {
+  it('allows a confirmed appointment from 15 minutes after its start', () => {
+    expect(canMarkNoShow({ appointmentDate: '2026-10-17', startTime: '11:45:00', status: 'Confirmed' })).toBe(true);
+    expect(canMarkNoShow({ appointmentDate: '2026-10-16', startTime: '18:00:00', status: 'Confirmed' })).toBe(true);
+  });
+
+  it('blocks it during the grace period and before the start', () => {
+    expect(canMarkNoShow({ appointmentDate: '2026-10-17', startTime: '11:46:00', status: 'Confirmed' })).toBe(false);
+    expect(canMarkNoShow({ appointmentDate: '2026-10-17', startTime: '13:00:00', status: 'Confirmed' })).toBe(false);
+  });
+
+  it('blocks it for appointments that are not confirmed', () => {
+    expect(canMarkNoShow({ appointmentDate: '2026-10-16', startTime: '10:00:00', status: 'Completed' })).toBe(false);
+    expect(canMarkNoShow({ appointmentDate: '2026-10-16', startTime: '10:00:00', status: 'Cancelled' })).toBe(false);
+    expect(canMarkNoShow({ appointmentDate: '2026-10-16', startTime: '10:00:00', status: 'NoShow' })).toBe(false);
   });
 });

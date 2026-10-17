@@ -5,12 +5,14 @@ import type { Notification, NotificationType } from '@/types';
 import { getApiErrorMessage } from '@/lib/api-error';
 import { formatTimeAgo, parseUtc } from '@/lib/format';
 import { notifyNotificationsChanged } from '@/lib/notifications';
+import { pageCount, readTotalCount } from '@/lib/paging';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Page, PageHeader } from '@/components/layout/Page';
 import { EmptyState, ErrorState, LoadingState } from '@/components/states';
 import { useApiQuery } from '@/hooks/use-api-query';
 import { FilterTabs } from '@/components/FilterTabs';
+import { Pagination } from '@/components/Pagination';
 import { AlertTriangle, Bell, Check, CheckCheck, Clock, Info, type LucideIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -24,18 +26,50 @@ const typeConfig: Record<NotificationType, { icon: LucideIcon; className: string
 
 type Filter = 'all' | 'unread';
 
+const PAGE_SIZE = 20;
+
+interface NotificationPage {
+  items: Notification[];
+  /** Matching notifications on all pages */
+  total: number;
+  /** Unread notifications on all pages, whatever the filter */
+  unreadTotal: number;
+}
+
+/** One page plus the totals. The list is paged, so both totals come from `X-Total-Count` (API contract #32). */
+async function loadPage(filter: Filter, pageNumber: number): Promise<NotificationPage> {
+  const unreadOnly = filter === 'unread';
+  const [page, unread] = await Promise.all([
+    notificationsApi.getMyNotifications({ unreadOnly, pageNumber, pageSize: PAGE_SIZE }),
+    // The unread filter already returns the unread total; otherwise ask for it with a one-item page
+    unreadOnly ? null : notificationsApi.getMyNotifications({ unreadOnly: true, pageSize: 1 }),
+  ]);
+  const total = readTotalCount(page.headers) ?? page.data.length;
+  const unreadTotal = unread
+    ? readTotalCount(unread.headers) ?? page.data.filter((n) => !n.isRead).length
+    : total;
+  return { items: page.data, total, unreadTotal };
+}
+
 export function NotificationsPage() {
   const [filter, setFilter] = useState<Filter>('all');
-  const { data, loading, error, reload, setData: setNotifications } = useApiQuery(
-    () => notificationsApi.getMyNotifications(filter === 'unread').then((res) => res.data),
-    filter
+  const [pageNumber, setPageNumber] = useState(1);
+  const { data, loading, error, reload, setData } = useApiQuery(
+    () => loadPage(filter, pageNumber),
+    `${filter}|${pageNumber}`
   );
-  const notifications: Notification[] = data ?? [];
+  const notifications: Notification[] = data?.items ?? [];
+  const total = data?.total ?? 0;
+  const unreadCount = data?.unreadTotal ?? 0;
 
   const handleMarkRead = async (id: number) => {
     try {
       await notificationsApi.markAsRead(id);
-      setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, isRead: true } : n)));
+      setData((prev) => ({
+        ...prev,
+        items: prev.items.map((n) => (n.id === id ? { ...n, isRead: true } : n)),
+        unreadTotal: Math.max(0, prev.unreadTotal - 1),
+      }));
       notifyNotificationsChanged();
     } catch {
       toast.error('Failed to mark as read');
@@ -45,7 +79,7 @@ export function NotificationsPage() {
   const handleMarkAllRead = async () => {
     try {
       await notificationsApi.markAllAsRead();
-      setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+      setData((prev) => ({ ...prev, items: prev.items.map((n) => ({ ...n, isRead: true })), unreadTotal: 0 }));
       notifyNotificationsChanged();
       toast.success('All notifications marked as read');
     } catch {
@@ -53,7 +87,10 @@ export function NotificationsPage() {
     }
   };
 
-  const unreadCount = notifications.filter((n) => !n.isRead).length;
+  const changeFilter = (value: Filter) => {
+    setFilter(value);
+    setPageNumber(1);
+  };
 
   return (
     <Page width="narrow">
@@ -79,7 +116,7 @@ export function NotificationsPage() {
       <FilterTabs
         label="Show notifications"
         value={filter}
-        onChange={setFilter}
+        onChange={changeFilter}
         options={[
           { value: 'all', label: 'All' },
           { value: 'unread', label: 'Unread' },
@@ -141,6 +178,17 @@ export function NotificationsPage() {
           </ul>
         )}
       </div>
+
+      {/* Outside the list so it stays visible on an empty later page (e.g. after marking all read) */}
+      {!loading && !error && (
+        <Pagination
+          page={pageNumber}
+          hasNext={pageNumber * PAGE_SIZE < total}
+          pageCount={pageCount(total, PAGE_SIZE)}
+          onChange={setPageNumber}
+          label="Notification pages"
+        />
+      )}
     </Page>
   );
 }

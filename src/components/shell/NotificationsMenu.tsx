@@ -8,15 +8,17 @@ import type { Notification, UserRole } from '@/types';
 
 interface NotificationsMenuProps {
   role: UserRole | null;
+  /** The newest unread notifications (a preview, not all of them) */
   unread: Notification[];
+  /** Total unread, from the X-Total-Count header */
+  unreadCount: number;
   onMarkAllRead: () => void;
   onMarkRead: (id: number) => Promise<void>;
 }
 
 /** Bell button with the five latest unread notifications. */
-export function NotificationsMenu({ role, unread, onMarkAllRead, onMarkRead }: NotificationsMenuProps) {
+export function NotificationsMenu({ role, unread, unreadCount, onMarkAllRead, onMarkRead }: NotificationsMenuProps) {
   const navigate = useNavigate();
-  const unreadCount = unread.length;
 
   const openNotification = async (n: Notification) => {
     await onMarkRead(n.id);
@@ -64,7 +66,7 @@ export function NotificationsMenu({ role, unread, onMarkAllRead, onMarkRead }: N
               <p className="text-body-md text-muted-foreground">No new notifications</p>
             </div>
           ) : (
-            unread.slice(0, 5).map((n) => (
+            unread.map((n) => (
               <DropdownMenuItem
                 key={n.id}
                 onSelect={() => openNotification(n)}
