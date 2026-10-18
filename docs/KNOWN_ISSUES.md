@@ -90,8 +90,8 @@ The backend moved to contract 3.0.0 (see [API_CONTRACT.md §10](API_CONTRACT.md#
 - Tokens are stored in `localStorage`, so an XSS bug could steal them (the CSP now limits scripts to the app's own origin). Moving to cookies needs backend changes.
 - The entry chunk is about 261 kB (≈ 86 kB gzipped) and the `react` chunk about 232 kB (≈ 74 kB gzipped). What's left is mostly React DOM, axios, sonner and tailwind-merge, which are all in use.
 
-### Contract 3.1.0 follow-ups — P2
-The backend moved to contract 3.1.0 (see [API_CONTRACT.md §10](API_CONTRACT.md#10-changelog)). Nothing breaks: every request that worked before gets the same response. These gaps remain:
+### Contract 3.1.x follow-ups — P2
+The backend moved to contract 3.1.1 (see [API_CONTRACT.md §10](API_CONTRACT.md#10-changelog)). Nothing breaks: every request that worked before gets the same response. 3.1.1 only renames the validation error key of the doctor-notes endpoint (#24) from `notes` to `Notes`; the app doesn't read that key, so no change is needed. §9 now also plans the removal of `GET /doctors/{id}/reviews` (#12) in favour of #26. `DoctorDetailsPage` already uses #26 (`reviewsApi.getDoctorReviews`); the unused `doctorsApi.getReviews` (#12) can be deleted. These gaps remain:
 
 | Issue | Impact | Fix |
 |---|---|---|
