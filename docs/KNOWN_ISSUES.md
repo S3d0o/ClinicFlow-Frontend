@@ -90,6 +90,14 @@ The backend moved to contract 3.0.0 (see [API_CONTRACT.md §10](API_CONTRACT.md#
 - Tokens are stored in `localStorage`, so an XSS bug could steal them (the CSP now limits scripts to the app's own origin). Moving to cookies needs backend changes.
 - The entry chunk is about 261 kB (≈ 86 kB gzipped) and the `react` chunk about 232 kB (≈ 74 kB gzipped). What's left is mostly React DOM, axios, sonner and tailwind-merge, which are all in use.
 
+### Contract 3.1.0 follow-ups — P2
+The backend moved to contract 3.1.0 (see [API_CONTRACT.md §10](API_CONTRACT.md#10-changelog)). Nothing breaks: every request that worked before gets the same response. These gaps remain:
+
+| Issue | Impact | Fix |
+|---|---|---|
+| The auth forms have no message for 429 `RateLimit.Exceeded` | Register, login, confirm email, forgot password and reset password share a limit of 10 requests per minute per IP ([§2.7](API_CONTRACT.md#27-rate-limiting)). Over it, users see the generic error text | Add a message for `RateLimit.Exceeded` in `api-error.ts` that uses the `Retry-After` header ("try again in N seconds"), and don't retry automatically |
+| Sign-out with an expired access token refreshes first | Logout no longer needs an access token ([§2.6](API_CONTRACT.md#26-logout)), so the refresh is an extra request. Nothing fails | Optional: send `POST /auth/logout` without triggering the 401 refresh retry |
+
 ### Code health — P3
 - **Tests cover the core, not every page.** `npm test` covers auth refresh, session restore, `useApiQuery`, the `src/lib` helpers and `DoctorsPage`. The other pages (booking, appointments, schedules, profiles, admin) have no tests yet.
 - **Docker file name:** git tracks the file as `DockerFile` (capital F), so Linux builds need `-f DockerFile`.
