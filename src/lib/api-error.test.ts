@@ -1,12 +1,12 @@
 import { AxiosError, type AxiosResponse, type InternalAxiosRequestConfig } from 'axios';
 import { describe, expect, it } from 'vitest';
-import { getApiErrorCode, getApiErrorMessage, getApiErrorMessages } from './api-error';
+import { getApiErrorCode, getApiErrorMessage, getApiErrorMessages, isRateLimited } from './api-error';
 
 const config = { headers: {} } as InternalAxiosRequestConfig;
 
 /** An axios error carrying a response, as the API returns it */
-function apiError(status: number, data: unknown) {
-  const response = { status, data, statusText: '', headers: {}, config } as AxiosResponse;
+function apiError(status: number, data: unknown, headers: Record<string, string> = {}) {
+  const response = { status, data, statusText: '', headers, config } as AxiosResponse;
   return new AxiosError('Request failed', AxiosError.ERR_BAD_REQUEST, config, null, response);
 }
 
@@ -76,5 +76,31 @@ describe('getApiErrorMessage', () => {
       .toMatch(/15 minutes/);
     expect(getApiErrorMessage(apiError(409, { title: 'Appointment.AlreadyNoShow', detail: 'x' }), 'fallback'))
       .toMatch(/already been marked as a no-show/);
+  });
+});
+
+describe('rate limiting (contract §2.7)', () => {
+  const rateLimited = (headers: Record<string, string> = {}) =>
+    apiError(429, { title: 'RateLimit.Exceeded', status: 429, detail: 'Too many requests.' }, headers);
+
+  it('recognizes a 429', () => {
+    expect(isRateLimited(rateLimited())).toBe(true);
+    expect(isRateLimited(apiError(401, { title: 'Auth.InvalidCredentials' }))).toBe(false);
+    expect(isRateLimited(new Error('boom'))).toBe(false);
+  });
+
+  it('tells the user how long to wait from Retry-After', () => {
+    expect(getApiErrorMessage(rateLimited({ 'retry-after': '42' }), 'fallback'))
+      .toBe('Too many attempts. Please wait 42 seconds and try again.');
+    expect(getApiErrorMessage(rateLimited({ 'retry-after': '1' }), 'fallback'))
+      .toBe('Too many attempts. Please wait 1 second and try again.');
+    expect(getApiErrorMessage(rateLimited({ 'retry-after': '90' }), 'fallback'))
+      .toBe('Too many attempts. Please wait 2 minutes and try again.');
+  });
+
+  it('falls back to a minute when the header is missing or unreadable (e.g. hidden by CORS)', () => {
+    expect(getApiErrorMessage(rateLimited(), 'fallback')).toBe('Too many attempts. Please wait a minute and try again.');
+    expect(getApiErrorMessage(rateLimited({ 'retry-after': 'soon' }), 'fallback'))
+      .toBe('Too many attempts. Please wait a minute and try again.');
   });
 });

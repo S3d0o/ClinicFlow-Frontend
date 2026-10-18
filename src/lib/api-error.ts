@@ -74,11 +74,26 @@ export function getApiErrorCode(error: unknown): string | undefined {
   return Object.keys(body.errors ?? {}).find(isErrorCode);
 }
 
+/** A 429 from the rate-limited auth endpoints (`RateLimit.Exceeded`, API contract §2.7). Don't retry it automatically. */
+export function isRateLimited(error: unknown): boolean {
+  return isAxiosError(error) && error.response?.status === 429;
+}
+
+// `Retry-After` holds the seconds until the limit resets. The browser only exposes it cross-origin
+// when the backend's CORS policy does (contract 3.1.2+); without it, fall back to "a minute".
+function rateLimitMessage(error: unknown): string {
+  const seconds = Number(isAxiosError(error) ? error.response?.headers?.['retry-after'] : undefined);
+  if (!Number.isFinite(seconds) || seconds <= 0) return 'Too many attempts. Please wait a minute and try again.';
+  const [amount, unit] = seconds < 60 ? [Math.ceil(seconds), 'second'] : [Math.ceil(seconds / 60), 'minute'];
+  return `Too many attempts. Please wait ${amount} ${unit}${amount === 1 ? '' : 's'} and try again.`;
+}
+
 /** Every user-facing message for a failed request, most specific first. */
 export function getApiErrorMessages(error: unknown, fallback: string): string[] {
   if (isAxiosError(error) && !error.response) {
     return ['Could not reach the server. Check your connection and try again.'];
   }
+  if (isRateLimited(error)) return [rateLimitMessage(error)];
 
   const body = getBody(error);
   const code = getApiErrorCode(error);

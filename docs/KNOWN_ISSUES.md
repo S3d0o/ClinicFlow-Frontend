@@ -62,6 +62,14 @@ The backend moved to contract 3.0.0 (see [API_CONTRACT.md §10](API_CONTRACT.md#
 | No-show | Doctors get **Mark as no-show** (Confirmed visits, 15 minutes after the start, with a confirmation) and a No-show filter; notes are allowed on no-shows, as the API allows. `Appointment.NoShowTooEarly` and `Appointment.AlreadyNoShow` have messages |
 | Specialties | The add/edit dialog has an **Active** switch, so admins can deactivate and reactivate a specialty (`isActive`) |
 
+### Contract 3.1.x follow-ups
+The backend moved to contract 3.1.x (see [API_CONTRACT.md §10](API_CONTRACT.md#10-changelog)). Nothing breaks: every request that worked before gets the same response. 3.1.1 only renames the doctor-notes validation key (#24) from `notes` to `Notes`, which the app doesn't read.
+
+| Area | What changed |
+|---|---|
+| Rate limiting | A 429 `RateLimit.Exceeded` (contract §2.7) shows "Too many attempts. Please wait N seconds and try again." on every auth form, from the `Retry-After` header, or "a minute" when the browser can't read it. `isRateLimited()` in `src/lib/api-error.ts`. Forgot password no longer shows "Check your email" after a 429 (no email was sent), and Confirm email shows "Too many attempts" with **Try again** instead of "This link didn't work". Nothing retries automatically |
+| Doctor reviews | The unused `doctorsApi.getReviews` (`GET doctors/{id}/reviews`, #12) is removed; the contract plans to drop that route. `DoctorDetailsPage` uses #26 (`reviewsApi.getDoctorReviews`) |
+
 ## Open issues
 
 ### Data correctness — P2
@@ -91,12 +99,9 @@ The backend moved to contract 3.0.0 (see [API_CONTRACT.md §10](API_CONTRACT.md#
 - Tokens are stored in `localStorage`, so an XSS bug could steal them (the CSP now limits scripts to the app's own origin). Moving to cookies needs backend changes.
 - The entry chunk is about 261 kB (≈ 86 kB gzipped) and the `react` chunk about 232 kB (≈ 74 kB gzipped). What's left is mostly React DOM, axios, sonner and tailwind-merge, which are all in use.
 
-### Contract 3.1.x follow-ups — P2
-The backend moved to contract 3.1.1 (see [API_CONTRACT.md §10](API_CONTRACT.md#10-changelog)). Nothing breaks: every request that worked before gets the same response. 3.1.1 only renames the validation error key of the doctor-notes endpoint (#24) from `notes` to `Notes`; the app doesn't read that key, so no change is needed. §9 now also plans the removal of `GET /doctors/{id}/reviews` (#12) in favour of #26. `DoctorDetailsPage` already uses #26 (`reviewsApi.getDoctorReviews`); the unused `doctorsApi.getReviews` (#12) can be deleted. These gaps remain:
-
+### Contract 3.1.x follow-ups — P3
 | Issue | Impact | Fix |
 |---|---|---|
-| The auth forms have no message for 429 `RateLimit.Exceeded` | Register, login, confirm email, forgot password and reset password share a limit of 10 requests per minute per IP ([§2.7](API_CONTRACT.md#27-rate-limiting)). Over it, users see the generic error text | Add a message for `RateLimit.Exceeded` in `api-error.ts` that uses the `Retry-After` header ("try again in N seconds"), and don't retry automatically |
 | Sign-out with an expired access token refreshes first | Logout no longer needs an access token ([§2.6](API_CONTRACT.md#26-logout)), so the refresh is an extra request. Nothing fails | Optional: send `POST /auth/logout` without triggering the 401 refresh retry |
 
 ### Code health — P3
