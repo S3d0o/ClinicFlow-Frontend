@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Spinner } from '@/components/ui/spinner';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import {
   Dialog,
   DialogContent,
@@ -24,6 +26,8 @@ import { toast } from 'sonner';
 const NAME_MAX_LENGTH = 100;
 const DESCRIPTION_MAX_LENGTH = 500;
 
+type SpecialtyForm = CreateSpecialtyRequest & { isActive: boolean };
+
 export function AdminSpecialtiesPage() {
   const { data, loading, error, reload: fetchSpecialties } = useApiQuery(() =>
     adminApi.getAllSpecialties().then((res) => res.data)
@@ -35,14 +39,16 @@ export function AdminSpecialtiesPage() {
   const [showDelete, setShowDelete] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const [form, setForm] = useState<CreateSpecialtyRequest>({
+  // isActive is always sent: true for a new specialty, the switch's value on edit (API contract #41, #42)
+  const [form, setForm] = useState<SpecialtyForm>({
     name: '',
     description: '',
     iconUrl: '',
+    isActive: true,
   });
 
   const resetForm = () => {
-    setForm({ name: '', description: '', iconUrl: '' });
+    setForm({ name: '', description: '', iconUrl: '', isActive: true });
   };
 
   // Optional fields must be omitted rather than sent as "" (iconUrl must be an absolute URL)
@@ -50,6 +56,7 @@ export function AdminSpecialtiesPage() {
     name: form.name.trim(),
     description: form.description?.trim() || undefined,
     iconUrl: form.iconUrl?.trim() || undefined,
+    isActive: form.isActive,
   });
 
   const handleCreate = async () => {
@@ -99,7 +106,7 @@ export function AdminSpecialtiesPage() {
   };
 
   const openEdit = (s: Specialty) => {
-    setForm({ name: s.name, description: s.description || '', iconUrl: s.iconUrl || '' });
+    setForm({ name: s.name, description: s.description || '', iconUrl: s.iconUrl || '', isActive: s.isActive });
     setShowEdit(s);
   };
 
@@ -227,6 +234,20 @@ export function AdminSpecialtiesPage() {
             <Field id="specialty-icon" label="Icon URL" optional hint="A full URL starting with https://">
               <Input type="url" inputMode="url" value={form.iconUrl} onChange={(e) => setForm({ ...form, iconUrl: e.target.value })} placeholder="https://…" />
             </Field>
+            <div className="flex items-start justify-between gap-4 rounded-xl bg-muted px-4 py-3">
+              <div>
+                <Label htmlFor="specialty-active">Active</Label>
+                <p id="specialty-active-hint" className="mt-1 text-body-sm text-muted-foreground">
+                  Inactive specialties are hidden from patients and from doctor registration. Turn it back on at any time.
+                </p>
+              </div>
+              <Switch
+                id="specialty-active"
+                aria-describedby="specialty-active-hint"
+                checked={form.isActive}
+                onCheckedChange={(v) => setForm({ ...form, isActive: v })}
+              />
+            </div>
           </form>
           <DialogFooter>
             <Button variant="outline" onClick={closeForm} disabled={submitting}>Cancel</Button>

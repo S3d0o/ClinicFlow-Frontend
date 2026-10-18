@@ -37,6 +37,8 @@ const messagesByCode: Record<string, string> = {
   'Appointment.AlreadyCancelled': 'This appointment has already been cancelled.',
   'Appointment.AlreadyCompleted': 'This appointment has already been completed.',
   'Appointment.CannotCompleteCancelled': 'A cancelled appointment cannot be completed.',
+  'Appointment.AlreadyNoShow': 'This appointment has already been marked as a no-show.',
+  'Appointment.NoShowTooEarly': 'A visit can only be marked as a no-show 15 minutes after it starts.',
   'Appointment.DoctorNotesNotAllowed': 'Notes cannot be added to a cancelled appointment.',
   'Appointment.Unauthorized': 'You do not have access to this appointment.',
   'Appointment.ReviewAlreadyExists': 'You have already reviewed this appointment.',

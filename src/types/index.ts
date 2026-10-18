@@ -311,6 +311,13 @@ export interface Notification {
   relatedEntityId?: number;
 }
 
+/** Query for GET /notifications/my (API contract #32): pageSize 1–100, default 50. */
+export interface NotificationFilter {
+  unreadOnly?: boolean;
+  pageNumber?: number;
+  pageSize?: number;
+}
+
 // ============ SPECIALTY TYPES ============
 export interface Specialty {
   id: number;
@@ -324,6 +331,8 @@ export interface CreateSpecialtyRequest {
   name: string;
   description?: string;
   iconUrl?: string;
+  /** Omit to keep the current state; a new specialty is active unless false (API contract #41, #42). */
+  isActive?: boolean;
 }
 
 // ============ ADMIN TYPES ============

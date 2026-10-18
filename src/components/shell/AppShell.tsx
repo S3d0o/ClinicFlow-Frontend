@@ -95,14 +95,14 @@ function SidebarContent({ role, displayName, pictureUrl, unreadCount, onNavigate
 export function AppShell({ children }: { children: ReactNode }) {
   const { user, role, userName, logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { unread, markAllRead, markRead } = useUnreadNotifications(true);
+  const { unread, unreadCount, markAllRead, markRead } = useUnreadNotifications(true);
 
   if (!role) return null;
 
   const displayName = user ? `${user.firstName} ${user.lastName}` : userName || 'Account';
   const pictureUrl = user?.profilePictureUrl;
   const profile = profileNavByRole[role];
-  const sidebarProps = { role, displayName, pictureUrl, unreadCount: unread.length, onSignOut: () => logout() };
+  const sidebarProps = { role, displayName, pictureUrl, unreadCount, onSignOut: () => logout() };
 
   return (
     <div className="min-h-screen bg-background">
@@ -141,7 +141,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             </div>
 
             <div className="ml-auto flex items-center gap-1.5">
-              <NotificationsMenu role={role} unread={unread} onMarkAllRead={markAllRead} onMarkRead={markRead} />
+              <NotificationsMenu role={role} unread={unread} unreadCount={unreadCount} onMarkAllRead={markAllRead} onMarkRead={markRead} />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="h-11 gap-2.5 pl-2 pr-2 text-foreground" aria-label={`Account menu for ${displayName}`}>

@@ -52,17 +52,17 @@ Open problems in the frontend, the improvements planned for them, and recent fix
 | Tests | Vitest + Testing Library added (`npm test`): the token refresh and cross-tab sync, `useApiQuery`, the `src/lib` helpers and `DoctorsPage`. The cross-tab tests fail against the old `axios.ts`. The Docker build moved to Node 22, which Vitest needs (Node 20 is past end of life) |
 | Lint and CI | The last 4 lint errors fixed: `buttonVariants` moved to `ui/button-variants.ts`, `badgeVariants` no longer exported, `useAuth` and the context moved to `context/auth-context.ts`, and the session restore no longer sets state synchronously in an effect (signed-out users skip the loading state). GitHub Actions (`.github/workflows/ci.yml`) runs lint, tests, build and a Docker build on every push |
 
+### Contract 3.0.0 follow-ups
+The backend moved to contract 3.0.0 (see [API_CONTRACT.md §10](API_CONTRACT.md#10-changelog)). Error bodies on 401/403/404/500 have no `Feature.Reason` code, so `api-error.ts` falls back to its generic text as before (pinned by a test), and every list request already sent valid paging.
+
+| Area | What changed |
+|---|---|
+| Unread badge | The bell asks for the 5 newest unread notifications and takes the count from `X-Total-Count`. Before, it counted the returned list, which the API now caps at 50 |
+| Notifications page | 20 per page with "Page 2 of 5" paging; the unread count covers every page. Before, only the newest 50 were reachable |
+| No-show | Doctors get **Mark as no-show** (Confirmed visits, 15 minutes after the start, with a confirmation) and a No-show filter; notes are allowed on no-shows, as the API allows. `Appointment.NoShowTooEarly` and `Appointment.AlreadyNoShow` have messages |
+| Specialties | The add/edit dialog has an **Active** switch, so admins can deactivate and reactivate a specialty (`isActive`) |
+
 ## Open issues
-
-### Contract 3.0.0 follow-ups — P2
-The backend moved to contract 3.0.0 (see [API_CONTRACT.md §10](API_CONTRACT.md#10-changelog)). The app keeps working: error bodies on 401/403/404/500 have no `Feature.Reason` code, so `api-error.ts` falls back to its generic text as before, and every list request already sends valid paging. These gaps remain:
-
-| Issue | Impact | Fix |
-|---|---|---|
-| The unread badge counts the items `GET /notifications/my?unreadOnly=true` returns, and that list is now capped at 50 per page | The badge shows at most 50 | Request `unreadOnly=true&pageSize=1` and read the `X-Total-Count` header (`readTotalCount` in contract §12) |
-| The Notifications page shows only the newest 50 notifications | Older ones can't be reached | Add paging (`pageNumber`, `pageSize` ≤ 100) driven by `X-Total-Count` |
-| No "Mark as no-show" action for doctors or admins | The new `POST /appointments/{id}/no-show` (#24b) is unused. `DoctorAppointmentsPage` still says `NoShow` is never set | Add the action (from 15 minutes after the start, `Confirmed` only) and messages for `Appointment.NoShowTooEarly` and `Appointment.AlreadyNoShow` in `api-error.ts` |
-| Admin specialties can't be deactivated or reactivated | `SpecialtyRequest.isActive` (#42) is unused | Add an active switch to the edit dialog and send `isActive` |
 
 ### Data correctness — P2
 | Issue | Impact |
@@ -83,6 +83,7 @@ The backend moved to contract 3.0.0 (see [API_CONTRACT.md §10](API_CONTRACT.md#
 | Issue | Notes |
 |---|---|
 | Doctors can't cancel appointments in the UI | The API supports it (contract #22) |
+| Admins have no appointment list, so they can't cancel or mark no-shows in the UI | The API supports both (contract #22, #24b) but has no endpoint that lists every appointment |
 | The doctor's Practice tab can't show current values | Needs a backend endpoint |
 | No real-time notifications (polling only) | The contract has no push channel |
 

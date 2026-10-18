@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { appointmentsApi } from '@/api';
 import type { Appointment, AppointmentStatus } from '@/types';
 import { getApiErrorMessage } from '@/lib/api-error';
-import { hasAppointmentStarted } from '@/lib/appointments';
+import { canMarkNoShow, hasAppointmentStarted } from '@/lib/appointments';
 import { formatTimeRange } from '@/lib/format';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -24,26 +24,30 @@ import { Pagination } from '@/components/Pagination';
 import { StatusBadge } from '@/components/StatusBadge';
 import { DateTile } from '@/components/DateTile';
 import { UserAvatar } from '@/components/UserAvatar';
-import { CalendarDays, CheckCircle2, Clock, MessageSquareText, NotebookPen } from 'lucide-react';
+import { CalendarDays, CheckCircle2, Clock, MessageSquareText, NotebookPen, UserX } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
 type StatusFilter = 'all' | AppointmentStatus;
 
-// "Pending" and "NoShow" exist in the API enum but are never set (API contract §7)
+// "Pending" exists in the API enum but is never set (API contract §7)
 const filterOptions: { value: StatusFilter; label: string }[] = [
   { value: 'all', label: 'All' },
   { value: 'Confirmed', label: 'Confirmed' },
   { value: 'Completed', label: 'Completed' },
   { value: 'Cancelled', label: 'Cancelled' },
+  { value: 'NoShow', label: 'No-show' },
 ];
 
 const PAGE_SIZE = 10;
+// The API rejects longer notes (API contract #24)
+const NOTES_MAX_LENGTH = 4000;
 
 export function DoctorAppointmentsPage() {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [pageNumber, setPageNumber] = useState(1);
   const [completeId, setCompleteId] = useState<number | null>(null);
+  const [noShowId, setNoShowId] = useState<number | null>(null);
   const [notesId, setNotesId] = useState<number | null>(null);
   const [notes, setNotes] = useState('');
   const [actionLoading, setActionLoading] = useState(false);
@@ -77,6 +81,21 @@ export function DoctorAppointmentsPage() {
     }
   };
 
+  const handleNoShow = async () => {
+    if (!noShowId) return;
+    setActionLoading(true);
+    try {
+      await appointmentsApi.markNoShow(noShowId);
+      toast.success('Appointment marked as a no-show');
+      setNoShowId(null);
+      fetchAppointments();
+    } catch (err) {
+      toast.error(getApiErrorMessage(err, 'Failed to mark as a no-show'));
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   const closeNotes = () => {
     setNotesId(null);
     setNotes('');
@@ -98,11 +117,12 @@ export function DoctorAppointmentsPage() {
   };
 
   const completeTarget = appointments.find((a) => a.id === completeId);
+  const noShowTarget = appointments.find((a) => a.id === noShowId);
   const notesTarget = appointments.find((a) => a.id === notesId);
 
   return (
     <Page>
-      <PageHeader eyebrow="Clinic workspace" title="Appointments" description="Your patient visits, newest first. Complete visits after they start and keep clinical notes." />
+      <PageHeader eyebrow="Clinic workspace" title="Appointments" description="Your patient visits, newest first. Complete visits after they start, mark missed ones as no-shows and keep clinical notes." />
 
       <FilterTabs
         label="Filter appointments by status"
@@ -127,11 +147,12 @@ export function DoctorAppointmentsPage() {
           <ul className="space-y-4">
             {appointments.map((apt) => {
               const canComplete = apt.status === 'Confirmed' && hasAppointmentStarted(apt);
-              const canEditNotes = apt.status === 'Confirmed' || apt.status === 'Completed';
+              const canNoShow = canMarkNoShow(apt);
+              const canEditNotes = apt.status === 'Confirmed' || apt.status === 'Completed' || apt.status === 'NoShow';
               return (
                 <li key={apt.id} className="rounded-2xl border border-border/70 bg-card p-5 shadow-card sm:p-6">
                   <div className="flex gap-4">
-                    <DateTile date={apt.appointmentDate} muted={apt.status === 'Cancelled'} />
+                    <DateTile date={apt.appointmentDate} muted={apt.status === 'Cancelled' || apt.status === 'NoShow'} />
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
                         <div className="flex min-w-0 items-center gap-3">
@@ -166,11 +187,16 @@ export function DoctorAppointmentsPage() {
                           {apt.cancellationReason ? ` — “${apt.cancellationReason}”` : ''}
                         </p>
                       )}
-                      {(canComplete || canEditNotes) && (
+                      {(canComplete || canNoShow || canEditNotes) && (
                         <div className="mt-4 flex flex-wrap gap-2">
                           {canComplete && (
                             <Button size="sm" onClick={() => setCompleteId(apt.id)}>
                               <CheckCircle2 aria-hidden="true" /> Mark as completed
+                            </Button>
+                          )}
+                          {canNoShow && (
+                            <Button variant="outline" size="sm" onClick={() => setNoShowId(apt.id)}>
+                              <UserX aria-hidden="true" /> Mark as no-show
                             </Button>
                           )}
                           {canEditNotes && (
@@ -213,6 +239,26 @@ export function DoctorAppointmentsPage() {
         </DialogContent>
       </Dialog>
 
+      {/* No-show dialog */}
+      <Dialog open={!!noShowId} onOpenChange={(open) => { if (!open) setNoShowId(null); }}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Mark as a no-show?</DialogTitle>
+            <DialogDescription>
+              {noShowTarget ? `${noShowTarget.patientName} · ${formatTimeRange(noShowTarget.startTime, noShowTarget.endTime)}. ` : ''}
+              The patient will be told they missed the visit. This can’t be undone, and the visit can no longer be completed or cancelled.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setNoShowId(null)} disabled={actionLoading}>Cancel</Button>
+            <Button variant="destructive" onClick={handleNoShow} disabled={actionLoading}>
+              {actionLoading && <Spinner aria-hidden="true" />}
+              {actionLoading ? 'Saving…' : 'Mark as no-show'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {/* Notes dialog */}
       <Dialog open={!!notesId} onOpenChange={(open) => { if (!open) closeNotes(); }}>
         <DialogContent className="sm:max-w-lg">
@@ -224,7 +270,7 @@ export function DoctorAppointmentsPage() {
           </DialogHeader>
           <div className="space-y-1.5">
             <Label htmlFor="doctor-notes">Notes</Label>
-            <Textarea id="doctor-notes" placeholder="Findings, advice, follow-up plan…" value={notes} onChange={(e) => setNotes(e.target.value)} rows={5} />
+            <Textarea id="doctor-notes" placeholder="Findings, advice, follow-up plan…" value={notes} onChange={(e) => setNotes(e.target.value)} rows={5} maxLength={NOTES_MAX_LENGTH} />
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={closeNotes} disabled={actionLoading}>Cancel</Button>
