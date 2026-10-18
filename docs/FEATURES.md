@@ -98,7 +98,7 @@ It calls no API and shows no invented statistics.
 - Links: create a patient account, join as a doctor.
 
 ### Forgot password — `/forgot-password`
-Enter an email to receive a reset link. The page always says "If an account exists with … you will receive a link", so it never reveals whether an email is registered.
+Enter an email to receive a reset link. The page always says "If an account exists with … you will receive a link", so it never reveals whether an email is registered. The one exception is a 429 (too many requests from this connection, [API contract §2.7](API_CONTRACT.md#27-rate-limiting)): no email was sent, so the page stays on the form and shows "Too many attempts. Please wait N seconds and try again." The limit is per IP address, so this reveals nothing about the account.
 
 ### Reset password — `/reset-password` (opened from the email)
 - Reads `userId` and `token` from the link.
@@ -107,7 +107,9 @@ Enter an email to receive a reset link. The page always says "If an account exis
 - If the link is missing its parameters, the user is sent to Forgot password.
 
 ### Confirm email — `/confirm-email` (opened from the email)
-Confirms the account automatically from the link's `userId` and `token`, then shows success with a Sign In button, or "The confirmation link is invalid or has expired".
+Confirms the account automatically from the link's `userId` and `token`, then shows success with a Sign In button, or "The confirmation link is invalid or has expired". A 429 (rate limit) shows "Too many attempts" with the wait time and a **Try again** button instead, because the link itself may be fine.
+
+**Rate limiting on every auth form.** Sign-in, both registrations, confirm email, forgot password and reset password share one limit per IP address (10 per minute by default). Over it, every form shows "Too many attempts. Please wait N seconds and try again." (`getApiErrorMessage` in `src/lib/api-error.ts`), and nothing retries automatically.
 
 ---
 

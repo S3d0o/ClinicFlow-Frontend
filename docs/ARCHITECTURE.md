@@ -131,7 +131,7 @@ const res = await appointmentsApi.getMyAppointments({ pageNumber: 1, pageSize: 1
 | Module | File | Endpoints (paths are under `/api`) |
 |---|---|---|
 | `authApi` | `auth.ts` | `auth/login`, `auth/register/patient`, `auth/register/doctor`, `auth/confirm-email`, `auth/refresh-token`*, `auth/logout`, `auth/forgot-password`, `auth/reset-password` |
-| `doctorsApi` | `doctors.ts` | `GET doctors`, `GET doctors/{id}`, `GET doctors/{id}/slots`, `GET doctors/{id}/reviews`*, `PUT doctors/profile`, `GET/POST doctors/schedule`, `PUT/DELETE doctors/schedule/{id}` |
+| `doctorsApi` | `doctors.ts` | `GET doctors`, `GET doctors/{id}`, `GET doctors/{id}/slots`, `PUT doctors/profile`, `GET/POST doctors/schedule`, `PUT/DELETE doctors/schedule/{id}` |
 | `appointmentsApi` | `appointments.ts` | `POST appointments`, `GET appointments/my`, `GET appointments/doctor/my`, `GET appointments/{id}`*, `POST appointments/{id}/cancel`, `POST appointments/{id}/complete`, `POST appointments/{id}/no-show`, `PUT appointments/{id}/notes` |
 | `reviewsApi` | `reviews.ts` | `POST reviews`, `GET reviews/doctor/{doctorId}`, `DELETE reviews/{id}`* |
 | `notificationsApi` | `notifications.ts` | `GET notifications/my?unreadOnly=&pageNumber=&pageSize=` (total in `X-Total-Count`), `POST notifications/{id}/read`, `POST notifications/read-all` |

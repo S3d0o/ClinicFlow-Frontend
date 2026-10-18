@@ -8,6 +8,7 @@ import { AuthLayout } from '@/components/layout/AuthLayout';
 import { Field } from '@/components/form/Field';
 import { Mail } from 'lucide-react';
 import { toast } from 'sonner';
+import { getApiErrorMessage, isRateLimited } from '@/lib/api-error';
 
 export function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -21,7 +22,12 @@ export function ForgotPasswordPage() {
       await authApi.forgotPassword({ email });
       setSent(true);
       toast.success('Password reset link sent!');
-    } catch {
+    } catch (err) {
+      // No email was sent. The limit is per client IP, so saying so reveals nothing about the account
+      if (isRateLimited(err)) {
+        toast.error(getApiErrorMessage(err, 'Please try again in a moment.'));
+        return;
+      }
       // Always show success to prevent email enumeration
       setSent(true);
     } finally {

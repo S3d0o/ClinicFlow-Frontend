@@ -1,5 +1,5 @@
 import api from './axios';
-import type { DoctorSummary, DoctorDetails, Slot, Review, ReviewFilterRequest, DoctorFilterRequest, UpdateDoctorProfileRequest, Schedule, CreateScheduleRequest, UpdateScheduleRequest,  } from '@/types';
+import type { DoctorSummary, DoctorDetails, Slot, DoctorFilterRequest, UpdateDoctorProfileRequest, Schedule, CreateScheduleRequest, UpdateScheduleRequest } from '@/types';
 
 export const doctorsApi = {
   list: (params?: DoctorFilterRequest) =>
@@ -7,8 +7,6 @@ export const doctorsApi = {
   getById: (id: number) => api.get<DoctorDetails>(`/doctors/${id}`),
   getSlots: (id: number, date: string) =>
     api.get<Slot[]>(`/doctors/${id}/slots`, { params: { date } }),
-  getReviews: (id: number, params?: ReviewFilterRequest) =>
-    api.get<Review[]>(`/doctors/${id}/reviews`, { params }),
   updateProfile: (data: UpdateDoctorProfileRequest) =>
     api.put('/doctors/profile', data),
   getSchedules: () => api.get<Schedule[]>('/doctors/schedule'),

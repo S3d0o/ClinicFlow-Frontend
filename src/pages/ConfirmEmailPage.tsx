@@ -1,12 +1,13 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { authApi } from '@/api';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { AuthLayout } from '@/components/layout/AuthLayout';
-import { CheckCircle2, XCircle } from 'lucide-react';
+import { CheckCircle2, Clock, XCircle } from 'lucide-react';
+import { getApiErrorMessage, isRateLimited } from '@/lib/api-error';
 
-type Status = 'loading' | 'success' | 'error';
+type Status = 'loading' | 'success' | 'error' | 'rateLimited';
 
 export function ConfirmEmailPage() {
   const [searchParams] = useSearchParams();
@@ -14,17 +15,55 @@ export function ConfirmEmailPage() {
   const token = searchParams.get('token');
   // A link without its parameters can't be confirmed; no request needed
   const [status, setStatus] = useState<Status>(() => (userId && token ? 'loading' : 'error'));
+  const [rateLimitMessage, setRateLimitMessage] = useState('');
 
   const called = useRef(false);
 
-  useEffect(() => {
-    if (called.current || !userId || !token) return;
-    called.current = true;
+  const confirm = useCallback(() => {
+    if (!userId || !token) return;
     authApi
       .confirmEmail({ userId, token })
       .then(() => setStatus('success'))
-      .catch(() => setStatus('error'));
+      .catch((err: unknown) => {
+        // A 429 says nothing about the link (API contract §2.7), so don't call it invalid
+        if (isRateLimited(err)) {
+          setRateLimitMessage(getApiErrorMessage(err, 'Too many attempts. Please wait a minute and try again.'));
+          setStatus('rateLimited');
+        } else {
+          setStatus('error');
+        }
+      });
   }, [userId, token]);
+
+  useEffect(() => {
+    if (called.current) return;
+    called.current = true;
+    confirm();
+  }, [confirm]);
+
+  if (status === 'rateLimited') {
+    return (
+      <AuthLayout title="Too many attempts" description={rateLimitMessage}>
+        <div role="alert" className="rounded-xl bg-muted p-6">
+          <span className="inline-flex size-11 items-center justify-center rounded-xl bg-warning/10 text-warning">
+            <Clock className="size-5" aria-hidden="true" />
+          </span>
+          <p className="mt-4 text-body-md text-muted-foreground">
+            Your email hasn't been confirmed yet. Try the same link again once the wait is over.
+          </p>
+          <Button
+            className="mt-6 w-full"
+            onClick={() => {
+              setStatus('loading');
+              confirm();
+            }}
+          >
+            Try again
+          </Button>
+        </div>
+      </AuthLayout>
+    );
+  }
 
   if (status === 'loading') {
     return (
