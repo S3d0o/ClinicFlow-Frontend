@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState } from 'react';
 import { adminApi } from '@/api';
 import type { DoctorSummary } from '@/types';
+import { getApiErrorMessage } from '@/lib/api-error';
+import { formatFee } from '@/lib/format';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Spinner } from '@/components/ui/spinner';
 import {
   Dialog,
   DialogContent,
@@ -12,37 +13,26 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import {
-  CheckCircle,
-  XCircle,
-  MapPin,
-  Briefcase,
-  Banknote,
-} from 'lucide-react';
+import { Page, PageHeader } from '@/components/layout/Page';
+import { EmptyState, ErrorState, LoadingState } from '@/components/states';
+import { useApiQuery } from '@/hooks/use-api-query';
+import { UserAvatar } from '@/components/UserAvatar';
+import { Check, CheckCircle2, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 export function AdminPendingDoctorsPage() {
-  const [doctors, setDoctors] = useState<DoctorSummary[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, loading, error, reload: fetchDoctors } = useApiQuery(() =>
+    adminApi.getPendingDoctors().then((res) => res.data)
+  );
+  const doctors: DoctorSummary[] = data ?? [];
   const [actionId, setActionId] = useState<number | null>(null);
   const [actionType, setActionType] = useState<'approve' | 'suspend' | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const fetchDoctors = async () => {
-    setLoading(true);
-    try {
-      const res = await adminApi.getPendingDoctors();
-      setDoctors(res.data);
-    } catch {
-      toast.error('Failed to load pending doctors');
-    } finally {
-      setLoading(false);
-    }
+  const closeDialog = () => {
+    setActionId(null);
+    setActionType(null);
   };
-
-  useEffect(() => {
-    fetchDoctors();
-  }, []);
 
   const handleAction = async () => {
     if (!actionId || !actionType) return;
@@ -53,112 +43,136 @@ export function AdminPendingDoctorsPage() {
         toast.success('Doctor approved');
       } else {
         await adminApi.suspendDoctor(actionId);
-        toast.success('Doctor suspended');
+        toast.success('Doctor rejected and suspended');
       }
-      setActionId(null);
-      setActionType(null);
+      closeDialog();
       fetchDoctors();
-    } catch (err: any) {
-      toast.error(err.response?.data?.title || 'Action failed');
+    } catch (err) {
+      toast.error(getApiErrorMessage(err, 'Action failed'));
     } finally {
       setSubmitting(false);
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-50/40 to-white py-8 sm:py-12">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold text-slate-900">Pending Doctor Approvals</h1>
-            <p className="text-sm text-slate-500">Review and approve doctor registration requests</p>
-          </div>
+  const open = (id: number, type: 'approve' | 'suspend') => {
+    setActionId(id);
+    setActionType(type);
+  };
 
-          {loading ? (
-            <div className="flex justify-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600" />
-            </div>
-          ) : doctors.length === 0 ? (
-            <Card className="border-slate-100">
-              <CardContent className="p-12 text-center">
-                <CheckCircle className="h-12 w-12 text-emerald-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-slate-700 mb-1">All caught up!</h3>
-                <p className="text-sm text-slate-400">No pending doctor approvals</p>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="space-y-3">
-              {doctors.map((doctor, i) => (
-                <motion.div key={doctor.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
-                  <Card className="border-slate-100 hover:border-teal-200 transition-colors">
-                    <CardContent className="p-5">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div className="flex items-start gap-4">
-                          <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center text-white text-lg font-semibold shrink-0">
-                            {doctor.fullName.charAt(0)}
-                          </div>
-                          <div>
-                            <h3 className="font-semibold text-slate-900">{doctor.fullName}</h3>
-                            <p className="text-sm text-teal-600 font-medium">{doctor.specialtyName}</p>
-                            <div className="flex items-center gap-3 mt-1.5 text-xs text-slate-400">
-                              <span className="flex items-center gap-1"><MapPin className="h-3 w-3" /> {doctor.clinicCity}</span>
-                              <span className="flex items-center gap-1"><Briefcase className="h-3 w-3" /> {doctor.yearsOfExperience}y exp</span>
-                              <span className="flex items-center gap-1"><Banknote className="h-3 w-3" /> {doctor.consultationFee} EGP</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Button
-                            size="sm"
-                            onClick={() => { setActionId(doctor.id); setActionType('approve'); }}
-                            className="bg-emerald-600 hover:bg-emerald-700"
-                          >
-                            <CheckCircle className="h-4 w-4 mr-1" /> Approve
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => { setActionId(doctor.id); setActionType('suspend'); }}
-                            className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
-                          >
-                            <XCircle className="h-4 w-4 mr-1" /> Reject
-                          </Button>
+  const target = doctors.find((d) => d.id === actionId);
+
+  const actions = (d: DoctorSummary) => (
+    <div className="flex gap-2">
+      <Button size="sm" onClick={() => open(d.id, 'approve')} aria-label={`Approve ${d.fullName}`}>
+        <Check aria-hidden="true" /> Approve
+      </Button>
+      <Button size="sm" variant="destructive-outline" onClick={() => open(d.id, 'suspend')} aria-label={`Reject ${d.fullName}`}>
+        <X aria-hidden="true" /> Reject
+      </Button>
+    </div>
+  );
+
+  return (
+    <Page width="wide">
+      <PageHeader
+        eyebrow="Clinic administration"
+        title="Doctor approvals"
+        description="New doctors appear in search only after you approve them. Review each application below."
+        actions={
+          !loading && doctors.length > 0 ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-warning/25 bg-warning/10 px-3 py-1 text-label-md text-warning">
+              <span className="size-1.5 rounded-full bg-warning" aria-hidden="true" />
+              {doctors.length} awaiting review
+            </span>
+          ) : undefined
+        }
+      />
+
+      {loading ? (
+        <LoadingState label="Loading applications…" />
+      ) : error ? (
+        <ErrorState title="Couldn’t load applications" message={getApiErrorMessage(error, 'Please try again in a moment.')} onRetry={fetchDoctors} />
+      ) : doctors.length === 0 ? (
+        <EmptyState icon={CheckCircle2} title="All caught up" description="There are no doctors waiting for approval." />
+      ) : (
+        <>
+          {/* Desktop: table */}
+          <div className="hidden overflow-hidden rounded-2xl border border-border/70 bg-card shadow-card md:block">
+            <table className="w-full text-sm">
+              <caption className="sr-only">Doctors waiting for approval</caption>
+              <thead className="bg-muted text-left text-label-sm uppercase tracking-wider text-muted-foreground">
+                <tr>
+                  <th scope="col" className="px-5 py-3.5">Doctor</th>
+                  <th scope="col" className="px-5 py-3">City</th>
+                  <th scope="col" className="px-5 py-3 text-right">Experience</th>
+                  <th scope="col" className="px-5 py-3 text-right">Fee</th>
+                  <th scope="col" className="px-5 py-3 text-right"><span className="sr-only">Actions</span></th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border/70">
+                {doctors.map((d) => (
+                  <tr key={d.id} className="transition-colors hover:bg-muted/50">
+                    <td className="px-5 py-4">
+                      <div className="flex items-center gap-3">
+                        <UserAvatar name={d.fullName} />
+                        <div className="min-w-0">
+                          <p className="truncate text-label-md">{d.fullName}</p>
+                          <span className="mt-1 inline-flex rounded-full bg-primary/10 px-2 py-0.5 text-label-sm text-primary">{d.specialtyName}</span>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-          )}
-        </motion.div>
-      </div>
+                    </td>
+                    <td className="px-5 py-4 text-muted-foreground">{d.clinicCity || '—'}</td>
+                    <td className="px-5 py-4 text-right tabular-nums">{d.yearsOfExperience} yrs</td>
+                    <td className="px-5 py-4 text-right tabular-nums">{formatFee(d.consultationFee)}</td>
+                    <td className="px-5 py-4"><div className="flex justify-end">{actions(d)}</div></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-      <Dialog open={!!actionId} onOpenChange={() => { setActionId(null); setActionType(null); }}>
+          {/* Mobile: cards */}
+          <ul className="space-y-3 md:hidden">
+            {doctors.map((d) => (
+              <li key={d.id} className="rounded-2xl border border-border/70 bg-card p-5 shadow-card">
+                <div className="flex items-center gap-3">
+                  <UserAvatar name={d.fullName} />
+                  <div className="min-w-0">
+                    <p className="truncate text-label-md">{d.fullName}</p>
+                    <span className="mt-1 inline-flex rounded-full bg-primary/10 px-2 py-0.5 text-label-sm text-primary">{d.specialtyName}</span>
+                  </div>
+                </div>
+                <dl className="mt-4 grid grid-cols-3 gap-2 rounded-xl bg-muted px-3 py-3 text-sm">
+                  <div><dt className="text-caption uppercase tracking-wider text-muted-foreground">City</dt><dd className="truncate font-medium">{d.clinicCity || '—'}</dd></div>
+                  <div><dt className="text-caption uppercase tracking-wider text-muted-foreground">Experience</dt><dd className="font-medium tabular-nums">{d.yearsOfExperience} yrs</dd></div>
+                  <div><dt className="text-caption uppercase tracking-wider text-muted-foreground">Fee</dt><dd className="font-medium tabular-nums">{formatFee(d.consultationFee)}</dd></div>
+                </dl>
+                <div className="mt-4">{actions(d)}</div>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      <Dialog open={!!actionId} onOpenChange={(o) => { if (!o) closeDialog(); }}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              {actionType === 'approve' ? <CheckCircle className="h-5 w-5 text-emerald-500" /> : <XCircle className="h-5 w-5 text-red-500" />}
-              {actionType === 'approve' ? 'Approve Doctor' : 'Reject Doctor'}
-            </DialogTitle>
+            <DialogTitle>{actionType === 'approve' ? `Approve ${target?.fullName ?? 'doctor'}?` : `Reject ${target?.fullName ?? 'doctor'}?`}</DialogTitle>
             <DialogDescription>
               {actionType === 'approve'
-                ? 'This doctor will be able to set their schedule and accept appointments.'
-                : 'This doctor account will be suspended.'}
+                ? 'They’ll appear in search, can publish their hours, and will be notified.'
+                : 'Rejecting suspends the account: it’s deactivated and the doctor can no longer sign in.'}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => { setActionId(null); setActionType(null); }}>Cancel</Button>
-            <Button
-              onClick={handleAction}
-              disabled={submitting}
-              className={actionType === 'approve' ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-red-600 hover:bg-red-700'}
-            >
-              {submitting ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" /> : 'Confirm'}
+            <Button variant="outline" onClick={closeDialog} disabled={submitting}>Cancel</Button>
+            <Button variant={actionType === 'approve' ? 'default' : 'destructive'} onClick={handleAction} disabled={submitting}>
+              {submitting && <Spinner aria-hidden="true" />}
+              {actionType === 'approve' ? 'Approve doctor' : 'Reject & suspend'}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </Page>
   );
 }

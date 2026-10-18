@@ -1,78 +1,111 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { authApi } from '@/api';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Stethoscope, CheckCircle, XCircle } from 'lucide-react';
+import { Spinner } from '@/components/ui/spinner';
+import { AuthLayout } from '@/components/layout/AuthLayout';
+import { CheckCircle2, Clock, XCircle } from 'lucide-react';
+import { getApiErrorMessage, isRateLimited } from '@/lib/api-error';
+
+type Status = 'loading' | 'success' | 'error' | 'rateLimited';
 
 export function ConfirmEmailPage() {
   const [searchParams] = useSearchParams();
-  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const userId = searchParams.get('userId');
   const token = searchParams.get('token');
+  // A link without its parameters can't be confirmed; no request needed
+  const [status, setStatus] = useState<Status>(() => (userId && token ? 'loading' : 'error'));
+  const [rateLimitMessage, setRateLimitMessage] = useState('');
 
   const called = useRef(false);
 
-useEffect(() => {
-  if (called.current) return;
-  called.current = true;
+  const confirm = useCallback(() => {
+    if (!userId || !token) return;
+    authApi
+      .confirmEmail({ userId, token })
+      .then(() => setStatus('success'))
+      .catch((err: unknown) => {
+        // A 429 says nothing about the link (API contract §2.7), so don't call it invalid
+        if (isRateLimited(err)) {
+          setRateLimitMessage(getApiErrorMessage(err, 'Too many attempts. Please wait a minute and try again.'));
+          setStatus('rateLimited');
+        } else {
+          setStatus('error');
+        }
+      });
+  }, [userId, token]);
 
-  if (!userId || !token) {
-    setStatus('error');
-    return;
+  useEffect(() => {
+    if (called.current) return;
+    called.current = true;
+    confirm();
+  }, [confirm]);
+
+  if (status === 'rateLimited') {
+    return (
+      <AuthLayout title="Too many attempts" description={rateLimitMessage}>
+        <div role="alert" className="rounded-xl bg-muted p-6">
+          <span className="inline-flex size-11 items-center justify-center rounded-xl bg-warning/10 text-warning">
+            <Clock className="size-5" aria-hidden="true" />
+          </span>
+          <p className="mt-4 text-body-md text-muted-foreground">
+            Your email hasn't been confirmed yet. Try the same link again once the wait is over.
+          </p>
+          <Button
+            className="mt-6 w-full"
+            onClick={() => {
+              setStatus('loading');
+              confirm();
+            }}
+          >
+            Try again
+          </Button>
+        </div>
+      </AuthLayout>
+    );
   }
-  authApi
-    .confirmEmail({ userId, token })
-    .then(() => setStatus('success'))
-    .catch(() => setStatus('error'));
-}, [userId, token]);
+
+  if (status === 'loading') {
+    return (
+      <AuthLayout title="Confirming your email…" description="This only takes a moment.">
+        <div role="status" className="flex items-center gap-3 rounded-xl bg-muted p-6 text-body-md text-muted-foreground">
+          <Spinner className="size-5 text-primary" aria-hidden="true" /> Verifying your confirmation link
+        </div>
+      </AuthLayout>
+    );
+  }
+
+  if (status === 'success') {
+    return (
+      <AuthLayout title="Email confirmed" description="Your account is ready. Sign in to book your first appointment.">
+        <div role="status" className="rounded-xl bg-muted p-6">
+          <span className="inline-flex size-11 items-center justify-center rounded-xl bg-success/10 text-success">
+            <CheckCircle2 className="size-5" aria-hidden="true" />
+          </span>
+          <p className="mt-4 text-body-md text-muted-foreground">
+            Doctors: your profile becomes visible to patients once the clinic team approves it.
+          </p>
+          <Button asChild className="mt-6 w-full">
+            <Link to="/login">Sign in</Link>
+          </Button>
+        </div>
+      </AuthLayout>
+    );
+  }
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gradient-to-b from-teal-50/40 to-white py-12 px-4">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="w-full max-w-md text-center">
-        <Link to="/" className="inline-flex items-center gap-2.5 mb-6">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 shadow-md">
-            <Stethoscope className="h-5 w-5 text-white" />
-          </div>
-          <span className="text-2xl font-bold text-gradient">ClinicFlow</span>
-        </Link>
-
-        <Card className="border-slate-100 shadow-lg">
-          <CardContent className="p-8">
-            {status === 'loading' && (
-              <div className="py-4">
-                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-teal-600 mx-auto mb-4" />
-                <p className="text-sm text-slate-500">Confirming your email...</p>
-              </div>
-            )}
-            {status === 'success' && (
-              <div className="py-4">
-                <CheckCircle className="h-12 w-12 text-teal-500 mx-auto mb-4" />
-                <h2 className="text-xl font-bold text-slate-900 mb-2">Email Confirmed!</h2>
-                <p className="text-sm text-slate-500 mb-6">
-                  Your email has been verified. You can now sign in to your account.
-                </p>
-                <Button asChild className="bg-teal-600 hover:bg-teal-700">
-                  <Link to="/login">Sign In</Link>
-                </Button>
-              </div>
-            )}
-            {status === 'error' && (
-              <div className="py-4">
-                <XCircle className="h-12 w-12 text-red-400 mx-auto mb-4" />
-                <h2 className="text-xl font-bold text-slate-900 mb-2">Confirmation Failed</h2>
-                <p className="text-sm text-slate-500 mb-6">
-                  The confirmation link is invalid or has expired.
-                </p>
-                <Button asChild variant="outline">
-                  <Link to="/login">Go to Sign In</Link>
-                </Button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </motion.div>
-    </div>
+    <AuthLayout title="This link didn’t work" description="The confirmation link is invalid or has expired.">
+      <div role="alert" className="rounded-xl bg-muted p-6">
+        <span className="inline-flex size-11 items-center justify-center rounded-xl bg-destructive/10 text-destructive">
+          <XCircle className="size-5" aria-hidden="true" />
+        </span>
+        <p className="mt-4 text-body-md text-muted-foreground">
+          Links can only be used once. If you’ve already confirmed your email, you can sign in now.
+        </p>
+        <Button asChild variant="outline" className="mt-6 w-full">
+          <Link to="/login">Go to sign in</Link>
+        </Button>
+      </div>
+    </AuthLayout>
   );
 }

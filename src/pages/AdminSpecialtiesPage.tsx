@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState } from 'react';
 import { adminApi } from '@/api';
 import type { Specialty, CreateSpecialtyRequest } from '@/types';
+import { getApiErrorMessage } from '@/lib/api-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Spinner } from '@/components/ui/spinner';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent } from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
 import {
   Dialog,
   DialogContent,
@@ -14,60 +16,59 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
-import {
-  Shield,
-  Plus,
-  Pencil,
-  Trash2,
-  AlertTriangle,
-} from 'lucide-react';
+import { Page, PageHeader } from '@/components/layout/Page';
+import { EmptyState, ErrorState, LoadingState } from '@/components/states';
+import { useApiQuery } from '@/hooks/use-api-query';
+import { Field } from '@/components/form/Field';
+import { Pencil, Plus, Search, Shield, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
+const NAME_MAX_LENGTH = 100;
+const DESCRIPTION_MAX_LENGTH = 500;
+
+type SpecialtyForm = CreateSpecialtyRequest & { isActive: boolean };
+
 export function AdminSpecialtiesPage() {
-  const [specialties, setSpecialties] = useState<Specialty[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, loading, error, reload: fetchSpecialties } = useApiQuery(() =>
+    adminApi.getAllSpecialties().then((res) => res.data)
+  );
+  const specialties: Specialty[] = data ?? [];
+  const [query, setQuery] = useState('');
   const [showCreate, setShowCreate] = useState(false);
   const [showEdit, setShowEdit] = useState<Specialty | null>(null);
   const [showDelete, setShowDelete] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const [form, setForm] = useState<CreateSpecialtyRequest>({
+  // isActive is always sent: true for a new specialty, the switch's value on edit (API contract #41, #42)
+  const [form, setForm] = useState<SpecialtyForm>({
     name: '',
     description: '',
     iconUrl: '',
+    isActive: true,
   });
 
-  const fetchSpecialties = async () => {
-    setLoading(true);
-    try {
-      const res = await adminApi.getAllSpecialties();
-      setSpecialties(res.data);
-    } catch {
-      toast.error('Failed to load specialties');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchSpecialties();
-  }, []);
-
   const resetForm = () => {
-    setForm({ name: '', description: '', iconUrl: '' });
+    setForm({ name: '', description: '', iconUrl: '', isActive: true });
   };
+
+  // Optional fields must be omitted rather than sent as "" (iconUrl must be an absolute URL)
+  const toRequest = (): CreateSpecialtyRequest => ({
+    name: form.name.trim(),
+    description: form.description?.trim() || undefined,
+    iconUrl: form.iconUrl?.trim() || undefined,
+    isActive: form.isActive,
+  });
 
   const handleCreate = async () => {
     setSubmitting(true);
     try {
-      await adminApi.createSpecialty(form);
+      await adminApi.createSpecialty(toRequest());
       toast.success('Specialty created');
       setShowCreate(false);
       resetForm();
       fetchSpecialties();
-    } catch (err: any) {
-      toast.error(err.response?.data?.title || 'Failed to create');
+    } catch (err) {
+      toast.error(getApiErrorMessage(err, 'Failed to create'));
     } finally {
       setSubmitting(false);
     }
@@ -77,13 +78,13 @@ export function AdminSpecialtiesPage() {
     if (!showEdit) return;
     setSubmitting(true);
     try {
-      await adminApi.updateSpecialty(showEdit.id, form);
+      await adminApi.updateSpecialty(showEdit.id, toRequest());
       toast.success('Specialty updated');
       setShowEdit(null);
       resetForm();
       fetchSpecialties();
-    } catch (err: any) {
-      toast.error(err.response?.data?.title || 'Failed to update');
+    } catch (err) {
+      toast.error(getApiErrorMessage(err, 'Failed to update'));
     } finally {
       setSubmitting(false);
     }
@@ -97,125 +98,183 @@ export function AdminSpecialtiesPage() {
       toast.success('Specialty deleted');
       setShowDelete(null);
       fetchSpecialties();
-    } catch (err: any) {
-      toast.error(err.response?.data?.title || 'Failed to delete');
+    } catch (err) {
+      toast.error(getApiErrorMessage(err, 'Failed to delete'));
     } finally {
       setSubmitting(false);
     }
   };
 
   const openEdit = (s: Specialty) => {
-    setForm({ name: s.name, description: s.description || '', iconUrl: s.iconUrl || '' });
+    setForm({ name: s.name, description: s.description || '', iconUrl: s.iconUrl || '', isActive: s.isActive });
     setShowEdit(s);
   };
 
+  const closeForm = () => {
+    setShowCreate(false);
+    setShowEdit(null);
+    resetForm();
+  };
+
+  const activeCount = specialties.filter((s) => s.isActive).length;
+  const q = query.trim().toLowerCase();
+  const visible = q ? specialties.filter((s) => s.name.toLowerCase().includes(q) || s.description?.toLowerCase().includes(q)) : specialties;
+  const deleteTarget = specialties.find((s) => s.id === showDelete);
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-50/40 to-white py-8 sm:py-12">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900">Specialties</h1>
-              <p className="text-sm text-slate-500">Manage medical specialties</p>
-            </div>
-            <Button onClick={() => { resetForm(); setShowCreate(true); }} className="bg-teal-600 hover:bg-teal-700">
-              <Plus className="h-4 w-4 mr-2" /> Add Specialty
-            </Button>
-          </div>
+    <Page width="wide">
+      <PageHeader
+        eyebrow="Clinic administration"
+        title="Specialties"
+        description={
+          loading || error
+            ? 'The medical specialties doctors can register under.'
+            : `${specialties.length} specialties · ${activeCount} active. Doctors choose one when they register.`
+        }
+        actions={
+          <Button variant="strong" onClick={() => { resetForm(); setShowCreate(true); }}>
+            <Plus aria-hidden="true" /> Add specialty
+          </Button>
+        }
+      />
 
-          {loading ? (
-            <div className="flex justify-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600" />
+      {loading ? (
+        <LoadingState label="Loading specialties…" />
+      ) : error ? (
+        <ErrorState title="Couldn’t load specialties" message={getApiErrorMessage(error, 'Please try again in a moment.')} onRetry={fetchSpecialties} />
+      ) : specialties.length === 0 ? (
+        <EmptyState
+          icon={Shield}
+          title="No specialties yet"
+          description="Add a specialty so doctors can register under it."
+          action={<Button onClick={() => { resetForm(); setShowCreate(true); }}><Plus aria-hidden="true" /> Add specialty</Button>}
+        />
+      ) : (
+        <section aria-labelledby="registry-heading" className="rounded-2xl border border-border/70 bg-card shadow-card">
+          <div className="flex flex-col gap-3 border-b border-border/70 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <h2 id="registry-heading" className="font-display text-headline-md">Specialty registry</h2>
+            <div className="relative sm:w-72">
+              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+              <Input
+                type="search"
+                aria-label="Search specialties"
+                placeholder="Search specialties"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="h-9 bg-muted pl-10"
+              />
             </div>
-          ) : specialties.length === 0 ? (
-            <Card className="border-slate-100">
-              <CardContent className="p-12 text-center">
-                <Shield className="h-12 w-12 text-slate-300 mx-auto mb-4" />
-                <p className="text-sm text-slate-500">No specialties found</p>
-              </CardContent>
-            </Card>
+          </div>
+          {visible.length === 0 ? (
+            <p className="px-5 py-10 text-center text-body-md text-muted-foreground">No specialties match “{query.trim()}”.</p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {specialties.map((s, i) => (
-                <motion.div key={s.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
-                  <Card className="border-slate-100 hover:border-teal-200 transition-colors">
-                    <CardContent className="p-4">
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="h-10 w-10 rounded-lg bg-teal-50 flex items-center justify-center">
-                            <Shield className="h-5 w-5 text-teal-600" />
-                          </div>
-                          <div>
-                            <h3 className="font-semibold text-slate-900">{s.name}</h3>
-                            {s.description && <p className="text-xs text-slate-500 line-clamp-2 max-w-[200px]">{s.description}</p>}
-                            <span className={`inline-block mt-1 px-1.5 py-0.5 rounded text-xs ${s.isActive ? 'bg-teal-50 text-teal-600' : 'bg-slate-100 text-slate-500'}`}>
-                              {s.isActive ? 'Active' : 'Inactive'}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-teal-600" onClick={() => openEdit(s)}>
-                            <Pencil className="h-3.5 w-3.5" />
-                          </Button>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-red-600" onClick={() => setShowDelete(s.id)}>
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </Button>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
+        <ul className="divide-y divide-border/70">
+          {visible.map((s) => (
+            <li key={s.id} className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:px-5">
+              <div className="flex min-w-0 flex-1 items-start gap-3">
+                <span className="mt-0.5 inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-secondary text-secondary-foreground">
+                  <Shield className="size-[1.125rem]" aria-hidden="true" />
+                </span>
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="text-label-md">{s.name}</h3>
+                    {s.isActive ? (
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-success/25 bg-success/10 px-2 py-0.5 text-label-sm text-success"><span className="size-1.5 rounded-full bg-success" aria-hidden="true" />Active</span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted px-2 py-0.5 text-label-sm text-muted-foreground"><span className="size-1.5 rounded-full bg-muted-foreground/60" aria-hidden="true" />Inactive</span>
+                    )}
+                  </div>
+                  <p className="mt-1 line-clamp-2 text-body-md text-muted-foreground">{s.description || 'No description'}</p>
+                </div>
+              </div>
+              <div className="flex gap-1 self-end sm:self-auto">
+                <Button variant="ghost" size="sm" onClick={() => openEdit(s)} aria-label={`Edit ${s.name}`}>
+                  <Pencil aria-hidden="true" /> Edit
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-destructive hover:bg-destructive/[0.06] hover:text-destructive"
+                  onClick={() => setShowDelete(s.id)}
+                  aria-label={`Delete ${s.name}`}
+                >
+                  <Trash2 aria-hidden="true" /> Delete
+                </Button>
+              </div>
+            </li>
+          ))}
+        </ul>
           )}
-        </motion.div>
-      </div>
+        </section>
+      )}
 
-      {/* Create/Edit Dialog */}
-      <Dialog open={showCreate || !!showEdit} onOpenChange={() => { setShowCreate(false); setShowEdit(null); resetForm(); }}>
+      {/* Create / edit dialog */}
+      <Dialog open={showCreate || !!showEdit} onOpenChange={(o) => { if (!o) closeForm(); }}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{showEdit ? 'Edit Specialty' : 'Add Specialty'}</DialogTitle>
-            <DialogDescription>{showEdit ? 'Update the specialty details' : 'Create a new medical specialty'}</DialogDescription>
+            <DialogTitle>{showEdit ? `Edit ${showEdit.name}` : 'Add specialty'}</DialogTitle>
+            <DialogDescription>{showEdit ? 'Update how this specialty appears to patients and doctors.' : 'Doctors will be able to register under this specialty.'}</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-3">
-            <div className="space-y-2">
-              <Label>Name *</Label>
-              <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="e.g., Cardiology" maxLength={100} />
+          <form
+            id="specialty-form"
+            className="space-y-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (!form.name.trim() || submitting) return;
+              if (showEdit) handleEdit();
+              else handleCreate();
+            }}
+          >
+            <Field id="specialty-name" label="Name" required hint="Must be unique.">
+              <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="e.g. Cardiology" maxLength={NAME_MAX_LENGTH} />
+            </Field>
+            <Field id="specialty-description" label="Description" optional hint={`${form.description?.length ?? 0}/${DESCRIPTION_MAX_LENGTH}`}>
+              <Textarea rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="What this specialty covers" maxLength={DESCRIPTION_MAX_LENGTH} />
+            </Field>
+            <Field id="specialty-icon" label="Icon URL" optional hint="A full URL starting with https://">
+              <Input type="url" inputMode="url" value={form.iconUrl} onChange={(e) => setForm({ ...form, iconUrl: e.target.value })} placeholder="https://…" />
+            </Field>
+            <div className="flex items-start justify-between gap-4 rounded-xl bg-muted px-4 py-3">
+              <div>
+                <Label htmlFor="specialty-active">Active</Label>
+                <p id="specialty-active-hint" className="mt-1 text-body-sm text-muted-foreground">
+                  Inactive specialties are hidden from patients and from doctor registration. Turn it back on at any time.
+                </p>
+              </div>
+              <Switch
+                id="specialty-active"
+                aria-describedby="specialty-active-hint"
+                checked={form.isActive}
+                onCheckedChange={(v) => setForm({ ...form, isActive: v })}
+              />
             </div>
-            <div className="space-y-2">
-              <Label>Description</Label>
-              <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Description..." maxLength={500} />
-            </div>
-            <div className="space-y-2">
-              <Label>Icon URL</Label>
-              <Input value={form.iconUrl} onChange={(e) => setForm({ ...form, iconUrl: e.target.value })} placeholder="https://..." />
-            </div>
-          </div>
+          </form>
           <DialogFooter>
-            <Button variant="outline" onClick={() => { setShowCreate(false); setShowEdit(null); resetForm(); }}>Cancel</Button>
-            <Button onClick={showEdit ? handleEdit : handleCreate} disabled={submitting || !form.name} className="bg-teal-600 hover:bg-teal-700">
-              {submitting ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" /> : (showEdit ? 'Save Changes' : 'Create')}
+            <Button variant="outline" onClick={closeForm} disabled={submitting}>Cancel</Button>
+            <Button type="submit" form="specialty-form" disabled={submitting || !form.name.trim()}>
+              {submitting && <Spinner aria-hidden="true" />}
+              {showEdit ? 'Save changes' : 'Add specialty'}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Delete Dialog */}
-      <Dialog open={!!showDelete} onOpenChange={() => setShowDelete(null)}>
+      {/* Delete dialog */}
+      <Dialog open={!!showDelete} onOpenChange={(o) => { if (!o) setShowDelete(null); }}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2"><AlertTriangle className="h-5 w-5 text-red-500" /> Delete Specialty</DialogTitle>
-            <DialogDescription>This will permanently delete this specialty. Only allowed if no doctors are assigned.</DialogDescription>
+            <DialogTitle>Delete {deleteTarget?.name ?? 'specialty'}?</DialogTitle>
+            <DialogDescription>This can’t be undone. Specialties that doctors are registered under can’t be deleted.</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDelete(null)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setShowDelete(null)} disabled={submitting}>Cancel</Button>
             <Button variant="destructive" onClick={handleDelete} disabled={submitting}>
-              {submitting ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" /> : 'Delete'}
+              {submitting && <Spinner aria-hidden="true" />}
+              {submitting ? 'Deleting…' : 'Delete specialty'}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </Page>
   );
 }

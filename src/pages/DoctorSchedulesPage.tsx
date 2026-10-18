@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState } from 'react';
 import { doctorsApi } from '@/api';
-import type { Schedule, CreateScheduleRequest } from '@/types';
+import type { Schedule, CreateScheduleRequest, DayOfWeek } from '@/types';
+import { getApiErrorMessage } from '@/lib/api-error';
+import { formatTimeRange } from '@/lib/format';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent } from '@/components/ui/card';
+import { Spinner } from '@/components/ui/spinner';
 import {
   Select,
   SelectContent,
@@ -22,66 +23,93 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
-import {
-  Clock,
-  Plus,
-  Pencil,
-  Trash2,
-  CalendarDays,
-  AlertTriangle,
-} from 'lucide-react';
+import { Page, PageHeader } from '@/components/layout/Page';
+import { ErrorState, LoadingState } from '@/components/states';
+import { useApiQuery } from '@/hooks/use-api-query';
+import { Field } from '@/components/form/Field';
+import { FormAlert } from '@/components/form/FormAlert';
+import { cn } from '@/lib/utils';
+import { Info, Pencil, Plus, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const weekDays: DayOfWeek[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+const slotDurations = [10, 15, 20, 30, 45, 60, 90, 120];
+
+const defaultCreateForm: Omit<CreateScheduleRequest, 'dayOfWeek'> = {
+  startTime: '09:00',
+  endTime: '17:00',
+  slotDurationMinutes: 30,
+};
+
+// "HH:mm" or "HH:mm:ss" → minutes since midnight
+const toMinutes = (time: string) => {
+  const [hours, minutes] = time.split(':').map(Number);
+  return hours * 60 + minutes;
+};
+
+// Mirrors the backend's CreateScheduleRequestValidator so the doctor sees the problem before submitting
+const getTimeWindowError = (startTime: string, endTime: string, slotDurationMinutes: number) => {
+  if (!startTime || !endTime) return 'Start and end times are required.';
+  const windowMinutes = toMinutes(endTime) - toMinutes(startTime);
+  if (windowMinutes <= 0) return 'End time must be after start time.';
+  if (windowMinutes < slotDurationMinutes) {
+    return `The time window must fit at least one ${slotDurationMinutes}-minute slot.`;
+  }
+  return null;
+};
+
+const slotCount = (s: Pick<Schedule, 'startTime' | 'endTime' | 'slotDurationMinutes'>) =>
+  Math.max(0, Math.floor((toMinutes(s.endTime) - toMinutes(s.startTime)) / s.slotDurationMinutes));
 
 export function DoctorSchedulesPage() {
-  const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, loading, error, reload: fetchSchedules } = useApiQuery(() =>
+    doctorsApi.getSchedules().then((res) => res.data)
+  );
+  const schedules: Schedule[] = data ?? [];
   const [showCreate, setShowCreate] = useState(false);
   const [showEdit, setShowEdit] = useState<Schedule | null>(null);
   const [showDelete, setShowDelete] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const [createForm, setCreateForm] = useState<CreateScheduleRequest>({
-    dayOfWeek: 1,
-    startTime: '09:00',
-    endTime: '17:00',
-    slotDurationMinutes: 30,
+    dayOfWeek: 'Monday',
+    ...defaultCreateForm,
   });
 
-  const fetchSchedules = async () => {
-    setLoading(true);
-    try {
-      const res = await doctorsApi.getSchedules();
-      setSchedules(res.data);
-    } catch {
-      toast.error('Failed to load schedules');
-    } finally {
-      setLoading(false);
-    }
+  // The API allows one schedule per weekday, so only days without one can be added
+  const scheduledDays = new Set(schedules.map((s) => s.dayOfWeek));
+  const availableDays = weekDays.filter((day) => !scheduledDays.has(day));
+
+  const createError = getTimeWindowError(createForm.startTime, createForm.endTime, createForm.slotDurationMinutes);
+  const editError = showEdit
+    ? getTimeWindowError(showEdit.startTime, showEdit.endTime, showEdit.slotDurationMinutes)
+    : null;
+
+  const openCreate = (day?: DayOfWeek) => {
+    const dayOfWeek = day ?? availableDays[0];
+    if (!dayOfWeek) return;
+    setCreateForm({ dayOfWeek, ...defaultCreateForm });
+    setShowCreate(true);
   };
 
-  useEffect(() => {
-    fetchSchedules();
-  }, []);
-
   const handleCreate = async () => {
+    if (createError || scheduledDays.has(createForm.dayOfWeek)) return;
     setSubmitting(true);
     try {
       await doctorsApi.createSchedule(createForm);
-      toast.success('Schedule created');
+      toast.success(`Schedule created for ${createForm.dayOfWeek}`);
       setShowCreate(false);
-      setCreateForm({ dayOfWeek: 1, startTime: '09:00', endTime: '17:00', slotDurationMinutes: 30 });
       fetchSchedules();
-    } catch (err: any) {
-      toast.error(err.response?.data?.title || 'Failed to create schedule');
+    } catch (err) {
+      toast.error(getApiErrorMessage(err, 'Failed to create schedule'));
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleEdit = async () => {
-    if (!showEdit) return;
+    if (!showEdit || editError) return;
     setSubmitting(true);
     try {
       await doctorsApi.updateSchedule(showEdit.id, {
@@ -93,8 +121,8 @@ export function DoctorSchedulesPage() {
       toast.success('Schedule updated');
       setShowEdit(null);
       fetchSchedules();
-    } catch (err: any) {
-      toast.error(err.response?.data?.title || 'Failed to update schedule');
+    } catch (err) {
+      toast.error(getApiErrorMessage(err, 'Failed to update schedule'));
     } finally {
       setSubmitting(false);
     }
@@ -108,174 +136,224 @@ export function DoctorSchedulesPage() {
       toast.success('Schedule deleted');
       setShowDelete(null);
       fetchSchedules();
-    } catch (err: any) {
-      toast.error(err.response?.data?.title || 'Failed to delete schedule');
+    } catch (err) {
+      toast.error(getApiErrorMessage(err, 'Failed to delete schedule'));
     } finally {
       setSubmitting(false);
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-50/40 to-white py-8 sm:py-12">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900">My Schedules</h1>
-              <p className="text-sm text-slate-500">Set your weekly availability for appointments</p>
-            </div>
-            <Button onClick={() => setShowCreate(true)} className="bg-teal-600 hover:bg-teal-700">
-              <Plus className="h-4 w-4 mr-2" /> Add Schedule
-            </Button>
-          </div>
+  const deleteTarget = schedules.find((s) => s.id === showDelete);
 
-          {loading ? (
-            <div className="flex justify-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600" />
+  return (
+    <Page width="full">
+      <PageHeader
+        eyebrow="Clinic workspace"
+        title="Weekly schedule"
+        description="Set your working hours for each day. Patients can book slots generated from these hours for the next 14 days."
+        actions={
+          <Button
+            variant="strong"
+            onClick={() => openCreate()}
+            disabled={loading || !!error || availableDays.length === 0}
+            title={availableDays.length === 0 ? 'Every day already has a schedule' : undefined}
+          >
+            <Plus aria-hidden="true" /> Add hours
+          </Button>
+        }
+      />
+
+      {loading ? (
+        <LoadingState label="Loading your schedule…" />
+      ) : error ? (
+        <ErrorState title="Couldn’t load your schedule" message={getApiErrorMessage(error, 'Please try again in a moment.')} onRetry={fetchSchedules} />
+      ) : (
+        <>
+          {schedules.length === 0 && (
+            <div className="mb-4 flex items-start gap-3 rounded-xl border border-info/15 bg-info/[0.06] px-4 py-3.5 text-body-md">
+              <Info className="mt-0.5 size-4 shrink-0 text-info" aria-hidden="true" />
+              <p>
+                <span className="font-semibold">You have no working hours yet.</span>{' '}
+                <span className="text-muted-foreground">Add hours to at least one day so patients can book you.</span>
+              </p>
             </div>
-          ) : schedules.length === 0 ? (
-            <Card className="border-slate-100">
-              <CardContent className="p-12 text-center">
-                <CalendarDays className="h-12 w-12 text-slate-300 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-slate-700 mb-1">No schedules yet</h3>
-                <p className="text-sm text-slate-400 mb-4">Add your first weekly schedule to start accepting appointments</p>
-                <Button onClick={() => setShowCreate(true)} className="bg-teal-600 hover:bg-teal-700">
-                  <Plus className="h-4 w-4 mr-2" /> Add Schedule
-                </Button>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="space-y-3">
-              {weekDays.map((day, dayIndex) => {
-                const daySchedules = schedules.filter((s) => String(s.dayOfWeek) === day);
+          )}
+          <section aria-labelledby="planner-heading" className="rounded-2xl border border-border/70 bg-card p-5 shadow-card sm:p-6">
+            <div className="mb-5">
+              <h2 id="planner-heading" className="font-display text-headline-md">Working hours planner</h2>
+              <p className="mt-0.5 text-body-sm text-muted-foreground">Sunday to Saturday. Changing a day regenerates its future open slots; booked visits are kept.</p>
+            </div>
+            <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
+              {weekDays.map((day) => {
+                const s = schedules.find((x) => x.dayOfWeek === day);
+                const status = !s ? 'Not available' : s.isActive ? 'Accepting bookings' : 'Paused — not bookable';
                 return (
-                  <motion.div key={day} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: dayIndex * 0.03 }}>
-                    <Card className="border-slate-100">
-                      <CardContent className="p-4">
-                        <div className="flex items-center justify-between mb-2">
-                          <h3 className="font-semibold text-slate-800">{day}</h3>
-                          <Button variant="ghost" size="sm" onClick={() => setShowCreate(true)} className="text-teal-600 hover:text-teal-700 h-7 text-xs">
-                            <Plus className="h-3.5 w-3.5 mr-1" /> Add
+                  <li key={day} className={cn('flex flex-col rounded-xl p-3', s ? 'bg-muted' : 'bg-muted/50')}>
+                    <div className="flex items-center justify-between gap-2 px-1">
+                      <h3 className={cn('text-label-md', !s && 'text-muted-foreground')}>{day}</h3>
+                      <span
+                        className={cn('size-2 rounded-full', !s ? 'bg-input' : s.isActive ? 'bg-primary' : 'bg-warning')}
+                        aria-hidden="true"
+                      />
+                      <span className="sr-only">{status}</span>
+                    </div>
+                    {s ? (
+                      <>
+                        <div className="mt-3 flex-1 rounded-lg bg-card px-3 py-2.5 shadow-xs">
+                          <p className="text-sm font-semibold tabular-nums">{formatTimeRange(s.startTime, s.endTime)}</p>
+                          <p className="mt-1 text-body-sm text-muted-foreground">
+                            {s.slotDurationMinutes}-min slots · {slotCount(s)} per day
+                          </p>
+                          {!s.isActive && (
+                            <p className="mt-2 inline-flex rounded-full bg-warning/10 px-2 py-0.5 text-label-sm text-warning">Paused</p>
+                          )}
+                        </div>
+                        <div className="mt-3 flex gap-1.5">
+                          <Button variant="secondary" size="sm" className="flex-1 bg-card hover:bg-accent" onClick={() => setShowEdit(s)} aria-label={`Edit ${day} schedule`}>
+                            <Pencil aria-hidden="true" /> Edit
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon-sm"
+                            className="text-destructive hover:bg-destructive/[0.08] hover:text-destructive"
+                            onClick={() => setShowDelete(s.id)}
+                            aria-label={`Delete ${day} schedule`}
+                          >
+                            <Trash2 aria-hidden="true" />
                           </Button>
                         </div>
-                        {daySchedules.length === 0 ? (
-                          <p className="text-sm text-slate-400 py-2">No schedule set</p>
-                        ) : (
-                          <div className="space-y-2">
-                            {daySchedules.map((s) => (
-                              <div key={s.id} className={`flex items-center justify-between p-3 rounded-lg ${s.isActive ? 'bg-teal-50/50 border border-teal-100' : 'bg-slate-50 border border-slate-100'}`}>
-                                <div className="flex items-center gap-3">
-                                  <Clock className={`h-4 w-4 ${s.isActive ? 'text-teal-600' : 'text-slate-400'}`} />
-                                  <span className="text-sm font-medium text-slate-700">{s.startTime} - {s.endTime}</span>
-                                  <span className="text-xs text-slate-400">({s.slotDurationMinutes} min slots)</span>
-                                  {!s.isActive && <span className="px-1.5 py-0.5 rounded text-xs bg-slate-200 text-slate-500">Inactive</span>}
-                                </div>
-                                <div className="flex items-center gap-1">
-                                  <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-teal-600" onClick={() => setShowEdit(s)}>
-                                    <Pencil className="h-3.5 w-3.5" />
-                                  </Button>
-                                  <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-red-600" onClick={() => setShowDelete(s.id)}>
-                                    <Trash2 className="h-3.5 w-3.5" />
-                                  </Button>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  </motion.div>
+                      </>
+                    ) : (
+                      <>
+                        <p className="flex flex-1 items-center justify-center px-2 py-6 text-center text-body-sm text-muted-foreground">Day off</p>
+                        <Button variant="outline" size="sm" onClick={() => openCreate(day)} aria-label={`Add hours for ${day}`}>
+                          <Plus aria-hidden="true" /> Add hours
+                        </Button>
+                      </>
+                    )}
+                  </li>
                 );
               })}
-            </div>
-          )}
-        </motion.div>
-      </div>
+            </ul>
+          </section>
+        </>
+      )}
 
-      {/* Create Dialog */}
+      {/* Create dialog */}
       <Dialog open={showCreate} onOpenChange={setShowCreate}>
         <DialogContent className="sm:max-w-md">
-          <DialogHeader><DialogTitle>Add Schedule</DialogTitle><DialogDescription>Set your availability for a day of the week</DialogDescription></DialogHeader>
-          <div className="space-y-4 py-3">
-            <div className="space-y-2">
-              <Label>Day of Week</Label>
-              <Select value={String(createForm.dayOfWeek)} onValueChange={(v) => setCreateForm({ ...createForm, dayOfWeek: Number(v) })}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+          <DialogHeader>
+            <DialogTitle>Add working hours</DialogTitle>
+            <DialogDescription>Bookable slots are generated from these hours for the next 14 days.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="create-day" className="text-label-md">Day of week</Label>
+              <Select value={createForm.dayOfWeek} onValueChange={(v) => setCreateForm({ ...createForm, dayOfWeek: v as DayOfWeek })}>
+                <SelectTrigger id="create-day" className="w-full" aria-describedby="create-day-hint"><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  {weekDays.map((d, i) => (<SelectItem key={i} value={String(i)}>{d}</SelectItem>))}
+                  {availableDays.map((d) => (<SelectItem key={d} value={d}>{d}</SelectItem>))}
                 </SelectContent>
               </Select>
+              <p id="create-day-hint" className="text-body-sm text-muted-foreground">Only days without hours are listed. To change an existing day, edit it instead.</p>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-2"><Label>Start Time</Label><Input type="time" value={createForm.startTime} onChange={(e) => setCreateForm({ ...createForm, startTime: e.target.value })} /></div>
-              <div className="space-y-2"><Label>End Time</Label><Input type="time" value={createForm.endTime} onChange={(e) => setCreateForm({ ...createForm, endTime: e.target.value })} /></div>
+              <Field id="create-start" label="Start time" required>
+                <Input type="time" value={createForm.startTime} onChange={(e) => setCreateForm({ ...createForm, startTime: e.target.value })} />
+              </Field>
+              <Field id="create-end" label="End time" required>
+                <Input type="time" value={createForm.endTime} onChange={(e) => setCreateForm({ ...createForm, endTime: e.target.value })} />
+              </Field>
             </div>
-            <div className="space-y-2">
-              <Label>Slot Duration (minutes)</Label>
+            <div className="space-y-1.5">
+              <Label htmlFor="create-duration" className="text-label-md">Slot length</Label>
               <Select value={String(createForm.slotDurationMinutes)} onValueChange={(v) => setCreateForm({ ...createForm, slotDurationMinutes: Number(v) })}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger id="create-duration" className="w-full"><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  {[10, 15, 20, 30, 45, 60, 90, 120].map((m) => (<SelectItem key={m} value={String(m)}>{m} minutes</SelectItem>))}
+                  {slotDurations.map((m) => (<SelectItem key={m} value={String(m)}>{m} minutes</SelectItem>))}
                 </SelectContent>
               </Select>
             </div>
+            {createError ? (
+              <FormAlert>{createError}</FormAlert>
+            ) : (
+              <p className="rounded-xl bg-muted px-3.5 py-2.5 text-body-md text-muted-foreground">
+                {slotCount(createForm)} bookable slots on {createForm.dayOfWeek}s.
+              </p>
+            )}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCreate(false)}>Cancel</Button>
-            <Button onClick={handleCreate} disabled={submitting} className="bg-teal-600 hover:bg-teal-700">
-              {submitting ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" /> : 'Create Schedule'}
+            <Button variant="outline" onClick={() => setShowCreate(false)} disabled={submitting}>Cancel</Button>
+            <Button onClick={handleCreate} disabled={submitting || !!createError}>
+              {submitting && <Spinner aria-hidden="true" />}
+              {submitting ? 'Saving…' : 'Add hours'}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Edit Dialog */}
-      <Dialog open={!!showEdit} onOpenChange={() => setShowEdit(null)}>
+      {/* Edit dialog */}
+      <Dialog open={!!showEdit} onOpenChange={(open) => { if (!open) setShowEdit(null); }}>
         <DialogContent className="sm:max-w-md">
-          <DialogHeader><DialogTitle>Edit Schedule</DialogTitle><DialogDescription>Update your schedule for {showEdit && weekDays[showEdit.dayOfWeek]}</DialogDescription></DialogHeader>
+          <DialogHeader>
+            <DialogTitle>Edit {showEdit?.dayOfWeek} hours</DialogTitle>
+            <DialogDescription>Future open slots are regenerated. Booked appointments are kept.</DialogDescription>
+          </DialogHeader>
           {showEdit && (
-            <div className="space-y-4 py-3">
+            <div className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-2"><Label>Start Time</Label><Input type="time" value={showEdit.startTime} onChange={(e) => setShowEdit({ ...showEdit, startTime: e.target.value })} /></div>
-                <div className="space-y-2"><Label>End Time</Label><Input type="time" value={showEdit.endTime} onChange={(e) => setShowEdit({ ...showEdit, endTime: e.target.value })} /></div>
+                <Field id="edit-start" label="Start time" required>
+                  <Input type="time" value={showEdit.startTime} onChange={(e) => setShowEdit({ ...showEdit, startTime: e.target.value })} />
+                </Field>
+                <Field id="edit-end" label="End time" required>
+                  <Input type="time" value={showEdit.endTime} onChange={(e) => setShowEdit({ ...showEdit, endTime: e.target.value })} />
+                </Field>
               </div>
-              <div className="space-y-2">
-                <Label>Slot Duration (minutes)</Label>
+              <div className="space-y-1.5">
+                <Label htmlFor="edit-duration" className="text-label-md">Slot length</Label>
                 <Select value={String(showEdit.slotDurationMinutes)} onValueChange={(v) => setShowEdit({ ...showEdit, slotDurationMinutes: Number(v) })}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>{[10, 15, 20, 30, 45, 60, 90, 120].map((m) => (<SelectItem key={m} value={String(m)}>{m} minutes</SelectItem>))}</SelectContent>
+                  <SelectTrigger id="edit-duration" className="w-full"><SelectValue /></SelectTrigger>
+                  <SelectContent>{slotDurations.map((m) => (<SelectItem key={m} value={String(m)}>{m} minutes</SelectItem>))}</SelectContent>
                 </Select>
               </div>
-              <div className="flex items-center justify-between">
-                <Label>Active</Label>
-                <Switch checked={showEdit.isActive} onCheckedChange={(v) => setShowEdit({ ...showEdit, isActive: v })} />
+              <div className="flex items-start justify-between gap-4 rounded-xl bg-muted px-4 py-3">
+                <div>
+                  <Label htmlFor="edit-active">Accept bookings</Label>
+                  <p id="edit-active-hint" className="mt-1 text-body-sm text-muted-foreground">Turn off to pause this day without deleting it.</p>
+                </div>
+                <Switch id="edit-active" aria-describedby="edit-active-hint" checked={showEdit.isActive} onCheckedChange={(v) => setShowEdit({ ...showEdit, isActive: v })} />
               </div>
+              {editError && <FormAlert>{editError}</FormAlert>}
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowEdit(null)}>Cancel</Button>
-            <Button onClick={handleEdit} disabled={submitting} className="bg-teal-600 hover:bg-teal-700">
-              {submitting ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" /> : 'Save Changes'}
+            <Button variant="outline" onClick={() => setShowEdit(null)} disabled={submitting}>Cancel</Button>
+            <Button onClick={handleEdit} disabled={submitting || !!editError}>
+              {submitting && <Spinner aria-hidden="true" />}
+              {submitting ? 'Saving…' : 'Save changes'}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Delete Dialog */}
-      <Dialog open={!!showDelete} onOpenChange={() => setShowDelete(null)}>
+      {/* Delete dialog */}
+      <Dialog open={!!showDelete} onOpenChange={(open) => { if (!open) setShowDelete(null); }}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2"><AlertTriangle className="h-5 w-5 text-red-500" /> Delete Schedule</DialogTitle>
-            <DialogDescription>This will remove the schedule and stop generating future slots for this day.</DialogDescription>
+            <DialogTitle>Delete {deleteTarget?.dayOfWeek ?? 'this'} schedule?</DialogTitle>
+            <DialogDescription>
+              No new slots will be generated for this day. To stop bookings temporarily, edit the schedule and pause it instead.
+            </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDelete(null)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setShowDelete(null)} disabled={submitting}>Keep schedule</Button>
             <Button variant="destructive" onClick={handleDelete} disabled={submitting}>
-              {submitting ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" /> : 'Delete'}
+              {submitting && <Spinner aria-hidden="true" />}
+              {submitting ? 'Deleting…' : 'Delete schedule'}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </Page>
   );
 }

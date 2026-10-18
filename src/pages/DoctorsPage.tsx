@@ -1,10 +1,13 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { doctorsApi, specialtiesApi } from '@/api';
 import type { DoctorSummary, Specialty, DoctorSortBy } from '@/types';
+import { getApiErrorMessage } from '@/lib/api-error';
+import { formatFee } from '@/lib/format';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Select,
   SelectContent,
@@ -12,23 +15,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Card, CardContent } from '@/components/ui/card';
-import {
-  Star,
-  MapPin,
-  Stethoscope,
-  Briefcase,
-  Banknote,
-  Search,
-  SlidersHorizontal,
-  ChevronLeft,
-  ChevronRight,
-} from 'lucide-react';
+import { Page, PageHeader } from '@/components/layout/Page';
+import { EmptyState, ErrorState } from '@/components/states';
+import { Pagination } from '@/components/Pagination';
+import { UserAvatar } from '@/components/UserAvatar';
+import { RatingSummary } from '@/components/Rating';
+import { ArrowRight, Briefcase, MapPin, Search, Stethoscope } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { useApiQuery } from '@/hooks/use-api-query';
+
+const PAGE_SIZE = 12;
 
 export function DoctorsPage() {
-  const [doctors, setDoctors] = useState<DoctorSummary[]>([]);
-  const [specialties, setSpecialties] = useState<Specialty[]>([]);
-  const [loading, setLoading] = useState(true);
   const [specialtyId, setSpecialtyId] = useState<string>('all');
   const [city, setCity] = useState('');
   const [cityInput, setCityInput] = useState('');
@@ -36,209 +34,211 @@ export function DoctorsPage() {
   const [name, setName] = useState('');
   const [sortBy, setSortBy] = useState<DoctorSortBy>('Rating');
   const [pageNumber, setPageNumber] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
 
-  const fetchDoctors = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await doctorsApi.list({
-        ...(specialtyId !== 'all' ? { specialtyId: Number(specialtyId) } : {}),
-        ...(city ? { city } : {}),
-        ...(name ? { name } : {}),
-        sortBy,
-        pageNumber,
-        pageSize: 12,
-      });
-      setDoctors(res.data);
-      setHasMore(res.data.length === 12);
-    } catch {
-      // error handled silently
-    } finally {
-      setLoading(false);
-    }
-  }, [specialtyId, city, name, sortBy, pageNumber]);
+  // Fast filter changes are safe: useApiQuery ignores responses for an older key
+  const { data, loading, error, reload: fetchDoctors } = useApiQuery(
+    () =>
+      doctorsApi
+        .list({
+          ...(specialtyId !== 'all' ? { specialtyId: Number(specialtyId) } : {}),
+          ...(city ? { city } : {}),
+          ...(name ? { name } : {}),
+          sortBy,
+          pageNumber,
+          pageSize: PAGE_SIZE,
+        })
+        .then((res) => res.data),
+    `${specialtyId}|${city}|${name}|${sortBy}|${pageNumber}`
+  );
+  const doctors: DoctorSummary[] = data ?? [];
+  const hasMore = doctors.length === PAGE_SIZE;
 
-  useEffect(() => {
-    fetchDoctors();
-  }, [fetchDoctors]);
+  // The chips are a convenience; if specialties fail to load, "All specialties" still works
+  const { data: specialtiesData } = useApiQuery(() => specialtiesApi.getAll().then((res) => res.data));
+  const specialties: Specialty[] = specialtiesData ?? [];
 
   useEffect(() => {
-    specialtiesApi.getAll().then((res) => setSpecialties(res.data)).catch(() => {});
-  }, []);
+    const timer = setTimeout(() => {
+      setCity(cityInput);
+      setPageNumber(1);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [cityInput]);
 
   useEffect(() => {
-  const timer = setTimeout(() => {
+    const timer = setTimeout(() => {
+      setName(nameInput);
+      setPageNumber(1);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [nameInput]);
+
+  // Apply typed filters immediately instead of waiting for the debounce
+  const applySearch = () => {
+    setName(nameInput);
     setCity(cityInput);
     setPageNumber(1);
-  }, 300);
-  return () => clearTimeout(timer);
-}, [cityInput]);
+  };
 
-useEffect(() => {
-  const timer = setTimeout(() => {
-    setName(nameInput);
+  const hasFilters = name !== '' || city !== '' || specialtyId !== 'all';
+  const clearFilters = () => {
+    setNameInput('');
+    setCityInput('');
+    setName('');
+    setCity('');
+    setSpecialtyId('all');
     setPageNumber(1);
-  }, 300);
-  return () => clearTimeout(timer);
-}, [nameInput]);
-
-  // const handleSearch = () => {
-  //   setPageNumber(1);
-  //   fetchDoctors();
-  // };
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-50/40 to-white py-8 sm:py-12">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-        >
-          <div className="text-center mb-10">
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">Find a Doctor</h1>
-            <p className="text-slate-500">Browse our network of verified healthcare professionals</p>
+    <Page width="full">
+      <PageHeader
+        eyebrow="Clinic directory"
+        title="Find a doctor"
+        description="Browse approved specialists, compare experience and fees, and book an open slot."
+      />
+
+      {/* Filters */}
+      <form
+        role="search"
+        aria-label="Filter doctors"
+        onSubmit={(e) => {
+          e.preventDefault();
+          applySearch();
+        }}
+        className="mb-8 rounded-2xl border border-border/70 bg-card p-4 shadow-card sm:p-5"
+      >
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)_minmax(0,0.9fr)_auto] lg:items-end">
+        <div className="space-y-1.5">
+          <Label htmlFor="doctor-name" className="text-label-sm uppercase tracking-[0.08em] text-muted-foreground">Doctor name</Label>
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+            <Input id="doctor-name" placeholder="Search by doctor name" value={nameInput} onChange={(e) => setNameInput(e.target.value)} className="pl-10" />
           </div>
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="doctor-city" className="text-label-sm uppercase tracking-[0.08em] text-muted-foreground">City</Label>
+          <div className="relative">
+            <MapPin className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+            <Input id="doctor-city" placeholder="e.g. Cairo" value={cityInput} onChange={(e) => setCityInput(e.target.value)} className="pl-10" />
+          </div>
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="doctor-sort" className="text-label-sm uppercase tracking-[0.08em] text-muted-foreground">Sort by</Label>
+          <Select value={sortBy} onValueChange={(v) => { setSortBy(v as DoctorSortBy); setPageNumber(1); }}>
+            <SelectTrigger id="doctor-sort" className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Rating">Top rated</SelectItem>
+              <SelectItem value="Fee">Lowest fee</SelectItem>
+              <SelectItem value="Experience">Most experienced</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <Button type="submit" className="sm:col-span-2 lg:col-span-1">
+          <Search aria-hidden="true" /> Search
+        </Button>
+        </div>
 
-          {/* Filters */}
-          <Card className="mb-8 border-slate-100 shadow-sm">
-            <CardContent className="p-4 sm:p-6">
-              <div className="flex flex-col sm:flex-row gap-3">
-                <div className="flex-1 relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                  <Input
-                    placeholder="Search by name..."
-                    value={nameInput}
-                    onChange={(e) => setNameInput(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && setPageNumber(1)}
-                    className="pl-10"
-                  />
+        {/* Specialty chips filter immediately */}
+        <div role="group" aria-label="Specialty" className="-mx-1 mt-4 flex gap-2 overflow-x-auto px-1 pb-1 scrollbar-thin">
+          {[{ id: 'all', name: 'All specialties' }, ...specialties.map((s) => ({ id: String(s.id), name: s.name }))].map((s) => {
+            const active = specialtyId === s.id;
+            return (
+              <button
+                key={s.id}
+                type="button"
+                aria-pressed={active}
+                onClick={() => { setSpecialtyId(s.id); setPageNumber(1); }}
+                className={cn(
+                  'h-9 shrink-0 rounded-full border px-4 text-label-md transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+                  active ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-card text-muted-foreground hover:border-input hover:text-foreground'
+                )}
+              >
+                {s.name}
+              </button>
+            );
+          })}
+        </div>
+      </form>
+
+      {/* Results */}
+      <div aria-live="polite" aria-busy={loading}>
+        {loading ? (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }, (_, i) => (
+              <div key={i} className="rounded-2xl border border-border/70 bg-card p-5 shadow-card">
+                <div className="flex items-center gap-3">
+                  <Skeleton className="size-12 rounded-full" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-4 w-2/3" />
+                    <Skeleton className="h-3 w-1/3" />
+                  </div>
                 </div>
-                <div className="flex-1 relative">
-                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                  <Input
-                    placeholder="Search by city..."
-                    value={cityInput}
-                    onChange={(e) => setCityInput(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && setPageNumber(1)}
-                    className="pl-10"
-                  />
-                </div>
-                <Select value={specialtyId} onValueChange={setSpecialtyId}>
-                  <SelectTrigger className="w-full sm:w-[200px]">
-                    <SlidersHorizontal className="h-4 w-4 mr-2 text-slate-400" />
-                    <SelectValue placeholder="All Specialties" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Specialties</SelectItem>
-                    {specialties.map((s) => (
-                      <SelectItem key={s.id} value={String(s.id)}>{s.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Select value={sortBy} onValueChange={(v) => setSortBy(v as DoctorSortBy)}>
-                  <SelectTrigger className="w-full sm:w-[160px]">
-                    <SelectValue placeholder="Sort by" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Rating">Top Rated</SelectItem>
-                    <SelectItem value="Fee">Lowest Fee</SelectItem>
-                    <SelectItem value="Experience">Most Experienced</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Button onClick={() => setPageNumber(1)} className="bg-teal-600 hover:bg-teal-700">
-                  Search
-                </Button>
+                <Skeleton className="mt-6 h-3 w-full" />
               </div>
-            </CardContent>
-          </Card>
-
-          {/* Results */}
-          {loading ? (
-            <div className="flex justify-center py-16">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600" />
-            </div>
-          ) : doctors.length === 0 ? (
-            <div className="text-center py-16">
-              <Stethoscope className="h-12 w-12 text-slate-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-slate-700 mb-1">No doctors found</h3>
-              <p className="text-sm text-slate-400">Try adjusting your filters</p>
-            </div>
+            ))}
+            <span className="sr-only">Loading doctors…</span>
+          </div>
+        ) : error ? (
+          <ErrorState title="Couldn’t load doctors" message={getApiErrorMessage(error, 'Please try again in a moment.')} onRetry={fetchDoctors} />
+        ) : doctors.length === 0 ? (
+          pageNumber > 1 ? (
+            <EmptyState icon={Stethoscope} title="No more doctors" description="You’ve reached the end of the results." />
           ) : (
-            <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {doctors.map((doctor, i) => (
-                  <motion.div
-                    key={doctor.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.05, duration: 0.35 }}
-                  >
-                    <Link to={`/doctors/${doctor.id}`}>
-                      <Card className="h-full hover:border-teal-200 hover:shadow-lg hover:shadow-teal-500/5 transition-all duration-300 group cursor-pointer border-slate-100">
-                        <CardContent className="p-5">
-                          <div className="flex items-start gap-4">
-                            <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white text-lg font-semibold shrink-0 group-hover:shadow-md group-hover:shadow-teal-500/20 transition-shadow">
-                              {doctor.fullName.charAt(0)}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-slate-900 truncate group-hover:text-teal-700 transition-colors">
-                                {doctor.fullName}
-                              </h3>
-                              <p className="text-sm text-teal-600 font-medium">{doctor.specialtyName}</p>
-                              <div className="flex items-center gap-1 mt-1">
-                                <Star className="h-3.5 w-3.5 text-amber-400 fill-amber-400" />
-                                <span className="text-sm font-medium text-slate-700">{doctor.averageRating.toFixed(1)}</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="mt-4 pt-4 border-t border-slate-50 flex items-center justify-between text-sm">
-                            <div className="flex items-center gap-1.5 text-slate-500">
-                              <MapPin className="h-3.5 w-3.5" />
-                              <span>{doctor.clinicCity}</span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                              <span className="flex items-center gap-1 text-slate-500">
-                                <Briefcase className="h-3.5 w-3.5" />
-                                {doctor.yearsOfExperience}y
-                              </span>
-                              <span className="flex items-center gap-1 text-teal-700 font-medium">
-                                <Banknote className="h-3.5 w-3.5" />
-                                {doctor.consultationFee} EGP
-                              </span>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </Link>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Pagination */}
-              <div className="flex items-center justify-center gap-3 mt-10">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPageNumber((p) => Math.max(1, p - 1))}
-                  disabled={pageNumber === 1}
+            <EmptyState
+              icon={Stethoscope}
+              title="No doctors match your search"
+              description="Try a different name or city, or browse all specialties."
+              action={hasFilters ? <Button variant="outline" onClick={clearFilters}>Clear filters</Button> : undefined}
+            />
+          )
+        ) : (
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {doctors.map((doctor) => (
+              <li key={doctor.id}>
+                <Link
+                  to={`/doctors/${doctor.id}`}
+                  className="group flex h-full flex-col rounded-2xl border border-border/70 bg-card p-5 shadow-card transition-[border-color,box-shadow] hover:border-input hover:shadow-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <span className="text-sm text-slate-600">Page {pageNumber}</span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPageNumber((p) => p + 1)}
-                  disabled={!hasMore}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </>
-          )}
-        </motion.div>
+                  <div className="flex items-start gap-3.5">
+                    <UserAvatar name={doctor.fullName} size="lg" />
+                    <div className="min-w-0 flex-1">
+                      <h2 className="truncate font-display text-title-sm text-foreground">{doctor.fullName}</h2>
+                      <p className="text-label-md text-primary">{doctor.specialtyName}</p>
+                      <RatingSummary rating={doctor.averageRating} className="mt-1.5" />
+                    </div>
+                  </div>
+                  <dl className="mt-5 grid grid-cols-3 gap-2 rounded-xl bg-muted px-3 py-3 text-sm">
+                    <div className="min-w-0">
+                      <dt className="flex items-center gap-1 text-caption uppercase tracking-wider text-muted-foreground"><MapPin className="size-3" aria-hidden="true" />City</dt>
+                      <dd className="mt-0.5 truncate font-medium">{doctor.clinicCity || '—'}</dd>
+                    </div>
+                    <div>
+                      <dt className="flex items-center gap-1 text-caption uppercase tracking-wider text-muted-foreground"><Briefcase className="size-3" aria-hidden="true" />Experience</dt>
+                      <dd className="mt-0.5 font-medium tabular-nums">{doctor.yearsOfExperience} yrs</dd>
+                    </div>
+                    <div>
+                      <dt className="text-caption uppercase tracking-wider text-muted-foreground">Fee</dt>
+                      <dd className="mt-0.5 font-semibold tabular-nums">{formatFee(doctor.consultationFee)}</dd>
+                    </div>
+                  </dl>
+                  <span className="mt-4 inline-flex items-center gap-1 text-label-md text-primary">
+                    View profile & book
+                    <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
-    </div>
+
+      {/* Paging stays visible on an empty later page so the user can go back */}
+      {!loading && !error && (doctors.length > 0 || pageNumber > 1) && (
+        <Pagination page={pageNumber} hasNext={hasMore} onChange={setPageNumber} label="Doctor results pages" />
+      )}
+    </Page>
   );
 }

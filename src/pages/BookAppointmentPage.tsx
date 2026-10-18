@@ -1,12 +1,17 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, type ReactNode } from 'react';
+import { isAxiosError } from 'axios';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { format, addDays, isToday, isTomorrow } from 'date-fns';
+import { format, addDays, isToday, isTomorrow, parseISO } from 'date-fns';
 import { doctorsApi, appointmentsApi } from '@/api';
 import type { DoctorDetails, Slot } from '@/types';
+import { getApiErrorCode, getApiErrorMessage } from '@/lib/api-error';
+import { formatFee, formatTime, formatTimeRange } from '@/lib/format';
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Spinner } from '@/components/ui/spinner';
 import {
   Dialog,
   DialogContent,
@@ -15,28 +20,54 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import {
-  ArrowLeft,
-  Calendar,
-  Clock,
-  Stethoscope,
-  Check,
-  ChevronLeft,
-  ChevronRight,
-  MapPin,
-} from 'lucide-react';
+import { Page, PageHeader } from '@/components/layout/Page';
+import { EmptyState, ErrorState, LoadingState } from '@/components/states';
+import { useApiQuery } from '@/hooks/use-api-query';
+import { UserAvatar } from '@/components/UserAvatar';
+import { Calendar, ChevronLeft, ChevronRight, Clock, MapPin, Stethoscope } from 'lucide-react';
 import { toast } from 'sonner';
+
+// Slots are generated only for the next 14 days (API contract §5.2 #11)
+const BOOKING_WINDOW_DAYS = 14;
+
+// Booking errors after which the slot list is out of date
+const STALE_SLOT_ERRORS = new Set([
+  'Appointment.SlotNotAvailable',
+  'Appointment.SlotAlreadyBooked',
+  'Appointment.SlotInPast',
+  'Appointment.SlotNotFound',
+]);
+
+const REASON_MAX_LENGTH = 500;
+
+// Group slots by part of the day for easier scanning
+const periods = [
+  { label: 'Morning', test: (h: number) => h < 12 },
+  { label: 'Afternoon', test: (h: number) => h >= 12 && h < 17 },
+  { label: 'Evening', test: (h: number) => h >= 17 },
+];
+
+function Step({ number, title, children, aside }: { number: number; title: string; children: ReactNode; aside?: ReactNode }) {
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between gap-3 space-y-0">
+        <CardTitle className="flex items-center gap-3">
+          <span className="inline-flex size-8 items-center justify-center rounded-lg bg-ink text-label-md text-ink-foreground">{number}</span>
+          <span>{title}</span>
+        </CardTitle>
+        {aside}
+      </CardHeader>
+      <CardContent>{children}</CardContent>
+    </Card>
+  );
+}
 
 export function BookAppointmentPage() {
   const { doctorId } = useParams<{ doctorId: string }>();
   const navigate = useNavigate();
-  const [doctor, setDoctor] = useState<DoctorDetails | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [slots, setSlots] = useState<Slot[]>([]);
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
   const [reason, setReason] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [slotsLoading, setSlotsLoading] = useState(false);
   const [bookingLoading, setBookingLoading] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [dateOffset, setDateOffset] = useState(0);
@@ -44,36 +75,39 @@ export function BookAppointmentPage() {
   const datesPerPage = 7;
   const today = new Date();
 
-  useEffect(() => {
-    if (!doctorId) return;
-    doctorsApi
-      .getById(Number(doctorId))
-      .then((res) => setDoctor(res.data))
-      .catch(() => toast.error('Failed to load doctor details'))
-      .finally(() => setLoading(false));
-  }, [doctorId]);
+  const doctorQuery = useApiQuery(
+    (): Promise<DoctorDetails | null> =>
+      doctorsApi
+        .getById(Number(doctorId))
+        .then((res) => res.data)
+        .catch((err) => {
+          // A 404 means "no such doctor"; anything else is a failure worth retrying
+          if (isAxiosError(err) && err.response?.status === 404) return null;
+          throw err;
+        }),
+    doctorId
+  );
+  const { loading } = doctorQuery;
+  const doctor = doctorQuery.data ?? null;
 
-  const fetchSlots = useCallback(async (date: Date) => {
-    if (!doctorId) return;
-    setSlotsLoading(true);
-    try {
-      const dateStr = format(date, 'yyyy-MM-dd');
-      const res = await doctorsApi.getSlots(Number(doctorId), dateStr);
-      setSlots(res.data);
-    } catch {
-      setSlots([]);
-    } finally {
-      setSlotsLoading(false);
-    }
-  }, [doctorId]);
-
-  useEffect(() => {
-    fetchSlots(selectedDate);
-  }, [selectedDate, fetchSlots]);
+  // Responses for a date the user has already moved away from are ignored by useApiQuery
+  const selectedDateStr = format(selectedDate, 'yyyy-MM-dd');
+  const slotsQuery = useApiQuery(
+    (): Promise<Slot[]> => doctorsApi.getSlots(Number(doctorId), selectedDateStr).then((res) => res.data),
+    `${doctorId}|${selectedDateStr}`
+  );
+  const slots = slotsQuery.data ?? [];
+  const slotsLoading = slotsQuery.loading;
 
   const visibleDates = Array.from({ length: datesPerPage }, (_, i) =>
     addDays(today, dateOffset + i)
   );
+
+  const selectDate = (date: Date) => {
+    setSelectedDate(date);
+    // A slot belongs to one date; keep the selection from pointing at another day
+    setSelectedSlot(null);
+  };
 
   const handleBook = async () => {
     if (!selectedSlot) return;
@@ -81,13 +115,17 @@ export function BookAppointmentPage() {
     try {
       await appointmentsApi.book({
         slotId: selectedSlot.id,
-        reasonForVisit: reason || undefined,
+        reasonForVisit: reason.trim() || undefined,
       });
-      toast.success('Appointment booked successfully!');
+      toast.success('Appointment booked', { description: 'You’ll find it under your appointments.' });
       navigate('/patient/appointments');
-    } catch (err: any) {
-      const title = err.response?.data?.title || 'Failed to book appointment';
-      toast.error(title);
+    } catch (err) {
+      toast.error(getApiErrorMessage(err, 'Failed to book appointment'));
+      const code = getApiErrorCode(err);
+      if (code && STALE_SLOT_ERRORS.has(code)) {
+        setSelectedSlot(null);
+        slotsQuery.reload();
+      }
     } finally {
       setBookingLoading(false);
       setShowConfirm(false);
@@ -96,269 +134,273 @@ export function BookAppointmentPage() {
 
   const getDateLabel = (date: Date) => {
     if (isToday(date)) return 'Today';
-    if (isTomorrow(date)) return 'Tomorrow';
+    if (isTomorrow(date)) return 'Tmrw';
     return format(date, 'EEE');
   };
 
   if (loading) {
+    return <LoadingState label="Loading booking…" className="min-h-[60vh]" />;
+  }
+
+  if (doctorQuery.error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-teal-50/40 to-white">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600" />
-      </div>
+      <Page width="narrow">
+        <ErrorState
+          title="Couldn’t load booking"
+          message={getApiErrorMessage(doctorQuery.error, 'Failed to load doctor details')}
+          onRetry={doctorQuery.reload}
+        />
+      </Page>
     );
   }
 
   if (!doctor) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-teal-50/40 to-white">
-        <div className="text-center">
-          <Stethoscope className="h-12 w-12 text-slate-300 mx-auto mb-4" />
-          <h2 className="text-lg font-medium text-slate-700">Doctor not found</h2>
-        </div>
-      </div>
+      <Page width="narrow">
+        <EmptyState
+          icon={Stethoscope}
+          title="Doctor not found"
+          description="We couldn’t load this doctor. They may no longer be available."
+          action={<Button asChild variant="outline"><Link to="/doctors">Browse doctors</Link></Button>}
+        />
+      </Page>
     );
   }
 
+  const groupedSlots = periods
+    .map((p) => ({ label: p.label, slots: slots.filter((s) => p.test(Number(s.startTime.split(':')[0]))) }))
+    .filter((g) => g.slots.length > 0);
+
+  const lastPage = dateOffset + datesPerPage >= BOOKING_WINDOW_DAYS;
+  const rangeLabel = `${format(visibleDates[0], 'MMM d')} – ${format(visibleDates[visibleDates.length - 1], 'MMM d')}`;
+
+  const summary = (
+    <Card className="lg:sticky lg:top-24">
+      <CardHeader className="border-b border-border/70">
+        <div className="flex items-center gap-3">
+          <UserAvatar name={doctor.fullName} />
+          <div className="min-w-0">
+            <p className="truncate font-display text-title-sm">{doctor.fullName}</p>
+            <p className="text-label-md text-primary">{doctor.specialtyName}</p>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-4 pt-5 sm:pt-5">
+        <dl className="space-y-3 rounded-xl bg-muted p-4 text-sm">
+          <div className="flex items-start justify-between gap-4">
+            <dt className="flex items-center gap-2 text-muted-foreground"><Calendar className="size-4" aria-hidden="true" />Date</dt>
+            <dd className="text-right font-medium">{selectedSlot ? format(parseISO(selectedSlot.date), 'EEE, MMM d') : '—'}</dd>
+          </div>
+          <div className="flex items-start justify-between gap-4">
+            <dt className="flex items-center gap-2 text-muted-foreground"><Clock className="size-4" aria-hidden="true" />Time</dt>
+            <dd className="text-right font-medium">{selectedSlot ? formatTimeRange(selectedSlot.startTime, selectedSlot.endTime) : '—'}</dd>
+          </div>
+          {doctor.clinicCity && (
+            <div className="flex items-start justify-between gap-4">
+              <dt className="flex items-center gap-2 text-muted-foreground"><MapPin className="size-4" aria-hidden="true" />Clinic</dt>
+              <dd className="text-right font-medium">{doctor.clinicCity}</dd>
+            </div>
+          )}
+          <div className="flex items-start justify-between gap-4 border-t border-border pt-3">
+            <dt className="text-muted-foreground">Consultation fee</dt>
+            <dd className="font-display text-title-sm tabular-nums">{formatFee(doctor.consultationFee)}</dd>
+          </div>
+        </dl>
+        <Button size="lg" className="w-full" disabled={!selectedSlot} onClick={() => setShowConfirm(true)}>
+          {selectedSlot ? 'Review & confirm' : 'Select a time to continue'}
+        </Button>
+        <p className="text-center text-body-sm text-muted-foreground">You can cancel up to 2 hours before the start time.</p>
+      </CardContent>
+    </Card>
+  );
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-50/40 to-white py-8 sm:py-12">
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-        >
-          <Button
-            variant="ghost"
-            size="sm"
-            asChild
-            className="mb-6 text-slate-500 hover:text-teal-700"
-          >
-            <Link to={`/doctors/${doctor.id}`}>
-              <ArrowLeft className="h-4 w-4 mr-1" /> Back to Doctor
-            </Link>
-          </Button>
+    <Page width="wide">
+      <PageHeader
+        back={{ to: `/doctors/${doctor.id}`, label: 'Back to profile' }}
+        eyebrow="Book an appointment"
+        title={doctor.fullName}
+        description={`${doctor.specialtyName}${doctor.clinicCity ? ` · ${doctor.clinicCity}` : ''}`}
+      />
 
-          {/* Doctor Header */}
-          <Card className="mb-6 border-slate-100 shadow-sm">
-            <CardContent className="p-5">
-              <div className="flex items-center gap-4">
-                <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white text-lg font-semibold shrink-0">
-                  {doctor.fullName.charAt(0)}
-                </div>
-                <div>
-                  <h1 className="text-lg font-bold text-slate-900">{doctor.fullName}</h1>
-                  <p className="text-sm text-teal-600 font-medium">{doctor.specialtyName}</p>
-                  <div className="flex items-center gap-3 mt-1 text-xs text-slate-400">
-                    <span className="flex items-center gap-1">
-                      <MapPin className="h-3 w-3" /> {doctor.clinicCity}
-                    </span>
-                    <span>{doctor.consultationFee} EGP</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Date Selection */}
-          <Card className="mb-6 border-slate-100 shadow-sm">
-            <CardContent className="p-5">
-              <h2 className="text-base font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-teal-600" /> Select a Date
-              </h2>
-
-              <div className="flex items-center gap-2">
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
+        <div className="space-y-6">
+          <Step
+            number={1}
+            title="Choose a date"
+            aside={
+              <div className="flex items-center gap-1">
+                <span className="mr-1 hidden text-body-sm text-muted-foreground sm:inline">{rangeLabel}</span>
                 <Button
                   variant="outline"
-                  size="icon"
-                  className="shrink-0 h-9 w-9"
+                  size="icon-sm"
                   onClick={() => setDateOffset((o) => Math.max(0, o - datesPerPage))}
                   disabled={dateOffset === 0}
+                  aria-label="Previous week"
                 >
-                  <ChevronLeft className="h-4 w-4" />
+                  <ChevronLeft aria-hidden="true" />
                 </Button>
-
-                <div className="flex-1 grid grid-cols-7 gap-1.5">
-                  {visibleDates.map((date) => {
-                    const isSelected = format(date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd');
-                    const isPast = date < new Date(new Date().setHours(0, 0, 0, 0));
-                    return (
-                      <button
-                        key={date.toISOString()}
-                        onClick={() => !isPast && setSelectedDate(date)}
-                        disabled={isPast}
-                        className={`flex flex-col items-center py-2.5 px-1 rounded-xl text-xs transition-all duration-200 ${
-                          isSelected
-                            ? 'bg-teal-600 text-white shadow-md shadow-teal-500/25'
-                            : isPast
-                            ? 'text-slate-300 cursor-not-allowed'
-                            : 'text-slate-600 hover:bg-teal-50 hover:text-teal-700'
-                        }`}
-                      >
-                        <span className="font-medium">{getDateLabel(date)}</span>
-                        <span className={`text-lg font-bold mt-0.5 ${isSelected ? 'text-white' : ''}`}>
-                          {format(date, 'd')}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-
                 <Button
                   variant="outline"
-                  size="icon"
-                  className="shrink-0 h-9 w-9"
+                  size="icon-sm"
                   onClick={() => setDateOffset((o) => o + datesPerPage)}
+                  disabled={lastPage}
+                  aria-label="Next week"
                 >
-                  <ChevronRight className="h-4 w-4" />
+                  <ChevronRight aria-hidden="true" />
                 </Button>
               </div>
-            </CardContent>
-          </Card>
+            }
+          >
+            <div className="grid grid-cols-7 gap-1 sm:gap-1.5" role="group" aria-label="Dates">
+              {visibleDates.map((date) => {
+                const isSelected = format(date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd');
+                const isPast = date < new Date(new Date().setHours(0, 0, 0, 0));
+                return (
+                  <button
+                    key={date.toISOString()}
+                    type="button"
+                    onClick={() => !isPast && selectDate(date)}
+                    disabled={isPast}
+                    aria-pressed={isSelected}
+                    aria-label={format(date, 'EEEE, MMMM d')}
+                    className={cn(
+                      'flex flex-col items-center rounded-xl border px-1 py-2.5 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
+                      isSelected
+                        ? 'border-primary bg-primary text-primary-foreground shadow-xs'
+                        : isPast
+                        ? 'cursor-not-allowed border-transparent text-muted-foreground/50'
+                        : 'border-transparent bg-muted text-foreground hover:border-input hover:bg-accent'
+                    )}
+                  >
+                    <span className={cn('text-[10px] font-semibold uppercase sm:text-label-sm sm:tracking-wide', isSelected ? 'text-primary-foreground/80' : 'text-muted-foreground')}>
+                      {getDateLabel(date)}
+                    </span>
+                    <span className="mt-0.5 font-display text-headline-md tabular-nums">{format(date, 'd')}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </Step>
 
-          {/* Time Slots */}
-          <Card className="mb-6 border-slate-100 shadow-sm">
-            <CardContent className="p-5">
-              <h2 className="text-base font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                <Clock className="h-4 w-4 text-teal-600" />
-                Available Slots — {format(selectedDate, 'EEEE, MMM d')}
-              </h2>
-
+          <Step number={2} title={`Choose a time · ${format(selectedDate, 'EEEE, MMM d')}`}>
+            <div aria-live="polite" aria-busy={slotsLoading}>
               {slotsLoading ? (
-                <div className="flex justify-center py-8">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-teal-600" />
+                <div className="flex items-center justify-center gap-2 py-10 text-body-md text-muted-foreground">
+                  <Spinner className="text-primary" /> Loading available times…
                 </div>
+              ) : slotsQuery.error ? (
+                <ErrorState
+                  title="Couldn’t load available times"
+                  message={getApiErrorMessage(slotsQuery.error, 'Failed to load available slots')}
+                  onRetry={slotsQuery.reload}
+                  className="py-10"
+                />
               ) : slots.length === 0 ? (
-                <div className="text-center py-8">
-                  <Clock className="h-10 w-10 text-slate-300 mx-auto mb-3" />
-                  <p className="text-sm text-slate-500">No available slots for this date</p>
-                  <p className="text-xs text-slate-400 mt-1">Try selecting a different date</p>
+                <div className="rounded-xl border border-dashed border-input px-4 py-10 text-center">
+                  <span className="mx-auto mb-3 inline-flex size-11 items-center justify-center rounded-xl bg-secondary text-secondary-foreground">
+                    <Clock className="size-5" aria-hidden="true" />
+                  </span>
+                  <p className="font-display text-title-sm">No open times on this day</p>
+                  <p className="mt-1 text-body-md text-muted-foreground">Try another date{lastPage ? '' : ' or the next week'}.</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
-                  {slots.map((slot) => {
-                    const isSelected = selectedSlot?.id === slot.id;
-                    return (
-                      <motion.button
-                        key={slot.id}
-                        whileHover={{ scale: 1.03 }}
-                        whileTap={{ scale: 0.97 }}
-                        onClick={() => setSelectedSlot(slot)}
-                        className={`py-2.5 px-2 rounded-xl text-sm font-medium transition-all duration-200 ${
-                          isSelected
-                            ? 'bg-teal-600 text-white shadow-md shadow-teal-500/25'
-                            : 'bg-slate-50 text-slate-700 hover:bg-teal-50 hover:text-teal-700 border border-slate-100 hover:border-teal-200'
-                        }`}
-                      >
-                        {slot.startTime}
-                      </motion.button>
-                    );
-                  })}
+                <div className="space-y-5">
+                  {groupedSlots.map((group) => (
+                    <div key={group.label}>
+                      <p className="eyebrow mb-2">{group.label}</p>
+                      <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5" role="group" aria-label={`${group.label} times`}>
+                        {group.slots.map((slot) => {
+                          const isSelected = selectedSlot?.id === slot.id;
+                          return (
+                            <button
+                              key={slot.id}
+                              type="button"
+                              onClick={() => setSelectedSlot(slot)}
+                              aria-pressed={isSelected}
+                              aria-label={formatTimeRange(slot.startTime, slot.endTime)}
+                              className={cn(
+                                'h-10 rounded-lg border text-sm font-semibold tabular-nums transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
+                                isSelected
+                                  ? 'border-primary bg-primary text-primary-foreground shadow-xs'
+                                  : 'border-info/25 bg-info/[0.06] text-info hover:border-info/50 hover:bg-info/10'
+                              )}
+                            >
+                              {formatTime(slot.startTime)}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </Step>
 
-          {/* Reason + Book */}
-          <AnimatePresence>
-            {selectedSlot && (
-              <motion.div
-                initial={{ opacity: 0, y: 10, height: 0 }}
-                animate={{ opacity: 1, y: 0, height: 'auto' }}
-                exit={{ opacity: 0, y: 10, height: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <Card className="border-teal-200 shadow-md shadow-teal-500/5">
-                  <CardContent className="p-5 space-y-4">
-                    <div className="flex items-center gap-2 text-teal-700">
-                      <Check className="h-5 w-5" />
-                      <span className="font-medium">
-                        Selected: {format(selectedDate, 'EEEE, MMM d')} at {selectedSlot.startTime} - {selectedSlot.endTime}
-                      </span>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-slate-700 mb-1.5 block">
-                        Reason for Visit (optional)
-                      </label>
-                      <Input
-                        placeholder="e.g., Annual check-up, follow-up..."
-                        value={reason}
-                        onChange={(e) => setReason(e.target.value)}
-                      />
-                    </div>
-                    <Button
-                      onClick={() => setShowConfirm(true)}
-                      className="w-full bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 shadow-lg shadow-teal-500/20 h-11 text-base"
-                    >
-                      Confirm Booking
-                    </Button>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
+          <Step number={3} title="Reason for visit">
+            <Label htmlFor="visit-reason" className="sr-only">Reason for visit (optional)</Label>
+            <Textarea
+              id="visit-reason"
+              placeholder="Optional — e.g. annual check-up, follow-up on test results…"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              maxLength={REASON_MAX_LENGTH}
+              rows={3}
+              aria-describedby="visit-reason-hint"
+            />
+            <p id="visit-reason-hint" className="mt-1.5 flex justify-between text-body-sm text-muted-foreground">
+              <span>Shared with your doctor before the visit.</span>
+              <span className="tabular-nums">{reason.length}/{REASON_MAX_LENGTH}</span>
+            </p>
+          </Step>
+        </div>
+
+        <aside aria-label="Booking summary">{summary}</aside>
       </div>
 
-      {/* Confirmation Dialog */}
+      {/* Confirmation dialog */}
       <Dialog open={showConfirm} onOpenChange={setShowConfirm}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Confirm Appointment</DialogTitle>
-            <DialogDescription>
-              Please review your appointment details before confirming.
-            </DialogDescription>
+            <DialogTitle>Confirm your appointment</DialogTitle>
+            <DialogDescription>Please check the details below. Your booking is confirmed as soon as you continue.</DialogDescription>
           </DialogHeader>
-          <div className="space-y-3 py-3">
-            <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-50">
-              <Stethoscope className="h-4 w-4 text-teal-600" />
-              <div>
-                <p className="text-xs text-slate-400">Doctor</p>
-                <p className="text-sm font-medium text-slate-800">{doctor.fullName}</p>
-              </div>
+          <dl className="divide-y divide-border/70 rounded-xl bg-muted text-sm">
+            <div className="flex items-center justify-between gap-4 px-4 py-3">
+              <dt className="text-muted-foreground">Doctor</dt>
+              <dd className="text-right font-medium">{doctor.fullName}</dd>
             </div>
-            <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-50">
-              <Calendar className="h-4 w-4 text-teal-600" />
-              <div>
-                <p className="text-xs text-slate-400">Date</p>
-                <p className="text-sm font-medium text-slate-800">
-                  {format(selectedDate, 'EEEE, MMMM d, yyyy')}
-                </p>
-              </div>
+            <div className="flex items-center justify-between gap-4 px-4 py-3">
+              <dt className="text-muted-foreground">Date</dt>
+              <dd className="text-right font-medium">{selectedSlot && format(parseISO(selectedSlot.date), 'EEEE, MMMM d, yyyy')}</dd>
             </div>
-            <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-50">
-              <Clock className="h-4 w-4 text-teal-600" />
-              <div>
-                <p className="text-xs text-slate-400">Time</p>
-                <p className="text-sm font-medium text-slate-800">
-                  {selectedSlot?.startTime} - {selectedSlot?.endTime}
-                </p>
-              </div>
+            <div className="flex items-center justify-between gap-4 px-4 py-3">
+              <dt className="text-muted-foreground">Time</dt>
+              <dd className="text-right font-medium">{selectedSlot && formatTimeRange(selectedSlot.startTime, selectedSlot.endTime)}</dd>
             </div>
-            {reason && (
-              <div className="p-3 rounded-lg bg-slate-50">
-                <p className="text-xs text-slate-400 mb-1">Reason</p>
-                <p className="text-sm text-slate-700">{reason}</p>
+            <div className="flex items-center justify-between gap-4 px-4 py-3">
+              <dt className="text-muted-foreground">Fee</dt>
+              <dd className="text-right font-medium tabular-nums">{formatFee(doctor.consultationFee)}</dd>
+            </div>
+            {reason.trim() && (
+              <div className="px-4 py-3">
+                <dt className="text-muted-foreground">Reason</dt>
+                <dd className="mt-1 break-words">{reason}</dd>
               </div>
             )}
-          </div>
+          </dl>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowConfirm(false)}>
-              Cancel
+            <Button variant="outline" onClick={() => setShowConfirm(false)} disabled={bookingLoading}>
+              Go back
             </Button>
-            <Button
-              onClick={handleBook}
-              disabled={bookingLoading}
-              className="bg-teal-600 hover:bg-teal-700"
-            >
-              {bookingLoading ? (
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
-              ) : (
-                'Confirm Booking'
-              )}
+            <Button onClick={handleBook} disabled={bookingLoading}>
+              {bookingLoading && <Spinner aria-hidden="true" />}
+              {bookingLoading ? 'Booking…' : 'Confirm booking'}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </Page>
   );
 }

@@ -1,69 +1,109 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * ClinicFlow design tokens ("Clinical Sanctuary"). Colors are HSL channel triplets consumed by
+ * tailwind.config.js as `hsl(var(--name) / <alpha-value>)`, so every color supports opacity modifiers.
+ *
+ * Palette: restorative eucalyptus (primary, the interactive color) and deep medical slate (ink, for
+ * structure and high-emphasis fills) on a cool, softly blue-tinted canvas with tonal surface layers.
+ * Semantic colors are tuned for readable text (WCAG AA) on their own 10% tint.
+ */
 @layer base {
   :root {
-    --background: 180 20% 99%;
-    --foreground: 200 20% 15%;
+    /* Canvas and surfaces (tonal layering: background < muted < accent < secondary) */
+    --background: 231 100% 98.6%;
+    --foreground: 212 63% 11.6%;
     --card: 0 0% 100%;
-    --card-foreground: 200 20% 15%;
+    --card-foreground: 212 63% 11.6%;
     --popover: 0 0% 100%;
-    --popover-foreground: 200 20% 15%;
-    --primary: 174 60% 35%;
+    --popover-foreground: 212 63% 11.6%;
+
+    /* Eucalyptus: primary actions, links, selected and active states */
+    --primary: 161 100% 21.2%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 174 30% 94%;
-    --secondary-foreground: 174 60% 25%;
-    --muted: 180 10% 95%;
-    --muted-foreground: 200 8% 45%;
-    --accent: 162 55% 45%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 180 15% 88%;
-    --input: 180 15% 88%;
-    --ring: 174 60% 35%;
+    /* Deep medical slate: logo mark, high-emphasis "create" actions, the Doctor role */
+    --ink: 222 47% 11.2%;
+    --ink-foreground: 0 0% 100%;
+
+    /* Soft blue surface: icon tiles, avatars, tonal buttons, active navigation */
+    --secondary: 218 100% 93.1%;
+    --secondary-foreground: 222 42% 12.7%;
+    --muted: 221 100% 96.9%;
+    --muted-foreground: 215 19% 34.5%;
+    --accent: 219 100% 94.9%;
+    --accent-foreground: 212 63% 11.6%;
+
+    --destructive: 0 75% 41.6%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 163 94% 24.3%;
+    --success-foreground: 0 0% 100%;
+    --warning: 23 83% 31.4%;
+    --warning-foreground: 0 0% 100%;
+    --info: 201 96% 32.2%;
+    --info-foreground: 0 0% 100%;
+    --violet: 273 67% 39.4%;
+    --violet-foreground: 0 0% 100%;
+
+    --border: 214 32% 91.4%;
+    --input: 213 27% 83.9%;
+    --ring: 161 94% 30.4%;
+    /* Form controls and buttons; cards use rounded-2xl (radius + 6px = 16px) */
     --radius: 0.625rem;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 200 15% 26%;
-    --sidebar-primary: 174 60% 35%;
+
+    /* Tailwind v4 spacing variable used by a few generated shadcn components */
+    --spacing: 0.25rem;
+
+    --sidebar-background: 221 100% 96.9%;
+    --sidebar-foreground: 215 19% 34.5%;
+    --sidebar-primary: 161 100% 21.2%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 174 30% 94%;
-    --sidebar-accent-foreground: 174 60% 25%;
-    --sidebar-border: 180 15% 91%;
-    --sidebar-ring: 174 60% 35%;
+    --sidebar-accent: 216 96% 91.2%;
+    --sidebar-accent-foreground: 212 63% 11.6%;
+    --sidebar-border: 214 32% 91.4%;
+    --sidebar-ring: 161 94% 30.4%;
   }
 
+  /* Not switched on anywhere yet; kept in step with the light palette for a future theme toggle */
   .dark {
-    --background: 200 20% 8%;
-    --foreground: 180 15% 92%;
-    --card: 200 18% 12%;
-    --card-foreground: 180 15% 92%;
-    --popover: 200 18% 12%;
-    --popover-foreground: 180 15% 92%;
-    --primary: 174 55% 45%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 200 15% 18%;
-    --secondary-foreground: 180 15% 92%;
-    --muted: 200 15% 18%;
-    --muted-foreground: 180 10% 60%;
-    --accent: 162 50% 40%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 62% 30%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 200 15% 20%;
-    --input: 200 15% 20%;
-    --ring: 174 55% 45%;
-    --sidebar-background: 200 18% 10%;
-    --sidebar-foreground: 180 15% 92%;
-    --sidebar-primary: 174 55% 45%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 200 15% 18%;
-    --sidebar-accent-foreground: 180 15% 92%;
-    --sidebar-border: 200 15% 20%;
-    --sidebar-ring: 174 55% 45%;
+    --background: 220 49% 8.4%;
+    --foreground: 214 32% 91.4%;
+    --card: 221 46% 12.4%;
+    --card-foreground: 214 32% 91.4%;
+    --popover: 221 46% 12.4%;
+    --popover-foreground: 214 32% 91.4%;
+    --primary: 158 64% 51.6%;
+    --primary-foreground: 220 49% 8.4%;
+    --ink: 214 32% 91.4%;
+    --ink-foreground: 220 49% 8.4%;
+    --secondary: 223 42% 17.6%;
+    --secondary-foreground: 214 32% 91.4%;
+    --muted: 223 42% 17.6%;
+    --muted-foreground: 215 20% 65.1%;
+    --accent: 217 30% 22%;
+    --accent-foreground: 214 32% 91.4%;
+    --destructive: 0 91% 70.8%;
+    --destructive-foreground: 220 49% 8.4%;
+    --success: 158 64% 51.6%;
+    --success-foreground: 220 49% 8.4%;
+    --warning: 43 96% 56.3%;
+    --warning-foreground: 220 49% 8.4%;
+    --info: 198 93% 59.6%;
+    --info-foreground: 220 49% 8.4%;
+    --violet: 252 95% 85.1%;
+    --violet-foreground: 220 49% 8.4%;
+    --border: 217 30% 22%;
+    --input: 217 30% 26%;
+    --ring: 158 64% 51.6%;
+    --sidebar-background: 221 46% 12.4%;
+    --sidebar-foreground: 215 20% 65.1%;
+    --sidebar-primary: 158 64% 51.6%;
+    --sidebar-primary-foreground: 220 49% 8.4%;
+    --sidebar-accent: 217 30% 22%;
+    --sidebar-accent-foreground: 214 32% 91.4%;
+    --sidebar-border: 217 30% 22%;
+    --sidebar-ring: 158 64% 51.6%;
   }
 }
 
@@ -72,33 +112,76 @@
     @apply border-border;
   }
 
-  /* Fix navbar layout shift — always show scrollbar so page width stays constant */
+  /* Always reserve the scrollbar so the layout doesn't shift when Radix locks scrolling */
   html {
     overflow-y: scroll;
     scrollbar-gutter: stable;
+    -webkit-text-size-adjust: 100%;
   }
 
- body {
-    @apply bg-background text-foreground antialiased;
-    font-family: 'Inter', sans-serif;
-    font-feature-settings: "rlig" 1, "calt" 1;
-    overflow: hidden auto !important;  /* ← this line */
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+    font-feature-settings: "cv11", "ss01";
+    overflow: hidden auto !important;
   }
   body[style] {
-  padding-right: 0 !important;
-}
-/* Prevent Radix from locking scroll on html element */
-html[style*="overflow"] {
-  overflow-y: scroll !important;
+    padding-right: 0 !important;
+  }
+  /* Prevent Radix from locking scroll on the html element (see main.tsx) */
+  html[style*="overflow"] {
+    overflow-y: scroll !important;
+  }
+
+  ::selection {
+    background-color: hsl(var(--primary) / 0.16);
+  }
+
+  /* Visible keyboard focus for links and other native controls that don't style their own */
+  a:focus-visible,
+  summary:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  h1, h2, h3, h4 {
+    text-wrap: balance;
+  }
+
+  /* Times, dates and counts never jitter: tables and time elements use tabular figures */
+  table,
+  time {
+    font-variant-numeric: tabular-nums;
+  }
 }
 
-  /* All pages sit below the fixed 64px navbar */
-  main {
-    padding-top: 64px;
+@layer components {
+  /* Plus Jakarta Sans for page titles, panel headers and names */
+  .font-display {
+    letter-spacing: -0.015em;
+  }
+
+  /* Small uppercase section label ("TODAY'S PATIENTS", "SELECT PORTAL DOMAIN") */
+  .eyebrow {
+    @apply text-label-sm uppercase tracking-[0.08em] text-muted-foreground;
   }
 }
 
 @layer utilities {
+  /* Tailwind v4 utilities used by the generated shadcn components, mapped for Tailwind 3 */
+  .outline-hidden {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+  .field-sizing-content {
+    field-sizing: content;
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
   .scrollbar-thin {
     scrollbar-width: thin;
     scrollbar-color: hsl(var(--border)) transparent;
@@ -114,10 +197,15 @@ html[style*="overflow"] {
     background-color: hsl(var(--border));
     border-radius: 3px;
   }
-  .glass-card {
-    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-lg;
-  }
-  .text-gradient {
-    @apply bg-gradient-to-r from-teal-600 to-emerald-500 bg-clip-text text-transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

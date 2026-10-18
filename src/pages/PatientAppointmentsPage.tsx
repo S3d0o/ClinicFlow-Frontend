@@ -1,18 +1,14 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { format, parseISO } from 'date-fns';
 import { appointmentsApi, reviewsApi } from '@/api';
 import type { Appointment, AppointmentStatus } from '@/types';
+import { getApiErrorMessage } from '@/lib/api-error';
+import { canPatientCancel, hasAppointmentStarted, PATIENT_CANCELLATION_WINDOW_HOURS } from '@/lib/appointments';
+import { formatTimeRange } from '@/lib/format';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Spinner } from '@/components/ui/spinner';
 import {
   Dialog,
   DialogContent,
@@ -21,32 +17,32 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
-import {
-  Calendar,
-  Clock,
-  Stethoscope,
-  Star,
-  X,
-  MessageSquare,
-  ClipboardList,
-  ChevronLeft,
-  ChevronRight,
-} from 'lucide-react';
+import { Page, PageHeader } from '@/components/layout/Page';
+import { EmptyState, ErrorState, LoadingState } from '@/components/states';
+import { useApiQuery } from '@/hooks/use-api-query';
+import { FilterTabs } from '@/components/FilterTabs';
+import { Pagination } from '@/components/Pagination';
+import { StatusBadge } from '@/components/StatusBadge';
+import { DateTile } from '@/components/DateTile';
+import { RatingInput } from '@/components/Rating';
+import { CalendarDays, CalendarPlus, Clock, Info, MessageSquareText, Star, X } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
-const statusColors: Record<AppointmentStatus, string> = {
-  Pending: 'bg-amber-50 text-amber-700 border-amber-200',
-  Confirmed: 'bg-teal-50 text-teal-700 border-teal-200',
-  Cancelled: 'bg-red-50 text-red-700 border-red-200',
-  Completed: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-  NoShow: 'bg-slate-100 text-slate-600 border-slate-200',
-};
+type StatusFilter = 'all' | AppointmentStatus;
+
+const filterOptions: { value: StatusFilter; label: string }[] = [
+  { value: 'all', label: 'All' },
+  { value: 'Confirmed', label: 'Confirmed' },
+  { value: 'Completed', label: 'Completed' },
+  { value: 'Cancelled', label: 'Cancelled' },
+];
+
+const REVIEW_MAX_LENGTH = 300;
+const PAGE_SIZE = 10;
 
 export function PatientAppointmentsPage() {
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [pageNumber, setPageNumber] = useState(1);
   const [cancelId, setCancelId] = useState<number | null>(null);
   const [cancelReason, setCancelReason] = useState('');
@@ -55,29 +51,32 @@ export function PatientAppointmentsPage() {
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewComment, setReviewComment] = useState('');
   const [reviewLoading, setReviewLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
   const [reviewedIds, setReviewedIds] = useState<Set<number>>(new Set());
 
-  const fetchAppointments = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await appointmentsApi.getMyAppointments({
-        ...(statusFilter !== 'all' ? { status: statusFilter as AppointmentStatus } : {}),
-        pageNumber,
-        pageSize: 10,
-      });
-      setAppointments(res.data);
-      setHasMore(res.data.length === 10);
-    } catch {
-      toast.error('Failed to load appointments');
-    } finally {
-      setLoading(false);
-    }
-  }, [statusFilter, pageNumber]);
+  const { data, loading, error, reload } = useApiQuery(
+    () =>
+      appointmentsApi
+        .getMyAppointments({
+          ...(statusFilter !== 'all' ? { status: statusFilter } : {}),
+          pageNumber,
+          pageSize: PAGE_SIZE,
+        })
+        .then((res) => res.data),
+    `${statusFilter}|${pageNumber}`
+  );
+  const appointments: Appointment[] = data ?? [];
+  const hasMore = appointments.length === PAGE_SIZE;
 
-  useEffect(() => {
-    fetchAppointments();
-  }, [fetchAppointments]);
+  const closeCancel = () => {
+    setCancelId(null);
+    setCancelReason('');
+  };
+
+  const closeReview = () => {
+    setReviewAppointment(null);
+    setReviewRating(5);
+    setReviewComment('');
+  };
 
   const handleCancel = async () => {
     if (!cancelId) return;
@@ -85,11 +84,10 @@ export function PatientAppointmentsPage() {
     try {
       await appointmentsApi.cancel(cancelId, { cancellationReason: cancelReason || undefined });
       toast.success('Appointment cancelled');
-      setCancelId(null);
-      setCancelReason('');
-      fetchAppointments();
-    } catch (err: any) {
-      toast.error(err.response?.data?.title || 'Failed to cancel');
+      closeCancel();
+      reload();
+    } catch (err) {
+      toast.error(getApiErrorMessage(err, 'Failed to cancel'));
     } finally {
       setCancelLoading(false);
     }
@@ -104,196 +102,198 @@ export function PatientAppointmentsPage() {
         rating: reviewRating,
         comment: reviewComment || undefined,
       });
-      toast.success('Review submitted!');
+      toast.success('Thanks for your review!');
       setReviewedIds(prev => new Set(prev).add(reviewAppointment.id));
-      setReviewAppointment(null);
-      setReviewRating(5);
-      setReviewComment('');
-    } catch (err: any) {
-      toast.error(err.response?.data?.title || 'Failed to submit review');
+      closeReview();
+    } catch (err) {
+      toast.error(getApiErrorMessage(err, 'Failed to submit review'));
     } finally {
       setReviewLoading(false);
     }
   };
 
+  const cancelTarget = appointments.find((a) => a.id === cancelId);
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-50/40 to-white py-8 sm:py-12">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900">My Appointments</h1>
-              <p className="text-sm text-slate-500">Manage your upcoming and past appointments</p>
-            </div>
-            <Button asChild className="bg-teal-600 hover:bg-teal-700">
-              <Link to="/doctors">
-                <Stethoscope className="h-4 w-4 mr-2" /> Book New
-              </Link>
-            </Button>
-          </div>
+    <Page>
+      <PageHeader
+        eyebrow="Patient portal"
+        title="My appointments"
+        description="Your upcoming visits and appointment history."
+        actions={
+          <Button asChild>
+            <Link to="/doctors">
+              <CalendarPlus aria-hidden="true" /> Book an appointment
+            </Link>
+          </Button>
+        }
+      />
 
-          <div className="flex items-center gap-3 mb-6">
-            <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v); setPageNumber(1); }}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="All Statuses" />
-              </SelectTrigger>
-              <SelectContent position="popper">
-                <SelectItem value="all">All Statuses</SelectItem>
-                {/* <SelectItem value="Pending">Pending</SelectItem> */}
-                <SelectItem value="Confirmed">Confirmed</SelectItem>
-                <SelectItem value="Completed">Completed</SelectItem>
-                <SelectItem value="Cancelled">Cancelled</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+      <FilterTabs
+        label="Filter appointments by status"
+        value={statusFilter}
+        onChange={(v) => { setStatusFilter(v); setPageNumber(1); }}
+        options={filterOptions}
+        className="mb-6"
+      />
 
-          {loading ? (
-            <div className="flex justify-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600" />
-            </div>
-          ) : appointments.length === 0 ? (
-            <Card className="border-slate-100">
-              <CardContent className="p-12 text-center">
-                <Calendar className="h-12 w-12 text-slate-300 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-slate-700 mb-1">No appointments found</h3>
-                <p className="text-sm text-slate-400 mb-4">Book your first appointment with a doctor</p>
-                <Button asChild className="bg-teal-600 hover:bg-teal-700">
-                  <Link to="/doctors">Find a Doctor</Link>
-                </Button>
-              </CardContent>
-            </Card>
-          ) : (
-            <>
-              <div className="space-y-3">
-                {appointments.map((apt, i) => (
-                  <motion.div key={apt.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
-                    <Card className="border-slate-100 hover:border-teal-200 transition-colors">
-                      <CardContent className="p-4 sm:p-5">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                          <div className="flex items-start gap-4">
-                            <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white font-semibold shrink-0">
-                              {apt.doctorName.charAt(3)}
-                            </div>
-                            <div>
-                              <h3 className="font-semibold text-slate-900">{apt.doctorName}</h3>
-                              <div className="flex items-center gap-3 mt-1 text-sm text-slate-500">
-                                <span className="flex items-center gap-1">
-                                  <Calendar className="h-3.5 w-3.5" />
-                                  {format(parseISO(apt.appointmentDate), 'MMM d, yyyy')}
-                                </span>
-                                <span className="flex items-center gap-1">
-                                  <Clock className="h-3.5 w-3.5" />
-                                  {apt.startTime} - {apt.endTime}
-                                </span>
-                              </div>
-                              {apt.reasonForVisit && (
-                                <p className="text-xs text-slate-400 mt-1 flex items-center gap-1">
-                                  <ClipboardList className="h-3 w-3" /> {apt.reasonForVisit}
-                                </p>
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${statusColors[apt.status]}`}>
-                              {apt.status}
-                            </span>
-                            {(apt.status === 'Confirmed') && (
-                              <Button variant="outline" size="sm" onClick={() => setCancelId(apt.id)} className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200">
-                                <X className="h-3.5 w-3.5 mr-1" /> Cancel
-                              </Button>
-                            )}
-                            {apt.status === 'Completed' && !apt.hasReview && !reviewedIds.has(apt.id) && (
-                                <Button variant="outline" size="sm" onClick={() => setReviewAppointment(apt)} className="text-amber-600 hover:text-amber-700 hover:bg-amber-50 border-amber-200">
-                                  <Star className="h-3.5 w-3.5 mr-1" /> Review
-                                </Button>
-                              )}
-                          </div>
+      <div aria-live="polite" aria-busy={loading}>
+        {loading ? (
+          <LoadingState label="Loading appointments…" />
+        ) : error ? (
+          <ErrorState title="Couldn’t load your appointments" message={getApiErrorMessage(error, 'Please try again in a moment.')} onRetry={reload} />
+        ) : appointments.length === 0 ? (
+          <EmptyState
+            icon={CalendarDays}
+            title={statusFilter === 'all' ? 'No appointments yet' : 'Nothing here'}
+            description={statusFilter === 'all' ? 'Find a doctor and book your first visit — it only takes a minute.' : 'No appointments match this filter.'}
+            action={statusFilter === 'all' ? <Button asChild><Link to="/doctors">Find a doctor</Link></Button> : undefined}
+          />
+        ) : (
+          <ul className="space-y-4">
+            {appointments.map((apt) => {
+              const canReview = apt.status === 'Completed' && !apt.hasReview && !reviewedIds.has(apt.id);
+              const inactive = apt.status === 'Cancelled';
+              const canCancel = canPatientCancel(apt);
+              const windowClosed = apt.status === 'Confirmed' && !canCancel && !hasAppointmentStarted(apt);
+              return (
+                <li key={apt.id} className="rounded-2xl border border-border/70 bg-card p-5 shadow-card sm:p-6">
+                  <div className="flex gap-4">
+                    <DateTile date={apt.appointmentDate} muted={inactive} />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+                        <div className="min-w-0">
+                          <h2 className={cn('truncate font-display text-title-sm', inactive && 'text-muted-foreground line-through decoration-muted-foreground/50')}>{apt.doctorName}</h2>
+                          <p className="mt-1 flex items-center gap-1.5 text-body-md text-muted-foreground">
+                            <Clock className="size-3.5" aria-hidden="true" />
+                            <span className="tabular-nums">{formatTimeRange(apt.startTime, apt.endTime)}</span>
+                          </p>
                         </div>
-                        {apt.doctorNotes && (
-                          <div className="mt-3 pt-3 border-t border-slate-50">
-                            <p className="text-xs text-slate-500 flex items-center gap-1">
-                              <MessageSquare className="h-3 w-3" />
-                              <span className="font-medium">Doctor Notes:</span> {apt.doctorNotes}
-                            </p>
-                          </div>
-                        )}
-                        {apt.cancellationReason && (
-                          <div className="mt-3 pt-3 border-t border-slate-50">
-                            <p className="text-xs text-red-500">
-                              <span className="font-medium">Cancelled by {apt.cancelledBy}:</span> {apt.cancellationReason}
-                            </p>
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
-              <div className="flex items-center justify-center gap-3 mt-6">
-                <Button variant="outline" size="sm" onClick={() => setPageNumber((p) => Math.max(1, p - 1))} disabled={pageNumber === 1}>
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <span className="text-sm text-slate-600">Page {pageNumber}</span>
-                <Button variant="outline" size="sm" onClick={() => setPageNumber((p) => p + 1)} disabled={!hasMore}>
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </>
-          )}
-        </motion.div>
+                        <StatusBadge status={apt.status} />
+                      </div>
+                      {apt.reasonForVisit && (
+                        <p className="mt-3 text-body-md text-foreground/85">
+                          <span className="text-muted-foreground">Reason: </span>
+                          {apt.reasonForVisit}
+                        </p>
+                      )}
+
+                      {apt.doctorNotes && (
+                        <div className="mt-3 rounded-xl bg-muted px-4 py-3 text-body-md">
+                          <p className="flex items-center gap-1.5 text-label-sm uppercase tracking-wider text-muted-foreground">
+                            <MessageSquareText className="size-3.5" aria-hidden="true" /> Doctor’s notes
+                          </p>
+                          <p className="mt-1 text-foreground/90">{apt.doctorNotes}</p>
+                        </div>
+                      )}
+                      {apt.status === 'Cancelled' && (apt.cancellationReason || apt.cancelledBy) && (
+                        <p className="mt-3 rounded-xl bg-muted px-4 py-2.5 text-body-sm text-muted-foreground">
+                          Cancelled{apt.cancelledBy ? ` by ${apt.cancelledBy.toLowerCase()}` : ''}
+                          {apt.cancellationReason ? ` — “${apt.cancellationReason}”` : ''}
+                        </p>
+                      )}
+
+                      {(canCancel || windowClosed) && (
+                        <p className="mt-3 flex items-start gap-2 rounded-xl border border-info/15 bg-info/[0.06] px-3 py-2 text-body-sm text-info">
+                          <Info className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
+                          {canCancel
+                            ? `You can cancel up to ${PATIENT_CANCELLATION_WINDOW_HOURS} hours before the start time.`
+                            : `This visit starts in less than ${PATIENT_CANCELLATION_WINDOW_HOURS} hours, so it can no longer be cancelled.`}
+                        </p>
+                      )}
+
+                      {(canCancel || canReview) && (
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          {canCancel && (
+                            <Button variant="destructive-outline" size="sm" onClick={() => setCancelId(apt.id)}>
+                              <X aria-hidden="true" /> Cancel appointment
+                            </Button>
+                          )}
+                          {canReview && (
+                            <Button variant="outline" size="sm" onClick={() => setReviewAppointment(apt)}>
+                              <Star aria-hidden="true" /> Leave a review
+                            </Button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </div>
 
-      {/* Cancel Dialog */}
-      <Dialog open={!!cancelId} onOpenChange={() => { setCancelId(null); setCancelReason(''); }}>
+      {!loading && (appointments.length > 0 || pageNumber > 1) && (
+        <Pagination page={pageNumber} hasNext={hasMore} onChange={setPageNumber} label="Appointment pages" />
+      )}
+
+      {/* Cancel dialog */}
+      <Dialog open={!!cancelId} onOpenChange={(open) => { if (!open) closeCancel(); }}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Cancel Appointment</DialogTitle>
-            <DialogDescription>Are you sure you want to cancel this appointment?</DialogDescription>
+            <DialogTitle>Cancel this appointment?</DialogTitle>
+            <DialogDescription>
+              {cancelTarget
+                ? `${cancelTarget.doctorName} · ${formatTimeRange(cancelTarget.startTime, cancelTarget.endTime)}. The slot will be released for other patients.`
+                : 'The slot will be released for other patients.'}
+            </DialogDescription>
           </DialogHeader>
-          <div className="space-y-3 py-3">
-            <div>
-              <label className="text-sm font-medium text-slate-700 mb-1.5 block">Reason (optional)</label>
-              <Textarea placeholder="Why are you cancelling..." value={cancelReason} onChange={(e) => setCancelReason(e.target.value)} />
-            </div>
-            <p className="text-xs text-slate-400">Must cancel at least 2 hours before the appointment.</p>
+          <div className="space-y-1.5">
+            <Label htmlFor="cancel-reason">Reason <span className="font-normal text-muted-foreground">(optional)</span></Label>
+            <Textarea
+              id="cancel-reason"
+              placeholder="Let the clinic know why you’re cancelling"
+              value={cancelReason}
+              onChange={(e) => setCancelReason(e.target.value)}
+              aria-describedby="cancel-reason-hint"
+            />
+            <p id="cancel-reason-hint" className="text-body-sm text-muted-foreground">Appointments can be cancelled up to 2 hours before they start.</p>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => { setCancelId(null); setCancelReason(''); }}>Keep Appointment</Button>
+            <Button variant="outline" onClick={closeCancel} disabled={cancelLoading}>Keep appointment</Button>
             <Button variant="destructive" onClick={handleCancel} disabled={cancelLoading}>
-              {cancelLoading ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" /> : 'Confirm Cancel'}
+              {cancelLoading && <Spinner aria-hidden="true" />}
+              {cancelLoading ? 'Cancelling…' : 'Cancel appointment'}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Review Dialog */}
-      <Dialog open={!!reviewAppointment} onOpenChange={() => { setReviewAppointment(null); setReviewRating(5); setReviewComment(''); }}>
+      {/* Review dialog */}
+      <Dialog open={!!reviewAppointment} onOpenChange={(open) => { if (!open) closeReview(); }}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Rate Your Experience</DialogTitle>
-            <DialogDescription>Share your feedback for {reviewAppointment?.doctorName}</DialogDescription>
+            <DialogTitle>How was your visit?</DialogTitle>
+            <DialogDescription>Your review of {reviewAppointment?.doctorName} helps other patients choose with confidence.</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-3">
-            <div className="flex items-center justify-center gap-2">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <button key={star} onClick={() => setReviewRating(star)} className="transition-transform hover:scale-110">
-                  <Star className={`h-8 w-8 ${star <= reviewRating ? 'text-amber-400 fill-amber-400' : 'text-slate-200'}`} />
-                </button>
-              ))}
-            </div>
-            <div>
-              <label className="text-sm font-medium text-slate-700 mb-1.5 block">Comment (optional)</label>
-              <Textarea placeholder="Share your experience..." value={reviewComment} onChange={(e) => setReviewComment(e.target.value)} maxLength={300} />
-            </div>
+          <div className="rounded-xl bg-muted py-4">
+            <RatingInput value={reviewRating} onChange={setReviewRating} />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="review-comment">Comment <span className="font-normal text-muted-foreground">(optional)</span></Label>
+            <Textarea
+              id="review-comment"
+              placeholder="What went well? What could be better?"
+              value={reviewComment}
+              onChange={(e) => setReviewComment(e.target.value)}
+              maxLength={REVIEW_MAX_LENGTH}
+              aria-describedby="review-comment-count"
+            />
+            <p id="review-comment-count" className="text-right text-body-sm text-muted-foreground tabular-nums">
+              {reviewComment.length}/{REVIEW_MAX_LENGTH}
+            </p>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => { setReviewAppointment(null); setReviewRating(5); setReviewComment(''); }}>Skip</Button>
-            <Button onClick={handleReview} disabled={reviewLoading} className="bg-teal-600 hover:bg-teal-700">
-              {reviewLoading ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" /> : 'Submit Review'}
+            <Button variant="outline" onClick={closeReview} disabled={reviewLoading}>Not now</Button>
+            <Button onClick={handleReview} disabled={reviewLoading}>
+              {reviewLoading && <Spinner aria-hidden="true" />}
+              {reviewLoading ? 'Submitting…' : 'Submit review'}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </Page>
   );
 }

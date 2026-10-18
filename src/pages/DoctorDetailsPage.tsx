@@ -1,276 +1,208 @@
-import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { isAxiosError } from 'axios';
 import { doctorsApi, reviewsApi } from '@/api';
 import type { DoctorDetails as DoctorDetailsType, Review } from '@/types';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/auth-context';
+import { getApiErrorMessage } from '@/lib/api-error';
+import { formatFee, parseUtc } from '@/lib/format';
+import { format } from 'date-fns';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  Star,
-  MapPin,
-  Briefcase,
-  Banknote,
-  Stethoscope,
-  ArrowLeft,
-  Calendar,
-  MessageSquare,
-} from 'lucide-react';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Page } from '@/components/layout/Page';
+import { EmptyState, ErrorState, LoadingState } from '@/components/states';
+import { UserAvatar } from '@/components/UserAvatar';
+import { RatingStars, RatingSummary } from '@/components/Rating';
+import { useApiQuery } from '@/hooks/use-api-query';
+import { ArrowLeft, Banknote, Briefcase, CalendarPlus, MapPin, MessageSquare, Stethoscope } from 'lucide-react';
 
 export function DoctorDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { isAuthenticated, role } = useAuth();
-  const [doctor, setDoctor] = useState<DoctorDetailsType | null>(null);
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [reviewsLoading, setReviewsLoading] = useState(true);
-
-  useEffect(() => {
-    if (!id) return;
-    setLoading(true);
-    doctorsApi
-      .getById(Number(id))
-      .then((res) => setDoctor(res.data))
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, [id]);
-
-  useEffect(() => {
-    if (!id) return;
-    setReviewsLoading(true);
-    reviewsApi
-      .getDoctorReviews(Number(id), { pageNumber: 1, pageSize: 10 })
-      .then((res) => setReviews(res.data))
-      .catch(() => {})
-      .finally(() => setReviewsLoading(false));
-  }, [id]);
+  const doctorQuery = useApiQuery(
+    (): Promise<DoctorDetailsType | null> =>
+      doctorsApi
+        .getById(Number(id))
+        .then((res) => res.data)
+        .catch((err) => {
+          // A 404 means "no such doctor"; anything else is a failure worth retrying
+          if (isAxiosError(err) && err.response?.status === 404) return null;
+          throw err;
+        }),
+    id
+  );
+  // Reviews are secondary: if they fail to load, the profile still shows with "No reviews yet"
+  const reviewsQuery = useApiQuery(
+    (): Promise<Review[]> =>
+      reviewsApi
+        .getDoctorReviews(Number(id), { pageNumber: 1, pageSize: 10 })
+        .then((res) => res.data)
+        .catch(() => []),
+    id
+  );
+  const { loading, error } = doctorQuery;
+  const doctor = doctorQuery.data ?? null;
+  const reviews = reviewsQuery.data ?? [];
+  const reviewsLoading = reviewsQuery.loading;
+  const retry = () => {
+    doctorQuery.reload();
+    reviewsQuery.reload();
+  };
 
   if (loading) {
+    return <LoadingState label="Loading doctor profile…" className="min-h-[60vh]" />;
+  }
+
+  if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-teal-50/40 to-white">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600" />
-      </div>
+      <Page width="narrow">
+        <ErrorState title="Couldn’t load this doctor" message={getApiErrorMessage(error, 'Failed to load this doctor')} onRetry={retry} />
+      </Page>
     );
   }
 
   if (!doctor) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-teal-50/40 to-white">
-        <div className="text-center">
-          <Stethoscope className="h-12 w-12 text-slate-300 mx-auto mb-4" />
-          <h2 className="text-lg font-medium text-slate-700">Doctor not found</h2>
-          <Button asChild variant="link" className="mt-2">
-            <Link to="/doctors">Back to doctors</Link>
-          </Button>
-        </div>
-      </div>
+      <Page width="narrow">
+        <EmptyState
+          icon={Stethoscope}
+          title="Doctor not found"
+          description="This profile may have been removed, or the link is incorrect."
+          action={<Button asChild variant="outline"><Link to="/doctors">Browse doctors</Link></Button>}
+        />
+      </Page>
     );
   }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-50/40 to-white py-8 sm:py-12">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-        >
-          <Button
-            variant="ghost"
-            size="sm"
-            asChild
-            className="mb-6 text-slate-500 hover:text-teal-700"
-          >
-            <Link to="/doctors">
-              <ArrowLeft className="h-4 w-4 mr-1" /> Back to Doctors
-            </Link>
+  const facts = [
+    { icon: Briefcase, label: 'Experience', value: `${doctor.yearsOfExperience} years` },
+    { icon: MapPin, label: 'City', value: doctor.clinicCity || '—' },
+    { icon: Banknote, label: 'Consultation', value: formatFee(doctor.consultationFee) },
+  ];
+
+  const bookingCard = (
+    <Card className="lg:sticky lg:top-24">
+      <CardHeader>
+        <p className="eyebrow">Consultation fee</p>
+        <p className="font-display text-headline-xl tabular-nums">{formatFee(doctor.consultationFee)}</p>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {doctor.clinicCity && (
+          <p className="flex items-start gap-2 rounded-xl bg-muted px-3 py-2.5 text-body-md text-muted-foreground">
+            <MapPin className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+            <span>{doctor.clinicAddress ? `${doctor.clinicAddress}, ${doctor.clinicCity}` : doctor.clinicCity}</span>
+          </p>
+        )}
+        {isAuthenticated && role === 'Patient' ? (
+          <Button size="lg" className="w-full" onClick={() => navigate(`/patient/book/${doctor.id}`)}>
+            <CalendarPlus aria-hidden="true" /> Book an appointment
           </Button>
+        ) : !isAuthenticated ? (
+          <>
+            <Button size="lg" className="w-full" onClick={() => navigate('/login', { state: { from: `/patient/book/${doctor.id}` } })}>
+              <CalendarPlus aria-hidden="true" /> Sign in to book
+            </Button>
+            <p className="text-center text-body-sm text-muted-foreground">
+              New here? <Link to="/register/patient" className="font-semibold text-primary hover:underline">Create a free account</Link>
+            </p>
+          </>
+        ) : (
+          <p className="rounded-xl bg-muted px-3 py-2.5 text-body-md text-muted-foreground">Booking is available to patient accounts.</p>
+        )}
+        <p className="text-body-sm text-muted-foreground">Open slots are shown for the next 14 days. Bookings are confirmed instantly.</p>
+      </CardContent>
+    </Card>
+  );
 
-          {/* Profile Card */}
-          <Card className="mb-6 border-slate-100 shadow-sm overflow-hidden">
-            <div className="h-32 bg-gradient-to-r from-teal-500 to-teal-600" />
-            <CardContent className="p-6 -mt-12">
-              <div className="flex flex-col sm:flex-row items-start gap-5">
-                <div className="h-24 w-24 rounded-2xl bg-white shadow-lg flex items-center justify-center text-3xl font-bold text-teal-600 border-4 border-white">
-                  {doctor.fullName.charAt(0)}
-                </div>
-                <div className="flex-1 pt-2">
-                  <h1 className="text-2xl font-bold text-slate-900">{doctor.fullName}</h1>
-                  <p className="text-teal-600 font-medium">{doctor.specialtyName}</p>
-                  <div className="flex items-center gap-4 mt-2 text-sm text-slate-500">
-                    <span className="flex items-center gap-1">
-                      <Star className="h-4 w-4 text-amber-400 fill-amber-400" />
-                      <span className="font-medium text-slate-700">{doctor.averageRating.toFixed(1)}</span>
-                      <span>({doctor.totalReviews} reviews)</span>
-                    </span>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-2 sm:items-end">
-                  <div className="text-2xl font-bold text-teal-700">{doctor.consultationFee} EGP</div>
-                  <p className="text-xs text-slate-400">per consultation</p>
+  return (
+    <Page width="wide">
+      <Link to="/doctors" className="mb-6 inline-flex items-center gap-1.5 text-label-md text-muted-foreground transition-colors hover:text-foreground">
+        <ArrowLeft className="size-4" aria-hidden="true" /> All doctors
+      </Link>
+
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem]">
+        <div className="space-y-8">
+          {/* Profile header */}
+          <section className="rounded-2xl border border-border/70 bg-card p-6 shadow-card">
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+              <UserAvatar name={doctor.fullName} size="xl" />
+              <div className="min-w-0">
+                <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-label-sm uppercase tracking-wider text-primary">
+                  {doctor.specialtyName}
+                </span>
+                <h1 className="mt-2 font-display text-headline-lg sm:text-headline-xl">{doctor.fullName}</h1>
+                <div className="mt-1.5">
+                  <RatingSummary rating={doctor.averageRating} reviews={doctor.totalReviews} />
                 </div>
               </div>
+            </div>
 
-              <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50">
-                  <Briefcase className="h-4 w-4 text-teal-600" />
-                  <div>
-                    <p className="text-xs text-slate-400">Experience</p>
-                    <p className="text-sm font-medium text-slate-800">{doctor.yearsOfExperience} years</p>
+            <dl className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+              {facts.map((f) => (
+                <div key={f.label} className="flex items-center gap-3 rounded-xl bg-muted px-4 py-3">
+                  <span className="inline-flex size-10 items-center justify-center rounded-lg bg-card text-primary shadow-xs">
+                    <f.icon className="size-[1.125rem]" aria-hidden="true" />
+                  </span>
+                  <div className="min-w-0">
+                    <dt className="text-caption uppercase tracking-wider text-muted-foreground">{f.label}</dt>
+                    <dd className="truncate text-title-sm tabular-nums">{f.value}</dd>
                   </div>
                 </div>
-                <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50">
-                  <MapPin className="h-4 w-4 text-teal-600" />
-                  <div>
-                    <p className="text-xs text-slate-400">Location</p>
-                    <p className="text-sm font-medium text-slate-800">{doctor.clinicCity}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50">
-                  <Banknote className="h-4 w-4 text-teal-600" />
-                  <div>
-                    <p className="text-xs text-slate-400">Consultation Fee</p>
-                    <p className="text-sm font-medium text-slate-800">{doctor.consultationFee} EGP</p>
-                  </div>
-                </div>
-              </div>
+              ))}
+            </dl>
+          </section>
 
-              {doctor.bio && (
-                <div className="mt-5 p-4 rounded-xl bg-teal-50/50 border border-teal-100">
-                  <p className="text-sm text-slate-600 leading-relaxed">{doctor.bio}</p>
-                </div>
+          {/* Booking card appears here on small screens so the main action is near the top */}
+          <div className="lg:hidden">{bookingCard}</div>
+
+          {doctor.bio && (
+            <section aria-labelledby="about-heading">
+              <h2 id="about-heading" className="font-display text-headline-md">About</h2>
+              <p className="mt-3 max-w-prose text-body-lg text-muted-foreground">{doctor.bio}</p>
+            </section>
+          )}
+
+          <section aria-labelledby="reviews-heading">
+            <div className="flex items-end justify-between gap-4">
+              <h2 id="reviews-heading" className="font-display text-headline-md">Patient reviews</h2>
+              {doctor.totalReviews > 0 && (
+                <p className="rounded-full bg-secondary px-2.5 py-0.5 text-label-sm text-secondary-foreground">
+                  {doctor.totalReviews} {doctor.totalReviews === 1 ? 'review' : 'reviews'}
+                </p>
               )}
-
-              {doctor.clinicAddress && (
-                <div className="mt-3 flex items-center gap-2 text-sm text-slate-500">
-                  <MapPin className="h-4 w-4 text-slate-400" />
-                  {doctor.clinicAddress}, {doctor.clinicCity}
-                </div>
-              )}
-
-              <div className="mt-6 flex gap-3">
-                {isAuthenticated && role === 'Patient' ? (
-                  <Button
-                    onClick={() => navigate(`/patient/book/${doctor.id}`)}
-                    className="bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 shadow-md shadow-teal-500/20"
-                  >
-                    <Calendar className="h-4 w-4 mr-2" /> Book Appointment
-                  </Button>
-                ) : !isAuthenticated ? (
-                  <Button
-                    onClick={() => navigate('/login')}
-                    variant="outline"
-                  >
-                    <Calendar className="h-4 w-4 mr-2" /> Sign in to Book
-                  </Button>
-                ) : null}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Tabs */}
-          <Tabs defaultValue="reviews" className="w-full">
-            <TabsList className="w-full sm:w-auto">
-              <TabsTrigger value="reviews" className="flex items-center gap-1.5">
-                <MessageSquare className="h-3.5 w-3.5" /> Reviews
-              </TabsTrigger>
-              <TabsTrigger value="info" className="flex items-center gap-1.5">
-                <Stethoscope className="h-3.5 w-3.5" /> Information
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="reviews" className="mt-4">
+            </div>
+            <div className="mt-4">
               {reviewsLoading ? (
-                <div className="flex justify-center py-8">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-teal-600" />
-                </div>
+                <LoadingState label="Loading reviews…" className="py-10" />
               ) : reviews.length === 0 ? (
-                <Card className="border-slate-100">
-                  <CardContent className="p-8 text-center">
-                    <MessageSquare className="h-10 w-10 text-slate-300 mx-auto mb-3" />
-                    <p className="text-sm text-slate-500">No reviews yet</p>
-                  </CardContent>
-                </Card>
+                <EmptyState icon={MessageSquare} title="No reviews yet" description="Reviews appear after patients complete a visit." className="py-10" />
               ) : (
-                <div className="space-y-3">
-                  {reviews.map((review, i) => (
-                    <motion.div
-                      key={review.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.05 }}
-                    >
-                      <Card className="border-slate-100">
-                        <CardContent className="p-4">
-                          <div className="flex items-start justify-between">
-                            <div className="flex items-center gap-2.5">
-                              <div className="h-8 w-8 rounded-full bg-teal-50 flex items-center justify-center text-xs font-semibold text-teal-600">
-                                {review.patientName.charAt(0)}
-                              </div>
-                              <div>
-                                <p className="text-sm font-medium text-slate-800">{review.patientName}</p>
-                                <p className="text-xs text-slate-400">
-                                  {new Date(review.createdAt).toLocaleDateString()}
-                                </p>
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              {Array.from({ length: 5 }).map((_, idx) => (
-                                <Star
-                                  key={idx}
-                                  className={`h-3.5 w-3.5 ${
-                                    idx < review.rating
-                                      ? 'text-amber-400 fill-amber-400'
-                                      : 'text-slate-200'
-                                  }`}
-                                />
-                              ))}
-                            </div>
+                <ul className="divide-y divide-border/70 rounded-2xl border border-border/70 bg-card shadow-card">
+                  {reviews.map((review) => (
+                    <li key={review.id} className="p-5">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                          <UserAvatar name={review.patientName} size="sm" />
+                          <div>
+                            <p className="text-label-md">{review.patientName}</p>
+                            <p className="mt-0.5 text-body-sm text-muted-foreground">
+                              <time dateTime={parseUtc(review.createdAt).toISOString()}>{format(parseUtc(review.createdAt), 'MMM d, yyyy')}</time>
+                            </p>
                           </div>
-                          {review.comment && (
-                            <p className="mt-3 text-sm text-slate-600 leading-relaxed">{review.comment}</p>
-                          )}
-                        </CardContent>
-                      </Card>
-                    </motion.div>
+                        </div>
+                        <RatingStars value={review.rating} />
+                      </div>
+                      {review.comment && <p className="mt-3 text-body-md text-foreground/85">{review.comment}</p>}
+                    </li>
                   ))}
-                </div>
+                </ul>
               )}
-            </TabsContent>
+            </div>
+          </section>
+        </div>
 
-            <TabsContent value="info" className="mt-4">
-              <Card className="border-slate-100">
-                <CardContent className="p-6 space-y-4">
-                  <div>
-                    <h3 className="text-sm font-semibold text-slate-900 mb-1">Specialty</h3>
-                    <p className="text-sm text-slate-600">{doctor.specialtyName}</p>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold text-slate-900 mb-1">Years of Experience</h3>
-                    <p className="text-sm text-slate-600">{doctor.yearsOfExperience} years</p>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold text-slate-900 mb-1">Consultation Fee</h3>
-                    <p className="text-sm text-slate-600">{doctor.consultationFee} EGP</p>
-                  </div>
-                  {doctor.clinicAddress && (
-                    <div>
-                      <h3 className="text-sm font-semibold text-slate-900 mb-1">Clinic Address</h3>
-                      <p className="text-sm text-slate-600">{doctor.clinicAddress}</p>
-                    </div>
-                  )}
-                  <div>
-                    <h3 className="text-sm font-semibold text-slate-900 mb-1">City</h3>
-                    <p className="text-sm text-slate-600">{doctor.clinicCity}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </motion.div>
+        <aside className="hidden lg:block" aria-label="Book this doctor">{bookingCard}</aside>
       </div>
-    </div>
+    </Page>
   );
 }

@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { authApi, specialtiesApi } from '@/api';
 import type { Specialty, Gender } from '@/types';
+import { getApiErrorMessages } from '@/lib/api-error';
+import { meetsPasswordRules } from '@/lib/password';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
+import { Spinner } from '@/components/ui/spinner';
 import {
   Select,
   SelectContent,
@@ -14,15 +16,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Stethoscope, Eye, EyeOff } from 'lucide-react';
+import { AuthLayout } from '@/components/layout/AuthLayout';
+import { Field, FieldGroup } from '@/components/form/Field';
+import { PasswordInput } from '@/components/form/PasswordInput';
+import { PasswordRequirements } from '@/components/form/PasswordRequirements';
+import { IconInput } from '@/components/form/IconInput';
+import { ClipboardCheck, Mail, Phone } from 'lucide-react';
 import { toast } from 'sonner';
+
+const BIO_MAX_LENGTH = 500;
 
 export function RegisterDoctorPage() {
   const [specialties, setSpecialties] = useState<Specialty[]>([]);
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [errors, setErrors] = useState<{ gender?: string; specialty?: string; password?: string }>({});
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -45,6 +53,15 @@ export function RegisterDoctorPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Checks the browser can't do on its own (Radix Select ignores `required`)
+    const nextErrors = {
+      gender: form.gender ? undefined : 'Please select your gender.',
+      specialty: form.specialtyId ? undefined : 'Please select your specialty.',
+      password: meetsPasswordRules(form.password) ? undefined : 'Your password doesn’t meet all the requirements yet.',
+    };
+    setErrors(nextErrors);
+    if (nextErrors.gender || nextErrors.specialty || nextErrors.password) return;
+
     setLoading(true);
     try {
       await authApi.registerDoctor({
@@ -63,14 +80,9 @@ export function RegisterDoctorPage() {
         clinicCity: form.clinicCity || undefined,
       });
       setSuccess(true);
-      toast.success('Registration successful!');
-    } catch (err: any) {
-      const errors = err.response?.data?.errors;
-      if (errors) {
-        Object.values(errors).flat().forEach((msg: any) => toast.error(msg));
-      } else {
-        toast.error(err.response?.data?.title || 'Registration failed');
-      }
+      toast.success('Application submitted');
+    } catch (err) {
+      getApiErrorMessages(err, 'Registration failed').forEach((msg) => toast.error(msg));
     } finally {
       setLoading(false);
     }
@@ -78,136 +90,121 @@ export function RegisterDoctorPage() {
 
   if (success) {
     return (
-      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gradient-to-b from-teal-50/40 to-white py-12 px-4">
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="w-full max-w-md text-center">
-          <Card className="border-teal-200 shadow-lg">
-            <CardContent className="p-8">
-              <div className="h-16 w-16 rounded-full bg-teal-100 flex items-center justify-center mx-auto mb-4">
-                <Stethoscope className="h-8 w-8 text-teal-600" />
-              </div>
-              <h2 className="text-xl font-bold text-slate-900 mb-2">Application Submitted!</h2>
-              <p className="text-sm text-slate-500 mb-2">
-                Please check your email <strong>{form.email}</strong> to confirm your account.
-              </p>
-              <p className="text-sm text-slate-500 mb-6">
-                After confirmation, our team will review your application. You will be notified once approved.
-              </p>
-              <Button asChild className="bg-teal-600 hover:bg-teal-700">
-                <Link to="/login">Go to Sign In</Link>
-              </Button>
-            </CardContent>
-          </Card>
-        </motion.div>
-      </div>
+      <AuthLayout title="Application submitted" description={<>We sent a confirmation link to <strong className="font-semibold text-foreground">{form.email}</strong>.</>}>
+        <div className="rounded-xl bg-muted p-6">
+          <span className="inline-flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+            <ClipboardCheck className="size-5" aria-hidden="true" />
+          </span>
+          <ol className="mt-4 space-y-2 text-body-md text-muted-foreground">
+            <li><span className="font-semibold text-foreground">1. Confirm your email</span> using the link we just sent.</li>
+            <li><span className="font-semibold text-foreground">2. Wait for approval.</span> The clinic team reviews new doctors; you’ll be notified once approved.</li>
+            <li><span className="font-semibold text-foreground">3. Set your weekly hours</span> so patients can book you.</li>
+          </ol>
+          <Button asChild className="mt-6 w-full">
+            <Link to="/login">Go to sign in</Link>
+          </Button>
+        </div>
+      </AuthLayout>
     );
   }
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-start justify-center bg-gradient-to-b from-teal-50/40 to-white py-12 px-4">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="w-full max-w-lg">
-        <div className="text-center mb-6">
-          <Link to="/" className="inline-flex items-center gap-2.5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 shadow-md">
-              <Stethoscope className="h-5 w-5 text-white" />
-            </div>
-            <span className="text-2xl font-bold text-gradient">ClinicFlow</span>
-          </Link>
-        </div>
+    <AuthLayout
+      wide
+      title="Join as a doctor"
+      description="Create your practice profile. After you confirm your email, the clinic team reviews and approves your account."
+      footer={
+        <p>
+          Already have an account? <Link to="/login" className="font-semibold text-primary hover:underline">Sign in</Link>
+        </p>
+      }
+    >
+      <form onSubmit={handleSubmit} className="space-y-8">
+        <FieldGroup title="Account">
+          <Field id="email" label="Email" required>
+            <IconInput icon={Mail} type="email" autoComplete="email" placeholder="you@example.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
+          </Field>
+          <div className="space-y-2">
+            <Field id="password" label="Password" required error={errors.password}>
+              <PasswordInput autoComplete="new-password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
+            </Field>
+            <PasswordRequirements id="password-rules" password={form.password} />
+          </div>
+        </FieldGroup>
 
-        <Card className="border-slate-100 shadow-lg shadow-slate-200/50">
-          <CardHeader className="space-y-1 pb-4">
-            <CardTitle className="text-xl">Join as Doctor</CardTitle>
-            <CardDescription>Register your practice and start accepting patients</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-2">
-                  <Label>First Name *</Label>
-                  <Input value={form.firstName} onChange={(e) => setForm({ ...form, firstName: e.target.value })} required maxLength={50} />
-                </div>
-                <div className="space-y-2">
-                  <Label>Last Name *</Label>
-                  <Input value={form.lastName} onChange={(e) => setForm({ ...form, lastName: e.target.value })} required maxLength={50} />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label>Email *</Label>
-                <Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
-              </div>
-              <div className="space-y-2">
-                <Label>Password *</Label>
-                <div className="relative">
-                  <Input type={showPassword ? 'text' : 'password'} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
-                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
-                </div>
-                <p className="text-xs text-slate-400">Min 8 chars, uppercase, lowercase, digit, special char</p>
-              </div>
-              <div className="space-y-2">
-                <Label>Phone *</Label>
-                <Input placeholder="+201112223334" value={form.phoneNumber} onChange={(e) => setForm({ ...form, phoneNumber: e.target.value })} required />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-2">
-                  <Label>Gender *</Label>
-                  <Select value={form.gender} onValueChange={(v) => setForm({ ...form, gender: v as Gender })}>
-                    <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Male">Male</SelectItem>
-                      <SelectItem value="Female">Female</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label>Date of Birth</Label>
-                  <Input type="date" value={form.dateOfBirth} onChange={(e) => setForm({ ...form, dateOfBirth: e.target.value })} />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label>Specialty *</Label>
-                <Select value={form.specialtyId} onValueChange={(v) => setForm({ ...form, specialtyId: v })}>
-                  <SelectTrigger><SelectValue placeholder="Select specialty" /></SelectTrigger>
-                  <SelectContent>
-                    {specialties.map((s) => (
-                      <SelectItem key={s.id} value={String(s.id)}>{s.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>Bio</Label>
-                <Textarea placeholder="Tell patients about yourself..." value={form.bio} onChange={(e) => setForm({ ...form, bio: e.target.value })} maxLength={500} />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-2">
-                  <Label>Experience (years) *</Label>
-                  <Input type="number" value={form.yearsOfExperience} onChange={(e) => setForm({ ...form, yearsOfExperience: e.target.value })} required min={0} />
-                </div>
-                <div className="space-y-2">
-                  <Label>Consultation Fee (EGP) *</Label>
-                  <Input type="number" value={form.consultationFee} onChange={(e) => setForm({ ...form, consultationFee: e.target.value })} required min={1} max={10000} />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label>Clinic Address</Label>
-                <Input placeholder="Street address..." value={form.clinicAddress} onChange={(e) => setForm({ ...form, clinicAddress: e.target.value })} maxLength={300} />
-              </div>
-              <div className="space-y-2">
-                <Label>Clinic City</Label>
-                <Input placeholder="City..." value={form.clinicCity} onChange={(e) => setForm({ ...form, clinicCity: e.target.value })} maxLength={100} />
-              </div>
-              <Button type="submit" disabled={loading} className="w-full bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 shadow-md shadow-teal-500/20 h-10">
-                {loading ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" /> : 'Submit Application'}
-              </Button>
-            </form>
-            <p className="mt-4 text-center text-sm text-slate-500">
-              Already have an account? <Link to="/login" className="text-teal-600 hover:text-teal-700 font-medium">Sign in</Link>
-            </p>
-          </CardContent>
-        </Card>
-      </motion.div>
-    </div>
+        <FieldGroup title="About you">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field id="firstName" label="First name" required>
+              <Input autoComplete="given-name" value={form.firstName} onChange={(e) => setForm({ ...form, firstName: e.target.value })} required maxLength={50} />
+            </Field>
+            <Field id="lastName" label="Last name" required>
+              <Input autoComplete="family-name" value={form.lastName} onChange={(e) => setForm({ ...form, lastName: e.target.value })} required maxLength={50} />
+            </Field>
+            <Field id="phone" label="Phone number" required hint="International format, e.g. +201112223334">
+              <IconInput icon={Phone} type="tel" autoComplete="tel" placeholder="+201112223334" value={form.phoneNumber} onChange={(e) => setForm({ ...form, phoneNumber: e.target.value })} required />
+            </Field>
+            <Field id="dob" label="Date of birth" optional>
+              <Input type="date" autoComplete="bday" value={form.dateOfBirth} onChange={(e) => setForm({ ...form, dateOfBirth: e.target.value })} />
+            </Field>
+            <div className="space-y-1.5">
+              <Label htmlFor="gender" className="gap-1 text-label-md">
+                Gender<span className="text-destructive" aria-hidden="true">*</span>
+              </Label>
+              <Select value={form.gender} onValueChange={(v) => { setForm({ ...form, gender: v as Gender }); setErrors((er) => ({ ...er, gender: undefined })); }}>
+                <SelectTrigger id="gender" className="w-full" aria-invalid={errors.gender ? true : undefined} aria-describedby={errors.gender ? 'gender-error' : undefined} aria-required>
+                  <SelectValue placeholder="Select" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Male">Male</SelectItem>
+                  <SelectItem value="Female">Female</SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.gender && <p id="gender-error" className="text-body-sm font-medium text-destructive">{errors.gender}</p>}
+            </div>
+          </div>
+        </FieldGroup>
+
+        <FieldGroup title="Your practice" description="This is what patients see on your public profile.">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-1.5 sm:col-span-2">
+              <Label htmlFor="specialty" className="gap-1 text-label-md">
+                Specialty<span className="text-destructive" aria-hidden="true">*</span>
+              </Label>
+              <Select value={form.specialtyId} onValueChange={(v) => { setForm({ ...form, specialtyId: v }); setErrors((er) => ({ ...er, specialty: undefined })); }}>
+                <SelectTrigger id="specialty" className="w-full" aria-invalid={errors.specialty ? true : undefined} aria-describedby={errors.specialty ? 'specialty-error' : undefined} aria-required>
+                  <SelectValue placeholder="Select your specialty" />
+                </SelectTrigger>
+                <SelectContent>
+                  {specialties.map((s) => (
+                    <SelectItem key={s.id} value={String(s.id)}>{s.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {errors.specialty && <p id="specialty-error" className="text-body-sm font-medium text-destructive">{errors.specialty}</p>}
+            </div>
+            <Field id="experience" label="Years of experience" required>
+              <Input type="number" inputMode="numeric" value={form.yearsOfExperience} onChange={(e) => setForm({ ...form, yearsOfExperience: e.target.value })} required min={0} />
+            </Field>
+            <Field id="fee" label="Consultation fee (EGP)" required hint="Between 1 and 10,000">
+              <Input type="number" inputMode="decimal" value={form.consultationFee} onChange={(e) => setForm({ ...form, consultationFee: e.target.value })} required min={1} max={10000} />
+            </Field>
+            <Field id="bio" label="Bio" optional className="sm:col-span-2" hint={`${form.bio.length}/${BIO_MAX_LENGTH} — your experience, focus areas and approach to care.`}>
+              <Textarea rows={3} value={form.bio} onChange={(e) => setForm({ ...form, bio: e.target.value })} maxLength={BIO_MAX_LENGTH} />
+            </Field>
+            <Field id="address" label="Clinic address" optional>
+              <Input autoComplete="street-address" placeholder="Street and building" value={form.clinicAddress} onChange={(e) => setForm({ ...form, clinicAddress: e.target.value })} maxLength={300} />
+            </Field>
+            <Field id="city" label="City" optional>
+              <Input autoComplete="address-level2" value={form.clinicCity} onChange={(e) => setForm({ ...form, clinicCity: e.target.value })} maxLength={100} />
+            </Field>
+          </div>
+        </FieldGroup>
+
+        <Button type="submit" size="lg" disabled={loading} className="w-full">
+          {loading && <Spinner aria-hidden="true" />}
+          {loading ? 'Submitting…' : 'Submit application'}
+        </Button>
+      </form>
+    </AuthLayout>
   );
 }

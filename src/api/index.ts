@@ -1,4 +1,4 @@
-export { default as api, setTokens, clearTokens, getTokens } from './axios';
+export { default as api, setTokens, clearTokens, getTokens, saveSession, clearSession } from './axios';
 export { authApi } from './auth';
 export { doctorsApi } from './doctors';
 export { appointmentsApi } from './appointments';

@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { format } from 'date-fns';
 import { profileApi, patientApi } from '@/api';
 import type { UserProfile, PatientProfile, Gender, BloodType } from '@/types';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/auth-context';
+import { getApiErrorMessage } from '@/lib/api-error';
+import { parseUtc } from '@/lib/format';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
+import { Spinner } from '@/components/ui/spinner';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Select,
   SelectContent,
@@ -15,22 +19,32 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { User, Save, Stethoscope } from 'lucide-react';
+import { Page, PageHeader } from '@/components/layout/Page';
+import { ErrorState, LoadingState } from '@/components/states';
+import { Field } from '@/components/form/Field';
+import { PersonalInfoFields, type PersonalInfoForm } from '@/components/profile/PersonalInfoFields';
+import { ProfileSummary } from '@/components/profile/ProfileSummary';
+import { HeartPulse, User } from 'lucide-react';
 import { toast } from 'sonner';
+
+const bloodTypes: BloodType[] = ['APositive', 'ANegative', 'BPositive', 'BNegative', 'OPositive', 'ONegative', 'ABPositive', 'ABNegative'];
+const bloodTypeLabel = (bt: BloodType) => bt.replace('Positive', '+').replace('Negative', '−');
 
 export function PatientProfilePage() {
   const { refreshUser } = useAuth();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
   const [saving, setSaving] = useState(false);
   const [savingPatient, setSavingPatient] = useState(false);
 
-  const [baseForm, setBaseForm] = useState({
+  const [baseForm, setBaseForm] = useState<PersonalInfoForm>({
     firstName: '',
     lastName: '',
     phoneNumber: '',
     profilePictureUrl: '',
-    gender: '' as Gender | '',
+    gender: '',
     dateOfBirth: '',
   });
 
@@ -55,7 +69,7 @@ export function PatientProfilePage() {
         setBaseForm({
           firstName: profileRes.data.firstName,
           lastName: profileRes.data.lastName,
-          phoneNumber: profileRes.data.phoneNumber,
+          phoneNumber: profileRes.data.phoneNumber ?? '',
           profilePictureUrl: profileRes.data.profilePictureUrl || '',
           gender: profileRes.data.gender,
           dateOfBirth: profileRes.data.dateOfBirth || '',
@@ -67,14 +81,16 @@ export function PatientProfilePage() {
           emergencyContactName: patientRes.data.emergencyContactName || '',
           emergencyContactPhone: patientRes.data.emergencyContactPhone || '',
         });
-      } catch {
-        toast.error('Failed to load profile');
+        setLoadError(null);
+      } catch (err) {
+        // Don't show an editable empty form: saving it could blank out real data
+        setLoadError(getApiErrorMessage(err, 'Failed to load your profile'));
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, []);
+  }, [reloadKey]);
 
   const handleSaveBase = async () => {
     setSaving(true);
@@ -89,8 +105,8 @@ export function PatientProfilePage() {
       });
       toast.success('Profile updated');
       refreshUser();
-    } catch {
-      toast.error('Failed to update profile');
+    } catch (err) {
+      toast.error(getApiErrorMessage(err, 'Failed to update profile'));
     } finally {
       setSaving(false);
     }
@@ -106,108 +122,118 @@ export function PatientProfilePage() {
         emergencyContactName: medicalForm.emergencyContactName || undefined,
         emergencyContactPhone: medicalForm.emergencyContactPhone || undefined,
       });
-      toast.success('Medical info updated');
-    } catch {
-      toast.error('Failed to update medical info');
+      toast.success('Medical information updated');
+    } catch (err) {
+      toast.error(getApiErrorMessage(err, 'Failed to update medical info'));
     } finally {
       setSavingPatient(false);
     }
   };
 
   if (loading) {
+    return <LoadingState label="Loading your profile…" className="min-h-[60vh]" />;
+  }
+
+  if (loadError) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-teal-50/40 to-white">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600" />
-      </div>
+      <Page width="narrow">
+        <ErrorState
+          title="Couldn’t load your profile"
+          message={loadError}
+          onRetry={() => {
+            setLoading(true);
+            setReloadKey((k) => k + 1);
+          }}
+        />
+      </Page>
     );
   }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-50/40 to-white py-8 sm:py-12">
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold text-slate-900">My Profile</h1>
-            <p className="text-sm text-slate-500">Manage your personal and medical information</p>
-          </div>
+  const fullName = profile ? `${profile.firstName} ${profile.lastName}` : 'Your profile';
 
-          {/* Profile Header */}
-          <Card className="mb-6 border-slate-100 shadow-sm">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-5">
-                <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-teal-500/20">
-                  {profile?.firstName?.charAt(0)}{profile?.lastName?.charAt(0)}
+  return (
+    <Page width="narrow">
+      <PageHeader eyebrow="Account" title="Profile" description="Keep your contact and health details up to date so your doctors have what they need." />
+
+      <ProfileSummary
+        name={fullName}
+        email={profile?.email}
+        role="Patient"
+        pictureUrl={profile?.profilePictureUrl}
+        memberSince={profile?.createdAt ? format(parseUtc(profile.createdAt), 'MMMM yyyy') : undefined}
+      />
+
+      <Tabs defaultValue="personal" className="gap-4">
+        <TabsList className="w-full sm:w-auto">
+          <TabsTrigger value="personal"><User aria-hidden="true" /> Personal</TabsTrigger>
+          <TabsTrigger value="medical"><HeartPulse aria-hidden="true" /> Medical</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="personal">
+          <Card>
+            <CardHeader>
+              <CardTitle>Personal information</CardTitle>
+              <CardDescription>Your name and contact details as your doctors see them.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <PersonalInfoFields value={baseForm} onChange={setBaseForm} />
+            </CardContent>
+            <CardFooter className="justify-end border-t border-border/70">
+              <Button onClick={handleSaveBase} disabled={saving}>
+                {saving && <Spinner aria-hidden="true" />}
+                {saving ? 'Saving…' : 'Save changes'}
+              </Button>
+            </CardFooter>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="medical">
+          <Card>
+            <CardHeader>
+              <CardTitle>Medical information</CardTitle>
+              <CardDescription>Shared with doctors you book, to help them prepare for your visit.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-1.5">
+                  <Label htmlFor="medical-blood-type" className="text-label-md">Blood type</Label>
+                  <Select value={medicalForm.bloodType} onValueChange={(v) => setMedicalForm({ ...medicalForm, bloodType: v as BloodType })}>
+                    <SelectTrigger id="medical-blood-type" className="w-full"><SelectValue placeholder="Select" /></SelectTrigger>
+                    <SelectContent>
+                      {bloodTypes.map((bt) => (
+                        <SelectItem key={bt} value={bt}>{bloodTypeLabel(bt)}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-                <div>
-                  <h2 className="text-xl font-bold text-slate-900">{profile?.firstName} {profile?.lastName}</h2>
-                  <p className="text-sm text-teal-600 font-medium">Patient</p>
-                  <p className="text-sm text-slate-400">{profile?.email}</p>
+              </div>
+              <Field id="medical-allergies" label="Allergies" hint="e.g. Penicillin, peanuts">
+                <Textarea rows={2} value={medicalForm.allergies} onChange={(e) => setMedicalForm({ ...medicalForm, allergies: e.target.value })} maxLength={500} />
+              </Field>
+              <Field id="medical-chronic" label="Chronic conditions" hint="e.g. Asthma, type 2 diabetes">
+                <Textarea rows={2} value={medicalForm.chronicConditions} onChange={(e) => setMedicalForm({ ...medicalForm, chronicConditions: e.target.value })} maxLength={500} />
+              </Field>
+              <div className="rounded-xl bg-muted p-4">
+                <p className="eyebrow mb-3">Emergency contact</p>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field id="medical-emergency-name" label="Name">
+                    <Input autoComplete="off" className="bg-card" value={medicalForm.emergencyContactName} onChange={(e) => setMedicalForm({ ...medicalForm, emergencyContactName: e.target.value })} maxLength={100} />
+                  </Field>
+                  <Field id="medical-emergency-phone" label="Phone">
+                    <Input type="tel" placeholder="+201098765432" className="bg-card" value={medicalForm.emergencyContactPhone} onChange={(e) => setMedicalForm({ ...medicalForm, emergencyContactPhone: e.target.value })} />
+                  </Field>
                 </div>
               </div>
             </CardContent>
+            <CardFooter className="justify-end border-t border-border/70">
+              <Button onClick={handleSaveMedical} disabled={savingPatient}>
+                {savingPatient && <Spinner aria-hidden="true" />}
+                {savingPatient ? 'Saving…' : 'Save changes'}
+              </Button>
+            </CardFooter>
           </Card>
-
-          <Tabs defaultValue="personal" className="w-full">
-            <TabsList className="w-full sm:w-auto mb-4">
-              <TabsTrigger value="personal" className="flex items-center gap-1.5"><User className="h-3.5 w-3.5" /> Personal</TabsTrigger>
-              <TabsTrigger value="medical" className="flex items-center gap-1.5"><Stethoscope className="h-3.5 w-3.5" /> Medical</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="personal">
-              <Card className="border-slate-100 shadow-sm">
-                <CardHeader><CardTitle className="text-lg">Personal Information</CardTitle><CardDescription>Update your basic profile details</CardDescription></CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-2"><Label>First Name</Label><Input value={baseForm.firstName} onChange={(e) => setBaseForm({ ...baseForm, firstName: e.target.value })} /></div>
-                    <div className="space-y-2"><Label>Last Name</Label><Input value={baseForm.lastName} onChange={(e) => setBaseForm({ ...baseForm, lastName: e.target.value })} /></div>
-                  </div>
-                  <div className="space-y-2"><Label>Phone Number</Label><Input value={baseForm.phoneNumber} onChange={(e) => setBaseForm({ ...baseForm, phoneNumber: e.target.value })} /></div>
-                  <div className="space-y-2"><Label>Profile Picture URL</Label><Input value={baseForm.profilePictureUrl} onChange={(e) => setBaseForm({ ...baseForm, profilePictureUrl: e.target.value })} placeholder="https://..." /></div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-2">
-                      <Label>Gender</Label>
-                      <Select value={baseForm.gender} onValueChange={(v) => setBaseForm({ ...baseForm, gender: v as Gender })}>
-                        <SelectTrigger><SelectValue /></SelectTrigger>
-                        <SelectContent><SelectItem value="Male">Male</SelectItem><SelectItem value="Female">Female</SelectItem></SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2"><Label>Date of Birth</Label><Input type="date" value={baseForm.dateOfBirth} onChange={(e) => setBaseForm({ ...baseForm, dateOfBirth: e.target.value })} /></div>
-                  </div>
-                  <Button onClick={handleSaveBase} disabled={saving} className="bg-teal-600 hover:bg-teal-700">
-                    <Save className="h-4 w-4 mr-2" /> {saving ? 'Saving...' : 'Save Changes'}
-                  </Button>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="medical">
-              <Card className="border-slate-100 shadow-sm">
-                <CardHeader><CardTitle className="text-lg">Medical Information</CardTitle><CardDescription>Update your health details for better care</CardDescription></CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label>Blood Type</Label>
-                    <Select value={medicalForm.bloodType} onValueChange={(v) => setMedicalForm({ ...medicalForm, bloodType: v as BloodType })}>
-                      <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
-                      <SelectContent>
-                        {(['APositive', 'ANegative', 'BPositive', 'BNegative', 'OPositive', 'ONegative', 'ABPositive', 'ABNegative'] as BloodType[]).map((bt) => (
-                          <SelectItem key={bt} value={bt}>{bt.replace('Positive', '+').replace('Negative', '-')}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2"><Label>Allergies</Label><Input value={medicalForm.allergies} onChange={(e) => setMedicalForm({ ...medicalForm, allergies: e.target.value })} placeholder="e.g., Penicillin" /></div>
-                  <div className="space-y-2"><Label>Chronic Conditions</Label><Input value={medicalForm.chronicConditions} onChange={(e) => setMedicalForm({ ...medicalForm, chronicConditions: e.target.value })} placeholder="e.g., Asthma" /></div>
-                  <div className="space-y-2"><Label>Emergency Contact Name</Label><Input value={medicalForm.emergencyContactName} onChange={(e) => setMedicalForm({ ...medicalForm, emergencyContactName: e.target.value })} /></div>
-                  <div className="space-y-2"><Label>Emergency Contact Phone</Label><Input value={medicalForm.emergencyContactPhone} onChange={(e) => setMedicalForm({ ...medicalForm, emergencyContactPhone: e.target.value })} placeholder="+201098765432" /></div>
-                  <Button onClick={handleSaveMedical} disabled={savingPatient} className="bg-teal-600 hover:bg-teal-700">
-                    <Save className="h-4 w-4 mr-2" /> {savingPatient ? 'Saving...' : 'Save Changes'}
-                  </Button>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </motion.div>
-      </div>
-    </div>
+        </TabsContent>
+      </Tabs>
+    </Page>
   );
 }

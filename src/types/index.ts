@@ -184,9 +184,19 @@ export interface DoctorFilterRequest {
 export type DoctorSortBy = 'Rating' | 'Fee' | 'Experience';
 
 // ============ SCHEDULE TYPES ============
+// Sent and returned as strings (API contract §7)
+export type DayOfWeek =
+  | 'Sunday'
+  | 'Monday'
+  | 'Tuesday'
+  | 'Wednesday'
+  | 'Thursday'
+  | 'Friday'
+  | 'Saturday';
+
 export interface Schedule {
   id: number;
-  dayOfWeek: number;
+  dayOfWeek: DayOfWeek;
   startTime: string;
   endTime: string;
   slotDurationMinutes: number;
@@ -194,7 +204,7 @@ export interface Schedule {
 }
 
 export interface CreateScheduleRequest {
-  dayOfWeek: number;
+  dayOfWeek: DayOfWeek;
   startTime: string;
   endTime: string;
   slotDurationMinutes: number;
@@ -301,6 +311,13 @@ export interface Notification {
   relatedEntityId?: number;
 }
 
+/** Query for GET /notifications/my (API contract #32): pageSize 1–100, default 50. */
+export interface NotificationFilter {
+  unreadOnly?: boolean;
+  pageNumber?: number;
+  pageSize?: number;
+}
+
 // ============ SPECIALTY TYPES ============
 export interface Specialty {
   id: number;
@@ -314,6 +331,8 @@ export interface CreateSpecialtyRequest {
   name: string;
   description?: string;
   iconUrl?: string;
+  /** Omit to keep the current state; a new specialty is active unless false (API contract #41, #42). */
+  isActive?: boolean;
 }
 
 // ============ ADMIN TYPES ============

@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { authApi } from '@/api';
+import { getApiErrorMessage } from '@/lib/api-error';
+import { meetsPasswordRules } from '@/lib/password';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Stethoscope, Eye, EyeOff } from 'lucide-react';
+import { Spinner } from '@/components/ui/spinner';
+import { AuthLayout } from '@/components/layout/AuthLayout';
+import { Field } from '@/components/form/Field';
+import { PasswordInput } from '@/components/form/PasswordInput';
+import { PasswordRequirements } from '@/components/form/PasswordRequirements';
+import { CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export function ResetPasswordPage() {
@@ -14,9 +17,9 @@ export function ResetPasswordPage() {
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const userId = searchParams.get('userId');
   const token = searchParams.get('token');
 
@@ -27,12 +30,18 @@ export function ResetPasswordPage() {
     }
   }, [userId, token, navigate]);
 
+  // The reset endpoint's policy doesn't require a special character (API contract §5.1 #8)
+  const passwordOk = meetsPasswordRules(password, false);
+  const mismatch = confirmPassword !== '' && password !== confirmPassword;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitted(true);
     if (password !== confirmPassword) {
       toast.error('Passwords do not match');
       return;
     }
+    if (!passwordOk) return;
     setLoading(true);
     try {
       await authApi.resetPassword({
@@ -42,65 +51,46 @@ export function ResetPasswordPage() {
       });
       setSuccess(true);
       toast.success('Password reset successfully!');
-    } catch (err: any) {
-      toast.error(err.response?.data?.title || 'Failed to reset password');
+    } catch (err) {
+      toast.error(getApiErrorMessage(err, 'Failed to reset password'));
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gradient-to-b from-teal-50/40 to-white py-12 px-4">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="w-full max-w-md">
-        <div className="text-center mb-6">
-          <Link to="/" className="inline-flex items-center gap-2.5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 shadow-md">
-              <Stethoscope className="h-5 w-5 text-white" />
-            </div>
-            <span className="text-2xl font-bold text-gradient">ClinicFlow</span>
-          </Link>
+  if (success) {
+    return (
+      <AuthLayout title="Password updated" description="For your security, you’ve been signed out on all devices.">
+        <div className="rounded-xl bg-muted p-6" role="status">
+          <span className="inline-flex size-11 items-center justify-center rounded-xl bg-success/10 text-success">
+            <CheckCircle2 className="size-5" aria-hidden="true" />
+          </span>
+          <p className="mt-4 text-body-md text-muted-foreground">You can now sign in with your new password.</p>
+          <Button asChild className="mt-6 w-full">
+            <Link to="/login">Sign in</Link>
+          </Button>
         </div>
+      </AuthLayout>
+    );
+  }
 
-        <Card className="border-slate-100 shadow-lg">
-          <CardHeader className="space-y-1 pb-4">
-            <CardTitle className="text-xl">Reset Password</CardTitle>
-            <CardDescription>Enter your new password</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {success ? (
-              <div className="text-center py-4">
-                <div className="h-12 w-12 rounded-full bg-teal-100 flex items-center justify-center mx-auto mb-4">
-                  <Stethoscope className="h-6 w-6 text-teal-600" />
-                </div>
-                <p className="text-sm text-slate-600 mb-4">Your password has been reset successfully.</p>
-                <Button asChild className="bg-teal-600 hover:bg-teal-700">
-                  <Link to="/login">Sign In</Link>
-                </Button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-2">
-                  <Label>New Password</Label>
-                  <div className="relative">
-                    <Input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} required />
-                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
-                  </div>
-                  <p className="text-xs text-slate-400">Min 8 chars, uppercase, lowercase, digit, special char</p>
-                </div>
-                <div className="space-y-2">
-                  <Label>Confirm Password</Label>
-                  <Input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
-                </div>
-                <Button type="submit" disabled={loading} className="w-full bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 h-10">
-                  {loading ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" /> : 'Reset Password'}
-                </Button>
-              </form>
-            )}
-          </CardContent>
-        </Card>
-      </motion.div>
-    </div>
+  return (
+    <AuthLayout title="Choose a new password" description="Pick something you haven’t used before.">
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="space-y-2">
+          <Field id="new-password" label="New password" required error={submitted && !passwordOk ? 'Your password doesn’t meet all the requirements yet.' : null}>
+            <PasswordInput autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          </Field>
+          <PasswordRequirements id="new-password-rules" password={password} requireSpecial={false} />
+        </div>
+        <Field id="confirm-password" label="Confirm new password" required error={mismatch ? 'Passwords don’t match.' : null}>
+          <PasswordInput autoComplete="new-password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+        </Field>
+        <Button type="submit" size="lg" disabled={loading} className="w-full">
+          {loading && <Spinner aria-hidden="true" />}
+          {loading ? 'Updating…' : 'Update password'}
+        </Button>
+      </form>
+    </AuthLayout>
   );
 }
