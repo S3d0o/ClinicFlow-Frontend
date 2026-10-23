@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow Egypt - Patient Directory &amp; Registration</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed": "#ffdbce",
+            "surface-dim": "#c9dbf7",
+            "primary": "#002b4c",
+            "primary-fixed": "#d1e4ff",
+            "on-error-container": "#93000a",
+            "tertiary-fixed-dim": "#ffb599",
+            "error-container": "#ffdad6",
+            "on-tertiary-container": "#ff8b5b",
+            "tertiary-container": "#722600",
+            "surface-container-high": "#dbe9ff",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "on-secondary-fixed-variant": "#00497c",
+            "secondary-container": "#7cbafe",
+            "secondary-fixed": "#d1e4ff",
+            "on-tertiary": "#ffffff",
+            "on-background": "#081c31",
+            "surface-bright": "#f8f9ff",
+            "secondary-fixed-dim": "#9ecaff",
+            "on-primary-fixed": "#001d36",
+            "on-primary-container": "#8dadd6",
+            "surface-container-highest": "#d2e4ff",
+            "inverse-primary": "#a8c9f3",
+            "surface": "#f8f9ff",
+            "surface-tint": "#406185",
+            "tertiary": "#4e1700",
+            "outline": "#73777f",
+            "outline-variant": "#c3c6cf",
+            "surface-container-low": "#eff4ff",
+            "on-primary": "#ffffff",
+            "error": "#ba1a1a",
+            "on-surface-variant": "#43474e",
+            "on-surface": "#081c31",
+            "on-secondary-fixed": "#001d36",
+            "on-tertiary-fixed": "#370e00",
+            "inverse-on-surface": "#eaf1ff",
+            "surface-container": "#e5eeff",
+            "inverse-surface": "#1f3247",
+            "primary-fixed-dim": "#a8c9f3",
+            "background": "#f8f9ff",
+            "on-secondary": "#ffffff",
+            "secondary": "#1061a0",
+            "on-primary-fixed-variant": "#27496c",
+            "on-secondary-container": "#004a7d",
+            "surface-variant": "#d2e4ff",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "primary-container": "#1e4164"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-lg": "1rem",
+            "space-sm": "0.5rem",
+            "gutter-desktop": "1.5rem",
+            "margin-desktop": "2rem",
+            "space-md": "0.75rem",
+            "space-xl": "1.5rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem",
+            "margin": "1rem"
+          },
+          "fontFamily": {
+            "display-lg": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "tabular-data": ["Inter"],
+            "label-sm": ["Inter"]
+          },
+          "fontSize": {
+            "display-lg": ["2rem", { "lineHeight": "2.5rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-md": ["1.25rem", { "lineHeight": "1.75rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-md": ["0.875rem", { "lineHeight": "1.25rem", "fontWeight": "400" }],
+            "label-md": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.025em", "fontWeight": "600" }],
+            "headline-sm": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "600" }],
+            "body-lg": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "400" }],
+            "body-sm": ["0.75rem", { "lineHeight": "1rem", "fontWeight": "400" }],
+            "headline-lg": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "tabular-data": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0", "fontWeight": "500" }],
+            "label-sm": ["0.6875rem", { "lineHeight": "0.875rem", "letterSpacing": "0.05em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 20px;
+      line-height: 1;
+      display: inline-block;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #eff4ff;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #c3c6cf;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased h-full flex flex-col overflow-hidden font-body-md text-body-md select-none">
+<!-- ========================================================================= -->
+<!-- SHARED COMPONENT 1: SideNavBar                                            -->
+<!-- ========================================================================= -->
+<aside class="fixed top-0 left-0 h-screen w-64 z-40 bg-surface-container-lowest border-r border-outline-variant flex flex-col justify-between p-4">
+<!-- Brand / Clinic Info -->
+<div>
+<div class="flex items-center gap-3 px-2 py-1 mb-6">
+<div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-on-primary font-headline-md font-bold shadow-sm">
+          CF
+        </div>
+<div class="overflow-hidden">
+<div class="text-headline-sm font-headline-sm text-primary tracking-tight truncate leading-tight">ClinicFlow Egypt</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1 cursor-pointer hover:text-primary transition-colors">
+<span>Nasr City ▾</span>
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
+</div>
+</div>
+</div>
+<!-- Quick Action CTA -->
+<button class="w-full mb-5 flex items-center justify-center gap-2 py-2 px-3 bg-primary-container text-on-primary rounded-xl font-label-md text-label-md hover:bg-primary transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span>Quick Check-in</span>
+</button>
+<!-- Navigation Tabs (Patients is Active per hierarchy) -->
+<nav class="space-y-1">
+<!-- 1. Today -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-outline">calendar_today</span>
+<span class="text-label-md font-label-md">Today</span>
+</a>
+<!-- 2. Queue -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-outline">format_list_numbered</span>
+<span class="text-label-md font-label-md">Queue</span>
+<span class="ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-tertiary-container text-on-tertiary-container">12</span>
+</a>
+<!-- 3. Patients (ACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2 bg-surface-container text-primary-container font-semibold rounded-lg border-l-4 border-primary-container" href="#">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="text-label-md font-label-md">Patients</span>
+</a>
+<!-- 4. Book -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-outline">add_box</span>
+<span class="text-label-md font-label-md">Book</span>
+</a>
+<!-- 5. Payments -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-outline">payments</span>
+<span class="text-label-md font-label-md">Payments</span>
+</a>
+<!-- 6. Cash session -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-outline">point_of_sale</span>
+<span class="text-label-md font-label-md">Cash session</span>
+</a>
+</nav>
+</div>
+<!-- Sidebar Footer -->
+<div class="pt-4 border-t border-outline-variant/60">
+<div class="flex items-center gap-3 px-2 py-2 rounded-lg bg-surface-container-low">
+<span class="material-symbols-outlined text-primary-container text-2xl">account_circle</span>
+<div class="truncate">
+<div class="text-label-md font-label-md text-on-surface truncate">Mona Samir · Receptionist</div>
+<div class="text-label-sm font-label-sm text-outline font-tabular-data">Shift #1 (Morning)</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- SHARED COMPONENT 2: TopNavBar                                             -->
+<!-- ========================================================================= -->
+<header class="docked full-width top-0 pl-64 w-full h-14 bg-surface-container-lowest border-b border-outline-variant flex items-center justify-between px-6 z-30">
+<!-- Left: Title & Quick Search -->
+<div class="flex items-center gap-6">
+<h1 class="text-headline-md font-headline-md font-bold text-primary tracking-tight flex items-center gap-2">
+<span>Patient Directory &amp; Registration</span>
+<span class="text-label-sm font-label-sm font-medium px-2 py-0.5 rounded-full bg-surface-container text-secondary">Directory Mode</span>
+</h1>
+<!-- Top Global Search Bar -->
+<div class="relative w-72">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-[18px]">search</span>
+<input class="w-full pl-9 pr-4 py-1.5 text-body-sm font-body-sm bg-surface-container-low border border-outline-variant rounded-xl focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container text-on-surface placeholder:text-outline" placeholder="Global search (MRN, phone, doctor)..." type="text"/>
+</div>
+</div>
+<!-- Right Controls -->
+<div class="flex items-center gap-4">
+<!-- Language Switcher -->
+<button class="text-label-md font-label-md text-on-surface-variant hover:text-on-surface px-2.5 py-1.5 rounded-lg border border-outline-variant bg-surface-container-lowest transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm">translate</span>
+<span>EN | عربي</span>
+</button>
+<!-- Notification Action -->
+<button class="relative p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" title="Notifications">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#FF5E00]"></span>
+</button>
+<!-- Emergency Admit Trailing Action -->
+<button class="flex items-center gap-2 px-3.5 py-1.5 bg-error text-on-error rounded-xl font-label-md text-label-md hover:bg-red-700 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">emergency</span>
+<span>Emergency Admit</span>
+</button>
+</div>
+</header>
+<!-- ========================================================================= -->
+<!-- MAIN WORKSPACE CONTENT: Dual-Pane Layout                                    -->
+<!-- ========================================================================= -->
+<main class="ml-64 flex-1 overflow-hidden p-5 flex gap-5 bg-background">
+<!-- ======================================================================= -->
+<!-- LEFT PANE: Search & Search Results (approx 45% width)                   -->
+<!-- ======================================================================= -->
+<section class="w-5/12 flex flex-col bg-surface-container-lowest border border-[#D3DBE6] rounded-xl overflow-hidden shadow-none">
+<!-- Search Box & Filter Header -->
+<div class="p-4 border-b border-[#D3DBE6] bg-surface-bright space-y-3">
+<div class="flex items-center justify-between">
+<label class="text-label-md font-label-md text-on-surface font-semibold flex items-center gap-1.5" for="search-input">
+<span class="material-symbols-outlined text-[18px] text-secondary">person_search</span>
+<span>Search Patient Records</span>
+</label>
+<span class="text-label-sm font-label-sm text-outline font-tabular-data">2 matches found</span>
+</div>
+<!-- Auto-focused Search Input with live value entered -->
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-primary text-[20px]">search</span>
+<input autofocus="" class="w-full pl-10 pr-24 py-2 bg-surface-container-lowest border-2 border-primary-container rounded-xl text-body-md font-semibold text-primary focus:outline-none focus:ring-2 focus:ring-secondary/20 shadow-sm" id="search-input" placeholder="Search by Mobile, MRN, National ID or Name..." type="text" value="010 1234 5678"/>
+<div class="absolute right-2 top-2 flex items-center gap-1">
+<button class="p-1 hover:bg-surface-container text-outline rounded" title="Clear">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+<span class="text-label-sm font-label-sm px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-mono">↵ Enter</span>
+</div>
+</div>
+<!-- Filter Pills -->
+<div class="flex items-center gap-2 pt-1">
+<button class="px-3 py-1 rounded-full text-label-sm font-label-sm bg-primary-container text-on-primary font-semibold shadow-xs">
+            All (2)
+          </button>
+<button class="px-3 py-1 rounded-full text-label-sm font-label-sm bg-surface-container-lowest border border-[#D3DBE6] text-on-surface-variant hover:border-primary-container hover:bg-surface-container-low transition-colors">
+            Active
+          </button>
+<button class="px-3 py-1 rounded-full text-label-sm font-label-sm bg-surface-container-lowest border border-[#D3DBE6] text-on-surface-variant hover:border-primary-container hover:bg-surface-container-low transition-colors">
+            Has balance due
+          </button>
+<button class="px-3 py-1 rounded-full text-label-sm font-label-sm bg-surface-container-lowest border border-[#D3DBE6] text-on-surface-variant hover:border-primary-container hover:bg-surface-container-low transition-colors flex items-center gap-1">
+<span>Insured</span>
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+</button>
+</div>
+</div>
+<!-- Live Search Instant Feedback Banner -->
+<div class="px-4 py-2 bg-surface-container text-on-surface text-label-sm font-label-sm flex items-center justify-between border-b border-[#D3DBE6]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-secondary">filter_alt</span>
+<span>Matched on Phone: <strong class="text-primary font-tabular-data">+20 10 1234 5678</strong></span>
+</div>
+<span class="text-outline">Instant Sync Active</span>
+</div>
+<!-- Results List Container -->
+<div class="flex-1 overflow-y-auto p-4 space-y-3 custom-scroll bg-surface-container-low/30">
+<!-- Result Card 1: Mohamed Adel Hassan (SELECTED / PRIMARY MATCH) -->
+<div class="p-3.5 bg-surface-container-lowest border-2 border-primary-container rounded-xl shadow-sm hover:border-primary transition-all relative">
+<!-- Active selection marker -->
+<div class="absolute -left-1 top-4 w-2 h-8 bg-primary-container rounded-r"></div>
+<div class="flex items-start justify-between mb-2">
+<div>
+<div class="flex items-center gap-2">
+<h3 class="text-headline-sm font-headline-sm font-bold text-primary">Mohamed Adel Hassan</h3>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-emerald-50 text-emerald-800 border border-emerald-200">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  Active
+                </span>
+</div>
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-outline mt-0.5 font-tabular-data">
+<span class="font-semibold text-secondary">MRN: CF-004512</span>
+<span>•</span>
+<span>Adult Outpatient</span>
+</div>
+</div>
+<button class="px-2.5 py-1 text-label-sm font-label-sm bg-surface-container text-primary-container font-semibold rounded-lg hover:bg-surface-container-high transition-colors" title="Quick Profile">
+              Select Profile
+            </button>
+</div>
+<!-- Metadata Grid -->
+<div class="grid grid-cols-2 gap-y-1.5 gap-x-3 text-label-sm font-label-sm border-t border-b border-[#D3DBE6]/70 py-2.5 my-2">
+<div class="flex items-center gap-1.5 text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-outline">call</span>
+<span class="font-tabular-data font-medium">+20 10 1234 5678</span>
+</div>
+<div class="flex items-center gap-1.5 text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-outline">cake</span>
+<span class="font-tabular-data">14/05/1988 (37y)</span>
+</div>
+<div class="flex items-center gap-1.5 text-on-surface col-span-2">
+<span class="material-symbols-outlined text-[16px] text-outline">badge</span>
+<span class="font-tabular-data">National ID: 28805140103456</span>
+<span class="ml-auto text-emerald-700 bg-emerald-50 px-1 rounded text-[10px] font-semibold">Verified</span>
+</div>
+</div>
+<!-- Last Visit & Insurance Details -->
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant pt-0.5">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-secondary">medical_services</span>
+<span>Last: <strong class="text-on-surface font-tabular-data">12 Sep 2025</strong> (Dr. Ahmed Fathy)</span>
+</div>
+<div class="flex items-center gap-1 text-label-sm font-label-sm text-secondary font-medium">
+<span class="material-symbols-outlined text-[15px]">verified_user</span>
+<span>Allianz</span>
+</div>
+</div>
+</div>
+<!-- Result Card 2: Mona Adel Hassan (Same Family / Shared Phone) -->
+<div class="p-3.5 bg-surface-container-lowest border border-[#D3DBE6] rounded-xl hover:border-primary-container transition-all">
+<div class="flex items-start justify-between mb-2">
+<div>
+<div class="flex items-center gap-2">
+<h3 class="text-headline-sm font-headline-sm font-bold text-on-surface">Mona Adel Hassan</h3>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-blue-50 text-blue-800 border border-blue-200">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                  Family Member
+                </span>
+</div>
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-outline mt-0.5 font-tabular-data">
+<span class="font-semibold text-secondary">MRN: CF-007890</span>
+<span>•</span>
+<span>Pediatric / Adult Family</span>
+</div>
+</div>
+<button class="px-2.5 py-1 text-label-sm font-label-sm bg-surface-container-low text-on-surface-variant font-medium rounded-lg hover:bg-surface-container transition-colors">
+              View Profile
+            </button>
+</div>
+<!-- Metadata Grid -->
+<div class="grid grid-cols-2 gap-y-1.5 gap-x-3 text-label-sm font-label-sm border-t border-b border-[#D3DBE6]/70 py-2.5 my-2">
+<div class="flex items-center gap-1.5 text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-outline">call</span>
+<span class="font-tabular-data font-medium">+20 10 1234 5678</span>
+<span class="text-[10px] bg-surface-container text-on-surface-variant px-1 rounded">(Same family)</span>
+</div>
+<div class="flex items-center gap-1.5 text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-outline">cake</span>
+<span class="font-tabular-data">22/11/1992 (33y)</span>
+</div>
+</div>
+<!-- Last Visit -->
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant pt-0.5">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-outline">history</span>
+<span>Last visit: <strong class="text-on-surface font-tabular-data">04 Aug 2025</strong></span>
+</div>
+<span class="text-label-sm font-label-sm text-outline font-tabular-data">Self-Pay</span>
+</div>
+</div>
+<!-- Informational Prompt footer -->
+<div class="p-3 bg-surface-bright rounded-xl border border-dashed border-[#D3DBE6] text-center">
+<p class="text-label-sm font-label-sm text-on-surface-variant">
+            Not finding what you need? Fill in the registration form on the right to register a new file or add a new family member.
+          </p>
+</div>
+</div>
+<!-- Search Footer Stats -->
+<div class="p-3 bg-surface-bright border-t border-[#D3DBE6] flex items-center justify-between text-label-sm font-label-sm text-outline">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">database</span>
+<span>Indexed: 41,208 Patients</span>
+</span>
+<span class="font-tabular-data">Search response: 48ms</span>
+</div>
+</section>
+<!-- ======================================================================= -->
+<!-- RIGHT PANE: Register New Patient Form with Duplicate Detection (approx 55%) -->
+<!-- ======================================================================= -->
+<section class="w-7/12 flex flex-col bg-surface-container-lowest border border-[#D3DBE6] rounded-xl overflow-hidden shadow-none">
+<!-- Form Header -->
+<div class="px-6 py-3.5 border-b border-[#D3DBE6] bg-surface-bright flex items-center justify-between">
+<div>
+<h2 class="text-headline-md font-headline-md font-bold text-primary flex items-center gap-2">
+<span>Register New Patient</span>
+<span class="text-label-sm font-label-sm px-2 py-0.5 rounded bg-surface-container text-primary-container font-mono">NEW FILE</span>
+</h2>
+<p class="text-label-sm font-label-sm text-outline mt-0.5">Complete basic demographic and insurance data for Egyptian clinics</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm text-outline">Press <kbd class="px-1.5 py-0.5 bg-surface-container rounded border border-outline-variant font-mono text-on-surface font-semibold text-[11px]">[Esc]</kbd> to cancel</span>
+<button class="p-1.5 hover:bg-surface-container rounded-lg text-outline hover:text-on-surface transition-colors" title="Cancel">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+</div>
+<!-- Scrollable Form Body -->
+<div class="flex-1 overflow-y-auto p-6 space-y-5 custom-scroll">
+<!-- DUPLICATE WARNING CARD (Prominently amber #FFFBEB with #FCD34D border) -->
+<div class="p-4 rounded-xl bg-[#FFFBEB] border-2 border-[#FCD34D] shadow-sm">
+<div class="flex items-start gap-3">
+<span class="text-2xl leading-none">⚠️</span>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<h4 class="text-headline-sm font-headline-sm font-bold text-amber-900">Possible Duplicate Match Detected</h4>
+<span class="text-label-sm font-label-sm font-semibold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">High Confidence (98%)</span>
+</div>
+<p class="text-body-sm font-body-sm text-amber-900 mt-1 leading-snug">
+                Possible match found: <strong class="font-semibold text-primary underline">Mohamed Adel</strong>, MRN <strong class="font-tabular-data">CF-004512</strong>, sharing phone <strong class="font-tabular-data">+20 10 1234 5678</strong>.
+              </p>
+<!-- Quick Decision Action Buttons -->
+<div class="flex items-center gap-3 mt-3 pt-2 border-t border-[#FCD34D]/60">
+<button class="px-3.5 py-1.5 bg-primary-container text-on-primary rounded-lg text-label-md font-label-md font-semibold hover:bg-primary transition-colors flex items-center gap-1.5 shadow-xs">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span>Use this patient</span>
+</button>
+<button class="px-3.5 py-1.5 bg-white border border-[#1E4164] text-primary-container rounded-lg text-label-md font-label-md font-semibold hover:bg-surface-container-low transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">group_add</span>
+<span>Register as new family member</span>
+</button>
+<button class="text-label-sm font-label-sm text-amber-900/70 hover:text-amber-950 underline ml-auto">
+                  Ignore &amp; create separate
+                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Registration Fields Form -->
+<form class="space-y-4" onsubmit="event.preventDefault();">
+<!-- Row 1: Full Name & Mobile Number -->
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-label-md font-label-md font-semibold text-on-surface mb-1.5">
+                Full Name (Arabic / English) <span class="text-error">*</span>
+</label>
+<div class="relative">
+<input class="w-full h-[38px] px-3 bg-surface-container-lowest border border-[#D3DBE6] rounded-lg text-body-md font-body-md text-on-surface focus:border-primary-container focus:ring-1 focus:ring-primary-container" placeholder="e.g. Mohamed Adel Hassan / محمد عادل" type="text" value="Mohamed Adel"/>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-emerald-600 text-[18px]">verified</span>
+</div>
+</div>
+<div>
+<label class="block text-label-md font-label-md font-semibold text-on-surface mb-1.5">
+                Mobile Number <span class="text-error">*</span>
+</label>
+<div class="flex">
+<span class="inline-flex items-center px-2.5 text-label-sm font-label-sm bg-surface-container text-on-surface-variant border border-r-0 border-[#D3DBE6] rounded-l-lg font-tabular-data">
+                  🇪🇬 +20
+                </span>
+<input class="w-full h-[38px] px-3 bg-surface-container-lowest border border-[#D3DBE6] rounded-r-lg text-body-md font-tabular-data text-on-surface focus:border-primary-container focus:ring-1 focus:ring-primary-container" placeholder="10 xxxx xxxx" type="tel" value="10 1234 5678"/>
+</div>
+</div>
+</div>
+<!-- Row 2: Gender & Date of Birth with Calculated Age -->
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-label-md font-label-md font-semibold text-on-surface mb-1.5">
+                Gender <span class="text-error">*</span>
+</label>
+<div class="grid grid-cols-2 gap-2 h-[38px]">
+<label class="flex items-center justify-center gap-2 px-3 border-2 border-primary-container bg-surface-container-low rounded-lg cursor-pointer text-label-md font-label-md font-semibold text-primary-container">
+<input checked="" class="text-primary-container focus:ring-primary-container" name="gender" type="radio" value="male"/>
+<span>Male</span>
+</label>
+<label class="flex items-center justify-center gap-2 px-3 border border-[#D3DBE6] bg-surface-container-lowest rounded-lg cursor-pointer text-label-md font-label-md text-on-surface hover:bg-surface-container-low">
+<input class="text-primary-container focus:ring-primary-container" name="gender" type="radio" value="female"/>
+<span>Female</span>
+</label>
+</div>
+</div>
+<div>
+<label class="block text-label-md font-label-md font-semibold text-on-surface mb-1.5">
+                Date of Birth <span class="text-error">*</span>
+</label>
+<div class="relative flex items-center">
+<input class="w-full h-[38px] pl-3 pr-20 bg-surface-container-lowest border border-[#D3DBE6] rounded-lg text-body-md font-tabular-data text-on-surface focus:border-primary-container focus:ring-1 focus:ring-primary-container" placeholder="DD/MM/YYYY" type="text" value="14/05/1988"/>
+<div class="absolute right-2.5 flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-secondary text-label-sm font-label-sm font-bold font-tabular-data">
+                    37 yrs
+                  </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Row 3: Egyptian National ID (14 digits) -->
+<div>
+<div class="flex items-center justify-between mb-1.5">
+<label class="text-label-md font-label-md font-semibold text-on-surface">
+                National ID (Optional)
+              </label>
+<span class="text-label-sm font-label-sm text-emerald-700 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+<span>Validated 14 digits</span>
+</span>
+</div>
+<div class="relative">
+<input class="w-full h-[38px] px-3 bg-surface-container-lowest border border-[#D3DBE6] rounded-lg text-body-md font-tabular-data tracking-wider text-on-surface focus:border-primary-container focus:ring-1 focus:ring-primary-container" maxlength="14" placeholder="298xxxxxxxxxxx" type="text" value="28805140103456"/>
+<span class="absolute right-3 top-2.5 text-label-sm font-label-sm font-mono text-outline">14/14</span>
+</div>
+</div>
+<!-- Row 4: Emergency Contact & Relationship -->
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-label-md font-label-md font-semibold text-on-surface mb-1.5">
+                Emergency Contact (Optional)
+              </label>
+<input class="w-full h-[38px] px-3 bg-surface-container-lowest border border-[#D3DBE6] rounded-lg text-body-md font-body-md text-on-surface focus:border-primary-container focus:ring-1 focus:ring-primary-container" placeholder="Name &amp; emergency mobile" type="text"/>
+</div>
+<div>
+<label class="block text-label-md font-label-md font-semibold text-on-surface mb-1.5">
+                Relationship
+              </label>
+<select class="w-full h-[38px] px-3 bg-surface-container-lowest border border-[#D3DBE6] rounded-lg text-body-md font-body-md text-on-surface focus:border-primary-container focus:ring-1 focus:ring-primary-container">
+<option value="">Select relationship...</option>
+<option value="spouse">Spouse (زوج / زوجة)</option>
+<option value="parent">Parent (والد / والدة)</option>
+<option value="sibling">Sibling (أخ / أخت)</option>
+<option value="child">Child (ابن / ابنة)</option>
+<option value="other">Other</option>
+</select>
+</div>
+</div>
+<!-- Row 5: Insurance Provider -->
+<div>
+<label class="block text-label-md font-label-md font-semibold text-on-surface mb-1.5">
+              Insurance Provider
+            </label>
+<div class="relative">
+<select class="w-full h-[38px] px-3 bg-surface-container-lowest border border-[#D3DBE6] rounded-lg text-body-md font-body-md text-on-surface focus:border-primary-container focus:ring-1 focus:ring-primary-container pr-10">
+<option selected="" value="allianz">Allianz Egypt - Card #ALZ-9941</option>
+<option value="metlife">MetLife Egypt</option>
+<option value="axa">AXA OneHealth</option>
+<option value="bupa">Bupa Global / Egypt</option>
+<option value="self_pay">Cash / Self-Pay (No Insurance)</option>
+</select>
+<div class="absolute right-3 top-2.5 pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[20px]">arrow_drop_down</span>
+</div>
+</div>
+<div class="mt-1.5 flex items-center justify-between text-label-sm font-label-sm">
+<span class="text-outline">Coverage Tier: Gold Comprehensive (80% Outpatient copay)</span>
+<button class="text-secondary hover:underline font-semibold flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[14px]">credit_card</span>
+<span>Verify Card Online</span>
+</button>
+</div>
+</div>
+</form>
+</div>
+<!-- Form Sticky Actions Footer -->
+<div class="px-6 py-3.5 bg-surface-bright border-t border-[#D3DBE6] flex items-center justify-between">
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-outline">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span>Auto-saving draft locally</span>
+</div>
+<div class="flex items-center gap-3">
+<!-- Secondary Action: Save Patient Only -->
+<button class="h-[38px] px-4 bg-surface-container-lowest border border-[#D3DBE6] text-primary-container font-label-md text-label-md font-semibold rounded-lg hover:border-primary hover:bg-surface-container-low transition-colors" type="button">
+            Save Patient Only
+          </button>
+<!-- Primary Action: Save & Book Visit -->
+<button class="h-[38px] px-5 bg-primary-container text-on-primary font-label-md text-label-md font-semibold rounded-lg hover:bg-primary transition-colors flex items-center gap-2 shadow-xs ring-offset-1 focus:ring-2 focus:ring-secondary" type="button">
+<span class="material-symbols-outlined text-[18px]">calendar_add_on</span>
+<span>Save &amp; Book Visit</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Keyboard Shortcuts & Quick Status Floating Pill -->
+<div class="fixed bottom-3 right-6 z-50 bg-primary/95 text-on-primary px-3 py-1.5 rounded-full text-label-sm font-label-sm flex items-center gap-3 shadow-lg border border-primary-container">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+<span class="font-semibold">Shift #1 Active</span>
+</div>
+<span class="text-on-primary-container">|</span>
+<span class="font-tabular-data">F2: Quick Register</span>
+<span class="text-on-primary-container">|</span>
+<span class="font-tabular-data">F3: Queue Dispatch</span>
+</div>
+</body></html>

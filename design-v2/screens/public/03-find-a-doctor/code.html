@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow - Find a Doctor</title>
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-tint": "#406185",
+            "on-primary-container": "#8dadd6",
+            "surface-container-lowest": "#ffffff",
+            "secondary": "#4e6077",
+            "outline": "#73777f",
+            "on-primary-fixed": "#001d36",
+            "tertiary": "#4e1700",
+            "surface-dim": "#d1dbeb",
+            "on-surface-variant": "#43474e",
+            "primary-fixed": "#d1e4ff",
+            "inverse-surface": "#27313e",
+            "on-primary-fixed-variant": "#27496c",
+            "inverse-primary": "#a8c9f3",
+            "tertiary-fixed": "#ffdbce",
+            "surface-container-high": "#dfe9fa",
+            "inverse-on-surface": "#eaf1ff",
+            "error": "#ba1a1a",
+            "surface-container": "#e5efff",
+            "on-secondary-fixed": "#081c31",
+            "secondary-fixed": "#d2e4ff",
+            "outline-variant": "#c3c6cf",
+            "tertiary-container": "#722600",
+            "surface-variant": "#d9e3f4",
+            "on-surface": "#121c28",
+            "on-background": "#121c28",
+            "tertiary-fixed-dim": "#ffb599",
+            "primary-container": "#1e4164",
+            "background": "#f8f9ff",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-tertiary-fixed": "#370e00",
+            "on-secondary-fixed-variant": "#36485f",
+            "surface-container-highest": "#d9e3f4",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "on-secondary-container": "#52647c",
+            "on-error": "#ffffff",
+            "on-primary": "#ffffff",
+            "on-error-container": "#93000a",
+            "surface": "#f8f9ff",
+            "primary-fixed-dim": "#a8c9f3",
+            "on-tertiary": "#ffffff",
+            "surface-bright": "#f8f9ff",
+            "on-secondary": "#ffffff",
+            "secondary-container": "#cee1fd",
+            "surface-container-low": "#eef4ff",
+            "on-tertiary-container": "#ff8b5b",
+            "error-container": "#ffdad6",
+            "primary": "#002b4c"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1rem",
+            "margin-tablet": "1.5rem",
+            "space-md": "0.75rem",
+            "margin": "1rem",
+            "gutter": "1rem",
+            "gutter-sm": "0.75rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-xl": "1.5rem",
+            "margin-desktop": "2rem"
+          },
+          "fontFamily": {
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "label-lg": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-md": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      pointer-events: all;
+      width: 16px;
+      height: 16px;
+      -webkit-appearance: none;
+      background-color: #1e4164;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface antialiased flex flex-col min-h-screen">
+<!-- Desktop TopNavBar (Docked Full Width Top-0, Shared Component Specs) -->
+<header class="bg-surface-container-lowest sticky top-0 z-50 border-b border-outline-variant">
+<div class="max-w-7xl mx-auto px-8 w-full flex justify-between items-center h-16">
+<!-- Logo + Main Nav Links -->
+<div class="flex items-center space-x-10">
+<a class="flex items-center space-x-2" href="#">
+<span class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-on-primary font-headline-md font-bold text-headline-sm">C</span>
+<span class="text-headline-md font-headline-md font-bold text-primary tracking-tight">ClinicFlow</span>
+</a>
+<nav class="hidden md:flex items-center space-x-8">
+<!-- Active: Find a doctor -->
+<a class="text-primary font-semibold border-b-2 border-primary pb-1 text-label-lg font-label-lg transition-all duration-200" href="#">Find a doctor</a>
+<a class="text-secondary hover:text-primary transition-colors duration-150 text-label-lg font-label-lg" href="#">Branches</a>
+<a class="text-secondary hover:text-primary transition-colors duration-150 text-label-lg font-label-lg" href="#">Services &amp; prices</a>
+<a class="text-secondary hover:text-primary transition-colors duration-150 text-label-lg font-label-lg" href="#">Join as a doctor</a>
+</nav>
+</div>
+<!-- Trailing Controls: Language & Auth -->
+<div class="flex items-center space-x-6">
+<!-- Language Switcher -->
+<button class="flex items-center space-x-1 text-secondary hover:text-primary text-label-md font-label-md transition-colors duration-150" type="button">
+<span class="material-symbols-outlined text-base">language</span>
+<span class="font-semibold text-primary">EN</span>
+<span class="text-outline-variant">|</span>
+<span class="text-secondary">عربي</span>
+</button>
+<!-- Secondary Action: Sign in -->
+<a class="text-primary hover:text-primary-container font-label-lg text-label-lg transition-colors duration-150" href="#">Sign in</a>
+<!-- Primary Action: Create account -->
+<a class="bg-primary-container hover:bg-primary text-on-primary px-4 py-2 rounded-lg font-label-lg text-label-lg transition-all duration-200 active:scale-98 shadow-sm" href="#">
+          Create account
+        </a>
+</div>
+</div>
+</header>
+<!-- Page Main Container -->
+<main class="flex-1 max-w-7xl mx-auto px-8 w-full py-6">
+<!-- Breadcrumbs -->
+<nav aria-label="Breadcrumb" class="flex items-center space-x-2 text-body-sm font-body-sm text-secondary mb-5">
+<a class="hover:text-primary transition-colors" href="#">Home</a>
+<span class="material-symbols-outlined text-sm text-outline-variant">chevron_right</span>
+<span class="text-primary font-medium">Find a doctor</span>
+</nav>
+<!-- Top Control & Search Bar -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 mb-8">
+<div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
+<!-- Search Input -->
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary text-xl">search</span>
+<input class="w-full h-12 pl-11 pr-4 bg-surface-container-lowest border border-outline-variant rounded-lg text-on-surface font-body-md placeholder:text-secondary focus:outline-none focus:border-surface-tint focus:ring-2 focus:ring-surface-container transition-all" placeholder="Search by doctor name, medical specialty, or clinical condition..." type="text" value="Cardiology"/>
+</div>
+<!-- Quick Branch Pills -->
+<div class="flex items-center space-x-2 overflow-x-auto pb-1 lg:pb-0">
+<button class="px-3.5 py-2 rounded-full border border-primary-container bg-primary-container text-on-primary text-label-md font-label-md whitespace-nowrap transition-colors" type="button">
+            All Cairo
+          </button>
+<button class="px-3.5 py-2 rounded-full border border-outline-variant bg-surface-container-lowest text-secondary hover:border-primary-container hover:text-primary text-label-md font-label-md whitespace-nowrap transition-colors" type="button">
+            Nasr City
+          </button>
+<button class="px-3.5 py-2 rounded-full border border-outline-variant bg-surface-container-lowest text-secondary hover:border-primary-container hover:text-primary text-label-md font-label-md whitespace-nowrap transition-colors" type="button">
+            Maadi
+          </button>
+<button class="px-3.5 py-2 rounded-full border border-outline-variant bg-surface-container-lowest text-secondary hover:border-primary-container hover:text-primary text-label-md font-label-md whitespace-nowrap transition-colors" type="button">
+            Sheikh Zayed
+          </button>
+</div>
+<!-- Sort Select Box -->
+<div class="flex items-center space-x-2 min-w-[200px]">
+<label class="text-body-sm font-body-sm text-secondary whitespace-nowrap" for="sort-by">Sort by:</label>
+<div class="relative w-full">
+<select class="w-full h-12 pl-3 pr-8 bg-surface-container-lowest border border-outline-variant rounded-lg text-on-surface font-label-md text-label-md focus:border-surface-tint focus:ring-2 focus:ring-surface-container appearance-none cursor-pointer" id="sort-by">
+<option selected="">Soonest available</option>
+<option>Top rated</option>
+<option>Lowest price</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-secondary text-sm">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Count Meta Bar -->
+<div class="mt-4 pt-3.5 border-t border-outline-variant/60 flex items-center justify-between text-body-sm font-body-sm text-secondary">
+<div>
+          Showing <span class="font-semibold text-primary">28 verified consultants</span> in Cairo Network
+        </div>
+<div class="flex items-center space-x-4">
+<span class="flex items-center space-x-1.5 text-on-surface">
+<span class="w-2 h-2 rounded-full bg-primary-container inline-block"></span>
+<span>Real-time appointment sync</span>
+</span>
+</div>
+</div>
+</section>
+<!-- Main Body: Two Columns (Sidebar Filter + Doctor List) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-12">
+<!-- Left Filter Panel (~280px equivalent: lg:col-span-3) -->
+<aside class="lg:col-span-3 bg-surface-container-lowest border border-outline-variant rounded-xl p-5 sticky top-24">
+<div class="flex items-center justify-between pb-4 border-b border-outline-variant mb-5">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-primary text-lg">tune</span>
+<h2 class="text-headline-sm font-headline-sm text-primary">Filters</h2>
+</div>
+<button class="text-body-sm font-body-sm text-secondary hover:text-primary underline transition-colors" type="button">
+            Clear all
+          </button>
+</div>
+<form class="space-y-6" onsubmit="event.preventDefault();">
+<!-- Branch Selector -->
+<div>
+<h3 class="text-label-lg font-label-lg text-primary mb-3">Clinic Branch</h3>
+<div class="space-y-2.5">
+<label class="flex items-center space-x-2.5 cursor-pointer text-body-sm font-body-sm text-on-surface">
+<input checked="" class="w-4 h-4 rounded text-primary-container border-outline-variant focus:ring-primary-container" type="checkbox"/>
+<span class="flex-1">Nasr City Branch</span>
+</label>
+<label class="flex items-center space-x-2.5 cursor-pointer text-body-sm font-body-sm text-on-surface">
+<input checked="" class="w-4 h-4 rounded text-primary-container border-outline-variant focus:ring-primary-container" type="checkbox"/>
+<span class="flex-1">Maadi Branch</span>
+</label>
+<label class="flex items-center space-x-2.5 cursor-pointer text-body-sm font-body-sm text-on-surface">
+<input class="w-4 h-4 rounded text-primary-container border-outline-variant focus:ring-primary-container" type="checkbox"/>
+<span class="flex-1">Sheikh Zayed Branch</span>
+</label>
+</div>
+</div>
+<hr class="border-outline-variant/60"/>
+<!-- Medical Specialty -->
+<div>
+<div class="flex items-center justify-between mb-3">
+<h3 class="text-label-lg font-label-lg text-primary">Specialty</h3>
+<span class="text-label-sm font-label-sm bg-surface-container text-secondary px-2 py-0.5 rounded-full">1 Selected</span>
+</div>
+<div class="space-y-2.5">
+<label class="flex items-center justify-between cursor-pointer text-body-sm font-body-sm text-primary font-medium">
+<span class="flex items-center space-x-2.5">
+<input checked="" class="w-4 h-4 rounded text-primary-container border-outline-variant focus:ring-primary-container" type="checkbox"/>
+<span>Cardiology</span>
+</span>
+<span class="text-label-sm font-label-sm text-secondary">(8)</span>
+</label>
+<label class="flex items-center justify-between cursor-pointer text-body-sm font-body-sm text-on-surface">
+<span class="flex items-center space-x-2.5">
+<input class="w-4 h-4 rounded text-primary-container border-outline-variant focus:ring-primary-container" type="checkbox"/>
+<span>Internal Medicine</span>
+</span>
+<span class="text-label-sm font-label-sm text-secondary">(6)</span>
+</label>
+<label class="flex items-center justify-between cursor-pointer text-body-sm font-body-sm text-on-surface">
+<span class="flex items-center space-x-2.5">
+<input class="w-4 h-4 rounded text-primary-container border-outline-variant focus:ring-primary-container" type="checkbox"/>
+<span>Pediatrics</span>
+</span>
+<span class="text-label-sm font-label-sm text-secondary">(5)</span>
+</label>
+<label class="flex items-center justify-between cursor-pointer text-body-sm font-body-sm text-on-surface">
+<span class="flex items-center space-x-2.5">
+<input class="w-4 h-4 rounded text-primary-container border-outline-variant focus:ring-primary-container" type="checkbox"/>
+<span>Orthopedics</span>
+</span>
+<span class="text-label-sm font-label-sm text-secondary">(4)</span>
+</label>
+<label class="flex items-center justify-between cursor-pointer text-body-sm font-body-sm text-on-surface">
+<span class="flex items-center space-x-2.5">
+<input class="w-4 h-4 rounded text-primary-container border-outline-variant focus:ring-primary-container" type="checkbox"/>
+<span>Dermatology</span>
+</span>
+<span class="text-label-sm font-label-sm text-secondary">(3)</span>
+</label>
+<label class="flex items-center justify-between cursor-pointer text-body-sm font-body-sm text-on-surface">
+<span class="flex items-center space-x-2.5">
+<input class="w-4 h-4 rounded text-primary-container border-outline-variant focus:ring-primary-container" type="checkbox"/>
+<span>Dentistry</span>
+</span>
+<span class="text-label-sm font-label-sm text-secondary">(2)</span>
+</label>
+</div>
+</div>
+<hr class="border-outline-variant/60"/>
+<!-- Service Type -->
+<div>
+<h3 class="text-label-lg font-label-lg text-primary mb-3">Service Type</h3>
+<div class="space-y-2.5">
+<label class="flex items-center space-x-2.5 cursor-pointer text-body-sm font-body-sm text-on-surface">
+<input checked="" class="w-4 h-4 rounded text-primary-container border-outline-variant focus:ring-primary-container" type="checkbox"/>
+<span>Initial Consultation</span>
+</label>
+<label class="flex items-center space-x-2.5 cursor-pointer text-body-sm font-body-sm text-on-surface">
+<input class="w-4 h-4 rounded text-primary-container border-outline-variant focus:ring-primary-container" type="checkbox"/>
+<span>Follow-up Visit</span>
+</label>
+<label class="flex items-center space-x-2.5 cursor-pointer text-body-sm font-body-sm text-on-surface">
+<input class="w-4 h-4 rounded text-primary-container border-outline-variant focus:ring-primary-container" type="checkbox"/>
+<span>Specialized Diagnostics (ECG/Echo)</span>
+</label>
+</div>
+</div>
+<hr class="border-outline-variant/60"/>
+<!-- Availability Date -->
+<div>
+<h3 class="text-label-lg font-label-lg text-primary mb-3">Availability Date</h3>
+<div class="grid grid-cols-2 gap-2 mb-3">
+<button class="py-2 px-3 text-center border border-primary-container bg-primary-container text-on-primary rounded-lg text-label-md font-label-md" type="button">Today</button>
+<button class="py-2 px-3 text-center border border-outline-variant bg-surface-container-lowest text-secondary hover:text-primary rounded-lg text-label-md font-label-md" type="button">Tomorrow</button>
+<button class="py-2 px-3 text-center border border-outline-variant bg-surface-container-lowest text-secondary hover:text-primary rounded-lg text-label-md font-label-md" type="button">This Week</button>
+<button class="py-2 px-3 text-center border border-outline-variant bg-surface-container-lowest text-secondary hover:text-primary rounded-lg text-label-md font-label-md flex items-center justify-center space-x-1" type="button">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+<span>Select</span>
+</button>
+</div>
+</div>
+<hr class="border-outline-variant/60"/>
+<!-- Doctor Gender -->
+<div>
+<h3 class="text-label-lg font-label-lg text-primary mb-3">Doctor Gender</h3>
+<div class="flex items-center space-x-4">
+<label class="flex items-center space-x-2 cursor-pointer text-body-sm font-body-sm text-on-surface">
+<input checked="" class="text-primary-container focus:ring-primary-container" name="gender" type="radio"/>
+<span>Any</span>
+</label>
+<label class="flex items-center space-x-2 cursor-pointer text-body-sm font-body-sm text-on-surface">
+<input class="text-primary-container focus:ring-primary-container" name="gender" type="radio"/>
+<span>Male</span>
+</label>
+<label class="flex items-center space-x-2 cursor-pointer text-body-sm font-body-sm text-on-surface">
+<input class="text-primary-container focus:ring-primary-container" name="gender" type="radio"/>
+<span>Female</span>
+</label>
+</div>
+</div>
+<hr class="border-outline-variant/60"/>
+<!-- Languages Spoken -->
+<div>
+<h3 class="text-label-lg font-label-lg text-primary mb-3">Languages Spoken</h3>
+<div class="space-y-2">
+<label class="flex items-center space-x-2.5 cursor-pointer text-body-sm font-body-sm text-on-surface">
+<input checked="" class="w-4 h-4 rounded text-primary-container border-outline-variant focus:ring-primary-container" type="checkbox"/>
+<span>Arabic</span>
+</label>
+<label class="flex items-center space-x-2.5 cursor-pointer text-body-sm font-body-sm text-on-surface">
+<input checked="" class="w-4 h-4 rounded text-primary-container border-outline-variant focus:ring-primary-container" type="checkbox"/>
+<span>English</span>
+</label>
+<label class="flex items-center space-x-2.5 cursor-pointer text-body-sm font-body-sm text-on-surface">
+<input class="w-4 h-4 rounded text-primary-container border-outline-variant focus:ring-primary-container" type="checkbox"/>
+<span>French</span>
+</label>
+</div>
+</div>
+<hr class="border-outline-variant/60"/>
+<!-- Price Range Slider -->
+<div>
+<div class="flex items-center justify-between mb-2">
+<h3 class="text-label-lg font-label-lg text-primary">Consultation Fee (EGP)</h3>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-secondary mb-2">
+<span>EGP 200</span>
+<span class="font-semibold text-primary">EGP 800</span>
+</div>
+<!-- Range bar mockup -->
+<div class="relative w-full h-2 bg-surface-container rounded-full my-3">
+<div class="absolute left-0 right-1/4 h-2 bg-primary-container rounded-full"></div>
+<div class="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 bg-primary-container rounded-full shadow border-2 border-surface-container-lowest cursor-pointer"></div>
+<div class="absolute right-1/4 top-1/2 -translate-y-1/2 w-4 h-4 bg-primary-container rounded-full shadow border-2 border-surface-container-lowest cursor-pointer"></div>
+</div>
+<div class="grid grid-cols-2 gap-3 mt-3">
+<div class="border border-outline-variant rounded-lg p-2 bg-surface-container-lowest">
+<span class="block text-label-sm font-label-sm text-secondary">Min (EGP)</span>
+<span class="text-body-md font-body-md font-semibold text-on-surface">200</span>
+</div>
+<div class="border border-outline-variant rounded-lg p-2 bg-surface-container-lowest">
+<span class="block text-label-sm font-label-sm text-secondary">Max (EGP)</span>
+<span class="text-body-md font-body-md font-semibold text-on-surface">800</span>
+</div>
+</div>
+</div>
+<div class="pt-2">
+<button class="w-full bg-primary-container hover:bg-primary text-on-primary py-3 rounded-lg font-label-lg text-label-lg transition-colors shadow-sm" type="submit">
+              Apply filters
+            </button>
+</div>
+</form>
+</aside>
+<!-- Right Column: Doctor Results List (lg:col-span-9) -->
+<section class="lg:col-span-9 space-y-4">
+<!-- DOCTOR CARD 1: Dr. Ahmed Fathy -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 hover:border-surface-tint transition-all">
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+<!-- Left Info Cluster -->
+<div class="flex items-start space-x-4">
+<img class="w-20 h-20 rounded-xl object-cover border border-outline-variant flex-shrink-0" data-alt="Professional portrait of a male Egyptian cardiologist in his late forties wearing modern rimless glasses, a crisp white physician lab coat, and a dark navy stethoscope. Clean clinical ambient background with soft, natural illumination in subtle navy and cool white tones, projecting hospital excellence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVEmzZwDC3bdZyNyiILwjuBGbmQXIHVdydRMXnGTCajLissxfhyJ-kFLw0gqbI-J31ZJkaQwJfCpZd7lTLqkfhMJU8jLhWUbzydp8qhbj3hC7VF1RcEuvrPUCcAnK0oiTmlscI0acK56Y19xpnXwYO1pgyJ4PnBWdbvxvsozluKs-U_kHfJ-dpp1GMhFa-TqGweQxlYSdl7w_AXuFLZI78fcorXO2QpN2jxPmjkj8qQBox0hd3I7GGFUqmeBnIipk5KLfs9qYgAoW6"/>
+<div>
+<div class="flex items-center space-x-2">
+<h3 class="text-headline-md font-headline-md text-primary font-bold">Dr. Ahmed Fathy</h3>
+</div>
+<p class="text-body-md font-body-md text-secondary mt-0.5">Consultant Cardiology &amp; Angiology</p>
+<!-- Rating & Reviews -->
+<div class="flex items-center space-x-2 mt-2">
+<span class="flex items-center text-label-md font-label-md text-on-surface">
+<span class="material-symbols-outlined text-base text-[#D97706] mr-1" style="font-variation-settings: 'FILL' 1;">star</span>
+<strong class="font-semibold">4.9</strong>
+</span>
+<span class="text-body-sm font-body-sm text-secondary">(128 reviews)</span>
+<span class="text-outline-variant">·</span>
+<span class="flex items-center text-body-sm font-body-sm text-secondary">
+<span class="material-symbols-outlined text-sm mr-1">location_on</span>
+                    Nasr City &amp; Maadi
+                  </span>
+</div>
+<!-- Price callout -->
+<div class="mt-3 text-body-md font-body-md text-secondary">
+<span class="text-[#FF5E00] font-bold">EGP 450</span> · Cardiology consultation
+                </div>
+</div>
+</div>
+<!-- Right Schedule Slots & CTAs -->
+<div class="w-full md:w-auto md:min-w-[280px] flex flex-col items-stretch md:items-end border-t md:border-t-0 pt-4 md:pt-0 border-outline-variant/60">
+<span class="text-label-sm font-label-sm text-secondary mb-2">Available Appointment Slots</span>
+<!-- Slots Group -->
+<div class="flex flex-wrap md:justify-end gap-2 mb-4">
+<!-- Instant Slot with Orange Accent -->
+<button class="px-3 py-1.5 rounded-lg border border-[#FF5E00]/40 bg-[#FFF7ED] text-[#FF5E00] font-label-md text-label-md flex items-center space-x-1 hover:bg-[#FFEDD5] transition-colors" type="button">
+<span class="w-1.5 h-1.5 rounded-full bg-[#FF5E00]"></span>
+<span>Today 10:30 AM</span>
+</button>
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:border-primary transition-colors" type="button">
+                  Today 11:15 AM
+                </button>
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:border-primary transition-colors" type="button">
+                  Tomorrow 09:30 AM
+                </button>
+</div>
+<!-- Actions -->
+<div class="flex items-center space-x-3 w-full md:w-auto">
+<a class="text-primary hover:text-primary-container font-label-md text-label-md px-3 py-2 text-center transition-colors" href="#">
+                  View profile
+                </a>
+<button class="flex-1 md:flex-initial bg-primary-container hover:bg-primary text-on-primary px-5 py-2.5 rounded-lg font-label-lg text-label-lg transition-all active:scale-98 shadow-sm" type="button">
+                  Book appointment
+                </button>
+</div>
+</div>
+</div>
+</article>
+<!-- DOCTOR CARD 2: Dr. Mona Khalil -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 hover:border-surface-tint transition-all">
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+<!-- Left Info Cluster -->
+<div class="flex items-start space-x-4">
+<img class="w-20 h-20 rounded-xl object-cover border border-outline-variant flex-shrink-0" data-alt="Warm and professional female Egyptian dental consultant in her early forties with navy scrub uniform and clinician white jacket. Modern private clinic setting with soft ambient architectural light, showcasing dependable healthcare expertise in an institutional navy aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGRWhd2UzzCBW0HYfZpIq0U2-RVyoS6VyQBQoO9UyODHltBQ0SGav7FCfgI8RdwYMDlBLdUbxpvAMqaSCQBJZM_z05ZtVyeVAIXGinkUGINcfbtjd0-zAD3zzI5T9eCoWIgJ2E9XLT6kP5_rnH_Z2o8Wz0EGvFDkmixuI1Yi1ExtVC8m-Va7YJaFgX5OUR4j5lK34W9L4U-B7RsPtCtQkv8CPYwLt7hbtQjpDqIDZEfIRGZ1bVMZ4hjS6XP4HQUWxI_IAa0qLpWsNG"/>
+<div>
+<div class="flex items-center space-x-2">
+<h3 class="text-headline-md font-headline-md text-primary font-bold">Dr. Mona Khalil</h3>
+</div>
+<p class="text-body-md font-body-md text-secondary mt-0.5">Senior Consultant Dental &amp; Oral Surgery</p>
+<!-- Rating & Reviews -->
+<div class="flex items-center space-x-2 mt-2">
+<span class="flex items-center text-label-md font-label-md text-on-surface">
+<span class="material-symbols-outlined text-base text-[#D97706] mr-1" style="font-variation-settings: 'FILL' 1;">star</span>
+<strong class="font-semibold">4.9</strong>
+</span>
+<span class="text-body-sm font-body-sm text-secondary">(94 reviews)</span>
+<span class="text-outline-variant">·</span>
+<span class="flex items-center text-body-sm font-body-sm text-secondary">
+<span class="material-symbols-outlined text-sm mr-1">location_on</span>
+                    Maadi Branch
+                  </span>
+</div>
+<!-- Price callout -->
+<div class="mt-3 text-body-md font-body-md text-secondary">
+<span class="text-[#FF5E00] font-bold">EGP 350</span> · Consultation &amp; dental check
+                </div>
+</div>
+</div>
+<!-- Right Schedule Slots & CTAs -->
+<div class="w-full md:w-auto md:min-w-[280px] flex flex-col items-stretch md:items-end border-t md:border-t-0 pt-4 md:pt-0 border-outline-variant/60">
+<span class="text-label-sm font-label-sm text-secondary mb-2">Available Appointment Slots</span>
+<!-- Slots Group -->
+<div class="flex flex-wrap md:justify-end gap-2 mb-4">
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:border-primary transition-colors" type="button">
+                  Tomorrow 04:00 PM
+                </button>
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:border-primary transition-colors" type="button">
+                  Thu 26 Oct 10:00 AM
+                </button>
+</div>
+<!-- Actions -->
+<div class="flex items-center space-x-3 w-full md:w-auto">
+<a class="text-primary hover:text-primary-container font-label-md text-label-md px-3 py-2 text-center transition-colors" href="#">
+                  View profile
+                </a>
+<button class="flex-1 md:flex-initial bg-primary-container hover:bg-primary text-on-primary px-5 py-2.5 rounded-lg font-label-lg text-label-lg transition-all active:scale-98 shadow-sm" type="button">
+                  Book appointment
+                </button>
+</div>
+</div>
+</div>
+</article>
+<!-- DOCTOR CARD 3: Dr. Sherif Rostom -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 hover:border-surface-tint transition-all">
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+<!-- Left Info Cluster -->
+<div class="flex items-start space-x-4">
+<img class="w-20 h-20 rounded-xl object-cover border border-outline-variant flex-shrink-0" data-alt="Confident Egyptian male orthopedic surgeon in navy medical coat standing in a structured clinical consult room with clean architectural lines. Studio-like balanced lighting emphasizing professionalism and authoritative institutional care without distracting elements." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhSH_sLnUVaFNh3mRkMJgttLmNr96r9NIeXO-JjjkdLeQ1E-gxWUge8j4NZNEoRuPGCowzw-rifppT8uUXUbqSqDoYHjJLH2GlCXWRrvyisk85BEU8j64olAzeQFv19X6WG7EeIx_zD0TgOKm9jr5u21OdmOpztI6j-Hp4pvDhV0sYKmr3kt-2p_o-Hbm1NTGB7udmCWEoc6kawLqcotHPVwVWLJQ9AsCU5oINSMzQ9SV80fw0LsBvCX-qv_VmuYMEgdx1bpAGxVju"/>
+<div>
+<div class="flex items-center space-x-2">
+<h3 class="text-headline-md font-headline-md text-primary font-bold">Dr. Sherif Rostom</h3>
+</div>
+<p class="text-body-md font-body-md text-secondary mt-0.5">Specialist Orthopedics &amp; Sports Injuries</p>
+<!-- Rating & Reviews -->
+<div class="flex items-center space-x-2 mt-2">
+<span class="flex items-center text-label-md font-label-md text-on-surface">
+<span class="material-symbols-outlined text-base text-[#D97706] mr-1" style="font-variation-settings: 'FILL' 1;">star</span>
+<strong class="font-semibold">4.8</strong>
+</span>
+<span class="text-body-sm font-body-sm text-secondary">(82 reviews)</span>
+<span class="text-outline-variant">·</span>
+<span class="flex items-center text-body-sm font-body-sm text-secondary">
+<span class="material-symbols-outlined text-sm mr-1">location_on</span>
+                    Sheikh Zayed Branch &amp; Nasr City
+                  </span>
+</div>
+<!-- Price callout -->
+<div class="mt-3 text-body-md font-body-md text-secondary">
+<span class="text-[#FF5E00] font-bold">EGP 400</span> · Orthopedic evaluation
+                </div>
+</div>
+</div>
+<!-- Right Schedule Slots & CTAs -->
+<div class="w-full md:w-auto md:min-w-[280px] flex flex-col items-stretch md:items-end border-t md:border-t-0 pt-4 md:pt-0 border-outline-variant/60">
+<span class="text-label-sm font-label-sm text-secondary mb-2">Available Appointment Slots</span>
+<!-- Slots Group -->
+<div class="flex flex-wrap md:justify-end gap-2 mb-4">
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:border-primary transition-colors" type="button">
+                  Today 01:15 PM
+                </button>
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:border-primary transition-colors" type="button">
+                  Today 03:00 PM
+                </button>
+</div>
+<!-- Actions -->
+<div class="flex items-center space-x-3 w-full md:w-auto">
+<a class="text-primary hover:text-primary-container font-label-md text-label-md px-3 py-2 text-center transition-colors" href="#">
+                  View profile
+                </a>
+<button class="flex-1 md:flex-initial bg-primary-container hover:bg-primary text-on-primary px-5 py-2.5 rounded-lg font-label-lg text-label-lg transition-all active:scale-98 shadow-sm" type="button">
+                  Book appointment
+                </button>
+</div>
+</div>
+</div>
+</article>
+<!-- DOCTOR CARD 4: Dr. Laila Hassan -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 hover:border-surface-tint transition-all">
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+<!-- Left Info Cluster -->
+<div class="flex items-start space-x-4">
+<img class="w-20 h-20 rounded-xl object-cover border border-outline-variant flex-shrink-0" data-alt="Middle-aged female Egyptian pediatrician with a warm, caring demeanor, dressed in a professional white doctor jacket over navy blue apparel. Neutral clinical office background with soft diffused lighting, exuding trust and high clinical standards in pediatric outpatient care." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUsamHZwkEFOTA9YKvuMYn4NxSCR8h3P6WMYTu3dsV-4lrQ3TSh-IA7k3xZAQY7LzrMH6fR2Pi7BzYAP6VF7THfg6A4gTLSoFknOYpaa0N-fwc-onOi7CuRvka2DaG4Sf6dDtgPGbpBE3ddvtGfRgwiNJOuw8TAzgR74Fbzpu1IZezinP0OSETNqsD0w3CAqxAxxe5deiXuEram0t9sGQ6b63Ax3lNODhTbMH9UBDOP64wfXADSB5cIE8vul-tF4_7jDEAWp1UFNI_"/>
+<div>
+<div class="flex items-center space-x-2">
+<h3 class="text-headline-md font-headline-md text-primary font-bold">Dr. Laila Hassan</h3>
+</div>
+<p class="text-body-md font-body-md text-secondary mt-0.5">Consultant Pediatrics &amp; Neonatology</p>
+<!-- Rating & Reviews -->
+<div class="flex items-center space-x-2 mt-2">
+<span class="flex items-center text-label-md font-label-md text-on-surface">
+<span class="material-symbols-outlined text-base text-[#D97706] mr-1" style="font-variation-settings: 'FILL' 1;">star</span>
+<strong class="font-semibold">4.9</strong>
+</span>
+<span class="text-body-sm font-body-sm text-secondary">(145 reviews)</span>
+<span class="text-outline-variant">·</span>
+<span class="flex items-center text-body-sm font-body-sm text-secondary">
+<span class="material-symbols-outlined text-sm mr-1">location_on</span>
+                    Nasr City Branch
+                  </span>
+</div>
+<!-- Price callout -->
+<div class="mt-3 text-body-md font-body-md text-secondary">
+<span class="text-[#FF5E00] font-bold">EGP 400</span> · Pediatric consultation
+                </div>
+</div>
+</div>
+<!-- Right Schedule Slots & CTAs -->
+<div class="w-full md:w-auto md:min-w-[280px] flex flex-col items-stretch md:items-end border-t md:border-t-0 pt-4 md:pt-0 border-outline-variant/60">
+<span class="text-label-sm font-label-sm text-secondary mb-2">Available Appointment Slots</span>
+<!-- Slots Group -->
+<div class="flex flex-wrap md:justify-end gap-2 mb-4">
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:border-primary transition-colors" type="button">
+                  Tomorrow 10:00 AM
+                </button>
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:border-primary transition-colors" type="button">
+                  Tomorrow 11:30 AM
+                </button>
+</div>
+<!-- Actions -->
+<div class="flex items-center space-x-3 w-full md:w-auto">
+<a class="text-primary hover:text-primary-container font-label-md text-label-md px-3 py-2 text-center transition-colors" href="#">
+                  View profile
+                </a>
+<button class="flex-1 md:flex-initial bg-primary-container hover:bg-primary text-on-primary px-5 py-2.5 rounded-lg font-label-lg text-label-lg transition-all active:scale-98 shadow-sm" type="button">
+                  Book appointment
+                </button>
+</div>
+</div>
+</div>
+</article>
+<!-- Pagination Section -->
+<nav aria-label="Page Navigation" class="mt-8 pt-6 border-t border-outline-variant flex items-center justify-between">
+<button class="flex items-center space-x-1.5 px-4 py-2 border border-outline-variant rounded-lg text-body-sm font-body-sm text-secondary hover:text-primary hover:border-primary transition-colors disabled:opacity-50" disabled="" type="button">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+<span>Previous</span>
+</button>
+<div class="flex items-center space-x-2">
+<!-- Active 1 -->
+<button class="w-10 h-10 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md font-semibold" type="button">1</button>
+<button class="w-10 h-10 rounded-lg border border-outline-variant bg-surface-container-lowest text-secondary hover:text-primary hover:border-primary font-label-md text-label-md transition-colors" type="button">2</button>
+<button class="w-10 h-10 rounded-lg border border-outline-variant bg-surface-container-lowest text-secondary hover:text-primary hover:border-primary font-label-md text-label-md transition-colors" type="button">3</button>
+<button class="w-10 h-10 rounded-lg border border-outline-variant bg-surface-container-lowest text-secondary hover:text-primary hover:border-primary font-label-md text-label-md transition-colors" type="button">4</button>
+</div>
+<button class="flex items-center space-x-1.5 px-4 py-2 border border-outline-variant rounded-lg text-body-sm font-body-sm text-primary hover:bg-surface-container-lowest transition-colors" type="button">
+<span>Next</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</nav>
+</section>
+</div>
+</main>
+<!-- Standard ClinicFlow Desktop Footer (Shared Component Blueprint) -->
+<footer class="bg-surface-container-low border-t border-outline-variant mt-auto">
+<div class="max-w-7xl mx-auto px-8 py-12 w-full">
+<!-- Top Row: Brand & Quick Links Cluster -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+<!-- Brand Info -->
+<div class="space-y-3">
+<div class="flex items-center space-x-2">
+<span class="w-7 h-7 rounded-lg bg-primary flex items-center justify-center text-on-primary font-headline-md font-bold text-headline-sm">C</span>
+<span class="text-headline-md font-headline-md font-bold text-primary">ClinicFlow</span>
+</div>
+<p class="text-body-sm font-body-sm text-secondary">
+            Authorized multi-specialty clinical network across Greater Cairo, connecting verified Egyptian medical consultants with streamlined care workflows.
+          </p>
+</div>
+<!-- Branches List -->
+<div>
+<h4 class="text-label-lg font-label-lg text-primary mb-3">Our Branches</h4>
+<ul class="space-y-2 text-body-sm font-body-sm">
+<li><a class="text-secondary hover:text-primary transition-colors" href="#">Nasr City Branch</a></li>
+<li><a class="text-secondary hover:text-primary transition-colors" href="#">Maadi Medical Center</a></li>
+<li><a class="text-secondary hover:text-primary transition-colors" href="#">Sheikh Zayed Clinic</a></li>
+</ul>
+</div>
+<!-- Tariffs & Insurance -->
+<div>
+<h4 class="text-label-lg font-label-lg text-primary mb-3">Patient Resources</h4>
+<ul class="space-y-2 text-body-sm font-body-sm">
+<li><a class="text-secondary hover:text-primary transition-colors" href="#">Outpatient Tariffs (EGP)</a></li>
+<li><a class="text-secondary hover:text-primary transition-colors" href="#">Insurance &amp; Copays</a></li>
+<li><a class="text-secondary hover:text-primary transition-colors" href="#">Ministry of Health Licensing</a></li>
+</ul>
+</div>
+<!-- Policies & Hotline -->
+<div>
+<h4 class="text-label-lg font-label-lg text-primary mb-3">Support &amp; Legal</h4>
+<div class="mb-3">
+<span class="text-body-sm font-body-sm text-secondary block">24/7 Patient Concierge Hotline:</span>
+<span class="text-headline-sm font-headline-sm font-bold text-primary">16789</span>
+</div>
+<ul class="space-y-2 text-body-sm font-body-sm">
+<li><a class="text-secondary hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="text-secondary hover:text-primary transition-colors" href="#">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<!-- Bottom Row: Copyright -->
+<div class="pt-6 border-t border-outline-variant/60 flex flex-col md:flex-row items-center justify-between text-body-sm font-body-sm text-secondary">
+<p>© 2025 ClinicFlow Healthcare Network S.A.E. All rights reserved. Hotline 16789.</p>
+<div class="flex items-center space-x-4 mt-3 md:mt-0">
+<span class="text-label-sm font-label-sm text-outline">Cairo, Arab Republic of Egypt</span>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

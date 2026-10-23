@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow - Set a New Password</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary": "#4e1700",
+            "outline": "#73777f",
+            "secondary-fixed": "#d2e4ff",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "primary-fixed": "#d1e4ff",
+            "primary-fixed-dim": "#a8c9f3",
+            "surface-variant": "#e1e2e6",
+            "secondary-container": "#cee1fd",
+            "on-tertiary": "#ffffff",
+            "surface-container-high": "#e7e8ec",
+            "error": "#ba1a1a",
+            "on-surface": "#191c1f",
+            "on-primary-fixed": "#001d36",
+            "tertiary-fixed": "#ffdbce",
+            "surface-dim": "#d8dade",
+            "surface-container": "#eceef2",
+            "secondary": "#4e6077",
+            "on-secondary-fixed-variant": "#36485f",
+            "on-surface-variant": "#43474e",
+            "background": "#f8f9fd",
+            "primary": "#002b4c",
+            "on-primary": "#ffffff",
+            "on-error-container": "#93000a",
+            "outline-variant": "#c3c6cf",
+            "on-secondary-container": "#52647c",
+            "on-primary-fixed-variant": "#27496c",
+            "tertiary-fixed-dim": "#ffb599",
+            "on-primary-container": "#8dadd6",
+            "inverse-surface": "#2e3134",
+            "inverse-on-surface": "#eff1f5",
+            "tertiary-container": "#722600",
+            "surface": "#f8f9fd",
+            "inverse-primary": "#a8c9f3",
+            "on-error": "#ffffff",
+            "on-background": "#191c1f",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-tertiary-container": "#ff8b5b",
+            "surface-container-highest": "#e1e2e6",
+            "on-secondary-fixed": "#081c31",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f2f3f7",
+            "error-container": "#ffdad6",
+            "surface-tint": "#406185",
+            "surface-bright": "#f8f9fd",
+            "primary-container": "#1e4164",
+            "on-tertiary-fixed": "#370e00",
+            "on-secondary": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "1.5rem",
+            "space-xl": "2.5rem",
+            "space-sm": "0.5rem",
+            "space-2xl": "4rem",
+            "margin-mobile": "1rem",
+            "space-lg": "1.5rem",
+            "margin": "3rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem",
+            "margin-tablet": "2rem",
+            "gutter-mobile": "1rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "display-lg-mobile": ["Plus Jakarta Sans"],
+            "eyebrow": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "title-md": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"]
+          },
+          "fontSize": {
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "eyebrow": ["11px", { "lineHeight": "14px", "letterSpacing": "0.08em", "fontWeight": "700" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface antialiased min-h-screen flex justify-center selection:bg-secondary-container selection:text-on-secondary-fixed">
+<!-- Mobile Screen Container (390px targeted viewport) -->
+<div class="w-full max-w-[390px] min-h-screen flex flex-col bg-surface relative shadow-sm border-x border-outline-variant/30">
+<!-- Top Navigation Anchor (Shared TopAppBar: Linear recovery journey -> suppressed BottomNavBar per destination rule) -->
+<header class="sticky top-0 z-40 bg-surface-container-lowest h-14 px-4 flex justify-between items-center select-none">
+<div class="flex items-center gap-2">
+<button aria-label="Go back" class="w-11 h-11 min-h-[44px] min-w-[44px] flex items-center justify-center -ml-2 rounded-lg text-primary hover:bg-surface-container-low active:scale-95 transition-all duration-150" type="button">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="local_hospital">local_hospital</span>
+<span class="font-headline-sm text-headline-sm font-bold text-primary tracking-tight">ClinicFlow</span>
+</div>
+</div>
+<!-- Bilingual Equilibrium Switcher -->
+<button class="min-h-[44px] px-2.5 py-1 rounded-lg text-secondary hover:bg-surface-container-low active:scale-95 transition-all text-label-md font-label-md flex items-center gap-1" type="button">
+<span class="text-primary font-bold">EN</span>
+<span class="text-outline-variant">|</span>
+<span class="text-on-surface-variant">عربي</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 px-4 pt-4 pb-8 flex flex-col justify-between">
+<div>
+<!-- Eyebrow Pill Badge -->
+<div class="mb-3">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-eyebrow text-eyebrow bg-tertiary-fixed text-tertiary font-bold tracking-wider">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-fixed-variant"></span>
+            PASSWORD RECOVERY · STEP 2
+          </span>
+</div>
+<!-- Heading & Descriptive Subtitle -->
+<h1 class="font-headline-md text-headline-md text-primary font-bold tracking-tight mb-2">
+          Set a new password
+        </h1>
+<p class="font-body-sm text-body-sm text-secondary leading-relaxed mb-5">
+          Choose a strong password to protect your patient records and appointments.
+        </p>
+<!-- Main Form Card (Structured Architectural Minimalist Unit) -->
+<div class="bg-surface-container-lowest border border-outline-variant/60 rounded-2xl p-5 shadow-none space-y-4">
+<!-- Field 1: New password -->
+<div class="space-y-1.5">
+<label class="block font-label-md text-label-md text-on-surface" for="new-password">
+              New password
+            </label>
+<div class="relative flex items-center">
+<input class="w-full h-12 min-h-[44px] bg-surface-container-lowest border border-outline-variant rounded-[10px] pl-3.5 pr-11 font-body-md text-on-surface tracking-widest placeholder:tracking-normal focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 outline-none transition-all duration-150" id="new-password" placeholder="Enter password" type="password" value="SecureClinic!2024"/>
+<button aria-label="Toggle password visibility" class="absolute right-1 w-11 h-11 min-h-[44px] min-w-[44px] flex items-center justify-center text-secondary hover:text-primary active:scale-95 transition-all" id="toggle-new-pw" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span>
+</button>
+</div>
+<!-- Live Password Checklist Box -->
+<div class="mt-3 pt-3 border-t border-outline-variant/40 space-y-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-[18px]" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">8+ characters</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-[18px]" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Upper case &amp; lower case letters</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-[18px]" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">At least 1 number</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-[18px]" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">At least 1 symbol (@, #, $, etc.)</span>
+</div>
+</div>
+</div>
+<!-- Field 2: Confirm password -->
+<div class="space-y-1.5 pt-1">
+<label class="block font-label-md text-label-md text-on-surface" for="confirm-password">
+              Confirm password
+            </label>
+<div class="relative flex items-center">
+<input class="w-full h-12 min-h-[44px] bg-surface-container-lowest border-2 border-primary-container rounded-[10px] pl-3.5 pr-11 font-body-md text-on-surface tracking-widest placeholder:tracking-normal focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 outline-none transition-all duration-150" id="confirm-password" placeholder="Confirm password" type="password" value="SecureClinic!2024"/>
+<button aria-label="Toggle confirm password visibility" class="absolute right-1 w-11 h-11 min-h-[44px] min-w-[44px] flex items-center justify-center text-secondary hover:text-primary active:scale-95 transition-all" id="toggle-confirm-pw" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span>
+</button>
+</div>
+<!-- Passwords match confirmation pill badge -->
+<div class="flex items-center gap-1.5 mt-2 px-2 py-1 rounded bg-secondary-fixed/50 w-fit">
+<span class="material-symbols-outlined text-primary-container text-[16px] font-bold" data-icon="check">check</span>
+<span class="font-label-md text-label-md text-primary-container font-semibold">Passwords match</span>
+</div>
+</div>
+<!-- Institutional Notice / Session Invalidation Warning -->
+<div class="bg-surface-container-low border border-outline-variant/60 rounded-lg p-3 mt-3 flex items-start gap-2.5">
+<span class="material-symbols-outlined text-secondary text-[20px] flex-shrink-0 mt-0.5" data-icon="shield">shield</span>
+<p class="font-body-sm text-body-sm text-secondary leading-snug">
+              You'll be signed out on all other devices once your new password is saved.
+            </p>
+</div>
+<!-- Primary Submit Action CTA Button -->
+<button class="w-full h-12 min-h-[44px] bg-primary-container hover:bg-primary active:bg-on-primary-fixed text-on-primary rounded-[10px] font-label-lg text-label-lg flex items-center justify-center gap-2 transition-all duration-150 active:scale-[0.99] shadow-none mt-5" type="button">
+<span>Save new password</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="lock_reset">lock_reset</span>
+</button>
+</div>
+</div>
+<!-- Clean Security Verification Footer -->
+<footer class="mt-8 flex flex-col items-center justify-center text-center select-none">
+<div class="inline-flex items-center gap-1.5 text-secondary">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="lock">lock</span>
+<span class="font-label-md text-label-md tracking-tight font-medium text-secondary">Protected with 256-bit encryption</span>
+</div>
+</footer>
+</main>
+</div>
+<!-- Interactive State Toggles -->
+<script>
+    function setupToggle(buttonId, inputId) {
+      const btn = document.getElementById(buttonId);
+      const input = document.getElementById(inputId);
+      if (!btn || !input) return;
+
+      btn.addEventListener('click', () => {
+        const isPassword = input.type === 'password';
+        input.type = isPassword ? 'text' : 'password';
+        const iconSpan = btn.querySelector('.material-symbols-outlined');
+        if (iconSpan) {
+          iconSpan.innerText = isPassword ? 'visibility_off' : 'visibility';
+        }
+      });
+    }
+
+    setupToggle('toggle-new-pw', 'new-password');
+    setupToggle('toggle-confirm-pw', 'confirm-password');
+  </script>
+</body></html>

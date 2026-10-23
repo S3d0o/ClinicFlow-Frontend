@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-[#F7F9FD]" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Set up two-step sign-in · ClinicFlow Healthcare Network</title>
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-tint": "#406185",
+            "on-primary-container": "#8dadd6",
+            "surface-container-lowest": "#ffffff",
+            "secondary": "#4e6077",
+            "outline": "#73777f",
+            "on-primary-fixed": "#001d36",
+            "tertiary": "#4e1700",
+            "surface-dim": "#d1dbeb",
+            "on-surface-variant": "#43474e",
+            "primary-fixed": "#d1e4ff",
+            "inverse-surface": "#27313e",
+            "on-primary-fixed-variant": "#27496c",
+            "inverse-primary": "#a8c9f3",
+            "tertiary-fixed": "#ffdbce",
+            "surface-container-high": "#dfe9fa",
+            "inverse-on-surface": "#eaf1ff",
+            "error": "#ba1a1a",
+            "surface-container": "#e5efff",
+            "on-secondary-fixed": "#081c31",
+            "secondary-fixed": "#d2e4ff",
+            "outline-variant": "#c3c6cf",
+            "tertiary-container": "#722600",
+            "surface-variant": "#d9e3f4",
+            "on-surface": "#121c28",
+            "on-background": "#121c28",
+            "tertiary-fixed-dim": "#ffb599",
+            "primary-container": "#1e4164",
+            "background": "#f8f9ff",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-tertiary-fixed": "#370e00",
+            "on-secondary-fixed-variant": "#36485f",
+            "surface-container-highest": "#d9e3f4",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "on-secondary-container": "#52647c",
+            "on-error": "#ffffff",
+            "on-primary": "#ffffff",
+            "on-error-container": "#93000a",
+            "surface": "#f8f9ff",
+            "primary-fixed-dim": "#a8c9f3",
+            "on-tertiary": "#ffffff",
+            "surface-bright": "#f8f9ff",
+            "on-secondary": "#ffffff",
+            "secondary-container": "#cee1fd",
+            "surface-container-low": "#eef4ff",
+            "on-tertiary-container": "#ff8b5b",
+            "error-container": "#ffdad6",
+            "primary": "#002b4c",
+            /* Strict Brand Guidelines Alignment */
+            "cf-navy-deep": "#13263B",
+            "cf-navy-primary": "#1E4164",
+            "cf-navy-darker": "#112b45",
+            "cf-canvas": "#F7F9FD",
+            "cf-border": "#D3DBE6",
+            "cf-border-input": "#C6D0DE",
+            "cf-text-main": "#212427",
+            "cf-text-muted": "#5B6573",
+            "cf-accent-orange": "#FF5E00",
+            "cf-accent-orange-soft": "#FFF4ED"
+          },
+          fontFamily: {
+            "headline-xl": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-sm": ["Plus Jakarta Sans", "sans-serif"],
+            "body-lg": ["Inter", "sans-serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "body-sm": ["Inter", "sans-serif"],
+            "label-lg": ["Inter", "sans-serif"],
+            "label-md": ["Inter", "sans-serif"],
+            "label-sm": ["Inter", "sans-serif"],
+            "mono": ["JetBrains Mono", "monospace"]
+          },
+          boxShadow: {
+            "elevated": "0 8px 24px -4px rgba(19, 38, 59, 0.08)",
+            "subtle": "0 2px 8px -2px rgba(19, 38, 59, 0.04)"
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill-icon {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col font-body-md text-cf-text-main bg-cf-canvas antialiased selection:bg-secondary-container selection:text-cf-navy-deep">
+<!-- Desktop Top Navigation Shell -->
+<header class="bg-surface-container-lowest border-b border-cf-border sticky top-0 z-40">
+<div class="max-w-7xl mx-auto px-8 w-full flex justify-between items-center h-16">
+<!-- Brand Logo & Context Anchor -->
+<div class="flex items-center gap-6">
+<a class="flex items-center gap-2 group" href="#">
+<div class="w-9 h-9 rounded-lg bg-cf-navy-primary flex items-center justify-center text-white shadow-sm">
+<span class="material-symbols-outlined text-[22px]">health_and_safety</span>
+</div>
+<span class="text-headline-md font-headline-md font-bold text-cf-navy-deep tracking-tight group-hover:text-cf-navy-primary transition-colors">
+            ClinicFlow
+          </span>
+</a>
+<div class="h-5 w-px bg-cf-border hidden md:block"></div>
+<div class="hidden md:flex items-center gap-2 px-2.5 py-1 rounded-full bg-cf-canvas border border-cf-border">
+<span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+<span class="font-label-md text-label-md text-cf-navy-deep font-medium">Dr. Karim Nabil · Onboarding</span>
+</div>
+</div>
+<!-- Right Header Actions -->
+<div class="flex items-center gap-4">
+<!-- Arabic Language Switcher Toggle -->
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-cf-text-muted hover:text-cf-navy-primary hover:bg-cf-canvas transition-colors border border-transparent hover:border-cf-border text-label-md font-label-md" type="button">
+<span class="material-symbols-outlined text-[18px]">language</span>
+<span class="font-semibold text-cf-navy-deep">EN</span>
+<span class="text-cf-border">|</span>
+<span class="font-normal font-sans">عربي</span>
+</button>
+<div class="h-5 w-px bg-cf-border"></div>
+<!-- Help / Support Staff Desk -->
+<div class="flex items-center gap-2 text-cf-text-muted hover:text-cf-navy-primary text-label-md font-label-md cursor-pointer">
+<span class="material-symbols-outlined text-[20px]">support_agent</span>
+<span class="hidden lg:inline">Clinical IT Helpdesk</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 py-10 px-4 sm:px-6 lg:px-8">
+<div class="max-w-[880px] mx-auto">
+<!-- Stepper / Breadcrumbs Header -->
+<div class="mb-8">
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-cf-text-muted mb-2">
+<span>Staff Portal</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span>Account Setup</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-cf-navy-primary font-semibold">Step 2 of 2: Security &amp; MFA</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2">
+<div>
+<h1 class="text-headline-lg font-headline-lg text-cf-navy-deep font-bold tracking-tight">
+              Set up two-step sign-in
+            </h1>
+<p class="text-body-md font-body-md text-cf-text-muted mt-1">
+              Staff MFA Enrolment: Strengthen protection for confidential patient medical records and electronic prescribing privileges.
+            </p>
+</div>
+<!-- Egyptian Healthcare Accreditation Badge -->
+<div class="inline-flex items-center gap-1.5 px-3 py-1 bg-[#ECFDF5] border border-[#A7F3D0] rounded-full text-[#065F46] text-label-sm font-label-sm shrink-0 self-start md:self-auto">
+<span class="w-2 h-2 rounded-full bg-[#059669]"></span>
+<span>GAHAR / MOH Security Standard</span>
+</div>
+</div>
+<!-- Visual Step Progress Bar -->
+<div class="w-full bg-[#E2E8F0] h-1.5 rounded-full mt-4 overflow-hidden flex">
+<div class="bg-cf-navy-primary h-full w-full rounded-full transition-all duration-500"></div>
+</div>
+</div>
+<!-- Main MFA 2-Column Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<!-- Left Column: Authenticator Step-by-Step (7 cols) -->
+<section class="lg:col-span-7 bg-surface-container-lowest rounded-xl border border-cf-border p-6 shadow-subtle flex flex-col gap-6">
+<!-- Section Title -->
+<div class="border-b border-cf-border pb-4">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-cf-navy-primary">
+<span class="material-symbols-outlined text-[20px]">phonelink_lock</span>
+</div>
+<h2 class="text-headline-md font-headline-md text-cf-navy-deep">
+                Set up authenticator app
+              </h2>
+</div>
+<p class="text-body-sm font-body-sm text-cf-text-muted mt-1 ml-10">
+              Protect your clinical account and patient records by linking a mobile authenticator.
+            </p>
+</div>
+<!-- Step 1: Install App -->
+<div class="space-y-2.5">
+<div class="flex items-center gap-2.5">
+<span class="w-6 h-6 rounded-full bg-cf-navy-primary text-white text-label-sm font-label-sm flex items-center justify-center font-bold">1</span>
+<h3 class="text-headline-sm font-headline-sm text-cf-navy-deep">Install an authenticator app</h3>
+</div>
+<p class="text-body-sm font-body-sm text-cf-text-muted pl-8">
+              Open your smartphone app store to download any TOTP-compatible authenticator app:
+            </p>
+<div class="pl-8 flex flex-wrap gap-2 pt-1">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 bg-cf-canvas border border-cf-border rounded-lg text-body-sm text-cf-text-main font-medium">
+<span class="material-symbols-outlined text-[16px] text-cf-navy-primary">smartphone</span> Google Authenticator
+              </span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 bg-cf-canvas border border-cf-border rounded-lg text-body-sm text-cf-text-main font-medium">
+<span class="material-symbols-outlined text-[16px] text-cf-navy-primary">verified_user</span> Microsoft Authenticator
+              </span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 bg-cf-canvas border border-cf-border rounded-lg text-body-sm text-cf-text-main font-medium">
+<span class="material-symbols-outlined text-[16px] text-cf-navy-primary">lock</span> Cisco Duo
+              </span>
+</div>
+</div>
+<!-- Step 2: Scan QR Code -->
+<div class="space-y-3 pt-2 border-t border-dashed border-cf-border">
+<div class="flex items-center gap-2.5">
+<span class="w-6 h-6 rounded-full bg-cf-navy-primary text-white text-label-sm font-label-sm flex items-center justify-center font-bold">2</span>
+<h3 class="text-headline-sm font-headline-sm text-cf-navy-deep">Scan this QR code</h3>
+</div>
+<p class="text-body-sm font-body-sm text-cf-text-muted pl-8">
+              Open your authenticator app, tap <span class="font-semibold text-cf-text-main">“Add Account”</span> or <span class="font-semibold text-cf-text-main">“+”</span>, and point your camera at the screen:
+            </p>
+<!-- QR Code Area -->
+<div class="pl-8 pt-1 flex flex-col sm:flex-row items-center gap-5">
+<!-- Crisp High-Contrast Stylized QR Representation -->
+<div class="relative w-[180px] h-[180px] p-2 bg-white rounded-xl border border-cf-border flex items-center justify-center shadow-sm shrink-0 group">
+<!-- Hairline Corner Scan Guides -->
+<div class="absolute top-1.5 left-1.5 w-3.5 h-3.5 border-t-2 border-l-2 border-cf-navy-primary"></div>
+<div class="absolute top-1.5 right-1.5 w-3.5 h-3.5 border-t-2 border-r-2 border-cf-navy-primary"></div>
+<div class="absolute bottom-1.5 left-1.5 w-3.5 h-3.5 border-b-2 border-l-2 border-cf-navy-primary"></div>
+<div class="absolute bottom-1.5 right-1.5 w-3.5 h-3.5 border-b-2 border-r-2 border-cf-navy-primary"></div>
+<!-- Vector Grid Pattern Simulating Secure TOTP QR -->
+<svg class="w-full h-full text-cf-navy-deep" fill="currentColor" viewbox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+<!-- Top Left Finder -->
+<rect fill="#13263B" height="34" rx="3" width="34" x="8" y="8"></rect>
+<rect fill="white" height="22" rx="1.5" width="22" x="14" y="14"></rect>
+<rect fill="#13263B" height="12" width="12" x="19" y="19"></rect>
+<!-- Top Right Finder -->
+<rect fill="#13263B" height="34" rx="3" width="34" x="98" y="8"></rect>
+<rect fill="white" height="22" rx="1.5" width="22" x="104" y="14"></rect>
+<rect fill="#13263B" height="12" width="12" x="109" y="19"></rect>
+<!-- Bottom Left Finder -->
+<rect fill="#13263B" height="34" rx="3" width="34" x="8" y="98"></rect>
+<rect fill="white" height="22" rx="1.5" width="22" x="14" y="104"></rect>
+<rect fill="#13263B" height="12" width="12" x="19" y="109"></rect>
+<!-- Alignment & Data Pattern Grid -->
+<rect fill="#13263B" height="6" width="6" x="48" y="12"></rect>
+<rect fill="#13263B" height="6" width="12" x="60" y="12"></rect>
+<rect fill="#13263B" height="6" width="6" x="78" y="12"></rect>
+<rect fill="#13263B" height="6" width="12" x="48" y="24"></rect>
+<rect fill="#13263B" height="6" width="6" x="66" y="24"></rect>
+<rect fill="#13263B" height="6" width="12" x="78" y="24"></rect>
+<rect fill="#13263B" height="6" width="6" x="48" y="36"></rect>
+<rect fill="#13263B" height="6" width="18" x="60" y="36"></rect>
+<rect fill="#13263B" height="6" width="6" x="12" y="48"></rect>
+<rect fill="#13263B" height="6" width="12" x="24" y="48"></rect>
+<rect fill="#13263B" height="6" width="18" x="42" y="48"></rect>
+<rect fill="#13263B" height="6" width="12" x="66" y="48"></rect>
+<rect fill="#13263B" height="6" width="6" x="84" y="48"></rect>
+<rect fill="#13263B" height="6" width="18" x="96" y="48"></rect>
+<rect fill="#13263B" height="6" width="8" x="120" y="48"></rect>
+<rect fill="#13263B" height="6" width="18" x="8" y="60"></rect>
+<rect fill="#13263B" height="6" width="6" x="32" y="60"></rect>
+<rect fill="#13263B" height="6" width="12" x="48" y="60"></rect>
+<rect fill="#13263B" height="6" width="24" x="66" y="60"></rect>
+<rect fill="#13263B" height="6" width="6" x="96" y="60"></rect>
+<rect fill="#13263B" height="6" width="18" x="108" y="60"></rect>
+<rect fill="#13263B" height="6" width="6" x="12" y="72"></rect>
+<rect fill="#13263B" height="6" width="18" x="24" y="72"></rect>
+<rect fill="#13263B" height="6" width="6" x="48" y="72"></rect>
+<rect fill="#13263B" height="6" width="12" x="60" y="72"></rect>
+<rect fill="#13263B" height="6" width="18" x="78" y="72"></rect>
+<rect fill="#13263B" height="6" width="12" x="102" y="72"></rect>
+<rect fill="#13263B" height="6" width="8" x="120" y="72"></rect>
+<rect fill="#13263B" height="6" width="12" x="8" y="84"></rect>
+<rect fill="#13263B" height="6" width="12" x="26" y="84"></rect>
+<rect fill="#13263B" height="6" width="6" x="42" y="84"></rect>
+<rect fill="#13263B" height="6" width="18" x="54" y="84"></rect>
+<rect fill="#13263B" height="6" width="6" x="78" y="84"></rect>
+<rect fill="#13263B" height="6" width="18" x="90" y="84"></rect>
+<rect fill="#13263B" height="6" width="14" x="114" y="84"></rect>
+<rect fill="#13263B" height="6" width="12" x="48" y="96"></rect>
+<rect fill="#13263B" height="6" width="6" x="66" y="96"></rect>
+<rect fill="#13263B" height="6" width="12" x="78" y="96"></rect>
+<rect fill="#13263B" height="6" width="18" x="96" y="96"></rect>
+<rect fill="#13263B" height="6" width="8" x="120" y="96"></rect>
+<rect fill="#13263B" height="6" width="6" x="48" y="108"></rect>
+<rect fill="#13263B" height="6" width="18" x="60" y="108"></rect>
+<rect fill="#13263B" height="6" width="18" x="84" y="108"></rect>
+<rect fill="#13263B" height="6" width="6" x="108" y="108"></rect>
+<rect fill="#13263B" height="6" width="8" x="120" y="108"></rect>
+<rect fill="#13263B" height="8" width="18" x="48" y="120"></rect>
+<rect fill="#13263B" height="8" width="12" x="72" y="120"></rect>
+<rect fill="#13263B" height="8" width="6" x="90" y="120"></rect>
+<rect fill="#13263B" height="8" width="26" x="102" y="120"></rect>
+<!-- Center Logo Badge -->
+<circle cx="70" cy="70" fill="white" r="13" stroke="#D3DBE6" stroke-width="1.5"></circle>
+<path d="M70 63L76 66V71C76 74.8 73.4 78.4 70 79.5C66.6 78.4 64 74.8 64 71V66L70 63Z" fill="#1E4164"></path>
+<path d="M68 71.5L66.5 70L65.5 71L68 73.5L74.5 67L73.5 66L68 71.5Z" fill="white"></path>
+</svg>
+</div>
+<!-- Manual Entry Fallback Box -->
+<div class="flex-1 w-full space-y-2">
+<span class="text-label-sm font-label-sm text-cf-text-muted block">
+                  Can't scan the code? Use this manual entry key:
+                </span>
+<div class="flex items-center gap-1.5 p-1.5 bg-cf-canvas border border-cf-border rounded-lg">
+<div class="flex-1 font-mono text-body-sm font-semibold tracking-wider text-cf-navy-deep px-2 py-1 select-all" id="secretKeyText">
+                    CF25-NK99-LM44-88PX
+                  </div>
+<button class="px-2.5 py-1.5 bg-white border border-cf-border hover:border-cf-navy-primary text-cf-navy-primary rounded-md text-label-sm font-label-sm flex items-center gap-1 transition-all active:scale-95 shadow-xs" id="copyKeyBtn" onclick="copySecretKey()" title="Copy key to clipboard" type="button">
+<span class="material-symbols-outlined text-[16px]" id="copyKeyIcon">content_copy</span>
+<span id="copyKeyLabel">Copy key</span>
+</button>
+</div>
+<p class="text-body-sm text-cf-text-muted text-[11px] leading-tight">
+                  Account Name: <strong class="text-cf-navy-deep">ClinicFlow:knabil@clinicflow.eg</strong><br/>
+                  Key Type: Time-based (TOTP, 30s)
+                </p>
+</div>
+</div>
+</div>
+<!-- Step 3: Enter 6-digit Code -->
+<div class="space-y-3 pt-2 border-t border-dashed border-cf-border">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<span class="w-6 h-6 rounded-full bg-cf-navy-primary text-white text-label-sm font-label-sm flex items-center justify-center font-bold">3</span>
+<h3 class="text-headline-sm font-headline-sm text-cf-navy-deep">
+                  Enter the 6-digit verification code generated by the app
+                </h3>
+</div>
+</div>
+<p class="text-body-sm font-body-sm text-cf-text-muted pl-8">
+              Verify your setup by typing the active temporary code shown in your mobile app:
+            </p>
+<!-- Unified Segmented 6-digit PIN input -->
+<div class="pl-8 pt-1">
+<div class="flex items-center gap-2">
+<!-- Group 1 -->
+<div class="flex items-center gap-1.5">
+<input autofocus="" class="otp-digit w-10 h-12 text-center text-headline-sm font-mono font-bold border border-cf-border-input rounded-lg focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/20 transition-all bg-white" inputmode="numeric" maxlength="1" pattern="[0-9]" type="text"/>
+<input class="otp-digit w-10 h-12 text-center text-headline-sm font-mono font-bold border border-cf-border-input rounded-lg focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/20 transition-all bg-white" inputmode="numeric" maxlength="1" pattern="[0-9]" type="text"/>
+<input class="otp-digit w-10 h-12 text-center text-headline-sm font-mono font-bold border border-cf-border-input rounded-lg focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/20 transition-all bg-white" inputmode="numeric" maxlength="1" pattern="[0-9]" type="text"/>
+</div>
+<span class="text-cf-border font-bold text-lg select-none px-0.5">—</span>
+<!-- Group 2 -->
+<div class="flex items-center gap-1.5">
+<input class="otp-digit w-10 h-12 text-center text-headline-sm font-mono font-bold border border-cf-border-input rounded-lg focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/20 transition-all bg-white" inputmode="numeric" maxlength="1" pattern="[0-9]" type="text"/>
+<input class="otp-digit w-10 h-12 text-center text-headline-sm font-mono font-bold border border-cf-border-input rounded-lg focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/20 transition-all bg-white" inputmode="numeric" maxlength="1" pattern="[0-9]" type="text"/>
+<input class="otp-digit w-10 h-12 text-center text-headline-sm font-mono font-bold border border-cf-border-input rounded-lg focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/20 transition-all bg-white" inputmode="numeric" maxlength="1" pattern="[0-9]" type="text"/>
+</div>
+</div>
+<!-- Verification Helper & Live 30s Countdown -->
+<div class="flex items-center gap-2 mt-2 text-cf-text-muted text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-[#015C9A] animate-spin" style="animation-duration: 3s;">sync</span>
+<span>Codes refresh every 30 seconds.</span>
+<span class="inline-flex items-center gap-1 font-mono text-label-sm font-semibold text-cf-navy-deep bg-cf-canvas px-1.5 py-0.5 rounded border border-cf-border ml-auto">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+<span id="countdown">28s remaining</span>
+</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Column: Emergency Backup Codes & Action Dock (5 cols) -->
+<div class="lg:col-span-5 space-y-5">
+<!-- Top Card: Backup Recovery Codes Panel -->
+<section class="bg-surface-container-lowest rounded-xl border border-cf-border p-5 shadow-subtle">
+<!-- Card Header -->
+<div class="flex items-center justify-between pb-3 border-b border-cf-border">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-cf-navy-primary">
+<span class="material-symbols-outlined text-[20px]">key</span>
+</div>
+<div>
+<h2 class="text-headline-sm font-headline-sm text-cf-navy-deep">
+                    Emergency Backup Codes
+                  </h2>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-[#EFF6FF] text-[#015C9A] text-label-sm font-label-sm font-semibold">
+                8 Codes
+              </span>
+</div>
+<!-- Warning/Info Banner -->
+<div class="my-3.5 p-3 bg-cf-accent-orange-soft border border-[#FED7AA] rounded-lg flex items-start gap-2.5">
+<span class="material-symbols-outlined text-cf-accent-orange text-[20px] shrink-0 mt-0.5">warning</span>
+<p class="text-body-sm font-body-sm text-cf-navy-deep leading-relaxed">
+                Save these 8 one-time backup codes in a secure password manager. If you lose your phone, each code can be used once to access your workspace.
+              </p>
+</div>
+<!-- Grid of 8 cleanly formatted backup codes -->
+<div class="bg-cf-canvas border border-cf-border rounded-lg p-3.5">
+<div class="grid grid-cols-2 gap-x-4 gap-y-2 font-mono text-body-sm font-medium text-cf-navy-deep tracking-wider select-all">
+<div class="flex items-center gap-2">
+<span class="text-cf-text-muted text-[11px] font-sans">1.</span>
+<span>8492-1049</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-cf-text-muted text-[11px] font-sans">2.</span>
+<span>3921-9844</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-cf-text-muted text-[11px] font-sans">3.</span>
+<span>1094-8271</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-cf-text-muted text-[11px] font-sans">4.</span>
+<span>7741-2091</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-cf-text-muted text-[11px] font-sans">5.</span>
+<span>5519-3820</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-cf-text-muted text-[11px] font-sans">6.</span>
+<span>6204-1183</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-cf-text-muted text-[11px] font-sans">7.</span>
+<span>9012-4418</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-cf-text-muted text-[11px] font-sans">8.</span>
+<span>4310-7629</span>
+</div>
+</div>
+</div>
+<!-- Action Buttons: Download & Copy -->
+<div class="grid grid-cols-2 gap-2 mt-3.5">
+<button class="h-10 px-3 bg-white border border-cf-navy-primary text-cf-navy-primary hover:bg-cf-canvas rounded-lg text-label-md font-label-md flex items-center justify-center gap-1.5 transition-colors" onclick="downloadBackupCodes()" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span>Download (.txt)</span>
+</button>
+<button class="h-10 px-3 bg-white border border-cf-border hover:border-cf-navy-primary text-cf-navy-deep rounded-lg text-label-md font-label-md flex items-center justify-center gap-1.5 transition-colors" id="copyAllCodesBtn" onclick="copyAllBackupCodes()" type="button">
+<span class="material-symbols-outlined text-[18px]" id="copyAllIcon">file_copy</span>
+<span id="copyAllLabel">Copy all codes</span>
+</button>
+</div>
+<!-- Mandatory Acknowledgment Checkbox -->
+<div class="pt-4 mt-4 border-t border-cf-border">
+<label class="flex items-start gap-2.5 cursor-pointer select-none group">
+<input class="mt-0.5 w-4 h-4 text-cf-navy-primary border-cf-border-input rounded focus:ring-cf-navy-primary/20 accent-cf-navy-primary" id="mfaAckCheckbox" onchange="toggleSubmitState()" type="checkbox"/>
+<span class="text-body-sm font-body-sm text-cf-text-main group-hover:text-cf-navy-deep leading-tight">
+                  I have downloaded or securely saved my 8 backup codes.
+                </span>
+</label>
+</div>
+</section>
+<!-- Bottom Action Card -->
+<section class="bg-surface-container-lowest rounded-xl border border-cf-border p-5 shadow-subtle flex flex-col gap-3">
+<!-- Full-width Primary Navy Button -->
+<button class="w-full h-12 bg-cf-navy-primary hover:bg-cf-navy-darker text-white rounded-lg font-label-lg text-label-lg flex items-center justify-center gap-2 transition-all shadow-sm active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed" id="submitMfaBtn" onclick="handleCompleteMFA()" type="button">
+<span>Complete MFA Setup &amp; Enter Workspace</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+<!-- Secondary link: Back to previous step -->
+<div class="flex items-center justify-center pt-1">
+<a class="inline-flex items-center gap-1 text-label-md font-label-md text-cf-navy-primary hover:text-cf-navy-deep hover:underline transition-colors py-1" href="#">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+<span>Back to previous step</span>
+</a>
+</div>
+<!-- Security Assurance Notice -->
+<div class="flex items-center justify-center gap-1.5 pt-2 text-cf-text-muted text-[11px] border-t border-cf-border">
+<span class="material-symbols-outlined text-[14px] text-emerald-600">verified</span>
+<span>Encrypted via TLS 1.3 · ISO 27001 Clinical Compliance</span>
+</div>
+</section>
+</div>
+</div>
+</div>
+</main>
+<!-- Desktop Medical Network Footer -->
+<footer class="bg-surface-container-low border-t border-outline-variant mt-16">
+<div class="max-w-7xl mx-auto px-8 py-10 w-full">
+<div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-cf-border">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-cf-navy-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-[18px]">local_hospital</span>
+</div>
+<div>
+<span class="text-headline-sm font-headline-sm font-bold text-primary tracking-tight">ClinicFlow</span>
+<span class="text-body-sm text-cf-text-muted ml-2">Egyptian Medical Operations Network</span>
+</div>
+</div>
+<!-- Cairo Central Hotline Indicator -->
+<div class="flex items-center gap-2.5 px-4 py-2 bg-white rounded-lg border border-cf-border">
+<div class="w-7 h-7 rounded-full bg-cf-accent-orange-soft flex items-center justify-center text-cf-accent-orange">
+<span class="material-symbols-outlined text-[18px]">call</span>
+</div>
+<div class="text-left">
+<span class="text-[11px] uppercase tracking-wider text-cf-text-muted font-bold block leading-none">24/7 Clinical Hotline</span>
+<span class="text-headline-sm font-bold text-cf-navy-deep font-mono leading-tight">16789</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col md:flex-row items-center justify-between gap-4 pt-6">
+<p class="text-body-sm font-body-sm text-cf-text-muted">
+          © 2025 ClinicFlow Healthcare Network S.A.E. All rights reserved. Hotline 16789.
+        </p>
+<div class="flex flex-wrap gap-x-6 gap-y-2 text-body-sm text-cf-text-muted">
+<a class="hover:text-cf-navy-primary transition-colors" href="#">Nasr City Branch</a>
+<a class="hover:text-cf-navy-primary transition-colors" href="#">Maadi Medical Center</a>
+<a class="hover:text-cf-navy-primary transition-colors" href="#">Sheikh Zayed Clinic</a>
+<a class="hover:text-cf-navy-primary transition-colors" href="#">Ministry of Health Licensing</a>
+<a class="hover:text-cf-navy-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-cf-navy-primary transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+</footer>
+<!-- Toast Notification Template -->
+<div class="fixed bottom-6 right-6 transform translate-y-24 opacity-0 transition-all duration-300 z-50 flex items-center gap-2 bg-cf-navy-deep text-white px-4 py-3 rounded-lg shadow-elevated border border-slate-700" id="toastMessage">
+<span class="material-symbols-outlined text-emerald-400 text-[20px]" id="toastIcon">check_circle</span>
+<span class="text-body-sm font-medium" id="toastText">Action completed successfully</span>
+</div>
+<!-- Interactive Logic for MFA Setup -->
+<script>
+    // Copy manual secret key with visual feedback
+    function copySecretKey() {
+      const key = "CF25-NK99-LM44-88PX";
+      navigator.clipboard.writeText(key).then(() => {
+        const label = document.getElementById('copyKeyLabel');
+        const icon = document.getElementById('copyKeyIcon');
+        label.textContent = "Copied!";
+        icon.textContent = "done";
+        showToast("Secret key copied to clipboard");
+        setTimeout(() => {
+          label.textContent = "Copy key";
+          icon.textContent = "content_copy";
+        }, 2500);
+      });
+    }
+
+    // Copy all backup recovery codes
+    function copyAllBackupCodes() {
+      const backupCodes = "ClinicFlow Emergency Recovery Codes (Dr. Karim Nabil)\n1. 8492-1049\n2. 3921-9844\n3. 1094-8271\n4. 7741-2091\n5. 5519-3820\n6. 6204-1183\n7. 9012-4418\n8. 4310-7629\nKeep safe in a password manager.";
+      navigator.clipboard.writeText(backupCodes).then(() => {
+        const label = document.getElementById('copyAllLabel');
+        const icon = document.getElementById('copyAllIcon');
+        label.textContent = "Codes Copied!";
+        icon.textContent = "done";
+        showToast("All 8 backup codes copied to clipboard");
+        setTimeout(() => {
+          label.textContent = "Copy all codes";
+          icon.textContent = "file_copy";
+        }, 2500);
+      });
+    }
+
+    // Download backup codes as .txt file
+    function downloadBackupCodes() {
+      const content = `ClinicFlow Healthcare Network - Staff MFA Recovery Codes
+Account: Dr. Karim Nabil (knabil@clinicflow.eg)
+Generated: ${new Date().toISOString()}
+
+Emergency Backup Codes (One-time usage each):
+1. 8492-1049
+2. 3921-9844
+3. 1094-8271
+4. 7741-2091
+5. 5519-3820
+6. 6204-1183
+7. 9012-4418
+8. 4310-7629
+
+WARNING: Store this file in an encrypted vault or secure password manager.
+Never share these codes with IT or support staff.
+Support Hotline: 16789`;
+
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `clinicflow-backup-codes-dr-karim.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      
+      showToast("Downloaded clinicflow-backup-codes-dr-karim.txt");
+      
+      // Auto-check acknowledgment for user convenience
+      const checkbox = document.getElementById('mfaAckCheckbox');
+      if (!checkbox.checked) {
+        checkbox.checked = true;
+        toggleSubmitState();
+      }
+    }
+
+    // Toast helper
+    function showToast(message) {
+      const toast = document.getElementById('toastMessage');
+      const text = document.getElementById('toastText');
+      text.textContent = message;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 3000);
+    }
+
+    // OTP Auto-focus traversal
+    const otpInputs = document.querySelectorAll('.otp-digit');
+    otpInputs.forEach((input, index) => {
+      input.addEventListener('input', (e) => {
+        if (e.target.value.length === 1 && index < otpInputs.length - 1) {
+          otpInputs[index + 1].focus();
+        }
+      });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !e.target.value && index > 0) {
+          otpInputs[index - 1].focus();
+        }
+      });
+      // Allow pasting 6 digits directly
+      input.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const pastedData = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '').slice(0, 6);
+        if (pastedData) {
+          pastedData.split('').forEach((char, i) => {
+            if (otpInputs[i]) {
+              otpInputs[i].value = char;
+            }
+          });
+          const nextIndex = Math.min(pastedData.length, otpInputs.length - 1);
+          otpInputs[nextIndex].focus();
+        }
+      });
+    });
+
+    // Checkbox toggle logic
+    function toggleSubmitState() {
+      // Button is naturally enabled but can validate on submit
+    }
+
+    // Handle completion
+    function handleCompleteMFA() {
+      const checkbox = document.getElementById('mfaAckCheckbox');
+      const enteredCode = Array.from(otpInputs).map(i => i.value).join('');
+
+      if (enteredCode.length < 6) {
+        showToast("Please enter the 6-digit code from your authenticator app.");
+        otpInputs[0].focus();
+        return;
+      }
+
+      if (!checkbox.checked) {
+        showToast("Please confirm you have saved your 8 backup recovery codes.");
+        checkbox.focus();
+        return;
+      }
+
+      const btn = document.getElementById('submitMfaBtn');
+      btn.innerHTML = `<span class="material-symbols-outlined text-[18px] animate-spin">sync</span><span>Verifying Credentials & Enrolling...</span>`;
+      btn.disabled = true;
+
+      setTimeout(() => {
+        btn.classList.remove('bg-cf-navy-primary');
+        btn.classList.add('bg-emerald-700');
+        btn.innerHTML = `<span class="material-symbols-outlined text-[18px]">verified</span><span>MFA Enrolled! Redirecting...</span>`;
+        showToast("Two-step verification activated! Welcome Dr. Karim.");
+        setTimeout(() => {
+          btn.innerHTML = `<span>Complete MFA Setup & Enter Workspace</span><span class="material-symbols-outlined text-[18px]">arrow_forward</span>`;
+          btn.disabled = false;
+          btn.classList.add('bg-cf-navy-primary');
+          btn.classList.remove('bg-emerald-700');
+        }, 3000);
+      }, 1200);
+    }
+
+    // TOTP Countdown simulation
+    let seconds = 28;
+    const countdownEl = document.getElementById('countdown');
+    setInterval(() => {
+      seconds = seconds <= 1 ? 30 : seconds - 1;
+      if (countdownEl) {
+        countdownEl.textContent = `${seconds}s remaining`;
+      }
+    }, 1000);
+  </script>
+</body></html>

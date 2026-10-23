@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow Egypt Network Admin - Roles &amp; Permissions</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Forms & Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-fixed-dim": "#a8c9f3",
+            "surface-tint": "#406185",
+            "on-error-container": "#93000a",
+            "primary-container": "#1e4164",
+            "on-primary-fixed": "#001d36",
+            "inverse-surface": "#27313e",
+            "outline-variant": "#c3c6cf",
+            "on-tertiary-fixed": "#370e00",
+            "on-primary-fixed-variant": "#27496c",
+            "on-surface": "#121c28",
+            "on-secondary-container": "#52647c",
+            "on-primary": "#ffffff",
+            "on-secondary-fixed-variant": "#36485f",
+            "surface": "#f8f9ff",
+            "surface-dim": "#d1dbeb",
+            "tertiary-container": "#722600",
+            "on-primary-container": "#8dadd6",
+            "inverse-on-surface": "#eaf1ff",
+            "surface-container-highest": "#d9e3f4",
+            "on-tertiary-container": "#ff8b5b",
+            "on-error": "#ffffff",
+            "surface-variant": "#d9e3f4",
+            "error": "#ba1a1a",
+            "background": "#f8f9ff",
+            "on-secondary": "#ffffff",
+            "outline": "#73777f",
+            "on-tertiary": "#ffffff",
+            "surface-container": "#e5efff",
+            "secondary-fixed": "#d2e4ff",
+            "inverse-primary": "#a8c9f3",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-secondary-fixed": "#081c31",
+            "tertiary-fixed-dim": "#ffb599",
+            "surface-container-lowest": "#ffffff",
+            "tertiary-fixed": "#ffdbce",
+            "surface-container-low": "#eef4ff",
+            "secondary-container": "#cee1fd",
+            "on-surface-variant": "#43474e",
+            "primary-fixed": "#d1e4ff",
+            "tertiary": "#4e1700",
+            "error-container": "#ffdad6",
+            "surface-bright": "#f8f9ff",
+            "surface-container-high": "#dfe9fa",
+            "primary": "#002b4c",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "secondary": "#4e6077",
+            "on-background": "#121c28"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter-sm": "0.75rem",
+            "margin-tablet": "1.5rem",
+            "gutter": "1rem",
+            "space-xl": "1.5rem",
+            "margin": "1rem",
+            "margin-desktop": "2rem",
+            "space-md": "0.75rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1rem"
+          },
+          "fontFamily": {
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "body-sm": ["Inter"],
+            "label-lg": ["Inter"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="bg-[#F7F9FD] text-[#212427] antialiased min-h-screen flex flex-col font-body-md text-body-md">
+<!-- ========================================================================= -->
+<!-- SHARED COMPONENT: SideNavBar (Fixed Left Sidebar 260px / w-64)            -->
+<!-- ========================================================================= -->
+<aside class="fixed top-0 left-0 h-screen w-64 flex flex-col justify-between bg-surface-container-lowest dark:bg-inverse-surface border-r border-outline-variant dark:border-outline z-30">
+<!-- Header Section -->
+<div>
+<div class="px-5 py-5 flex items-center gap-3 border-b border-outline-variant/50 dark:border-outline/50">
+<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-sm">
+<span class="material-symbols-outlined text-[24px]">local_hospital</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary leading-tight">ClinicFlow</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant dark:text-inverse-on-surface tracking-wide">Egypt Network Admin</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="p-3 space-y-1">
+<!-- Tab 1: Overview -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-inverse-on-surface font-medium hover:bg-surface-container-low dark:hover:bg-primary-container/50 transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+<!-- Tab 2: Staff -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-inverse-on-surface font-medium hover:bg-surface-container-low dark:hover:bg-primary-container/50 transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">badge</span>
+<span class="font-label-md text-label-md">Staff</span>
+</a>
+<!-- Tab 3: Roles & permissions (ACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container dark:bg-primary-container text-primary dark:text-on-primary-container font-semibold" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">admin_panel_settings</span>
+<span class="font-label-md text-label-md">Roles &amp; permissions</span>
+</a>
+<!-- Tab 4: Branches -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-inverse-on-surface font-medium hover:bg-surface-container-low dark:hover:bg-primary-container/50 transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">apartment</span>
+<span class="font-label-md text-label-md">Branches</span>
+</a>
+<!-- Tab 5: Specialties -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-inverse-on-surface font-medium hover:bg-surface-container-low dark:hover:bg-primary-container/50 transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">medical_services</span>
+<span class="font-label-md text-label-md">Specialties</span>
+</a>
+<!-- Tab 6: Settings -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-inverse-on-surface font-medium hover:bg-surface-container-low dark:hover:bg-primary-container/50 transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<!-- Tab 7: Integrations -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-inverse-on-surface font-medium hover:bg-surface-container-low dark:hover:bg-primary-container/50 transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">hub</span>
+<span class="font-label-md text-label-md">Integrations</span>
+</a>
+<!-- Tab 8: Audit log -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-inverse-on-surface font-medium hover:bg-surface-container-low dark:hover:bg-primary-container/50 transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">history</span>
+<span class="font-label-md text-label-md">Audit log</span>
+</a>
+</nav>
+</div>
+<!-- User Profile Footer -->
+<div class="p-3 border-t border-outline-variant/50 dark:border-outline/50">
+<div class="flex items-center justify-between p-2 rounded-lg bg-surface-container-low dark:bg-inverse-surface border border-outline-variant/40">
+<div class="flex items-center gap-2.5 overflow-hidden">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-bold font-label-md text-label-md">
+            KA
+          </div>
+<div class="truncate">
+<p class="font-label-md text-label-md font-semibold text-primary truncate leading-tight">Karim Adel</p>
+<span class="inline-flex items-center px-1.5 py-0.2 rounded-full text-[10px] font-semibold bg-purple-100 text-purple-800 border border-purple-200">
+              Admin
+            </span>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-primary p-1 rounded-md transition-colors" title="Account profile">
+<span class="material-symbols-outlined text-[20px]">account_circle</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- SHARED COMPONENT: TopNavBar (Docked top-0, ml-64, w-[calc(100%-16rem)])   -->
+<!-- ========================================================================= -->
+<header class="fixed top-0 left-64 right-0 h-16 bg-surface-container-lowest dark:bg-inverse-surface border-b border-outline-variant dark:border-outline z-20 flex justify-between items-center px-6">
+<!-- Left: Global Context & Search -->
+<div class="flex items-center gap-6">
+<div class="relative w-80">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="w-full h-9 pl-9 pr-4 rounded-lg bg-surface-container-low border border-outline-variant/60 text-[#212427] placeholder:text-on-surface-variant font-body-sm text-body-sm focus:outline-none focus:border-[#015C9A] focus:ring-1 focus:ring-[#015C9A] transition-all" placeholder="Search permissions, modules, or roles..." type="text"/>
+</div>
+<!-- Network Node Status Pill -->
+<div class="hidden xl:flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-medium">
+<span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+<span>Egypt Central Node: Online (Cairo-DC-01)</span>
+</div>
+</div>
+<!-- Right Actions: Language, Notifications, Node indicator -->
+<div class="flex items-center gap-4">
+<!-- Language Switcher -->
+<button class="px-2.5 py-1 text-xs font-semibold rounded border border-outline-variant/80 hover:bg-surface-container-low text-on-surface-variant transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">translate</span>
+<span>EN/عربي</span>
+</button>
+<!-- System Notification Bell with Accent Pip -->
+<div class="relative">
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors relative" title="Notifications">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-[#FF5E00] rounded-full ring-2 ring-white"></span>
+</button>
+</div>
+<div class="h-4 w-px bg-outline-variant/60"></div>
+<!-- User Chip Status -->
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-emerald-600 text-[16px]">verified_user</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">2FA Enforced</span>
+</div>
+</div>
+</header>
+<!-- ========================================================================= -->
+<!-- MAIN CONTENT AREA                                                         -->
+<!-- ========================================================================= -->
+<main class="ml-64 pt-16 flex-1 bg-[#F7F9FD] p-6 lg:p-8 flex flex-col gap-6">
+<!-- Header Section with Title & Primary CTAs -->
+<div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4 pb-2 border-b border-[#D3DBE6]">
+<div>
+<div class="flex items-center gap-2.5">
+<h2 class="font-headline-lg text-headline-lg font-bold text-[#13263B] tracking-tight">Roles &amp; Permission Matrix</h2>
+<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-[#015C9A] border border-blue-200">
+            Active Security Policy v4.2
+          </span>
+</div>
+<p class="font-body-md text-body-md text-[#5B6573] mt-1 max-w-4xl">
+          Configure granular role authorizations across administrative, operational, billing, and clinical modules. Changes apply globally across all clinic branches.
+        </p>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-3 flex-shrink-0">
+<button class="px-4 py-2 text-sm font-semibold text-[#1E4164] bg-white border border-[#1E4164] rounded-lg hover:bg-[#F7F9FD] transition-colors flex items-center gap-2 active:scale-95" id="btn-reset">
+<span class="material-symbols-outlined text-[18px]">restart_alt</span>
+<span>Reset to Default Matrix</span>
+</button>
+<button class="px-5 py-2 text-sm font-semibold text-white bg-[#1E4164] rounded-lg hover:bg-[#13263B] transition-colors shadow-sm flex items-center gap-2 active:scale-95" id="btn-save">
+<span class="material-symbols-outlined text-[18px]">save</span>
+<span>Save Policy Changes</span>
+</button>
+</div>
+</div>
+<!-- Top Control Bar / Compliance Banner -->
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between p-3.5 bg-blue-50/80 border border-blue-200/80 rounded-xl gap-3 text-blue-950">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-blue-100 text-[#015C9A] flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+<p class="text-xs md:text-sm font-medium text-slate-800">
+<span class="font-bold text-[#13263B]">Security Compliance Guardrail:</span> 
+          Clinical encounter notes and diagnosis records are strictly restricted to licensed clinical personnel. All permission changes are cryptographically audited.
+        </p>
+</div>
+<div class="flex items-center gap-2 text-xs font-semibold text-[#015C9A] bg-white px-3 py-1.5 rounded-lg border border-blue-200 shadow-2xs flex-shrink-0">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+<span>Law 151/2020 Compliant</span>
+</div>
+</div>
+<!-- Legend of Permission Scopes Banner -->
+<div class="bg-white border border-[#D3DBE6] rounded-xl p-4 shadow-sm flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-500 text-[18px]">info</span>
+<span class="text-xs font-bold uppercase tracking-wider text-slate-500">Scope Hierarchy:</span>
+</div>
+<div class="flex flex-wrap items-center gap-3 md:gap-5">
+<!-- O -->
+<div class="flex items-center gap-1.5">
+<span class="w-6 h-6 rounded bg-emerald-100 text-emerald-800 font-bold text-xs flex items-center justify-center border border-emerald-300">O</span>
+<span class="text-xs font-medium text-slate-700"><strong class="font-semibold text-slate-900">Organization-wide</strong> (Full network access)</span>
+</div>
+<!-- B -->
+<div class="flex items-center gap-1.5">
+<span class="w-6 h-6 rounded bg-blue-100 text-[#015C9A] font-bold text-xs flex items-center justify-center border border-blue-300">B</span>
+<span class="text-xs font-medium text-slate-700"><strong class="font-semibold text-slate-900">Branch-scoped</strong> (Assigned clinics only)</span>
+</div>
+<!-- S -->
+<div class="flex items-center gap-1.5">
+<span class="w-6 h-6 rounded bg-amber-100 text-amber-900 font-bold text-xs flex items-center justify-center border border-amber-300">S</span>
+<span class="text-xs font-medium text-slate-700"><strong class="font-semibold text-slate-900">Self-only</strong> (Personal shifts &amp; encounters)</span>
+</div>
+<!-- — -->
+<div class="flex items-center gap-1.5">
+<span class="w-6 h-6 rounded bg-slate-100 text-slate-400 font-bold text-xs flex items-center justify-center border border-slate-300">—</span>
+<span class="text-xs font-medium text-slate-700"><strong class="font-semibold text-slate-900">No Access</strong> (Action prohibited)</span>
+</div>
+<!-- Padlock icon -->
+<div class="flex items-center gap-1.5 pl-2 border-l border-slate-200">
+<div class="w-6 h-6 rounded bg-rose-50 text-rose-700 flex items-center justify-center border border-rose-200">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+</div>
+<span class="text-xs font-medium text-slate-600">Clinically Locked / Non-overridable boundary</span>
+</div>
+</div>
+</div>
+<!-- Interactive Roles & Permissions Matrix Table Container -->
+<div class="bg-white border border-[#D3DBE6] rounded-xl shadow-sm overflow-hidden flex flex-col">
+<!-- Table Header & Filter Toolbar -->
+<div class="p-4 border-b border-[#D3DBE6] bg-slate-50/50 flex flex-col md:flex-row md:items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<span class="font-headline-sm text-headline-sm font-bold text-[#13263B]">Security Authorization Matrix</span>
+<span class="text-xs text-slate-500 font-medium">(10 Functional Modules, 8 Role Profiles)</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-2.5 py-1.5 bg-white border border-[#D3DBE6] rounded text-xs font-medium text-slate-700 hover:bg-slate-50 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">filter_list</span>
+<span>Filter Module</span>
+</button>
+<button class="px-2.5 py-1.5 bg-white border border-[#D3DBE6] rounded text-xs font-medium text-slate-700 hover:bg-slate-50 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+<span>Export CSV</span>
+</button>
+</div>
+</div>
+<!-- The Grid / Table -->
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse min-w-[1000px]">
+<thead>
+<tr class="border-b border-[#D3DBE6] bg-slate-100/70 text-slate-700 font-label-md text-label-md">
+<th class="py-3.5 px-4 w-[28%] font-bold text-[#13263B]">Functional Permission (Module)</th>
+<!-- 2. Admin (Violet) -->
+<th class="py-3.5 px-2 text-center w-[9%]">
+<span class="inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-bold bg-purple-100 text-purple-900 border border-purple-200 shadow-2xs">
+                  Admin
+                </span>
+</th>
+<!-- 3. Manager (Indigo) -->
+<th class="py-3.5 px-2 text-center w-[9%]">
+<span class="inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-bold bg-indigo-100 text-indigo-900 border border-indigo-200 shadow-2xs">
+                  Manager
+                </span>
+</th>
+<!-- 4. Receptionist (Sky Blue) -->
+<th class="py-3.5 px-2 text-center w-[10%]">
+<span class="inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-bold bg-sky-100 text-sky-900 border border-sky-200 shadow-2xs">
+                  Receptionist
+                </span>
+</th>
+<!-- 5. Nurse (Teal) -->
+<th class="py-3.5 px-2 text-center w-[9%]">
+<span class="inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-bold bg-teal-100 text-teal-900 border border-teal-200 shadow-2xs">
+                  Nurse
+                </span>
+</th>
+<!-- 6. Doctor (Navy) -->
+<th class="py-3.5 px-2 text-center w-[9%]">
+<span class="inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-bold bg-[#1E4164] text-white shadow-2xs">
+                  Doctor
+                </span>
+</th>
+<!-- 7. Accountant (Amber) -->
+<th class="py-3.5 px-2 text-center w-[10%]">
+<span class="inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200 shadow-2xs">
+                  Accountant
+                </span>
+</th>
+<!-- 8. Patient (Slate) -->
+<th class="py-3.5 px-2 text-center w-[9%]">
+<span class="inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-bold bg-slate-200 text-slate-800 border border-slate-300 shadow-2xs">
+                  Patient
+                </span>
+</th>
+<th class="py-3.5 px-3 text-center w-[7%] text-slate-400 font-semibold text-xs">Audit</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 font-body-sm text-body-sm">
+<!-- Row 1: Organization -->
+<tr class="hover:bg-blue-50/40 transition-colors group">
+<td class="py-3.5 px-4">
+<div class="font-bold text-[#13263B] group-hover:text-primary transition-colors">Organization</div>
+<div class="text-xs text-slate-500">Branch settings, Operating hours, Holiday calendar</div>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-emerald-100 text-emerald-800 border border-emerald-300">O</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-blue-100 text-[#015C9A] border border-blue-300">B</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-3 text-center">
+<span class="material-symbols-outlined text-[16px] text-slate-400 group-hover:text-primary cursor-pointer" title="View historical changes">history</span>
+</td>
+</tr>
+<!-- Row 2: Staff Management -->
+<tr class="hover:bg-blue-50/40 transition-colors group">
+<td class="py-3.5 px-4">
+<div class="font-bold text-[#13263B] group-hover:text-primary transition-colors">Staff Management</div>
+<div class="text-xs text-slate-500">Invite staff, Assign roles, Deactivate credentials</div>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-emerald-100 text-emerald-800 border border-emerald-300">O</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-blue-100 text-[#015C9A] border border-blue-300">B</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-3 text-center">
+<span class="material-symbols-outlined text-[16px] text-slate-400 group-hover:text-primary cursor-pointer" title="View historical changes">history</span>
+</td>
+</tr>
+<!-- Row 3: Recruitment -->
+<tr class="hover:bg-blue-50/40 transition-colors group">
+<td class="py-3.5 px-4">
+<div class="font-bold text-[#13263B] group-hover:text-primary transition-colors">Recruitment</div>
+<div class="text-xs text-slate-500">Post vacancies, Review doctor applications, Schedule interviews</div>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-emerald-100 text-emerald-800 border border-emerald-300">O</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-emerald-100 text-emerald-800 border border-emerald-300">O</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-3 text-center">
+<span class="material-symbols-outlined text-[16px] text-slate-400 group-hover:text-primary cursor-pointer" title="View historical changes">history</span>
+</td>
+</tr>
+<!-- Row 4: Scheduling & Shifts -->
+<tr class="hover:bg-blue-50/40 transition-colors group">
+<td class="py-3.5 px-4">
+<div class="font-bold text-[#13263B] group-hover:text-primary transition-colors">Scheduling &amp; Shifts</div>
+<div class="text-xs text-slate-500">Doctor master rosters, Exception leaves, Room allocation</div>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-emerald-100 text-emerald-800 border border-emerald-300">O</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-blue-100 text-[#015C9A] border border-blue-300">B</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-blue-100 text-[#015C9A] border border-blue-300">B</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-blue-100 text-[#015C9A] border border-blue-300">B</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-amber-100 text-amber-900 border border-amber-300">S</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-3 text-center">
+<span class="material-symbols-outlined text-[16px] text-slate-400 group-hover:text-primary cursor-pointer" title="View historical changes">history</span>
+</td>
+</tr>
+<!-- Row 5: Appointments -->
+<tr class="hover:bg-blue-50/40 transition-colors group">
+<td class="py-3.5 px-4">
+<div class="font-bold text-[#13263B] group-hover:text-primary transition-colors">Appointments</div>
+<div class="text-xs text-slate-500">Book walk-in, Reschedule slot, Cancel visit, Live queue management</div>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-emerald-100 text-emerald-800 border border-emerald-300">O</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-blue-100 text-[#015C9A] border border-blue-300">B</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-blue-100 text-[#015C9A] border border-blue-300">B</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-blue-100 text-[#015C9A] border border-blue-300">B</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-amber-100 text-amber-900 border border-amber-300">S</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-amber-100 text-amber-900 border border-amber-300">S</span>
+</td>
+<td class="py-3.5 px-3 text-center">
+<span class="material-symbols-outlined text-[16px] text-slate-400 group-hover:text-primary cursor-pointer" title="View historical changes">history</span>
+</td>
+</tr>
+<!-- Row 6: Clinical Records (SPECIAL LOCKED ROW) -->
+<tr class="bg-rose-50/25 hover:bg-rose-50/50 transition-colors group border-l-4 border-l-rose-500">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-1.5">
+<span class="font-bold text-[#13263B]">Clinical Records</span>
+<span class="material-symbols-outlined text-rose-600 text-[16px]" style="font-variation-settings: 'FILL' 1;">health_and_safety</span>
+</div>
+<div class="text-xs text-rose-900/80 font-medium">EHR charts, Vitals triage, Prescriptions, Diagnostic orders</div>
+</td>
+<!-- Admin (Locked) -->
+<td class="py-3.5 px-2 text-center">
+<div class="inline-flex items-center gap-1 px-2 py-1 rounded bg-rose-100 text-rose-800 text-[11px] font-bold border border-rose-200 shadow-2xs">
+<span>—</span>
+<span class="material-symbols-outlined text-[13px]">lock</span>
+</div>
+</td>
+<!-- Manager (Locked) -->
+<td class="py-3.5 px-2 text-center">
+<div class="inline-flex items-center gap-1 px-2 py-1 rounded bg-rose-100 text-rose-800 text-[11px] font-bold border border-rose-200 shadow-2xs">
+<span>—</span>
+<span class="material-symbols-outlined text-[13px]">lock</span>
+</div>
+</td>
+<!-- Receptionist (Locked) -->
+<td class="py-3.5 px-2 text-center">
+<div class="inline-flex items-center gap-1 px-2 py-1 rounded bg-rose-100 text-rose-800 text-[11px] font-bold border border-rose-200 shadow-2xs">
+<span>—</span>
+<span class="material-symbols-outlined text-[13px]">lock</span>
+</div>
+</td>
+<!-- Nurse -->
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-blue-100 text-[#015C9A] border border-blue-300">B</span>
+</td>
+<!-- Doctor -->
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-blue-100 text-[#015C9A] border border-blue-300">B</span>
+</td>
+<!-- Accountant (Locked) -->
+<td class="py-3.5 px-2 text-center">
+<div class="inline-flex items-center gap-1 px-2 py-1 rounded bg-rose-100 text-rose-800 text-[11px] font-bold border border-rose-200 shadow-2xs">
+<span>—</span>
+<span class="material-symbols-outlined text-[13px]">lock</span>
+</div>
+</td>
+<!-- Patient -->
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-amber-100 text-amber-900 border border-amber-300">S</span>
+</td>
+<td class="py-3.5 px-3 text-center">
+<span class="material-symbols-outlined text-[16px] text-rose-600 cursor-pointer" title="Immutable Policy Guardrail">shield_lock</span>
+</td>
+</tr>
+<!-- Row 7: Billing & Ledger -->
+<tr class="hover:bg-blue-50/40 transition-colors group">
+<td class="py-3.5 px-4">
+<div class="font-bold text-[#13263B] group-hover:text-primary transition-colors">Billing &amp; Ledger</div>
+<div class="text-xs text-slate-500">Issue invoices, Drawer close, Cash session reconciliation, POS settlement</div>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-emerald-100 text-emerald-800 border border-emerald-300">O</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-blue-100 text-[#015C9A] border border-blue-300">B</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-blue-100 text-[#015C9A] border border-blue-300">B</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-emerald-100 text-emerald-800 border border-emerald-300">O</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-amber-100 text-amber-900 border border-amber-300">S</span>
+</td>
+<td class="py-3.5 px-3 text-center">
+<span class="material-symbols-outlined text-[16px] text-slate-400 group-hover:text-primary cursor-pointer" title="View historical changes">history</span>
+</td>
+</tr>
+<!-- Row 8: Insurance & Claims -->
+<tr class="hover:bg-blue-50/40 transition-colors group">
+<td class="py-3.5 px-4">
+<div class="font-bold text-[#13263B] group-hover:text-primary transition-colors">Insurance &amp; Claims</div>
+<div class="text-xs text-slate-500">Payer contracts, Co-pay rules, Claim batch submission, XML export</div>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-emerald-100 text-emerald-800 border border-emerald-300">O</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-blue-100 text-[#015C9A] border border-blue-300">B</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-blue-100 text-[#015C9A] border border-blue-300">B</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-emerald-100 text-emerald-800 border border-emerald-300">O</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-amber-100 text-amber-900 border border-amber-300">S</span>
+</td>
+<td class="py-3.5 px-3 text-center">
+<span class="material-symbols-outlined text-[16px] text-slate-400 group-hover:text-primary cursor-pointer" title="View historical changes">history</span>
+</td>
+</tr>
+<!-- Row 9: Reporting & Analytics -->
+<tr class="hover:bg-blue-50/40 transition-colors group">
+<td class="py-3.5 px-4">
+<div class="font-bold text-[#13263B] group-hover:text-primary transition-colors">Reporting &amp; Analytics</div>
+<div class="text-xs text-slate-500">Productivity reports, Financial audit, Wait time metrics</div>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-emerald-100 text-emerald-800 border border-emerald-300">O</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-blue-100 text-[#015C9A] border border-blue-300">B</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-amber-100 text-amber-900 border border-amber-300">S</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-emerald-100 text-emerald-800 border border-emerald-300">O</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-3 text-center">
+<span class="material-symbols-outlined text-[16px] text-slate-400 group-hover:text-primary cursor-pointer" title="View historical changes">history</span>
+</td>
+</tr>
+<!-- Row 10: System & Security -->
+<tr class="hover:bg-blue-50/40 transition-colors group">
+<td class="py-3.5 px-4">
+<div class="font-bold text-[#13263B] group-hover:text-primary transition-colors">System &amp; Security</div>
+<div class="text-xs text-slate-500">Integrations, Audit logs, 2FA enforcement, API keys</div>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-bold text-xs bg-emerald-100 text-emerald-800 border border-emerald-300">O</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-2 text-center">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded font-semibold text-xs bg-slate-100 text-slate-400 border border-slate-200">—</span>
+</td>
+<td class="py-3.5 px-3 text-center">
+<span class="material-symbols-outlined text-[16px] text-slate-400 group-hover:text-primary cursor-pointer" title="View historical changes">history</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Quick Action Table Footer Bar -->
+<div class="p-3 bg-slate-50 border-t border-[#D3DBE6] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span>Matrix Status: In Sync across 14 Active Network Branches</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-slate-400">Double click non-locked cells to cycle permission scopes (O → B → S → —)</span>
+<button class="font-semibold text-[#015C9A] hover:underline flex items-center gap-1">
+<span>View Complete Change History</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Security & Statutory Footer Banner -->
+<div class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-slate-100 text-[#1E4164] flex items-center justify-center flex-shrink-0 border border-slate-200">
+<span class="material-symbols-outlined text-[24px]">gavel</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm font-bold text-[#13263B]">Statutory Compliance Notification</h4>
+<p class="font-body-sm text-body-sm text-[#5B6573] mt-0.5">
+            Clinical cells for Admin and Accountant are permanently locked to guarantee patient confidentiality under Egyptian Data Protection Law (Law No. 151 of 2020). Audit trail ID: <code class="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-slate-800 font-semibold">AUD-POL-2025-Q4</code>.
+          </p>
+</div>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0">
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant hover:bg-slate-50 text-xs font-semibold text-slate-700 transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+<span>Validate Policy Signatures</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Interactive JavaScript for UI Feedback -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const saveBtn = document.getElementById('btn-save');
+      const resetBtn = document.getElementById('btn-reset');
+
+      if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+          const originalText = saveBtn.innerHTML;
+          saveBtn.innerHTML = `
+            <span class="material-symbols-outlined text-[18px] animate-spin">sync</span>
+            <span>Signing Policy...</span>
+          `;
+          saveBtn.classList.add('opacity-80', 'pointer-events-none');
+          
+          setTimeout(() => {
+            saveBtn.innerHTML = `
+              <span class="material-symbols-outlined text-[18px]">check_circle</span>
+              <span>Policy Deployed Globally</span>
+            `;
+            saveBtn.classList.remove('bg-[#1E4164]', 'hover:bg-[#13263B]');
+            saveBtn.classList.add('bg-emerald-700', 'text-white');
+            
+            setTimeout(() => {
+              saveBtn.innerHTML = originalText;
+              saveBtn.classList.remove('opacity-80', 'pointer-events-none', 'bg-emerald-700');
+              saveBtn.classList.add('bg-[#1E4164]', 'hover:bg-[#13263B]');
+            }, 2500);
+          }, 800);
+        });
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          if (confirm('Revert all matrix assignments to Network Default Baseline? Non-committed overrides will be cleared.')) {
+            const originalText = resetBtn.innerHTML;
+            resetBtn.innerHTML = `
+              <span class="material-symbols-outlined text-[18px] animate-spin">refresh</span>
+              <span>Resetting...</span>
+            `;
+            setTimeout(() => {
+              resetBtn.innerHTML = originalText;
+            }, 600);
+          }
+        });
+      }
+    });
+  </script>
+</body></html>

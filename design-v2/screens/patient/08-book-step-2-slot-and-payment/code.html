@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>ClinicFlow - Book Visit: Step 2</title>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-variant": "#d9e3f4",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#eef4ff",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "on-tertiary": "#ffffff",
+            "tertiary": "#4e1700",
+            "secondary-fixed": "#d2e4ff",
+            "on-surface-variant": "#43474e",
+            "on-secondary-fixed-variant": "#36485f",
+            "on-background": "#121c28",
+            "error": "#ba1a1a",
+            "on-surface": "#121c28",
+            "inverse-primary": "#a8c9f3",
+            "background": "#f8f9ff",
+            "surface-container-high": "#dfe9fa",
+            "on-error": "#ffffff",
+            "on-secondary-fixed": "#081c31",
+            "surface-dim": "#d1dbeb",
+            "on-primary-container": "#8dadd6",
+            "on-secondary-container": "#52647c",
+            "tertiary-fixed-dim": "#ffb599",
+            "on-primary-fixed-variant": "#27496c",
+            "outline-variant": "#c3c6cf",
+            "secondary-fixed-dim": "#b5c8e3",
+            "surface-container-highest": "#d9e3f4",
+            "secondary-container": "#cee1fd",
+            "on-secondary": "#ffffff",
+            "tertiary-fixed": "#ffdbce",
+            "inverse-surface": "#27313e",
+            "surface": "#f8f9ff",
+            "on-error-container": "#93000a",
+            "on-tertiary-fixed": "#370e00",
+            "primary": "#002b4c",
+            "on-primary-fixed": "#001d36",
+            "inverse-on-surface": "#eaf1ff",
+            "on-tertiary-container": "#ff8b5b",
+            "outline": "#73777f",
+            "primary-fixed": "#d1e4ff",
+            "surface-container": "#e5efff",
+            "surface-bright": "#f8f9ff",
+            "on-primary": "#ffffff",
+            "surface-tint": "#406185",
+            "primary-container": "#1e4164",
+            "tertiary-container": "#722600",
+            "secondary": "#4e6077",
+            "primary-fixed-dim": "#a8c9f3",
+            "error-container": "#ffdad6"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xl": "1.5rem",
+            "margin": "1rem",
+            "gutter-sm": "0.75rem",
+            "space-lg": "1rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "gutter": "1rem",
+            "space-md": "0.75rem",
+            "margin-tablet": "1.5rem",
+            "margin-desktop": "2rem"
+          },
+          "fontFamily": {
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "label-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "headline-xl": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-[#F7F9FD] text-on-surface antialiased min-h-full flex flex-col justify-between selection:bg-secondary-container selection:text-primary">
+<!-- Main App Shell Header (Linear Flow Departure: Task Screen Header) -->
+<header class="sticky top-0 z-40 bg-surface-container-lowest border-b border-outline-variant/60 shadow-[0_2px_8px_-2px_rgba(19,38,59,0.04)]">
+<div class="max-w-md mx-auto px-margin h-16 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<button aria-label="Go back" class="w-10 h-10 -ml-1.5 rounded-full flex items-center justify-center text-primary hover:bg-surface-container-low transition-colors duration-150 active:scale-95" type="button">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<div>
+<h1 class="text-headline-sm font-headline-sm text-primary leading-tight">Select Time &amp; Review</h1>
+<p class="text-label-sm font-label-sm text-secondary">Step 2 of 2: Confirmation</p>
+</div>
+</div>
+<!-- Stepper Pill Indicator -->
+<div class="flex items-center gap-1.5 bg-surface-container-low px-2.5 py-1 rounded-full">
+<div class="w-2 h-2 rounded-full bg-primary-container"></div>
+<div class="w-2 h-2 rounded-full bg-primary-container"></div>
+<span class="text-label-sm font-label-sm text-primary font-semibold pl-0.5">2/2</span>
+</div>
+</div>
+</header>
+<!-- Main Scrollable Canvas -->
+<main class="flex-1 w-full max-w-md mx-auto px-margin pt-space-md pb-36 space-y-space-md">
+<!-- Chosen Doctor Summary Card -->
+<section class="bg-surface-container-lowest rounded-xl border border-[#D3DBE6] p-4 shadow-[0_4px_16px_-4px_rgba(19,38,59,0.04)]">
+<div class="flex items-start gap-3.5">
+<div class="relative flex-shrink-0">
+<img class="w-16 h-16 rounded-xl object-cover object-top border border-[#D3DBE6]" data-alt="A distinguished Egyptian male cardiologist Dr. Ahmed Fathy in clean white medical coat with stethoscope around neck smiling confidently in a modern bright hospital office in Cairo. Professional clinic background in deep navy and serene soft cool tones, warm directional key lighting, photorealistic corporate healthcare portrait." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmF-pJjt28lyNR5D5KIWy4tl7K8KwyvOtiBPzZ3gdj-Pxe70d1z_NPOxiiBnax0HwR_JrZragwN_GAbYo1wZuc5fw00qzJi4RR2ZFJpVDGeEEOrM1UWLRo4TuRUhZ6jbwn0W7nJqmzvEjBh8j0Yw9rcBYF2xa5JrCJW90lTLieCxD_G2UJx4eVrgCFJKiCt8zfthjhYgk0EFVDNMjLCO12U3hafdZh6nRPhVZALzFJ_nYADSWWyyZoSwwv-WknGqHUxhAmujyrxHuR"/>
+<div class="absolute -bottom-1 -right-1 bg-[#ECFDF5] border border-[#059669]/30 rounded-full px-1.5 py-0.5 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+<span class="text-[9px] font-semibold text-[#059669] leading-none">Active</span>
+</div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-1">
+<h2 class="text-headline-sm font-headline-sm text-[#13263B] truncate">Dr. Ahmed Fathy</h2>
+<div class="flex items-center gap-0.5 bg-surface-container-low px-1.5 py-0.5 rounded text-label-sm font-label-sm text-primary">
+<span class="material-symbols-outlined text-[14px] text-[#FF5E00]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span>4.9</span>
+</div>
+</div>
+<p class="text-label-md font-label-md text-secondary">Consultant Cardiology</p>
+<div class="mt-2.5 pt-2.5 border-t border-outline-variant/40 flex items-center justify-between text-body-sm font-body-sm text-secondary">
+<div class="flex items-center gap-1.5 truncate">
+<span class="material-symbols-outlined text-[16px] text-secondary">location_on</span>
+<span class="truncate">Nasr City Branch · 30 min</span>
+</div>
+<div class="text-right flex-shrink-0">
+<span class="text-label-sm font-label-sm text-secondary">Fee: </span>
+<span class="text-label-lg font-label-lg text-[#FF5E00] font-bold">EGP 450</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Date Strip (14 Days Horizontal Scroll) -->
+<section class="space-y-2">
+<div class="flex items-center justify-between px-0.5">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-primary">calendar_month</span>
+<h3 class="text-headline-sm font-headline-sm text-primary">Select Date</h3>
+</div>
+<span class="text-label-md font-label-md text-secondary">October 2024</span>
+</div>
+<div class="flex gap-2 overflow-x-auto no-scrollbar py-1 -mx-margin px-margin">
+<!-- Day Item: Mon 22 -->
+<button class="flex-shrink-0 w-[58px] py-2.5 rounded-xl border border-[#C6D0DE] bg-surface-container-lowest text-center transition-all active:scale-95 hover:border-primary-container" type="button">
+<p class="text-label-sm font-label-sm text-secondary uppercase">Mon</p>
+<p class="text-headline-sm font-headline-sm text-on-surface mt-0.5">22</p>
+<div class="w-1 h-1 rounded-full bg-transparent mx-auto mt-1"></div>
+</button>
+<!-- Day Item: Tue 23 -->
+<button class="flex-shrink-0 w-[58px] py-2.5 rounded-xl border border-[#C6D0DE] bg-surface-container-lowest text-center transition-all active:scale-95 hover:border-primary-container" type="button">
+<p class="text-label-sm font-label-sm text-secondary uppercase">Tue</p>
+<p class="text-headline-sm font-headline-sm text-on-surface mt-0.5">23</p>
+<div class="w-1 h-1 rounded-full bg-transparent mx-auto mt-1"></div>
+</button>
+<!-- Day Item: Wed 24 (SELECTED) -->
+<button class="flex-shrink-0 w-[58px] py-2.5 rounded-xl border border-[#1E4164] bg-[#1E4164] text-center shadow-sm transition-all active:scale-95 ring-2 ring-primary-container/20" type="button">
+<p class="text-label-sm font-label-sm text-surface-container-lowest/80 uppercase font-medium">Wed</p>
+<p class="text-headline-sm font-headline-sm text-surface-container-lowest font-bold mt-0.5">24</p>
+<div class="w-1.5 h-1.5 rounded-full bg-[#FF5E00] mx-auto mt-0.5"></div>
+</button>
+<!-- Day Item: Thu 25 -->
+<button class="flex-shrink-0 w-[58px] py-2.5 rounded-xl border border-[#C6D0DE] bg-surface-container-lowest text-center transition-all active:scale-95 hover:border-primary-container" type="button">
+<p class="text-label-sm font-label-sm text-secondary uppercase">Thu</p>
+<p class="text-headline-sm font-headline-sm text-on-surface mt-0.5">25</p>
+<div class="w-1 h-1 rounded-full bg-transparent mx-auto mt-1"></div>
+</button>
+<!-- Day Item: Fri 26 -->
+<button class="flex-shrink-0 w-[58px] py-2.5 rounded-xl border border-[#E2E8F0] bg-[#F7F9FD] text-center opacity-60 cursor-not-allowed" type="button">
+<p class="text-label-sm font-label-sm text-[#A0AEC0] uppercase">Fri</p>
+<p class="text-headline-sm font-headline-sm text-[#A0AEC0] line-through mt-0.5">26</p>
+<div class="w-1 h-1 rounded-full bg-transparent mx-auto mt-1"></div>
+</button>
+<!-- Day Item: Sat 27 -->
+<button class="flex-shrink-0 w-[58px] py-2.5 rounded-xl border border-[#C6D0DE] bg-surface-container-lowest text-center transition-all active:scale-95 hover:border-primary-container" type="button">
+<p class="text-label-sm font-label-sm text-secondary uppercase">Sat</p>
+<p class="text-headline-sm font-headline-sm text-on-surface mt-0.5">27</p>
+<div class="w-1 h-1 rounded-full bg-transparent mx-auto mt-1"></div>
+</button>
+<!-- Day Item: Sun 28 -->
+<button class="flex-shrink-0 w-[58px] py-2.5 rounded-xl border border-[#C6D0DE] bg-surface-container-lowest text-center transition-all active:scale-95 hover:border-primary-container" type="button">
+<p class="text-label-sm font-label-sm text-secondary uppercase">Sun</p>
+<p class="text-headline-sm font-headline-sm text-on-surface mt-0.5">28</p>
+<div class="w-1 h-1 rounded-full bg-transparent mx-auto mt-1"></div>
+</button>
+<!-- Day Item: Mon 29 -->
+<button class="flex-shrink-0 w-[58px] py-2.5 rounded-xl border border-[#C6D0DE] bg-surface-container-lowest text-center transition-all active:scale-95 hover:border-primary-container" type="button">
+<p class="text-label-sm font-label-sm text-secondary uppercase">Mon</p>
+<p class="text-headline-sm font-headline-sm text-on-surface mt-0.5">29</p>
+<div class="w-1 h-1 rounded-full bg-transparent mx-auto mt-1"></div>
+</button>
+</div>
+</section>
+<!-- Time Slots Grouped by Time of Day -->
+<section class="space-y-space-md bg-surface-container-lowest rounded-xl border border-[#D3DBE6] p-4 shadow-[0_4px_16px_-4px_rgba(19,38,59,0.04)]">
+<div class="flex items-center justify-between pb-2 border-b border-outline-variant/40">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-primary">schedule</span>
+<h3 class="text-headline-sm font-headline-sm text-primary">Available Slots</h3>
+</div>
+<span class="text-label-sm font-label-sm text-secondary">Wednesday, Oct 24</span>
+</div>
+<!-- Morning Group -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<span class="text-label-md font-label-md text-primary font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-[#D97706]">light_mode</span>
+            Morning
+          </span>
+<span class="text-label-sm font-label-sm text-secondary">09:00 AM - 12:00 PM</span>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<!-- 09:30 AM -->
+<button class="min-h-[44px] px-2 py-2.5 rounded-lg border border-[#C6D0DE] bg-surface-container-lowest text-on-surface text-label-md font-label-md text-center hover:border-primary transition-all active:scale-95" type="button">
+            09:30 AM
+          </button>
+<!-- 10:30 AM (SELECTED) -->
+<button class="min-h-[44px] px-2 py-2.5 rounded-lg border border-[#1E4164] bg-[#1E4164] text-surface-container-lowest text-label-md font-label-md text-center flex items-center justify-center gap-1.5 shadow-sm active:scale-95 ring-2 ring-primary-container/20" type="button">
+<span class="material-symbols-outlined text-[16px]">check</span>
+<span>10:30 AM</span>
+</button>
+<!-- 11:15 AM -->
+<button class="min-h-[44px] px-2 py-2.5 rounded-lg border border-[#C6D0DE] bg-surface-container-lowest text-on-surface text-label-md font-label-md text-center hover:border-primary transition-all active:scale-95" type="button">
+            11:15 AM
+          </button>
+</div>
+</div>
+<!-- Afternoon Group -->
+<div class="space-y-2 pt-1 border-t border-outline-variant/30">
+<div class="flex items-center justify-between">
+<span class="text-label-md font-label-md text-primary font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-[#015C9A]">wb_sunny</span>
+            Afternoon
+          </span>
+<span class="text-label-sm font-label-sm text-secondary">12:00 PM - 05:00 PM</span>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<!-- 01:00 PM -->
+<button class="min-h-[44px] px-2 py-2.5 rounded-lg border border-[#C6D0DE] bg-surface-container-lowest text-on-surface text-label-md font-label-md text-center hover:border-primary transition-all active:scale-95" type="button">
+            01:00 PM
+          </button>
+<!-- 02:30 PM -->
+<button class="min-h-[44px] px-2 py-2.5 rounded-lg border border-[#C6D0DE] bg-surface-container-lowest text-on-surface text-label-md font-label-md text-center hover:border-primary transition-all active:scale-95" type="button">
+            02:30 PM
+          </button>
+<!-- 04:00 PM -->
+<button class="min-h-[44px] px-2 py-2.5 rounded-lg border border-[#C6D0DE] bg-surface-container-lowest text-on-surface text-label-md font-label-md text-center hover:border-primary transition-all active:scale-95" type="button">
+            04:00 PM
+          </button>
+</div>
+</div>
+<!-- Evening Group -->
+<div class="space-y-2 pt-1 border-t border-outline-variant/30">
+<div class="flex items-center justify-between">
+<span class="text-label-md font-label-md text-primary font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-primary">dark_mode</span>
+            Evening
+          </span>
+<span class="text-label-sm font-label-sm text-secondary">05:00 PM - 09:30 PM</span>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<!-- 06:15 PM -->
+<button class="min-h-[44px] px-2 py-2.5 rounded-lg border border-[#C6D0DE] bg-surface-container-lowest text-on-surface text-label-md font-label-md text-center hover:border-primary transition-all active:scale-95" type="button">
+            06:15 PM
+          </button>
+<!-- 07:30 PM -->
+<button class="min-h-[44px] px-2 py-2.5 rounded-lg border border-[#C6D0DE] bg-surface-container-lowest text-on-surface text-label-md font-label-md text-center hover:border-primary transition-all active:scale-95" type="button">
+            07:30 PM
+          </button>
+<!-- 08:45 PM -->
+<button class="min-h-[44px] px-2 py-2.5 rounded-lg border border-[#C6D0DE] bg-surface-container-lowest text-on-surface text-label-md font-label-md text-center hover:border-primary transition-all active:scale-95" type="button">
+            08:45 PM
+          </button>
+</div>
+</div>
+</section>
+<!-- Price Breakdown Card -->
+<section class="bg-surface-container-lowest rounded-xl border border-[#D3DBE6] p-4 shadow-[0_4px_16px_-4px_rgba(19,38,59,0.04)] space-y-3">
+<div class="flex items-center justify-between pb-2 border-b border-outline-variant/40">
+<h3 class="text-headline-sm font-headline-sm text-primary flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-primary">receipt_long</span>
+          Payment Breakdown
+        </h3>
+<span class="text-label-sm font-label-sm text-[#059669] bg-[#ECFDF5] px-2 py-0.5 rounded-full font-semibold">Zero Booking Fees</span>
+</div>
+<div class="space-y-2.5 text-body-md font-body-md">
+<!-- Item 1 -->
+<div class="flex justify-between items-center text-on-surface">
+<span class="text-secondary">Visit consultation fee</span>
+<span class="font-medium text-on-surface">EGP 450</span>
+</div>
+<!-- Item 2: Deposit Checkbox Toggle Option -->
+<div class="flex justify-between items-center bg-surface-container-low/50 -mx-2 px-2 py-2 rounded-lg border border-outline-variant/30">
+<label class="flex items-center gap-2.5 cursor-pointer select-none">
+<input checked="" class="w-4 h-4 rounded text-primary-container focus:ring-primary focus:ring-offset-0 border-[#C6D0DE]" id="depositToggle" type="checkbox"/>
+<span class="text-label-md font-label-md text-primary font-medium">Optional online deposit</span>
+</label>
+<span class="font-semibold text-primary">EGP 100</span>
+</div>
+<!-- Item 3 -->
+<div class="flex justify-between items-center text-secondary">
+<span class="text-body-sm font-body-sm">Pay the rest at the desk</span>
+<span class="text-body-sm font-body-sm font-medium text-on-surface" id="deskRest">EGP 350</span>
+</div>
+</div>
+<div class="border-t border-[#D3DBE6] pt-3 flex justify-between items-baseline">
+<div>
+<span class="text-label-lg font-label-lg text-primary block">Total due at clinic</span>
+<span class="text-label-sm font-label-sm text-secondary">Pay upon arrival in cash or card</span>
+</div>
+<div class="text-right">
+<span class="text-headline-lg-mobile font-headline-lg-mobile text-[#FF5E00] font-bold" id="totalDueClinic">EGP 350</span>
+</div>
+</div>
+</section>
+<!-- Insurance Note Box -->
+<section class="bg-[#EFF6FF] rounded-xl border border-[#015C9A] p-3.5 shadow-sm">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container-lowest border border-[#015C9A]/30 flex items-center justify-center flex-shrink-0 text-[#015C9A]">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">credit_card</span>
+</div>
+<div class="flex-1 text-body-sm font-body-sm text-primary leading-snug">
+<span class="font-bold text-[#015C9A] block mb-0.5">Using medical insurance?</span>
+          Bring your insurance card to your visit — our desk team will verify network coverage and co-pay on arrival.
+        </div>
+</div>
+</section>
+<!-- Patient Consent Checkbox -->
+<section class="px-1 pt-1 pb-2">
+<label class="flex items-start gap-3 cursor-pointer select-none">
+<input checked="" class="mt-0.5 w-4 h-4 rounded text-primary-container focus:ring-primary focus:ring-offset-0 border-[#C6D0DE] transition-colors" type="checkbox"/>
+<span class="text-body-sm font-body-sm text-secondary leading-snug">
+          I agree to the clinic attendance terms and 2-hour cancellation notice policy.
+        </span>
+</label>
+</section>
+</main>
+<!-- Fixed Bottom Action Area (Sticky Dock) -->
+<footer class="fixed bottom-0 left-0 right-0 z-50 bg-surface-container-lowest border-t border-[#D3DBE6] shadow-[0_-8px_24px_-4px_rgba(19,38,59,0.08)]">
+<div class="max-w-md mx-auto px-margin pt-3 pb-[calc(env(safe-area-inset-bottom,0px)+0.75rem)] space-y-2">
+<!-- Primary Action Button -->
+<button class="w-full h-12 bg-primary-container hover:bg-primary text-surface-container-lowest font-headline-sm text-headline-sm rounded-xl flex items-center justify-center gap-2 shadow-sm transition-transform duration-150 active:scale-[0.98]" type="button">
+<span>Confirm booking</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+<!-- Microcopy -->
+<div class="flex items-center justify-center gap-1.5 text-center">
+<span class="material-symbols-outlined text-[15px] text-[#059669]">verified_user</span>
+<p class="text-label-sm font-label-sm text-secondary">
+          Free cancellation up to 2 hours before your slot
+        </p>
+</div>
+</div>
+</footer>
+<!-- Micro-interaction Script for Interactive State Demonstration -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const depositCheckbox = document.getElementById('depositToggle');
+      const deskRest = document.getElementById('deskRest');
+      const totalDueClinic = document.getElementById('totalDueClinic');
+
+      if (depositCheckbox && deskRest && totalDueClinic) {
+        depositCheckbox.addEventListener('change', (e) => {
+          if (e.target.checked) {
+            deskRest.textContent = 'EGP 350';
+            totalDueClinic.textContent = 'EGP 350';
+          } else {
+            deskRest.textContent = 'EGP 450';
+            totalDueClinic.textContent = 'EGP 450';
+          }
+        });
+      }
+    });
+  </script>
+</body></html>

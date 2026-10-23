@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow - Dr. Ahmed Fathy | Consultant Cardiology</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-tint": "#406185",
+            "on-primary-container": "#8dadd6",
+            "surface-container-lowest": "#ffffff",
+            "secondary": "#4e6077",
+            "outline": "#73777f",
+            "on-primary-fixed": "#001d36",
+            "tertiary": "#4e1700",
+            "surface-dim": "#d1dbeb",
+            "on-surface-variant": "#43474e",
+            "primary-fixed": "#d1e4ff",
+            "inverse-surface": "#27313e",
+            "on-primary-fixed-variant": "#27496c",
+            "inverse-primary": "#a8c9f3",
+            "tertiary-fixed": "#ffdbce",
+            "surface-container-high": "#dfe9fa",
+            "inverse-on-surface": "#eaf1ff",
+            "error": "#ba1a1a",
+            "surface-container": "#e5efff",
+            "on-secondary-fixed": "#081c31",
+            "secondary-fixed": "#d2e4ff",
+            "outline-variant": "#c3c6cf",
+            "tertiary-container": "#722600",
+            "surface-variant": "#d9e3f4",
+            "on-surface": "#121c28",
+            "on-background": "#121c28",
+            "tertiary-fixed-dim": "#ffb599",
+            "primary-container": "#1e4164",
+            "background": "#f8f9ff",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-tertiary-fixed": "#370e00",
+            "on-secondary-fixed-variant": "#36485f",
+            "surface-container-highest": "#d9e3f4",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "on-secondary-container": "#52647c",
+            "on-error": "#ffffff",
+            "on-primary": "#ffffff",
+            "on-error-container": "#93000a",
+            "surface": "#f8f9ff",
+            "primary-fixed-dim": "#a8c9f3",
+            "on-tertiary": "#ffffff",
+            "surface-bright": "#f8f9ff",
+            "on-secondary": "#ffffff",
+            "secondary-container": "#cee1fd",
+            "surface-container-low": "#eef4ff",
+            "on-tertiary-container": "#ff8b5b",
+            "error-container": "#ffdad6",
+            "primary": "#002b4c"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1rem",
+            "margin-tablet": "1.5rem",
+            "space-md": "0.75rem",
+            "margin": "1rem",
+            "gutter": "1rem",
+            "gutter-sm": "0.75rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-xl": "1.5rem",
+            "margin-desktop": "2rem"
+          },
+          "fontFamily": {
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "label-lg": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-md": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      height: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #c3c6cf;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-[#F7F9FD] text-[#212427] antialiased min-h-screen flex flex-col font-body-md text-body-md selection:bg-secondary-container">
+<!-- Desktop Header (Shared Component: TopNavBar) -->
+<header class="bg-surface-container-lowest dark:bg-inverse-surface border-b border-outline-variant dark:border-outline sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-8 w-full flex justify-between items-center h-16">
+<!-- Brand Logo & Main Nav -->
+<div class="flex items-center gap-10">
+<a class="text-headline-md font-headline-md font-bold text-primary dark:text-inverse-primary tracking-tight flex items-center gap-2" href="#">
+<span class="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center font-headline-md font-extrabold text-sm">CF</span>
+          ClinicFlow
+        </a>
+<!-- Navigation Links: "Find a doctor" is active -->
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-primary dark:text-inverse-primary font-semibold border-b-2 border-primary dark:border-inverse-primary pb-1 font-label-lg text-label-lg transition-colors duration-150" href="#">
+            Find a doctor
+          </a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed font-label-lg text-label-lg transition-colors duration-150" href="#">
+            Branches
+          </a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed font-label-lg text-label-lg transition-colors duration-150" href="#">
+            Services &amp; prices
+          </a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed font-label-lg text-label-lg transition-colors duration-150" href="#">
+            Join as a doctor
+          </a>
+</nav>
+</div>
+<!-- Trailing Action Cluster -->
+<div class="flex items-center gap-4">
+<button class="text-secondary hover:text-primary transition-colors flex items-center gap-1 font-label-md text-label-md p-1.5 rounded-lg border border-transparent hover:border-[#D3DBE6]" title="Language Selector">
+<span class="material-symbols-outlined text-[20px]" data-icon="language">language</span>
+<span>EN</span>
+</button>
+<a class="font-label-lg text-label-lg text-primary hover:text-[#13263B] px-3 py-2 transition-colors" href="#">
+          Sign in
+        </a>
+<a class="font-label-lg text-label-lg bg-primary hover:bg-[#13263B] text-white px-4 py-2 rounded-lg transition-all duration-200 active:scale-98 shadow-sm" href="#">
+          Create account
+        </a>
+</div>
+</div>
+</header>
+<!-- Main Container -->
+<main class="flex-grow max-w-7xl mx-auto px-8 py-6 w-full">
+<!-- Breadcrumbs -->
+<nav class="flex items-center gap-2 text-body-sm font-body-sm text-[#5B6573] mb-6">
+<a class="hover:text-primary transition-colors" href="#">Home</a>
+<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Find a doctor</a>
+<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+<span class="text-[#212427] font-medium">Dr. Ahmed Fathy</span>
+</nav>
+<!-- Top Profile Header Card -->
+<section class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-6 mb-8">
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+<!-- Left: Avatar + Identity -->
+<div class="flex items-start gap-5">
+<div class="relative w-28 h-28 rounded-xl overflow-hidden border border-[#D3DBE6] flex-shrink-0 bg-[#F7F9FD]">
+<img class="w-full h-full object-cover" data-alt="Distinguished Egyptian male cardiologist in his late forties wearing clean clinical attire with a stethoscope around his neck in a modern Cairo medical clinic with serene maritime navy tones, gentle daylight and professional healthcare composition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMOJqWxO1E4RDV6ai1FSXT5MtoVxHGym4U-ZFJhQN20bAWkmMlK-OOOPwiSiX57_guJNQTuA5YqnMpJu9QqHCP-nWPfzRo-B2vS-l80B1thVewIy4OKJJ6oN8SDhjoWT9tFLTjScaX2Wh0_HNmy96Xqk_TOGvdTPN7MHZbjx0xD1JzgkP4VeBAE_JBsUQ_MLLicikOpMl6YVWlqKQdyd3SiIsQ90g0KgQzz_W_a_g7vkzqYyolezIEs1VpRPRQpGwrsBRpboneg4J8"/>
+</div>
+<div class="space-y-2">
+<div class="flex items-center gap-3 flex-wrap">
+<h1 class="text-headline-lg font-headline-lg text-[#13263B] tracking-tight">Dr. Ahmed Fathy</h1>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#ECFDF5] text-[#059669] font-label-md text-label-md">
+<span class="w-2 h-2 rounded-full bg-[#059669]"></span>
+                Verified Consultant
+              </span>
+</div>
+<p class="text-body-md font-body-md text-[#5B6573] font-medium">
+              Consultant Cardiology &amp; Cardiac Intervention (MSc, MRCP UK)
+            </p>
+<!-- Rating badge -->
+<div class="flex items-center gap-2 pt-0.5">
+<div class="flex items-center gap-1 text-[#FF5E00] font-semibold text-body-sm font-body-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span>4.9</span>
+</div>
+<span class="text-body-sm font-body-sm text-[#5B6573]">(128 verified patient reviews)</span>
+<span class="text-[#C6D0DE]">•</span>
+<span class="text-body-sm font-body-sm text-[#5B6573] flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-[#015C9A]" data-icon="verified">verified</span>
+                Lic. MOH-EG #48192
+              </span>
+</div>
+<!-- Quick Badges -->
+<div class="flex flex-wrap items-center gap-2 pt-1">
+<span class="px-2.5 py-1 rounded-md bg-[#F7F9FD] border border-[#D3DBE6] text-body-sm font-body-sm text-[#212427] font-medium flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="medical_services">medical_services</span>
+                18+ Years Experience
+              </span>
+<span class="px-2.5 py-1 rounded-md bg-[#F7F9FD] border border-[#D3DBE6] text-body-sm font-body-sm text-[#212427] font-medium flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="translate">translate</span>
+                Languages: Arabic, English
+              </span>
+<span class="px-2.5 py-1 rounded-md bg-[#F7F9FD] border border-[#D3DBE6] text-body-sm font-body-sm text-[#212427] font-medium flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="location_on">location_on</span>
+                Nasr City &amp; Maadi Branches
+              </span>
+</div>
+</div>
+</div>
+<!-- Right Quick Highlight Box -->
+<div class="w-full md:w-80 bg-[#F7F9FD] border border-[#D3DBE6] p-4 rounded-xl text-body-sm font-body-sm text-[#5B6573] leading-relaxed">
+<div class="flex items-center gap-1.5 text-primary font-label-md text-label-md mb-1.5">
+<span class="material-symbols-outlined text-[18px]" data-icon="stethoscope">stethoscope</span>
+            Clinical Focus
+          </div>
+          Senior consultant specializing in coronary diagnostics, preventive cardiology, hypertension management, and outpatient echocardiography.
+        </div>
+</div>
+</section>
+<!-- Two-Column Architecture: Main Details & Sticky Booking Card -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Left / Main Column (Tabs & Info) -->
+<div class="lg:col-span-8 space-y-6">
+<!-- Navigation Tabs -->
+<div class="border-b border-[#D3DBE6] bg-surface-container-lowest rounded-t-xl px-6 pt-3 flex items-center gap-8">
+<a class="pb-3 text-headline-sm font-headline-sm text-primary border-b-2 border-primary font-semibold flex items-center gap-2" href="#about">
+<span class="material-symbols-outlined text-[18px]" data-icon="person">person</span>
+            About
+          </a>
+<a class="pb-3 text-headline-sm font-headline-sm text-secondary hover:text-primary transition-colors flex items-center gap-2" href="#services">
+<span class="material-symbols-outlined text-[18px]" data-icon="receipt_long">receipt_long</span>
+            Services &amp; prices
+          </a>
+<a class="pb-3 text-headline-sm font-headline-sm text-secondary hover:text-primary transition-colors flex items-center gap-2" href="#branches">
+<span class="material-symbols-outlined text-[18px]" data-icon="schedule">schedule</span>
+            Branches &amp; hours
+          </a>
+<a class="pb-3 text-headline-sm font-headline-sm text-secondary hover:text-primary transition-colors flex items-center gap-2" href="#reviews">
+<span class="material-symbols-outlined text-[18px]" data-icon="rate_review">rate_review</span>
+            Reviews
+            <span class="bg-surface-container text-primary text-label-sm font-label-sm px-1.5 py-0.5 rounded-full">128</span>
+</a>
+</div>
+<!-- Tab 1: About Doctor -->
+<section class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-6 space-y-6" id="about">
+<div>
+<h2 class="text-headline-md font-headline-md text-[#13263B] mb-3">Professional Biography</h2>
+<p class="text-body-md font-body-md text-[#5B6573] leading-relaxed">
+              Dr. Ahmed Fathy is an esteemed Consultant in Adult Cardiology and Interventional Therapeutics. With nearly two decades of clinical mastery in both the Egyptian National Heart Institute and leading private UK tertiary trusts, Dr. Fathy integrates precision diagnostics with empathetic lifestyle counseling. He oversees comprehensive cardiovascular risk assessments, resistant hypertension regimens, and complex ischemic heart workups.
+            </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+<!-- Education -->
+<div class="p-4 rounded-xl border border-[#D3DBE6] bg-[#F7F9FD] space-y-2">
+<div class="flex items-center gap-2 text-primary font-headline-sm text-headline-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="school">school</span>
+                Education &amp; Credentials
+              </div>
+<ul class="text-body-sm font-body-sm text-[#5B6573] space-y-1.5 list-disc pl-4">
+<li>Faculty of Medicine, Ain Shams University (MBBCh, Excellent with Honors)</li>
+<li>Master of Science in Cardiovascular Diseases (Ain Shams University)</li>
+<li>Membership of the Royal College of Physicians (MRCP UK - London)</li>
+<li>Fellowship of the European Society of Cardiology (FESC)</li>
+</ul>
+</div>
+<!-- Sub-specialties -->
+<div class="p-4 rounded-xl border border-[#D3DBE6] bg-[#F7F9FD] space-y-2">
+<div class="flex items-center gap-2 text-primary font-headline-sm text-headline-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="vital_signs">vital_signs</span>
+                Clinical Sub-Specialties
+              </div>
+<ul class="text-body-sm font-body-sm text-[#5B6573] space-y-1.5 list-disc pl-4">
+<li>Coronary Angiography &amp; Non-Invasive Diagnostics</li>
+<li>Essential &amp; Refractory Arterial Hypertension</li>
+<li>Transthoracic &amp; Stress Echocardiography</li>
+<li>Metabolic Syndrome &amp; Cardiomyopathy Prevention</li>
+</ul>
+</div>
+</div>
+<!-- Affiliations -->
+<div class="pt-1 border-t border-[#D3DBE6]">
+<p class="text-body-sm font-body-sm text-[#5B6573]">
+<strong class="text-[#212427]">Hospital Affiliations:</strong> Ain Shams Specialized Hospital, Dar Al Fouad (Nasr City), and ClinicFlow Network Ambulatory Centers.
+            </p>
+</div>
+</section>
+<!-- Tab 2: Clinic Services & Transparent EGP Tariffs -->
+<section class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-6 space-y-4" id="services">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="text-headline-md font-headline-md text-[#13263B]">Clinic Services &amp; Transparent EGP Tariffs</h2>
+<p class="text-body-sm font-body-sm text-[#5B6573]">Standardized network pricing with no hidden facility charges.</p>
+</div>
+<span class="text-label-sm font-label-sm px-2.5 py-1 rounded bg-surface-container text-primary font-semibold">Regulated Rates</span>
+</div>
+<div class="grid grid-cols-1 gap-3 pt-2">
+<!-- Service 1 -->
+<div class="flex items-center justify-between p-4 rounded-xl border border-[#D3DBE6] hover:border-primary transition-colors bg-[#FFFFFF]">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-[#13263B]">Initial Cardiology Consultation</span>
+<span class="text-label-sm font-label-sm px-2 py-0.5 rounded bg-[#F7F9FD] text-[#5B6573] border border-[#D3DBE6]">30 mins</span>
+</div>
+<p class="text-body-sm font-body-sm text-[#5B6573]">Comprehensive medical history, clinical exam, risk stratification &amp; therapy blueprint.</p>
+</div>
+<div class="text-right flex-shrink-0 pl-4">
+<span class="text-headline-md font-headline-md font-bold text-[#FF5E00]">EGP 450</span>
+<span class="block text-label-sm font-label-sm text-[#5B6573]">Cash / Card / Copay</span>
+</div>
+</div>
+<!-- Service 2 -->
+<div class="flex items-center justify-between p-4 rounded-xl border border-[#D3DBE6] hover:border-primary transition-colors bg-[#FFFFFF]">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-[#13263B]">Follow-up Consultation</span>
+<span class="text-label-sm font-label-sm px-2 py-0.5 rounded bg-[#F7F9FD] text-[#5B6573] border border-[#D3DBE6]">Within 14 days</span>
+</div>
+<p class="text-body-sm font-body-sm text-[#5B6573]">Evaluation of lab workups, dose titration, and treatment tolerance tracking.</p>
+</div>
+<div class="text-right flex-shrink-0 pl-4">
+<span class="text-headline-md font-headline-md font-bold text-[#FF5E00]">EGP 200</span>
+<span class="block text-label-sm font-label-sm text-[#5B6573]">Valid 2 weeks</span>
+</div>
+</div>
+<!-- Service 3 -->
+<div class="flex items-center justify-between p-4 rounded-xl border border-[#D3DBE6] hover:border-primary transition-colors bg-[#FFFFFF]">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-[#13263B]">12-Lead Resting ECG Diagnostic</span>
+<span class="text-label-sm font-label-sm px-2 py-0.5 rounded bg-[#F7F9FD] text-[#5B6573] border border-[#D3DBE6]">Immediate result</span>
+</div>
+<p class="text-body-sm font-body-sm text-[#5B6573]">Full rhythm analysis performed using digital telemetry and reviewed during visit.</p>
+</div>
+<div class="text-right flex-shrink-0 pl-4">
+<span class="text-headline-md font-headline-md font-bold text-[#FF5E00]">EGP 150</span>
+<span class="block text-label-sm font-label-sm text-[#5B6573]">Diagnostic strip</span>
+</div>
+</div>
+<!-- Service 4 -->
+<div class="flex items-center justify-between p-4 rounded-xl border border-[#D3DBE6] hover:border-primary transition-colors bg-[#FFFFFF]">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-[#13263B]">Transthoracic Echocardiogram (Echo)</span>
+<span class="text-label-sm font-label-sm px-2 py-0.5 rounded bg-[#F7F9FD] text-[#5B6573] border border-[#D3DBE6]">45 mins</span>
+</div>
+<p class="text-body-sm font-body-sm text-[#5B6573]">Complete ultrasound assessment of cardiac chambers, ejection fraction &amp; valve hemodynamics.</p>
+</div>
+<div class="text-right flex-shrink-0 pl-4">
+<span class="text-headline-md font-headline-md font-bold text-[#FF5E00]">EGP 600</span>
+<span class="block text-label-sm font-label-sm text-[#5B6573]">Includes report</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Tab 3: Practice Branches & Clinic Hours -->
+<section class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-6 space-y-4" id="branches">
+<div>
+<h2 class="text-headline-md font-headline-md text-[#13263B]">Practice Branches &amp; Clinic Hours</h2>
+<p class="text-body-sm font-body-sm text-[#5B6573]">Choose the location nearest to your residence in Greater Cairo.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+<!-- Nasr City Branch -->
+<div class="border border-primary bg-[#F7F9FD] p-5 rounded-xl space-y-3 relative">
+<div class="flex items-start justify-between">
+<div>
+<span class="text-label-sm font-label-sm uppercase tracking-wide text-primary font-bold">Primary Outpatient Hub</span>
+<h3 class="text-headline-sm font-headline-sm text-[#13263B] mt-0.5">Nasr City Branch</h3>
+</div>
+<span class="material-symbols-outlined text-primary text-[22px]" data-icon="domain">domain</span>
+</div>
+<div class="space-y-1.5 text-body-sm font-body-sm text-[#5B6573]">
+<p class="flex items-center gap-1.5 text-[#212427]">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="pin_drop">pin_drop</span>
+                  14 Abbas El Akkad St. (Floor 3), Nasr City
+                </p>
+<p class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="calendar_month">calendar_month</span>
+                  Mon, Wed, Sat
+                </p>
+<p class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="alarm">alarm</span>
+                  09:30 AM - 02:00 PM
+                </p>
+</div>
+<div class="pt-2 border-t border-[#D3DBE6] flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-[#059669] font-medium flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-[#059669]"></span>
+                  Slots Open Tomorrow
+                </span>
+<span class="text-primary font-semibold">Selected</span>
+</div>
+</div>
+<!-- Maadi Branch -->
+<div class="border border-[#D3DBE6] hover:border-secondary bg-[#FFFFFF] p-5 rounded-xl space-y-3 transition-colors">
+<div class="flex items-start justify-between">
+<div>
+<span class="text-label-sm font-label-sm uppercase tracking-wide text-[#5B6573] font-semibold">Specialized Polyclinic</span>
+<h3 class="text-headline-sm font-headline-sm text-[#13263B] mt-0.5">Maadi Branch</h3>
+</div>
+<span class="material-symbols-outlined text-[#5B6573] text-[22px]" data-icon="apartment">apartment</span>
+</div>
+<div class="space-y-1.5 text-body-sm font-body-sm text-[#5B6573]">
+<p class="flex items-center gap-1.5 text-[#212427]">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="pin_drop">pin_drop</span>
+                  26 Road 9 (Above Metro Market), Maadi
+                </p>
+<p class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="calendar_month">calendar_month</span>
+                  Sun, Tue
+                </p>
+<p class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="alarm">alarm</span>
+                  04:00 PM - 08:30 PM
+                </p>
+</div>
+<div class="pt-2 border-t border-[#D3DBE6] flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-[#5B6573]">Next available: Sun 4:00 PM</span>
+<button class="text-primary hover:underline font-label-sm text-label-sm">Select</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Tab 4: Patient Reviews (Verified visits only) -->
+<section class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-6 space-y-5" id="reviews">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div>
+<h2 class="text-headline-md font-headline-md text-[#13263B]">Patient Reviews</h2>
+<p class="text-body-sm font-body-sm text-[#5B6573]">Exclusively submitted by patients who attended and paid for appointments.</p>
+</div>
+<!-- Filter Pills -->
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-full bg-primary text-white font-label-md text-label-md">
+                All (128)
+              </button>
+<button class="px-3 py-1.5 rounded-full bg-[#F7F9FD] border border-[#D3DBE6] text-[#5B6573] hover:text-[#212427] font-label-md text-label-md">
+                5 stars (118)
+              </button>
+<button class="px-3 py-1.5 rounded-full bg-[#F7F9FD] border border-[#D3DBE6] text-[#5B6573] hover:text-[#212427] font-label-md text-label-md">
+                4 stars (8)
+              </button>
+</div>
+</div>
+<!-- Review Cards List -->
+<div class="space-y-4 pt-2">
+<!-- Review 1 -->
+<div class="border border-[#D3DBE6] p-4 rounded-xl bg-[#FFFFFF] space-y-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-full bg-secondary-container text-primary font-bold flex items-center justify-center text-xs">
+                    TM
+                  </div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-[#13263B]">Tarek M.</h4>
+<span class="text-body-sm font-body-sm text-[#5B6573]">Verified visit • Oct 2025</span>
+</div>
+</div>
+<div class="flex items-center gap-0.5 text-[#FF5E00]">
+<span class="material-symbols-outlined text-[16px]" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<p class="text-body-md font-body-md text-[#212427]">
+                "Exceptional diagnostic precision and calm explanation of my ECG results. Dr. Ahmed took thirty unhurried minutes to review my previous tests and answered every concern with scientific clarity."
+              </p>
+</div>
+<!-- Review 2 -->
+<div class="border border-[#D3DBE6] p-4 rounded-xl bg-[#FFFFFF] space-y-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-full bg-secondary-container text-primary font-bold flex items-center justify-center text-xs">
+                    SN
+                  </div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-[#13263B]">Salma N.</h4>
+<span class="text-body-sm font-body-sm text-[#5B6573]">Verified visit • Sep 2025</span>
+</div>
+</div>
+<div class="flex items-center gap-0.5 text-[#FF5E00]">
+<span class="material-symbols-outlined text-[16px]" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<p class="text-body-md font-body-md text-[#212427]">
+                "Smooth reception check-in and Dr. Ahmed was very attentive to my symptoms. The clinic environment is exceptionally clean and professional. Appreciated the digital prescription sent immediately to my phone."
+              </p>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Sticky Booking Card (width ~380px) -->
+<aside class="lg:col-span-4 lg:sticky lg:top-24">
+<div class="w-full bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-6 shadow-[0_8px_24px_-4px_rgba(19,38,59,0.08)] space-y-5">
+<!-- Header -->
+<div class="border-b border-[#D3DBE6] pb-4">
+<div class="flex items-center justify-between mb-1">
+<h3 class="text-headline-md font-headline-md text-[#13263B]">Book an Appointment</h3>
+<span class="w-2.5 h-2.5 rounded-full bg-[#059669]" title="Live clinic scheduling"></span>
+</div>
+<p class="text-body-sm font-body-sm text-[#5B6573]">Instant confirmation via SMS or email</p>
+</div>
+<!-- Branch Selector -->
+<div class="space-y-1.5">
+<label class="text-label-md font-label-md text-[#212427] block">Select Branch</label>
+<div class="relative">
+<select class="w-full h-12 bg-white border border-[#C6D0DE] focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/15 rounded-lg px-3 pr-8 text-body-md font-body-md text-[#212427] appearance-none cursor-pointer">
+<option selected="">Nasr City Branch · 14 Abbas El Akkad (Selected)</option>
+<option>Maadi Branch · 26 Road 9</option>
+</select>
+<span class="material-symbols-outlined text-[20px] text-[#5B6573] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- Service Selector -->
+<div class="space-y-1.5">
+<label class="text-label-md font-label-md text-[#212427] block">Select Clinical Service</label>
+<div class="relative">
+<select class="w-full h-12 bg-white border border-[#C6D0DE] focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/15 rounded-lg px-3 pr-8 text-body-md font-body-md text-[#212427] appearance-none cursor-pointer">
+<option selected="">Cardiology Consultation (New) · EGP 450</option>
+<option>Follow-up Consultation · EGP 200</option>
+<option>12-Lead Resting ECG Diagnostic · EGP 150</option>
+<option>Transthoracic Echocardiogram (Echo) · EGP 600</option>
+</select>
+<span class="material-symbols-outlined text-[20px] text-[#5B6573] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- Date Selection Strip -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<label class="text-label-md font-label-md text-[#212427]">Select Date (October 2025)</label>
+<span class="text-label-sm font-label-sm text-primary font-medium">Cairo (GMT+3)</span>
+</div>
+<div class="flex items-center gap-2 overflow-x-auto pb-1.5 custom-scroll">
+<!-- Today -->
+<button class="flex-shrink-0 w-20 py-2.5 px-1 border border-[#C6D0DE] bg-white rounded-lg text-center hover:border-primary transition-colors" type="button">
+<span class="block text-label-sm font-label-sm text-[#5B6573]">Today</span>
+<span class="block text-headline-sm font-headline-sm text-[#212427]">Oct 24</span>
+</button>
+<!-- Tomorrow (Selected) -->
+<button class="flex-shrink-0 w-20 py-2.5 px-1 border border-[#1E4164] bg-[#1E4164] text-white rounded-lg text-center shadow-sm" type="button">
+<span class="block text-label-sm font-label-sm text-white/80">Tomorrow</span>
+<span class="block text-headline-sm font-headline-sm text-white font-bold">Oct 25</span>
+</button>
+<!-- Sat -->
+<button class="flex-shrink-0 w-20 py-2.5 px-1 border border-[#C6D0DE] bg-white rounded-lg text-center hover:border-primary transition-colors" type="button">
+<span class="block text-label-sm font-label-sm text-[#5B6573]">Sat</span>
+<span class="block text-headline-sm font-headline-sm text-[#212427]">Oct 26</span>
+</button>
+<!-- Sun -->
+<button class="flex-shrink-0 w-20 py-2.5 px-1 border border-[#C6D0DE] bg-white rounded-lg text-center hover:border-primary transition-colors" type="button">
+<span class="block text-label-sm font-label-sm text-[#5B6573]">Sun</span>
+<span class="block text-headline-sm font-headline-sm text-[#212427]">Oct 27</span>
+</button>
+</div>
+</div>
+<!-- Available Time Slots -->
+<div class="space-y-3 pt-1">
+<label class="text-label-md font-label-md text-[#212427] block">Available Time Slots</label>
+<!-- Morning Slots -->
+<div class="space-y-1.5">
+<span class="text-label-sm font-label-sm text-[#5B6573] flex items-center gap-1 font-medium">
+<span class="material-symbols-outlined text-[14px]" data-icon="wb_sunny">wb_sunny</span>
+                Morning Shift
+              </span>
+<div class="grid grid-cols-3 gap-2">
+<button class="h-10 border border-[#C6D0DE] bg-white rounded-lg text-body-sm font-body-sm text-[#212427] hover:border-primary transition-colors" type="button">
+                  09:30 AM
+                </button>
+<button class="h-10 border border-[#1E4164] bg-[#1E4164] text-white rounded-lg text-body-sm font-body-sm font-semibold" type="button">
+                  10:30 AM
+                </button>
+<button class="h-10 border border-[#C6D0DE] bg-white rounded-lg text-body-sm font-body-sm text-[#212427] hover:border-primary transition-colors" type="button">
+                  11:15 AM
+                </button>
+</div>
+</div>
+<!-- Afternoon Slots -->
+<div class="space-y-1.5 pt-1">
+<span class="text-label-sm font-label-sm text-[#5B6573] flex items-center gap-1 font-medium">
+<span class="material-symbols-outlined text-[14px]" data-icon="light_mode">light_mode</span>
+                Afternoon Shift
+              </span>
+<div class="grid grid-cols-3 gap-2">
+<button class="h-10 border border-[#C6D0DE] bg-white rounded-lg text-body-sm font-body-sm text-[#212427] hover:border-primary transition-colors" type="button">
+                  01:00 PM
+                </button>
+<button class="h-10 border border-[#C6D0DE] bg-white rounded-lg text-body-sm font-body-sm text-[#212427] hover:border-primary transition-colors" type="button">
+                  02:30 PM
+                </button>
+<button class="h-10 border border-[#E2E8F0] bg-[#F7F9FD] rounded-lg text-body-sm font-body-sm text-[#A0AEC0] line-through cursor-not-allowed" disabled="" type="button">
+                  03:15 PM
+                </button>
+</div>
+</div>
+</div>
+<!-- Fee Summary Box -->
+<div class="p-3.5 rounded-xl border border-[#D3DBE6] bg-[#F7F9FD] space-y-2">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-[#5B6573]">Consultation fee:</span>
+<span class="text-[#13263B] font-bold text-headline-sm font-headline-sm">EGP 450</span>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm pt-1 border-t border-[#D3DBE6]/60">
+<span class="text-[#5B6573]">Payment preference:</span>
+<span class="text-primary font-medium">Pay at desk or online</span>
+</div>
+<div class="text-label-sm font-label-sm text-[#5B6573] pt-0.5">
+              Optional online deposit of <span class="text-[#FF5E00] font-semibold">EGP 100</span> locks queue priority.
+            </div>
+</div>
+<!-- Primary CTA Button -->
+<button class="w-full h-12 bg-primary hover:bg-[#13263B] text-white font-label-lg text-label-lg rounded-xl transition-all duration-200 active:scale-98 flex items-center justify-center gap-2 shadow-sm" type="button">
+<span>Confirm &amp; Book Slot</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<!-- Guarantee Note -->
+<div class="flex items-center justify-center gap-1.5 text-body-sm font-body-sm text-[#5B6573] text-center pt-1">
+<span class="material-symbols-outlined text-[16px] text-[#059669]" data-icon="check_circle">check_circle</span>
+<span>Free cancellation or rescheduling up to 2 hours prior to visit</span>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Desktop Footer (Shared Component: Footer) -->
+<footer class="bg-surface-container-low dark:bg-inverse-surface border-t border-outline-variant dark:border-outline mt-16">
+<div class="max-w-7xl mx-auto px-8 py-12 w-full">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+<!-- Brand Info -->
+<div class="space-y-3">
+<a class="text-headline-md font-headline-md font-bold text-primary dark:text-inverse-primary tracking-tight flex items-center gap-2" href="#">
+<span class="w-7 h-7 rounded bg-primary text-white flex items-center justify-center font-bold text-xs">CF</span>
+            ClinicFlow
+          </a>
+<p class="text-body-sm font-body-sm text-secondary dark:text-secondary-fixed-dim leading-relaxed">
+            The dependable Egyptian digital outpatient network uniting top verified consultants, transparent EGP tariffs, and instant booking clarity.
+          </p>
+</div>
+<!-- Links Col 1: Branches -->
+<div class="space-y-2">
+<h4 class="font-label-lg text-label-lg text-primary dark:text-inverse-primary">Branches</h4>
+<ul class="space-y-1.5 text-body-sm font-body-sm text-secondary dark:text-secondary-fixed-dim">
+<li><a class="hover:text-primary transition-colors" href="#">Nasr City Branch</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Maadi Medical Center</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Sheikh Zayed Clinic</a></li>
+</ul>
+</div>
+<!-- Links Col 2: Services & Pricing -->
+<div class="space-y-2">
+<h4 class="font-label-lg text-label-lg text-primary dark:text-inverse-primary">Patients &amp; Tariffs</h4>
+<ul class="space-y-1.5 text-body-sm font-body-sm text-secondary dark:text-secondary-fixed-dim">
+<li><a class="hover:text-primary transition-colors" href="#">Outpatient Tariffs (EGP)</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Insurance &amp; Copays</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Ministry of Health Licensing</a></li>
+</ul>
+</div>
+<!-- Links Col 3: Legal & Support -->
+<div class="space-y-2">
+<h4 class="font-label-lg text-label-lg text-primary dark:text-inverse-primary">Governance</h4>
+<ul class="space-y-1.5 text-body-sm font-body-sm text-secondary dark:text-secondary-fixed-dim">
+<li><a class="hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Terms of Service</a></li>
+<li class="pt-2 text-primary dark:text-inverse-primary font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]" data-icon="phone_in_talk">phone_in_talk</span>
+              Hotline 16789
+            </li>
+</ul>
+</div>
+</div>
+<div class="pt-6 border-t border-[#D3DBE6] dark:border-outline flex flex-col sm:flex-row items-center justify-between text-body-sm font-body-sm text-secondary dark:text-secondary-fixed-dim gap-4">
+<p>© 2025 ClinicFlow Healthcare Network S.A.E. All rights reserved. Hotline 16789.</p>
+<div class="flex items-center gap-6">
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-primary transition-colors" href="#">Ministry of Health Licensing</a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

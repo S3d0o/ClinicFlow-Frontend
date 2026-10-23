@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow - Nurse Station | Nasr City Branch</title>
+<!-- Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Forms and Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "inverse-surface": "#27313e",
+            "on-surface-variant": "#43474e",
+            "on-tertiary-fixed": "#370e00",
+            "on-tertiary": "#ffffff",
+            "primary-container": "#1e4164",
+            "background": "#f8f9ff",
+            "surface-tint": "#406185",
+            "secondary-fixed": "#d2e4ff",
+            "on-error": "#ffffff",
+            "surface-dim": "#d1dbeb",
+            "secondary-container": "#cee1fd",
+            "on-surface": "#121c28",
+            "tertiary-fixed-dim": "#ffb599",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "on-background": "#121c28",
+            "inverse-primary": "#a8c9f3",
+            "primary-fixed-dim": "#a8c9f3",
+            "surface-container-low": "#eef4ff",
+            "outline": "#73777f",
+            "on-secondary": "#ffffff",
+            "error-container": "#ffdad6",
+            "surface-container": "#e5efff",
+            "surface-bright": "#f8f9ff",
+            "inverse-on-surface": "#eaf1ff",
+            "surface-container-lowest": "#ffffff",
+            "outline-variant": "#c3c6cf",
+            "on-primary-fixed-variant": "#27496c",
+            "on-secondary-container": "#52647c",
+            "on-primary-container": "#8dadd6",
+            "on-tertiary-container": "#ff8b5b",
+            "surface-container-highest": "#d9e3f4",
+            "secondary-fixed-dim": "#b5c8e3",
+            "primary": "#002b4c",
+            "tertiary": "#4e1700",
+            "on-secondary-fixed-variant": "#36485f",
+            "tertiary-container": "#722600",
+            "surface-variant": "#d9e3f4",
+            "on-secondary-fixed": "#081c31",
+            "on-primary": "#ffffff",
+            "secondary": "#4e6077",
+            "on-error-container": "#93000a",
+            "tertiary-fixed": "#ffdbce",
+            "on-primary-fixed": "#001d36",
+            "surface-container-high": "#dfe9fa",
+            "error": "#ba1a1a",
+            "primary-fixed": "#d1e4ff",
+            "surface": "#f8f9ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "margin-tablet": "1.5rem",
+            "space-xl": "1.5rem",
+            "gutter": "1rem",
+            "space-lg": "1rem",
+            "margin-desktop": "2rem",
+            "space-md": "0.75rem",
+            "margin": "1rem",
+            "gutter-sm": "0.75rem"
+          },
+          "fontFamily": {
+            "label-md": ["Inter"],
+            "body-sm": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "label-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface h-full flex overflow-hidden font-body-md text-body-md antialiased selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- SHARED COMPONENT: SideNavBar (Strict Docked Rail Left) -->
+<aside class="fixed left-0 top-0 bottom-0 w-[72px] flex flex-col items-center py-space-lg z-40 bg-surface-container-lowest border-r border-outline-variant">
+<!-- Brand Mark Header -->
+<div class="flex flex-col items-center mb-space-xl">
+<div class="w-10 h-10 rounded-xl bg-primary text-on-primary flex items-center justify-center font-headline-md text-headline-md font-bold tracking-tight shadow-sm">
+<span class="material-symbols-outlined text-[24px]">local_hospital</span>
+</div>
+<span class="font-headline-sm text-[10px] tracking-tight font-bold text-primary mt-1">ClinicFlow</span>
+<span class="font-label-sm text-[8px] text-secondary">Nasr City</span>
+</div>
+<!-- Main Navigation Icons -->
+<nav aria-label="Main Navigation" class="flex-1 flex flex-col items-center space-y-space-sm w-full px-2">
+<!-- Active Tab: Queue (Intent-matched to Triage Queue) -->
+<a aria-current="page" class="flex flex-col items-center justify-center w-12 h-12 rounded-lg bg-primary text-on-primary active:scale-95 transition-all duration-150" href="#queue" title="Queue">
+<span class="material-symbols-outlined text-[22px]">groups</span>
+<span class="text-[9px] font-semibold mt-0.5 tracking-tight">Queue</span>
+</a>
+<!-- Inactive Tab: Rooms -->
+<a class="flex flex-col items-center justify-center w-12 h-12 rounded-lg text-secondary hover:bg-surface-container-low hover:text-primary active:scale-95 transition-all duration-150" href="#rooms" title="Rooms">
+<span class="material-symbols-outlined text-[22px]">meeting_room</span>
+<span class="text-[9px] font-semibold mt-0.5 tracking-tight">Rooms</span>
+</a>
+<!-- Inactive Tab: Profile -->
+<a class="flex flex-col items-center justify-center w-12 h-12 rounded-lg text-secondary hover:bg-surface-container-low hover:text-primary active:scale-95 transition-all duration-150" href="#profile" title="Profile">
+<span class="material-symbols-outlined text-[22px]">account_circle</span>
+<span class="text-[9px] font-semibold mt-0.5 tracking-tight">Profile</span>
+</a>
+</nav>
+<!-- Footer Action: Settings -->
+<div class="mt-auto flex flex-col items-center w-full px-2">
+<button class="flex flex-col items-center justify-center w-12 h-12 rounded-lg text-secondary hover:bg-surface-container-low hover:text-primary active:scale-95 transition-all duration-150" title="Settings" type="button">
+<span class="material-symbols-outlined text-[22px]">settings</span>
+<span class="text-[9px] font-semibold mt-0.5">Settings</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Layout Envelope with Left Offset for 72px SideNav -->
+<div class="ml-[72px] flex-1 flex flex-col h-full min-w-0 bg-background overflow-hidden">
+<!-- SHARED COMPONENT: TopNavBar (Docked Top 64px) -->
+<header class="flex justify-between items-center w-full px-space-xl h-16 bg-surface-container-lowest border-b border-outline-variant shrink-0 z-30">
+<!-- Left Anchor: Branch Selector & Live Clock -->
+<div class="flex items-center space-x-space-lg">
+<button class="flex items-center space-x-space-xs font-label-lg text-label-lg text-primary hover:bg-surface-container-low px-space-sm py-1.5 rounded-lg transition-all active:scale-[0.98]" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary">location_on</span>
+<span class="font-bold">Nasr City Branch</span>
+<span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+<div class="h-4 w-px bg-outline-variant"></div>
+<div class="flex items-center space-x-space-xs text-secondary font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span class="tabular-nums font-mono font-medium text-on-surface">10:21 AM</span>
+<span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-surface-container text-on-secondary-container">EGY (GMT+3)</span>
+</div>
+</div>
+<!-- Right Trailing Cluster -->
+<div class="flex items-center space-x-space-md">
+<!-- Live Queue Indicator Pill -->
+<div class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-surface-container text-on-surface text-[12px] font-medium border border-outline-variant">
+<span class="w-2 h-2 rounded-full bg-[#FF5E00] animate-pulse"></span>
+<span class="font-label-md text-label-md text-on-surface">Live Queue Active</span>
+</div>
+<!-- Language Switcher: Exact literal string from JSON -->
+<button class="px-space-sm py-1 text-primary hover:bg-surface-container-low rounded font-label-md text-label-md font-semibold transition-all" type="button">
+          EN | عربي
+        </button>
+<!-- Notifications Action with Accent Dot -->
+<button aria-label="Notifications" class="relative p-2 rounded-lg text-secondary hover:bg-surface-container-low hover:text-primary active:scale-[0.98] transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#FF5E00]"></span>
+</button>
+<div class="h-6 w-px bg-outline-variant"></div>
+<!-- Trailing Primary Action: Emergency Callout -->
+<button class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-error-container text-on-error-container hover:brightness-95 active:scale-[0.98] font-label-md text-label-md transition-all font-semibold border border-error/20" type="button">
+<span class="material-symbols-outlined text-[18px]">emergency</span>
+<span>Emergency</span>
+</button>
+<!-- User Profile Pill -->
+<div class="flex items-center space-x-space-sm pl-space-xs">
+<div class="relative w-9 h-9 rounded-full overflow-hidden border border-outline-variant ring-1 ring-primary/20 shrink-0">
+<img class="w-full h-full object-cover" data-alt="A portrait photograph of a professional Egyptian female clinic nurse wearing navy medical scrubs and a warm, focused expression inside an illuminated, modern healthcare clinic reception in Cairo. The atmosphere is sharp, sterile, and serene with clean directional clinical lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkp1q0Y3eZeXVkwKldUcTf-9Qz-8pqBmwGrIy3n_00ZYHWR6kEDpm8soT-KqN-pKGmRW6ER6QTdmB3U4TZx_j-5B8q90eOB7aGBgV0S6zr3ekUHoPB0pFwgjHij3iT19jBpo8ecfUlJPDQ_g8CWj1PlB92EEaFTJQg1mlDJ6Jc1ee-qfRDjS0V_KLmwSXDnO3r3SV1zAsCFaORBTqiYUG6Rv_XaHFL2Nv9llgYdu3Gx2fSVwJXjIo-ttOtFQvWBCtB-62SWYILgyxb"/>
+</div>
+<div class="text-left hidden sm:block">
+<div class="font-label-md text-label-md text-on-surface leading-tight font-semibold">Sara Ibrahim</div>
+<div class="font-label-sm text-label-sm text-secondary">Nurse (Station 1)</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Tablet Landscape Split Stage (2-Column Architecture: ~68% Queue / ~32% Rooms) -->
+<main class="flex-1 flex overflow-hidden p-space-lg gap-space-lg min-w-0">
+<!-- LEFT / CENTER PANEL: Triage Queue (Fluid ~68% width) -->
+<section class="flex-[68] min-w-0 flex flex-col bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+<!-- Queue Header with Doctor Filter Chips -->
+<div class="p-space-lg border-b border-outline-variant bg-surface-container-lowest shrink-0 space-y-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-space-sm">
+<h1 class="font-headline-md text-headline-md text-[#13263B] font-bold tracking-tight">Triage Queue</h1>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-surface-container-high text-primary font-mono tabular-nums">
+                4 patients waiting for vitals
+              </span>
+</div>
+<!-- Urgent Attention Notification Pill -->
+<div class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full bg-orange-50 border border-[#FF5E00]/30 text-[#FF5E00] text-xs font-semibold">
+<span class="material-symbols-outlined text-[14px]">priority_high</span>
+<span>Next vitals due</span>
+</div>
+</div>
+<!-- Doctor Filter Pills (Quick filter chips) -->
+<div class="flex items-center gap-space-xs overflow-x-auto pb-1 no-scrollbar">
+<button class="px-3 py-1.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-semibold whitespace-nowrap shadow-sm" type="button">
+              All Doctors (4)
+            </button>
+<button class="px-3 py-1.5 rounded-lg bg-surface border border-outline-variant text-secondary hover:bg-surface-container-low hover:text-primary font-label-md text-label-md whitespace-nowrap transition-all" type="button">
+              Dr. Ahmed Fathy (Cardiology)
+            </button>
+<button class="px-3 py-1.5 rounded-lg bg-surface border border-outline-variant text-secondary hover:bg-surface-container-low hover:text-primary font-label-md text-label-md whitespace-nowrap transition-all" type="button">
+              Dr. Laila Hassan (Pediatrics)
+            </button>
+<button class="px-3 py-1.5 rounded-lg bg-surface border border-outline-variant text-secondary hover:bg-surface-container-low hover:text-primary font-label-md text-label-md whitespace-nowrap transition-all" type="button">
+              Dr. Karim Nabil (Internal Med)
+            </button>
+</div>
+<!-- Quick Search Bar (48px Touch Height) -->
+<div class="relative w-full">
+<span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-secondary">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</span>
+<input class="w-full h-12 pl-10 pr-4 bg-surface border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface placeholder:text-secondary focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/20 transition-all outline-none" placeholder="Search ticket # or patient name..." type="text"/>
+</div>
+</div>
+<!-- Waiting Patients Scroll Canvas (Large Touch-Friendly Cards) -->
+<div class="flex-1 overflow-y-auto p-space-lg space-y-space-md">
+<!-- CARD 1: Selected / Next Up (Active Card) -->
+<article class="bg-surface-container-lowest border-2 border-primary rounded-xl p-space-lg shadow-sm relative transition-all">
+<!-- Active Eyebrow Accent Strip -->
+<div class="absolute -top-3 left-4 inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full bg-primary text-on-primary text-[11px] font-semibold tracking-wide">
+<span class="w-1.5 h-1.5 rounded-full bg-[#FF5E00]"></span>
+<span>NEXT IN LINE FOR VITALS</span>
+</div>
+<div class="flex items-start justify-between mt-1">
+<!-- Left Column: Badge + Patient Bio -->
+<div class="flex items-start space-x-space-md">
+<!-- Large Ticket Badge -->
+<div class="w-16 h-16 rounded-xl bg-surface-container-high border border-outline-variant flex flex-col items-center justify-center shrink-0">
+<span class="text-[10px] font-semibold text-secondary uppercase tracking-wider">Ticket</span>
+<span class="font-headline-lg text-headline-lg font-bold text-[#13263B] font-mono tabular-nums leading-none">A-14</span>
+</div>
+<div class="space-y-1">
+<div class="flex items-center space-x-2">
+<h2 class="font-headline-sm text-headline-sm font-bold text-[#13263B]">Mohamed Adel Hassan</h2>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary font-mono">MRN: CF-004512</span>
+</div>
+<div class="flex items-center space-x-space-md text-secondary font-body-sm text-body-sm">
+<span>37 yrs · Male</span>
+<span>•</span>
+<span class="flex items-center space-x-1">
+<span class="material-symbols-outlined text-[15px] text-[#015C9A]">stethoscope</span>
+<strong class="text-on-surface font-medium">Dr. Ahmed Fathy</strong>
+<span>· Cardiology (Room 101)</span>
+</span>
+</div>
+<!-- Chips Bar: Allergy & Waiting Time -->
+<div class="flex flex-wrap items-center gap-2 pt-1.5">
+<!-- Allergy Flag Chip -->
+<span class="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-error-container text-on-error-container text-xs font-semibold border border-error/20">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+<span>Allergy: Penicillin</span>
+</span>
+<!-- Time & Warning Pill -->
+<span class="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 text-xs font-medium border border-amber-300">
+<span class="material-symbols-outlined text-[14px] text-amber-600">timer</span>
+<span>Checked in 10:12 AM</span>
+<span class="font-semibold font-mono tabular-nums">(Wait: 9 min)</span>
+</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-md bg-surface-container text-on-secondary-container text-xs font-medium">
+                      Routine Follow-up (HTN)
+                    </span>
+</div>
+</div>
+</div>
+<!-- Status Dot -->
+<span class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+<span>Triage Ready</span>
+</span>
+</div>
+<!-- Action Touch Bar (Min 48px target height) -->
+<div class="mt-space-lg pt-space-md border-t border-outline-variant flex items-center justify-between gap-space-md">
+<div class="text-secondary font-body-sm text-body-sm flex items-center space-x-1">
+<span class="material-symbols-outlined text-[16px] text-primary">sensors</span>
+<span>Station 1 Connected (Omron BP + PulseOx)</span>
+</div>
+<div class="flex items-center space-x-space-sm">
+<!-- Secondary Chime Button -->
+<button class="h-12 px-4 rounded-lg bg-surface-container-lowest border border-primary text-primary hover:bg-surface-container-low font-label-lg text-label-lg font-semibold flex items-center space-x-1.5 active:scale-[0.98] transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">volume_up</span>
+<span>Call Patient (Chime)</span>
+</button>
+<!-- Primary Start Triage Button (Prominent 48px min height) -->
+<button class="h-12 px-6 rounded-lg bg-primary text-on-primary hover:bg-[#16324E] font-label-lg text-label-lg font-bold flex items-center space-x-2 shadow-sm active:scale-[0.98] transition-all" type="button">
+<span>Start Triage &amp; Vitals</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- CARD 2: Pediatrics (Farida Karim) -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg hover:border-primary/50 transition-all">
+<div class="flex items-start justify-between">
+<div class="flex items-start space-x-space-md">
+<div class="w-16 h-16 rounded-xl bg-surface border border-outline-variant flex flex-col items-center justify-center shrink-0">
+<span class="text-[10px] font-semibold text-secondary uppercase tracking-wider">Ticket</span>
+<span class="font-headline-lg text-headline-lg font-bold text-[#13263B] font-mono tabular-nums leading-none">P-08</span>
+</div>
+<div class="space-y-1">
+<div class="flex items-center space-x-2">
+<h2 class="font-headline-sm text-headline-sm font-bold text-[#13263B]">Farida Karim</h2>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary font-mono">MRN: CF-009120</span>
+</div>
+<div class="flex items-center space-x-space-md text-secondary font-body-sm text-body-sm">
+<span>8 mos · Female (Mother present)</span>
+<span>•</span>
+<span class="flex items-center space-x-1">
+<span class="material-symbols-outlined text-[15px] text-[#015C9A]">child_care</span>
+<strong class="text-on-surface font-medium">Dr. Laila Hassan</strong>
+<span>· Pediatrics (Room 104)</span>
+</span>
+</div>
+<!-- Chips -->
+<div class="flex flex-wrap items-center gap-2 pt-1">
+<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-md bg-blue-50 text-blue-800 text-xs font-medium border border-blue-200">
+<span class="material-symbols-outlined text-[14px]">vaccines</span>
+<span>Routine 9-mo vaccine + fever check</span>
+</span>
+<span class="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-surface text-secondary text-xs font-mono">
+<span>In at 10:14 AM (7m)</span>
+</span>
+</div>
+</div>
+</div>
+<!-- Action Button -->
+<div class="flex flex-col items-end space-y-2">
+<span class="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-full text-xs font-semibold bg-surface-container text-secondary">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span>Queued</span>
+</span>
+<button class="h-12 px-5 rounded-lg border border-primary text-primary hover:bg-surface-container-low font-label-md text-label-md font-semibold active:scale-[0.98] transition-all" type="button">
+                  Start Triage
+                </button>
+</div>
+</div>
+</article>
+<!-- CARD 3: Walk-in Acute Patient (Mariam Nader) -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg hover:border-primary/50 transition-all">
+<div class="flex items-start justify-between">
+<div class="flex items-start space-x-space-md">
+<div class="w-16 h-16 rounded-xl bg-surface border border-outline-variant flex flex-col items-center justify-center shrink-0">
+<span class="text-[10px] font-semibold text-secondary uppercase tracking-wider">Ticket</span>
+<span class="font-headline-lg text-headline-lg font-bold text-[#13263B] font-mono tabular-nums leading-none">W-03</span>
+</div>
+<div class="space-y-1">
+<div class="flex items-center space-x-2">
+<h2 class="font-headline-sm text-headline-sm font-bold text-[#13263B]">Mariam Nader</h2>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-[#FFF8F4] text-[#FF5E00] border border-[#FF5E00]/30">
+                      Walk-in
+                    </span>
+</div>
+<div class="flex items-center space-x-space-md text-secondary font-body-sm text-body-sm">
+<span>42 yrs · Female</span>
+<span>•</span>
+<span class="flex items-center space-x-1">
+<span class="material-symbols-outlined text-[15px] text-[#015C9A]">medication</span>
+<strong class="text-on-surface font-medium">Dr. Karim Nabil</strong>
+<span>· Internal Med (Room 108)</span>
+</span>
+</div>
+<!-- Chips -->
+<div class="flex flex-wrap items-center gap-2 pt-1">
+<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-md bg-amber-50 text-amber-900 text-xs font-semibold border border-amber-300">
+<span class="material-symbols-outlined text-[14px] text-[#FF5E00]">report_problem</span>
+<span>Acute abdominal discomfort</span>
+</span>
+<span class="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-surface text-secondary text-xs font-mono">
+<span>In at 10:16 AM (5m)</span>
+</span>
+</div>
+</div>
+</div>
+<!-- Action Button -->
+<div class="flex flex-col items-end space-y-2">
+<span class="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-full text-xs font-semibold bg-surface-container text-secondary">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span>Queued</span>
+</span>
+<button class="h-12 px-5 rounded-lg border border-primary text-primary hover:bg-surface-container-low font-label-md text-label-md font-semibold active:scale-[0.98] transition-all" type="button">
+                  Start Triage
+                </button>
+</div>
+</div>
+</article>
+<!-- CARD 4: Routine (Omar Khaled) -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg hover:border-primary/50 transition-all">
+<div class="flex items-start justify-between">
+<div class="flex items-start space-x-space-md">
+<div class="w-16 h-16 rounded-xl bg-surface border border-outline-variant flex flex-col items-center justify-center shrink-0">
+<span class="text-[10px] font-semibold text-secondary uppercase tracking-wider">Ticket</span>
+<span class="font-headline-lg text-headline-lg font-bold text-[#13263B] font-mono tabular-nums leading-none">A-15</span>
+</div>
+<div class="space-y-1">
+<div class="flex items-center space-x-2">
+<h2 class="font-headline-sm text-headline-sm font-bold text-[#13263B]">Omar Khaled</h2>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary font-mono">MRN: CF-007834</span>
+</div>
+<div class="flex items-center space-x-space-md text-secondary font-body-sm text-body-sm">
+<span>29 yrs · Male</span>
+<span>•</span>
+<span class="flex items-center space-x-1">
+<span class="material-symbols-outlined text-[15px] text-[#015C9A]">stethoscope</span>
+<strong class="text-on-surface font-medium">Dr. Ahmed Fathy</strong>
+<span>· Cardiology (Room 101)</span>
+</span>
+</div>
+<!-- Chips -->
+<div class="flex flex-wrap items-center gap-2 pt-1">
+<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-md bg-surface text-secondary text-xs font-mono">
+<span>Checked in 10:20 AM (Wait: 1 min)</span>
+</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-md bg-surface-container text-on-secondary-container text-xs font-medium">
+                      ECG Follow-up
+                    </span>
+</div>
+</div>
+</div>
+<!-- Action Button -->
+<div class="flex flex-col items-end space-y-2">
+<span class="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-full text-xs font-semibold bg-surface-container text-secondary">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span>Queued</span>
+</span>
+<button class="h-12 px-5 rounded-lg border border-primary text-primary hover:bg-surface-container-low font-label-md text-label-md font-semibold active:scale-[0.98] transition-all" type="button">
+                  Start Triage
+                </button>
+</div>
+</div>
+</article>
+</div>
+</section>
+<!-- RIGHT PANEL: Clinic Rooms Status (~32% width) -->
+<aside class="flex-[32] min-w-0 flex flex-col bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+<!-- Panel Header -->
+<div class="p-space-lg border-b border-outline-variant flex items-center justify-between shrink-0 bg-surface-container-lowest">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-[#13263B] font-bold">Consultation Rooms</h2>
+<p class="font-body-sm text-body-sm text-secondary">Live clinic turnover status</p>
+</div>
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-[#015C9A] border border-blue-200">
+            3 of 4 Active
+          </span>
+</div>
+<!-- Rooms List -->
+<div class="flex-1 overflow-y-auto p-space-md space-y-space-md">
+<!-- Room 101: Preparing / Waiting for Next Vitals -->
+<div class="p-3.5 rounded-xl border border-outline-variant bg-surface hover:bg-surface-container-lowest transition-all">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center space-x-2">
+<span class="font-headline-sm text-headline-sm font-bold text-[#13263B]">Room 101</span>
+<span class="text-xs text-secondary">Cardiology</span>
+</div>
+<!-- Status Chip: Preparing -->
+<span class="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-300">
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+<span>Preparing</span>
+</span>
+</div>
+<div class="text-sm font-medium text-on-surface mb-1">Dr. Ahmed Fathy</div>
+<div class="text-xs text-secondary flex items-center justify-between pt-1 border-t border-outline-variant/60">
+<span class="flex items-center space-x-1">
+<span class="material-symbols-outlined text-[14px] text-amber-600">hourglass_top</span>
+<span>Awaiting Ticket A-14 vitals</span>
+</span>
+<span class="text-[11px] font-mono text-emerald-700 font-medium">Room Clean ✓</span>
+</div>
+</div>
+<!-- Room 104: Occupied / In Consultation -->
+<div class="p-3.5 rounded-xl border border-outline-variant bg-surface hover:bg-surface-container-lowest transition-all">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center space-x-2">
+<span class="font-headline-sm text-headline-sm font-bold text-[#13263B]">Room 104</span>
+<span class="text-xs text-secondary">Pediatrics</span>
+</div>
+<!-- Status Chip: Occupied (Deep Navy) -->
+<span class="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary text-on-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-300 animate-pulse"></span>
+<span>In Consultation</span>
+</span>
+</div>
+<div class="text-sm font-medium text-on-surface mb-1">Dr. Laila Hassan</div>
+<div class="text-xs text-secondary flex items-center justify-between pt-1 border-t border-outline-variant/60">
+<span class="font-medium text-on-surface-variant">Serving: Ticket P-07 (Youssef O.)</span>
+<span class="font-mono tabular-nums text-secondary">14 mins in</span>
+</div>
+</div>
+<!-- Room 108: Free / Ready for Patient -->
+<div class="p-3.5 rounded-xl border border-outline-variant bg-surface hover:bg-surface-container-lowest transition-all">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center space-x-2">
+<span class="font-headline-sm text-headline-sm font-bold text-[#13263B]">Room 108</span>
+<span class="text-xs text-secondary">Internal Med</span>
+</div>
+<!-- Status Chip: Free (Clean genuine green dot) -->
+<span class="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-300">
+<span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+<span>Free &amp; Ready</span>
+</span>
+</div>
+<div class="text-sm font-medium text-on-surface mb-1">Dr. Karim Nabil</div>
+<div class="text-xs text-secondary flex items-center justify-between pt-1 border-t border-outline-variant/60">
+<span>Ready for next triage handover</span>
+<span class="font-semibold text-primary">Station Standby</span>
+</div>
+</div>
+<!-- Current Station Status: Triage Station A -->
+<div class="p-3.5 rounded-xl border border-dashed border-[#015C9A] bg-blue-50/50">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-[18px] text-[#015C9A]">vital_signs</span>
+<span class="font-label-md text-label-md font-bold text-[#13263B]">Triage Station A</span>
+</div>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-white text-[#015C9A] border border-blue-200">
+                Current Station
+              </span>
+</div>
+<div class="mt-2 text-xs text-secondary flex items-center justify-between">
+<span>Nurse Sara Ibrahim</span>
+<span class="font-medium text-emerald-700">Available · Connected</span>
+</div>
+</div>
+</div>
+<!-- Quick Station Command Actions (Bottom of Right Panel) -->
+<div class="p-space-md border-t border-outline-variant bg-surface space-y-space-sm shrink-0">
+<!-- Broadcast Next Ticket -->
+<button class="w-full h-12 rounded-lg bg-surface-container-lowest border border-outline-variant text-on-surface hover:border-primary hover:text-primary font-label-md text-label-md font-semibold flex items-center justify-center space-x-2 shadow-sm active:scale-[0.98] transition-all" type="button">
+<span class="material-symbols-outlined text-[20px] text-primary">campaign</span>
+<span>Broadcast Next Ticket to Display</span>
+</button>
+<!-- Emergency Triage Admit -->
+<button class="w-full h-12 rounded-lg bg-surface-container-lowest border border-error/40 text-error hover:bg-error-container/40 font-label-md text-label-md font-semibold flex items-center justify-center space-x-2 active:scale-[0.98] transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">e911_emergency</span>
+<span>Emergency Triage Admit</span>
+</button>
+</div>
+</aside>
+</main>
+</div>
+</body></html>

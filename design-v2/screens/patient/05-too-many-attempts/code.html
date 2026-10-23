@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow - Security Lockout</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;family=JetBrains+Mono:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary": "#4e1700",
+            "outline": "#73777f",
+            "secondary-fixed": "#d2e4ff",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "primary-fixed": "#d1e4ff",
+            "primary-fixed-dim": "#a8c9f3",
+            "surface-variant": "#e1e2e6",
+            "secondary-container": "#cee1fd",
+            "on-tertiary": "#ffffff",
+            "surface-container-high": "#e7e8ec",
+            "error": "#ba1a1a",
+            "on-surface": "#191c1f",
+            "on-primary-fixed": "#001d36",
+            "tertiary-fixed": "#ffdbce",
+            "surface-dim": "#d8dade",
+            "surface-container": "#eceef2",
+            "secondary": "#4e6077",
+            "on-secondary-fixed-variant": "#36485f",
+            "on-surface-variant": "#43474e",
+            "background": "#f8f9fd",
+            "primary": "#002b4c",
+            "on-primary": "#ffffff",
+            "on-error-container": "#93000a",
+            "outline-variant": "#c3c6cf",
+            "on-secondary-container": "#52647c",
+            "on-primary-fixed-variant": "#27496c",
+            "tertiary-fixed-dim": "#ffb599",
+            "on-primary-container": "#8dadd6",
+            "inverse-surface": "#2e3134",
+            "inverse-on-surface": "#eff1f5",
+            "tertiary-container": "#722600",
+            "surface": "#f8f9fd",
+            "inverse-primary": "#a8c9f3",
+            "on-error": "#ffffff",
+            "on-background": "#191c1f",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-tertiary-container": "#ff8b5b",
+            "surface-container-highest": "#e1e2e6",
+            "on-secondary-fixed": "#081c31",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f2f3f7",
+            "error-container": "#ffdad6",
+            "surface-tint": "#406185",
+            "surface-bright": "#f8f9fd",
+            "primary-container": "#1e4164",
+            "on-tertiary-fixed": "#370e00",
+            "on-secondary": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "1.5rem",
+            "space-xl": "2.5rem",
+            "space-sm": "0.5rem",
+            "space-2xl": "4rem",
+            "margin-mobile": "1rem",
+            "space-lg": "1.5rem",
+            "margin": "3rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem",
+            "margin-tablet": "2rem",
+            "gutter-mobile": "1rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "display-lg-mobile": ["Plus Jakarta Sans"],
+            "eyebrow": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "title-md": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"]
+          },
+          "fontSize": {
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "eyebrow": ["11px", { "lineHeight": "14px", "letterSpacing": "0.08em", "fontWeight": "700" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface antialiased flex flex-col min-h-screen">
+<!-- Docked Top Bar conforming to Shared Components JSON (TopAppBar) -->
+<header class="bg-surface-container-lowest sticky top-0 z-40 w-full border-b border-outline-variant">
+<div class="flex justify-between items-center w-full px-4 max-w-lg mx-auto h-14 min-h-[44px]">
+<!-- Leading Back Target (Min 44x44px touch target) -->
+<a aria-label="Go back" class="flex items-center justify-center w-11 h-11 -ml-2 rounded-lg text-primary hover:bg-surface-container-low transition-colors duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined text-primary text-[22px]">arrow_back</span>
+</a>
+<!-- Brand Identity Anchor -->
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-lg bg-primary-container flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[18px]">emergency</span>
+</div>
+<span class="font-headline-sm text-headline-sm font-bold text-primary tracking-tight">ClinicFlow</span>
+</div>
+<!-- Bilingual Language Switcher (Trailing Action) -->
+<button aria-label="Change language" class="flex items-center justify-center min-h-[44px] min-w-[44px] px-2.5 rounded-lg text-primary hover:bg-surface-container-low transition-colors duration-150 active:scale-95" type="button">
+<span class="font-label-lg text-label-lg font-semibold tracking-wide">EN | عربي</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas / Content Area -->
+<main class="flex-1 flex items-center justify-center px-4 py-6 w-full max-w-lg mx-auto">
+<!-- Centered Security Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 w-full max-w-sm text-center">
+<!-- Precision Security Emblem (No clip art, purely structural & restrained) -->
+<div class="w-16 h-16 rounded-full bg-tertiary-fixed border border-tertiary-fixed-dim text-on-tertiary-fixed-variant flex items-center justify-center mx-auto mb-4 relative">
+<span class="material-symbols-outlined text-[30px]" style="font-variation-settings: 'FILL' 1;">lock</span>
+<div class="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full bg-tertiary-container text-on-primary flex items-center justify-center border-2 border-surface-container-lowest">
+<span class="material-symbols-outlined text-[13px] font-bold">priority_high</span>
+</div>
+</div>
+<!-- Eyebrow Pill -->
+<div class="mb-3">
+<span class="inline-block bg-tertiary-fixed text-on-tertiary-fixed-variant font-eyebrow text-eyebrow uppercase px-3 py-1 rounded-full">
+          TEMPORARY LOCKOUT
+        </span>
+</div>
+<!-- Title -->
+<h1 class="font-headline-md text-headline-md font-bold text-primary mb-2">
+        Too many attempts
+      </h1>
+<!-- Core Security Message -->
+<p class="font-title-md text-title-md text-on-surface font-semibold mb-1">
+        For your security, wait 15 minutes before trying again.
+      </p>
+<p class="font-body-sm text-body-sm text-secondary leading-relaxed mb-6">
+        You have exceeded the maximum allowed attempts to verify your identity. Your account remains protected.
+      </p>
+<!-- 15-Minute Countdown Timer Widget -->
+<div class="bg-surface border border-outline-variant rounded-xl p-3 mb-6 flex items-center justify-center gap-3">
+<span class="material-symbols-outlined text-secondary text-[20px]">timer</span>
+<div class="flex items-baseline gap-2">
+<span aria-live="polite" class="font-mono font-bold text-xl text-primary tracking-wider" id="countdown">14:52</span>
+<span class="font-label-md text-label-md text-secondary">Time remaining</span>
+</div>
+</div>
+<!-- Primary Action: Secondary Outline Button -->
+<a class="h-12 w-full min-h-[44px] rounded-lg border border-primary-container text-primary-container font-label-lg text-label-lg hover:bg-surface-container-low transition-colors duration-150 active:scale-95 flex items-center justify-center mb-4" href="#">
+        Back to sign in
+      </a>
+<!-- Branch Support Card ("Contact the branch") -->
+<div class="bg-surface border border-outline-variant rounded-xl p-4 text-left">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-[18px]">store</span>
+<span class="font-title-md text-title-md font-semibold text-primary">Need urgent assistance? Contact the branch</span>
+</div>
+<a class="flex items-center gap-2 text-primary hover:underline font-label-lg text-label-lg font-semibold mb-1 min-h-[44px] py-1" href="tel:0224018890">
+<span class="material-symbols-outlined text-[18px]">call</span>
+<span>Call Nasr City Branch: 02 2401 8890</span>
+</a>
+<div class="flex items-center gap-1.5 font-body-sm text-body-sm text-secondary mt-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600 inline-block flex-shrink-0"></span>
+<span>Reception hours: Daily 08:30 AM – 10:00 PM</span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary mt-1 pt-1.5 border-t border-outline-variant">
+          Emergency Hotline: <span class="font-semibold text-on-surface">16789</span>
+</p>
+</div>
+</div>
+</main>
+<!-- Interactive timer simulation -->
+<script>
+    (function () {
+      let totalSeconds = 14 * 60 + 52;
+      const display = document.getElementById('countdown');
+
+      const interval = setInterval(function () {
+        if (totalSeconds <= 0) {
+          clearInterval(interval);
+          display.textContent = "00:00";
+          return;
+        }
+        totalSeconds--;
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        display.textContent = 
+          String(minutes).padStart(2, '0') + ':' + 
+          String(seconds).padStart(2, '0');
+      }, 1000);
+    })();
+  </script>
+</body></html>

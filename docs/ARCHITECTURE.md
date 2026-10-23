@@ -327,6 +327,8 @@ The design system is **Clinical Sanctuary**, from the Stitch design export (`cli
 
 The Stitch HTML is a visual reference only. None of it is copied into the app.
 
+**V2 designs:** the V2 screens (63 of them, every role) are tracked in `design-v2/`, with their own design system, **ClinicFlow Navy** (navy `#1E4164` instead of eucalyptus; `design-v2/DESIGN.md`), and UX notes. The V2 UI is being rebuilt from them, so the tokens described below are V1's until that work lands. See `design-v2/README.md`.
+
 ### Design tokens
 
 All colors are HSL channel triplets in `src/index.css` (`:root`), mapped in `tailwind.config.js` as `hsl(var(--name) / <alpha-value>)`, so **every color supports opacity modifiers** (`bg-primary/90`, `ring-ring/20`, `bg-destructive/[0.06]`). Use the tokens, not raw Tailwind palettes (`teal-600`, `slate-500`), and no decorative gradients.

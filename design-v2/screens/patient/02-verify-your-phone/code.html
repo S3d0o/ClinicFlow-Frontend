@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Verify your phone - ClinicFlow</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary": "#4e1700",
+            "outline": "#73777f",
+            "secondary-fixed": "#d2e4ff",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "primary-fixed": "#d1e4ff",
+            "primary-fixed-dim": "#a8c9f3",
+            "surface-variant": "#e1e2e6",
+            "secondary-container": "#cee1fd",
+            "on-tertiary": "#ffffff",
+            "surface-container-high": "#e7e8ec",
+            "error": "#ba1a1a",
+            "on-surface": "#191c1f",
+            "on-primary-fixed": "#001d36",
+            "tertiary-fixed": "#ffdbce",
+            "surface-dim": "#d8dade",
+            "surface-container": "#eceef2",
+            "secondary": "#4e6077",
+            "on-secondary-fixed-variant": "#36485f",
+            "on-surface-variant": "#43474e",
+            "background": "#f8f9fd",
+            "primary": "#002b4c",
+            "on-primary": "#ffffff",
+            "on-error-container": "#93000a",
+            "outline-variant": "#c3c6cf",
+            "on-secondary-container": "#52647c",
+            "on-primary-fixed-variant": "#27496c",
+            "tertiary-fixed-dim": "#ffb599",
+            "on-primary-container": "#8dadd6",
+            "inverse-surface": "#2e3134",
+            "inverse-on-surface": "#eff1f5",
+            "tertiary-container": "#722600",
+            "surface": "#f8f9fd",
+            "inverse-primary": "#a8c9f3",
+            "on-error": "#ffffff",
+            "on-background": "#191c1f",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-tertiary-container": "#ff8b5b",
+            "surface-container-highest": "#e1e2e6",
+            "on-secondary-fixed": "#081c31",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f2f3f7",
+            "error-container": "#ffdad6",
+            "surface-tint": "#406185",
+            "surface-bright": "#f8f9fd",
+            "primary-container": "#1e4164",
+            "on-tertiary-fixed": "#370e00",
+            "on-secondary": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "1.5rem",
+            "space-xl": "2.5rem",
+            "space-sm": "0.5rem",
+            "space-2xl": "4rem",
+            "margin-mobile": "1rem",
+            "space-lg": "1.5rem",
+            "margin": "3rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem",
+            "margin-tablet": "2rem",
+            "gutter-mobile": "1rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "display-lg-mobile": ["Plus Jakarta Sans"],
+            "eyebrow": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "title-md": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"]
+          },
+          "fontSize": {
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "eyebrow": ["11px", { "lineHeight": "14px", "letterSpacing": "0.08em", "fontWeight": "700" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col justify-between items-center selection:bg-secondary-container selection:text-primary">
+<!-- Mobile Viewport Container (~390px width) -->
+<div class="w-full max-w-[420px] min-h-screen flex flex-col bg-background relative shadow-sm mx-auto">
+<!-- Top Navigation Anchor (Shared Component: TopAppBar docked full-width top-0 h-14) -->
+<header class="bg-surface-container-lowest sticky top-0 z-40 w-full h-14 border-b border-outline-variant flex items-center justify-between px-4 max-w-lg mx-auto min-h-[44px]">
+<div class="flex items-center gap-2">
+<button aria-label="Go back" class="flex items-center justify-center w-11 h-11 rounded-lg text-primary hover:bg-surface-container-low active:scale-95 transition-all duration-150" type="button">
+<span class="material-symbols-outlined text-primary text-[22px]" data-icon="arrow_back">arrow_back</span>
+</button>
+<div class="flex items-center gap-1.5 pl-1">
+<div class="w-7 h-7 bg-primary rounded flex items-center justify-center text-white font-bold text-sm shadow-none">
+<span class="material-symbols-outlined text-white text-[18px]" data-icon="add">add</span>
+</div>
+<span class="font-headline-sm text-headline-sm font-bold text-primary tracking-tight">ClinicFlow</span>
+</div>
+</div>
+<button class="flex items-center px-2.5 py-1.5 rounded-lg text-primary hover:bg-surface-container-low font-label-lg text-label-lg active:scale-95 transition-all duration-150 font-semibold tracking-tight" type="button">
+        عربي
+      </button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col px-4 pt-4 pb-8 space-y-4">
+<!-- Progress Section: Step 2 of 2 -->
+<section class="space-y-2">
+<div class="flex justify-between items-center text-secondary">
+<span class="font-eyebrow text-eyebrow uppercase tracking-widest text-secondary font-bold">
+            STEP 2 OF 2 · Verify phone
+          </span>
+<span class="font-label-md text-label-md text-primary font-bold">100%</span>
+</div>
+<!-- Progress Bar Indicator with precision orange pip -->
+<div class="relative w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden flex items-center">
+<div class="h-full bg-primary-container rounded-full w-full relative">
+<div class="absolute right-0 top-0 bottom-0 w-1.5 bg-tertiary-container"></div>
+</div>
+</div>
+</section>
+<!-- Headings & Contact Metadata -->
+<section class="space-y-1.5 pt-1">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold tracking-tight">
+          Verify your phone
+        </h1>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          We sent a 6-digit code to <span class="font-semibold text-primary">+20 10•• ••• 5678</span>
+<a class="text-primary-container font-medium hover:underline text-body-sm font-body-sm inline-flex items-center ml-1 align-baseline focus:outline-none focus:ring-1 focus:ring-primary rounded" href="#">
+            Edit number
+          </a>
+</p>
+</section>
+<!-- Main Form Card Container -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-5 space-y-5">
+<div>
+<label class="block font-label-lg text-label-lg text-primary mb-3">
+            Enter 6-digit verification code
+          </label>
+<!-- OTP Input Field Matrix -->
+<div class="grid grid-cols-6 gap-2">
+<!-- Box 1 (Filled) -->
+<div class="relative">
+<input aria-label="First digit" class="w-full h-13 sm:h-14 aspect-[4/5] text-center font-headline-md text-headline-md font-bold text-on-surface bg-surface-container-lowest border border-outline-variant rounded-xl focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none transition-all" maxlength="1" readonly="" type="text" value="4"/>
+</div>
+<!-- Box 2 (Filled) -->
+<div class="relative">
+<input aria-label="Second digit" class="w-full h-13 sm:h-14 aspect-[4/5] text-center font-headline-md text-headline-md font-bold text-on-surface bg-surface-container-lowest border border-outline-variant rounded-xl focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none transition-all" maxlength="1" readonly="" type="text" value="8"/>
+</div>
+<!-- Box 3 (Filled) -->
+<div class="relative">
+<input aria-label="Third digit" class="w-full h-13 sm:h-14 aspect-[4/5] text-center font-headline-md text-headline-md font-bold text-on-surface bg-surface-container-lowest border border-outline-variant rounded-xl focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none transition-all" maxlength="1" readonly="" type="text" value="1"/>
+</div>
+<!-- Box 4 (Filled) -->
+<div class="relative">
+<input aria-label="Fourth digit" class="w-full h-13 sm:h-14 aspect-[4/5] text-center font-headline-md text-headline-md font-bold text-on-surface bg-surface-container-lowest border border-outline-variant rounded-xl focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none transition-all" maxlength="1" readonly="" type="text" value="9"/>
+</div>
+<!-- Box 5 (Filled) -->
+<div class="relative">
+<input aria-label="Fifth digit" class="w-full h-13 sm:h-14 aspect-[4/5] text-center font-headline-md text-headline-md font-bold text-on-surface bg-surface-container-lowest border border-outline-variant rounded-xl focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none transition-all" maxlength="1" readonly="" type="text" value="0"/>
+</div>
+<!-- Box 6 (Error State / Active Digit) -->
+<div class="relative">
+<input aria-label="Sixth digit" class="w-full h-13 sm:h-14 aspect-[4/5] text-center font-headline-md text-headline-md font-bold text-error bg-surface-container-lowest border-2 border-error rounded-xl focus:outline-none ring-2 ring-error/20 transition-all" maxlength="1" readonly="" type="text" value="2"/>
+</div>
+</div>
+<!-- Inline Error Feedback State -->
+<div class="bg-error-container/40 border border-error/30 rounded-lg px-3 py-2 text-error flex items-center gap-2 mt-3.5" role="alert">
+<span class="material-symbols-outlined text-error text-[18px] shrink-0" data-icon="error">error</span>
+<span class="font-label-md text-label-md font-semibold text-error tracking-tight">
+              That code isn't right. 3 attempts left.
+            </span>
+</div>
+</div>
+<!-- Timer, Resend, and Expiration Helpers -->
+<div class="pt-2 border-t border-outline-variant space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-secondary">
+<span class="material-symbols-outlined text-secondary text-[17px]" data-icon="schedule">schedule</span>
+<span class="font-body-sm text-body-sm text-secondary">Resend code in</span>
+<span class="font-label-md text-label-md bg-surface-container px-2 py-0.5 rounded text-primary font-bold">0:42</span>
+</div>
+<button class="font-label-lg text-label-lg text-outline-variant cursor-not-allowed font-semibold" disabled="" type="button">
+              Resend code
+            </button>
+</div>
+<div class="flex items-center gap-1.5 text-on-surface-variant/80">
+<span class="material-symbols-outlined text-secondary text-[15px] shrink-0" data-icon="info">info</span>
+<span class="font-body-sm text-body-sm text-secondary">The code expires in 5 minutes</span>
+</div>
+</div>
+<!-- Primary CTA Button -->
+<button class="w-full h-12 min-h-[44px] bg-primary-container hover:bg-primary text-white rounded-lg font-label-lg text-label-lg font-semibold flex items-center justify-center gap-2 active:scale-[0.98] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary shadow-none" type="button">
+<span>Verify</span>
+<span class="material-symbols-outlined text-white text-[18px]" data-icon="check">check</span>
+</button>
+</section>
+<!-- Clinical Security Guarantee Module -->
+<section class="mt-auto pt-6 pb-2 text-center">
+<div class="inline-flex items-center justify-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-container-low border border-outline-variant/60">
+<span class="material-symbols-outlined text-primary text-[15px]" data-icon="lock">lock</span>
+<span class="font-label-md text-label-md text-secondary font-medium tracking-tight">
+            256-bit Encrypted · Egyptian Health Data Guard
+          </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[11px] mt-2">
+          Your confidential health records are protected under national health privacy frameworks.
+        </p>
+</section>
+</main>
+</div>
+</body></html>

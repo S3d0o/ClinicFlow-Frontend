@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow Admin - 7. Integrations &amp; Message Templates</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Forms and Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-bright": "#f8f9ff",
+            "secondary": "#4e6077",
+            "outline": "#73777f",
+            "surface-tint": "#406185",
+            "secondary-container": "#cee1fd",
+            "surface-container-lowest": "#ffffff",
+            "surface-dim": "#d1dbeb",
+            "surface-container-high": "#dfe9fa",
+            "primary-fixed": "#d1e4ff",
+            "inverse-surface": "#27313e",
+            "on-surface": "#121c28",
+            "primary-fixed-dim": "#a8c9f3",
+            "on-primary-fixed": "#001d36",
+            "on-secondary-fixed": "#081c31",
+            "on-secondary": "#ffffff",
+            "surface-container-highest": "#d9e3f4",
+            "surface-container-low": "#eef4ff",
+            "inverse-primary": "#a8c9f3",
+            "error": "#ba1a1a",
+            "tertiary": "#4e1700",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-secondary-fixed-variant": "#36485f",
+            "on-primary-fixed-variant": "#27496c",
+            "surface-variant": "#d9e3f4",
+            "secondary-fixed": "#d2e4ff",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "tertiary-fixed-dim": "#ffb599",
+            "background": "#f8f9ff",
+            "on-tertiary-fixed": "#370e00",
+            "on-error": "#ffffff",
+            "outline-variant": "#c3c6cf",
+            "on-surface-variant": "#43474e",
+            "tertiary-container": "#722600",
+            "on-tertiary": "#ffffff",
+            "on-primary": "#ffffff",
+            "tertiary-fixed": "#ffdbce",
+            "error-container": "#ffdad6",
+            "primary": "#002b4c",
+            "on-error-container": "#93000a",
+            "on-primary-container": "#8dadd6",
+            "on-tertiary-container": "#ff8b5b",
+            "surface-container": "#e5efff",
+            "on-secondary-container": "#52647c",
+            "on-background": "#121c28",
+            "inverse-on-surface": "#eaf1ff",
+            "primary-container": "#1e4164",
+            "surface": "#f8f9ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-sm": "0.5rem",
+            "gutter-sm": "0.75rem",
+            "space-md": "0.75rem",
+            "margin-tablet": "1.5rem",
+            "margin": "1rem",
+            "space-xs": "0.25rem",
+            "space-lg": "1rem",
+            "space-xl": "1.5rem",
+            "gutter": "1rem",
+            "margin-desktop": "2rem"
+          },
+          "fontFamily": {
+            "body-sm": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-lg": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "mono": ["JetBrains Mono", "monospace"]
+          },
+          "fontSize": {
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill-icon {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    }
+    /* Custom Scrollbar for administrative density */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F7F9FD;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #C6D0DE;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #73777F;
+    }
+  </style>
+</head>
+<body class="h-full bg-[#F7F9FD] text-[#212427] font-body-md antialiased overflow-x-hidden">
+<!-- ========================================================= -->
+<!-- SHARED COMPONENT: SideNavBar (Fixed 260px Sidebar)        -->
+<!-- ========================================================= -->
+<aside class="fixed top-0 left-0 h-screen w-[260px] z-40 border-r border-[#D3DBE6] bg-surface-container-lowest flex flex-col justify-between p-4">
+<div class="flex flex-col gap-6">
+<!-- Brand & Network Emblem -->
+<div class="flex items-center gap-3 px-2 py-1">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center text-white shadow-sm flex-shrink-0">
+<span class="material-symbols-outlined text-[24px]">local_hospital</span>
+</div>
+<div class="flex flex-col overflow-hidden">
+<span class="font-headline-md text-headline-md font-bold text-primary tracking-tight truncate">ClinicFlow Egypt</span>
+<span class="font-label-sm text-label-sm text-secondary truncate">Network Administration</span>
+</div>
+</div>
+<!-- Navigation Tabs (8 Tabs from JSON) -->
+<nav class="flex flex-col space-y-1">
+<!-- 1. Overview -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+<!-- 2. Staff -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">badge</span>
+<span class="font-label-md text-label-md">Staff</span>
+</a>
+<!-- 3. Roles & Permissions -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">shield_person</span>
+<span class="font-label-md text-label-md">Roles &amp; Permissions</span>
+</a>
+<!-- 4. Branches -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">apartment</span>
+<span class="font-label-md text-label-md">Branches</span>
+</a>
+<!-- 5. Specialties -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">stethoscope</span>
+<span class="font-label-md text-label-md">Specialties</span>
+</a>
+<!-- 6. Settings -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<!-- 7. Integrations (ACTIVE DESTINATION) -->
+<a aria-current="page" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary-container text-white font-semibold border-l-4 border-primary shadow-sm" href="#">
+<span class="material-symbols-outlined text-[20px] text-white">hub</span>
+<span class="font-label-md text-label-md">Integrations</span>
+</a>
+<!-- 8. Audit Log -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+<span class="font-label-md text-label-md">Audit Log</span>
+</a>
+</nav>
+</div>
+<!-- Sidebar Footer / Authenticated Profile Status -->
+<div class="pt-4 border-t border-[#D3DBE6]/60">
+<div class="flex items-center justify-between p-2 rounded-lg bg-[#F7F9FD] border border-[#D3DBE6]">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-semibold text-xs flex-shrink-0">
+            KA
+          </div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-[#13263B] font-semibold truncate">Karim Adel</span>
+<span class="font-body-sm text-body-sm text-[#5B6573] truncate">Super Admin</span>
+</div>
+</div>
+<!-- Violet Role Pill Indicator -->
+<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#EDE9FE] text-[#6D28D9] border border-[#DDD6FE]">
+          Admin
+        </span>
+</div>
+</div>
+</aside>
+<!-- ========================================================= -->
+<!-- SHARED COMPONENT: TopNavBar (Sticky Header)              -->
+<!-- ========================================================= -->
+<header class="sticky top-0 right-0 z-30 w-[calc(100%-260px)] ml-[260px] h-16 bg-surface-container-lowest border-b border-[#D3DBE6] flex items-center justify-between px-8 shadow-sm">
+<!-- Global Quick Search -->
+<div class="relative w-96 max-w-lg">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[18px] text-[#5B6573]">
+        search
+      </span>
+<input class="w-full h-10 pl-10 pr-4 text-body-md bg-[#F7F9FD] border border-[#C6D0DE] rounded-lg text-[#212427] placeholder-[#5B6573] focus:outline-none focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/15 transition-all" placeholder="Search gateways, templates, APIs..." type="search"/>
+</div>
+<!-- Trailing Actions & Operational Indicator -->
+<div class="flex items-center gap-4">
+<!-- Operational Status Pill -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#ECFDF5] border border-[#A7F3D0]">
+<span class="w-2 h-2 rounded-full bg-[#059669] animate-pulse"></span>
+<span class="font-label-md text-label-md text-[#059669] font-medium">Network Operational</span>
+</div>
+<!-- Bilingual Language Toggle -->
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[#1E4164] hover:bg-[#F7F9FD] border border-[#D3DBE6] font-label-md text-label-md transition-colors" title="Switch Language" type="button">
+<span class="material-symbols-outlined text-[18px]">language</span>
+<span>EN / عربي</span>
+</button>
+<!-- Notifications with Alert Pip -->
+<div class="relative">
+<button aria-label="Notifications" class="p-2 text-[#5B6573] hover:text-[#13263B] hover:bg-[#F7F9FD] rounded-lg transition-colors" type="button">
+<span class="material-symbols-outlined text-[22px]">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-[#FF5E00] rounded-full ring-2 ring-white"></span>
+</button>
+</div>
+<div class="h-6 w-px bg-[#D3DBE6]"></div>
+<!-- User Quick Context -->
+<div class="flex items-center gap-2.5 pl-1">
+<div class="w-8 h-8 rounded-full bg-[#1E4164] text-white flex items-center justify-center font-semibold text-xs shadow-inner">
+          KA
+        </div>
+<span class="font-label-md text-label-md text-[#13263B] font-semibold hidden lg:inline">Karim Adel</span>
+</div>
+</div>
+</header>
+<!-- ========================================================= -->
+<!-- MAIN WORKSPACE CONTENT CANVAS                             -->
+<!-- ========================================================= -->
+<main class="w-[calc(100%-260px)] ml-[260px] min-h-[calc(100vh-64px)] p-8">
+<!-- Workspace Header & Breadcrumbs -->
+<div class="mb-8">
+<nav aria-label="Breadcrumb" class="flex items-center gap-2 text-body-sm text-[#5B6573] mb-2 font-medium">
+<span>ClinicFlow</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span>System Administration</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-[#13263B] font-semibold">Integrations &amp; Templates</span>
+</nav>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-[#13263B] tracking-tight">Communication Gateways &amp; Message Templates</h1>
+<p class="font-body-md text-body-md text-[#5B6573] mt-1 max-w-3xl">
+            Manage automated SMS gateways, SMTP dispatch servers, payment webhooks, and multilingual event notification templates across Cairo and regional clinic hubs.
+          </p>
+</div>
+<div class="flex items-center gap-3 self-start md:self-auto">
+<button class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-lg border border-[#D3DBE6] bg-white text-[#1E4164] font-label-md text-label-md hover:bg-[#F7F9FD] transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">history</span>
+<span>Gateway Audit</span>
+</button>
+<button class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#1E4164] text-white font-label-md text-label-md hover:bg-[#13263B] transition-colors shadow-sm active:scale-[0.99]" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>Add Webhook Route</span>
+</button>
+</div>
+</div>
+</div>
+<!-- ========================================================= -->
+<!-- TOP SECTION: Provider Gateway Integration Cards (3 Cards) -->
+<!-- ========================================================= -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+<!-- Card 1: Vodafone SMS Gateway (Egypt) -->
+<div class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-5 shadow-sm hover:border-[#1E4164]/40 transition-colors flex flex-col justify-between">
+<div>
+<div class="flex items-start justify-between gap-3 mb-4">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-lg bg-[#FEF2F2] border border-[#FEE2E2] flex items-center justify-center text-[#DC2626]">
+<span class="material-symbols-outlined text-[24px]">sms</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-[#13263B]">Vodafone SMS Gateway</h3>
+<span class="font-body-sm text-body-sm text-[#5B6573]">Egypt Telecommunication Route</span>
+</div>
+</div>
+<!-- Active / Operational Chip -->
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#ECFDF5] text-[#059669] border border-[#A7F3D0]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+              Active
+            </span>
+</div>
+<!-- Metadata Metrics -->
+<div class="grid grid-cols-2 gap-3 p-3 rounded-lg bg-[#F7F9FD] border border-[#D3DBE6]/70 mb-5">
+<div>
+<span class="text-[11px] font-medium text-[#5B6573] uppercase tracking-wider block">Remaining Balance</span>
+<span class="font-mono text-sm font-semibold text-[#13263B]">14,280 SMS</span>
+</div>
+<div>
+<span class="text-[11px] font-medium text-[#5B6573] uppercase tracking-wider block">API Latency</span>
+<span class="font-mono text-sm font-semibold text-[#13263B]">142ms</span>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-2.5 pt-2 border-t border-[#D3DBE6]/60">
+<button class="flex-1 py-2 px-3 rounded-lg text-center text-body-sm font-label-md text-[#1E4164] hover:bg-[#F7F9FD] transition-colors" type="button">
+            Configure Gateway
+          </button>
+<button class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#1E4164] text-white text-body-sm font-label-md hover:bg-[#13263B] transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">play_arrow</span>
+<span>Send Test SMS</span>
+</button>
+</div>
+</div>
+<!-- Card 2: SendGrid SMTP Relays -->
+<div class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-5 shadow-sm hover:border-[#1E4164]/40 transition-colors flex flex-col justify-between">
+<div>
+<div class="flex items-start justify-between gap-3 mb-4">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-lg bg-[#EFF6FF] border border-[#DBEAFE] flex items-center justify-center text-[#015C9A]">
+<span class="material-symbols-outlined text-[24px]">mail</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-[#13263B]">SendGrid SMTP Relays</h3>
+<span class="font-body-sm text-body-sm text-[#5B6573]">Transactional Dispatch Host</span>
+</div>
+</div>
+<!-- Active / Operational Chip -->
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#ECFDF5] text-[#059669] border border-[#A7F3D0]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+              Operational
+            </span>
+</div>
+<!-- Metadata Metrics -->
+<div class="grid grid-cols-2 gap-3 p-3 rounded-lg bg-[#F7F9FD] border border-[#D3DBE6]/70 mb-5">
+<div>
+<span class="text-[11px] font-medium text-[#5B6573] uppercase tracking-wider block">Delivery Rate</span>
+<span class="font-mono text-sm font-semibold text-[#059669]">99.4%</span>
+</div>
+<div>
+<span class="text-[11px] font-medium text-[#5B6573] uppercase tracking-wider block">Dispatch Queue</span>
+<span class="font-mono text-sm font-semibold text-[#13263B]">0 pending</span>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-2.5 pt-2 border-t border-[#D3DBE6]/60">
+<button class="flex-1 py-2 px-3 rounded-lg text-center text-body-sm font-label-md text-[#1E4164] hover:bg-[#F7F9FD] transition-colors" type="button">
+            SMTP Settings
+          </button>
+<button class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#1E4164] text-white text-body-sm font-label-md hover:bg-[#13263B] transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">outgoing_mail</span>
+<span>Send Test Email</span>
+</button>
+</div>
+</div>
+<!-- Card 3: Paymob Payment Gateway -->
+<div class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-5 shadow-sm hover:border-[#1E4164]/40 transition-colors flex flex-col justify-between">
+<div>
+<div class="flex items-start justify-between gap-3 mb-4">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-lg bg-[#F0FDF4] border border-[#DCFCE7] flex items-center justify-center text-[#16A34A]">
+<span class="material-symbols-outlined text-[24px]">point_of_sale</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-[#13263B]">Paymob Payment Gateway</h3>
+<span class="font-body-sm text-body-sm text-[#5B6573]">Checkout Callback Sync</span>
+</div>
+</div>
+<!-- Connected / Live Mode Chip -->
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#EFF6FF] text-[#015C9A] border border-[#BFDBFE]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#015C9A]"></span>
+              Live Mode
+            </span>
+</div>
+<!-- Metadata Metrics -->
+<div class="p-3 rounded-lg bg-[#F7F9FD] border border-[#D3DBE6]/70 mb-5">
+<span class="text-[11px] font-medium text-[#5B6573] uppercase tracking-wider block mb-1">Supported Channels</span>
+<span class="font-body-sm text-body-sm text-[#13263B] font-medium flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-[#059669]">check_circle</span>
+              Card / Mobile Wallets / InstaPay direct callbacks
+            </span>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-2.5 pt-2 border-t border-[#D3DBE6]/60">
+<button class="flex-1 py-2 px-3 rounded-lg text-center text-body-sm font-label-md text-[#1E4164] hover:bg-[#F7F9FD] transition-colors" type="button">
+            Webhook Keys
+          </button>
+<button class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#1E4164] text-white text-body-sm font-label-md hover:bg-[#13263B] transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">sync_alt</span>
+<span>Ping Paymob Webhook</span>
+</button>
+</div>
+</div>
+</section>
+<!-- ========================================================= -->
+<!-- BOTTOM SECTION: Message Templates Studio (Two Columns)    -->
+<!-- ========================================================= -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<!-- ======================================================= -->
+<!-- LEFT COLUMN: Templates Directory (5 of 12 columns)     -->
+<!-- ======================================================= -->
+<section class="lg:col-span-5 bg-surface-container-lowest border border-[#D3DBE6] rounded-xl shadow-sm flex flex-col overflow-hidden">
+<!-- Directory Header & Channel Filter Bar -->
+<div class="p-4 border-b border-[#D3DBE6] space-y-3 bg-white">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-sm text-headline-sm text-[#13263B] flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-[#1E4164]">mark_chat_unread</span>
+              System Event Templates
+            </h2>
+<span class="text-xs font-mono font-medium text-[#5B6573] bg-[#F7F9FD] px-2 py-0.5 rounded border border-[#D3DBE6]">
+              7 Total Events
+            </span>
+</div>
+<!-- Channel Filter Tabs -->
+<div class="flex items-center justify-between gap-2 pt-1">
+<div class="inline-flex p-1 bg-[#F7F9FD] border border-[#D3DBE6] rounded-lg">
+<button class="px-2.5 py-1 text-xs font-semibold rounded bg-white text-[#13263B] shadow-xs" type="button">
+                All Channels
+              </button>
+<button class="px-2.5 py-1 text-xs font-medium rounded text-[#5B6573] hover:text-[#13263B] transition-colors" type="button">
+                SMS
+              </button>
+<button class="px-2.5 py-1 text-xs font-medium rounded text-[#5B6573] hover:text-[#13263B] transition-colors" type="button">
+                Email
+              </button>
+</div>
+<!-- Quick Template Search -->
+<div class="relative flex-1 max-w-[200px]">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[16px] text-[#5B6573]">
+                search
+              </span>
+<input class="w-full h-8 pl-8 pr-2.5 text-xs bg-[#F7F9FD] border border-[#C6D0DE] rounded-md text-[#212427] placeholder-[#5B6573] focus:border-[#015C9A] focus:outline-none focus:ring-1 focus:ring-[#015C9A]" placeholder="Search event..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Interactive Events Table List -->
+<div class="divide-y divide-[#D3DBE6] overflow-y-auto max-h-[640px]">
+<!-- Event Item 1: Booking Confirmed (ACTIVE / SELECTED) -->
+<div class="p-3.5 bg-[#EFF6FF] border-l-4 border-[#1E4164] transition-all cursor-pointer relative hover:bg-[#E5EFFF]">
+<div class="flex items-start justify-between gap-2">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="font-label-lg text-label-lg text-[#13263B] font-semibold">Booking Confirmed</span>
+<!-- Orange Accent Tag for current active editing target -->
+<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#FFF2EA] text-[#FF5E00] border border-[#FFD8C2]">
+                    Editing
+                  </span>
+</div>
+<p class="font-body-sm text-body-sm text-[#5B6573] line-clamp-1">
+                  Trigger: Patient books online or via reception
+                </p>
+<div class="flex items-center gap-2 pt-1">
+<span class="inline-flex items-center gap-1 text-[11px] font-mono font-medium px-2 py-0.5 rounded bg-white text-[#1E4164] border border-[#D3DBE6]">
+<span class="material-symbols-outlined text-[13px]">sms</span> SMS
+                  </span>
+<span class="inline-flex items-center gap-1 text-[11px] font-mono font-medium px-2 py-0.5 rounded bg-white text-[#015C9A] border border-[#D3DBE6]">
+<span class="material-symbols-outlined text-[13px]">mail</span> Email
+                  </span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 text-[11px] font-medium text-[#059669]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span> Active
+              </span>
+</div>
+</div>
+<!-- Event Item 2: Visit Reminder -->
+<div class="p-3.5 hover:bg-[#F7F9FD] transition-colors cursor-pointer border-l-4 border-transparent">
+<div class="flex items-start justify-between gap-2">
+<div class="space-y-1">
+<span class="font-label-lg text-label-lg text-[#212427] font-semibold">Visit Reminder (24h prior)</span>
+<p class="font-body-sm text-body-sm text-[#5B6573] line-clamp-1">
+                  Trigger: T-24 hours automated cron
+                </p>
+<div class="flex items-center gap-2 pt-1">
+<span class="inline-flex items-center gap-1 text-[11px] font-mono text-[#5B6573] px-2 py-0.5 rounded bg-[#F7F9FD] border border-[#D3DBE6]">
+<span class="material-symbols-outlined text-[13px]">sms</span> SMS
+                  </span>
+<span class="inline-flex items-center gap-1 text-[11px] font-mono text-[#5B6573] px-2 py-0.5 rounded bg-[#F7F9FD] border border-[#D3DBE6]">
+<span class="material-symbols-outlined text-[13px]">mail</span> Email
+                  </span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 text-[11px] font-medium text-[#059669]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span> Active
+              </span>
+</div>
+</div>
+<!-- Event Item 3: Visit Rescheduled -->
+<div class="p-3.5 hover:bg-[#F7F9FD] transition-colors cursor-pointer border-l-4 border-transparent">
+<div class="flex items-start justify-between gap-2">
+<div class="space-y-1">
+<span class="font-label-lg text-label-lg text-[#212427] font-semibold">Visit Rescheduled</span>
+<p class="font-body-sm text-body-sm text-[#5B6573] line-clamp-1">
+                  Trigger: Doctor leave / patient reschedule
+                </p>
+<div class="flex items-center gap-2 pt-1">
+<span class="inline-flex items-center gap-1 text-[11px] font-mono text-[#5B6573] px-2 py-0.5 rounded bg-[#F7F9FD] border border-[#D3DBE6]">
+<span class="material-symbols-outlined text-[13px]">sms</span> SMS
+                  </span>
+<span class="inline-flex items-center gap-1 text-[11px] font-mono text-[#5B6573] px-2 py-0.5 rounded bg-[#F7F9FD] border border-[#D3DBE6]">
+<span class="material-symbols-outlined text-[13px]">mail</span> Email
+                  </span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 text-[11px] font-medium text-[#059669]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span> Active
+              </span>
+</div>
+</div>
+<!-- Event Item 4: Appointment Cancelled -->
+<div class="p-3.5 hover:bg-[#F7F9FD] transition-colors cursor-pointer border-l-4 border-transparent">
+<div class="flex items-start justify-between gap-2">
+<div class="space-y-1">
+<span class="font-label-lg text-label-lg text-[#212427] font-semibold">Appointment Cancelled</span>
+<p class="font-body-sm text-body-sm text-[#5B6573] line-clamp-1">
+                  Trigger: Cancellation recorded
+                </p>
+<div class="flex items-center gap-2 pt-1">
+<span class="inline-flex items-center gap-1 text-[11px] font-mono text-[#5B6573] px-2 py-0.5 rounded bg-[#F7F9FD] border border-[#D3DBE6]">
+<span class="material-symbols-outlined text-[13px]">sms</span> SMS
+                  </span>
+<span class="inline-flex items-center gap-1 text-[11px] font-mono text-[#5B6573] px-2 py-0.5 rounded bg-[#F7F9FD] border border-[#D3DBE6]">
+<span class="material-symbols-outlined text-[13px]">mail</span> Email
+                  </span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 text-[11px] font-medium text-[#059669]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span> Active
+              </span>
+</div>
+</div>
+<!-- Event Item 5: Invoice Issued & Balance Due -->
+<div class="p-3.5 hover:bg-[#F7F9FD] transition-colors cursor-pointer border-l-4 border-transparent">
+<div class="flex items-start justify-between gap-2">
+<div class="space-y-1">
+<span class="font-label-lg text-label-lg text-[#212427] font-semibold">Invoice Issued &amp; Balance Due</span>
+<p class="font-body-sm text-body-sm text-[#5B6573] line-clamp-1">
+                  Trigger: Encounter checkout completed
+                </p>
+<div class="flex items-center gap-2 pt-1">
+<span class="inline-flex items-center gap-1 text-[11px] font-mono text-[#5B6573] px-2 py-0.5 rounded bg-[#F7F9FD] border border-[#D3DBE6]">
+<span class="material-symbols-outlined text-[13px]">sms</span> SMS
+                  </span>
+<span class="inline-flex items-center gap-1 text-[11px] font-mono text-[#5B6573] px-2 py-0.5 rounded bg-[#F7F9FD] border border-[#D3DBE6]">
+<span class="material-symbols-outlined text-[13px]">mail</span> Email
+                  </span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 text-[11px] font-medium text-[#059669]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span> Active
+              </span>
+</div>
+</div>
+<!-- Event Item 6: Interview Invitation -->
+<div class="p-3.5 hover:bg-[#F7F9FD] transition-colors cursor-pointer border-l-4 border-transparent">
+<div class="flex items-start justify-between gap-2">
+<div class="space-y-1">
+<span class="font-label-lg text-label-lg text-[#212427] font-semibold">Interview Invitation</span>
+<p class="font-body-sm text-body-sm text-[#5B6573] line-clamp-1">
+                  Trigger: Doctor candidate shortlisted
+                </p>
+<div class="flex items-center gap-2 pt-1">
+<span class="inline-flex items-center gap-1 text-[11px] font-mono text-[#5B6573] px-2 py-0.5 rounded bg-[#F7F9FD] border border-[#D3DBE6]">
+<span class="material-symbols-outlined text-[13px]">mail</span> Email
+                  </span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 text-[11px] font-medium text-[#059669]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span> Active
+              </span>
+</div>
+</div>
+<!-- Event Item 7: Accountant Cash Drawer Alert -->
+<div class="p-3.5 hover:bg-[#F7F9FD] transition-colors cursor-pointer border-l-4 border-transparent">
+<div class="flex items-start justify-between gap-2">
+<div class="space-y-1">
+<span class="font-label-lg text-label-lg text-[#212427] font-semibold">Accountant Cash Drawer Alert</span>
+<p class="font-body-sm text-body-sm text-[#5B6573] line-clamp-1">
+                  Trigger: Variance &gt; EGP 50 logged
+                </p>
+<div class="flex items-center gap-2 pt-1">
+<span class="inline-flex items-center gap-1 text-[11px] font-mono text-[#5B6573] px-2 py-0.5 rounded bg-[#F7F9FD] border border-[#D3DBE6]">
+<span class="material-symbols-outlined text-[13px]">sms</span> SMS
+                  </span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 text-[11px] font-medium text-[#059669]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span> Active
+              </span>
+</div>
+</div>
+</div>
+</section>
+<!-- ======================================================= -->
+<!-- RIGHT COLUMN: Template Editor & Live Preview (7 cols)   -->
+<!-- ======================================================= -->
+<section class="lg:col-span-7 space-y-6">
+<!-- Editor Box Card -->
+<div class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl shadow-sm p-6">
+<!-- Editor Card Header -->
+<div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#D3DBE6]">
+<div>
+<div class="flex items-center gap-2.5">
+<h3 class="font-headline-sm text-headline-sm text-[#13263B]">Editing: Booking Confirmed (SMS Channel)</h3>
+</div>
+<span class="font-body-sm text-body-sm text-[#5B6573] mt-0.5 block">Automated patient mobile dispatch on appointment finalization</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-mono text-xs px-2.5 py-1 rounded-full bg-[#F7F9FD] text-[#5B6573] border border-[#D3DBE6] font-medium">
+                Event ID: EVT-BOOK-CONFIRM
+              </span>
+</div>
+</div>
+<!-- Language Switcher Tabs -->
+<div class="flex items-center justify-between pt-4 pb-3">
+<div class="inline-flex p-1 bg-[#F7F9FD] border border-[#D3DBE6] rounded-lg">
+<button class="px-3.5 py-1.5 text-xs font-semibold rounded bg-primary-container text-white shadow-xs" type="button">
+                English Tab (Active)
+              </button>
+<button class="px-3.5 py-1.5 text-xs font-medium rounded text-[#5B6573] hover:text-[#13263B] transition-colors" type="button">
+                العربية Tab
+              </button>
+</div>
+<span class="text-xs text-[#5B6573] font-body-sm">
+              Fallback locale: <strong class="text-[#13263B]">AR-EG</strong>
+</span>
+</div>
+<!-- Dynamic Token Chips (Clickable to Insert) -->
+<div class="py-3">
+<div class="flex items-center justify-between mb-2">
+<label class="text-xs font-semibold text-[#13263B] flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-[#1E4164]">data_object</span>
+                Available Dynamic Tokens
+              </label>
+<span class="text-[11px] text-[#5B6573]">Click token to insert into template cursor</span>
+</div>
+<div class="flex flex-wrap gap-1.5">
+<button class="font-mono text-xs px-2 py-1 rounded bg-[#F7F9FD] hover:bg-[#EEF4FF] hover:border-[#1E4164]/50 border border-[#D3DBE6] text-[#1E4164] transition-colors" type="button">
+                {{PatientName}}
+              </button>
+<button class="font-mono text-xs px-2 py-1 rounded bg-[#F7F9FD] hover:bg-[#EEF4FF] hover:border-[#1E4164]/50 border border-[#D3DBE6] text-[#1E4164] transition-colors" type="button">
+                {{DoctorName}}
+              </button>
+<button class="font-mono text-xs px-2 py-1 rounded bg-[#F7F9FD] hover:bg-[#EEF4FF] hover:border-[#1E4164]/50 border border-[#D3DBE6] text-[#1E4164] transition-colors" type="button">
+                {{Specialty}}
+              </button>
+<button class="font-mono text-xs px-2 py-1 rounded bg-[#F7F9FD] hover:bg-[#EEF4FF] hover:border-[#1E4164]/50 border border-[#D3DBE6] text-[#1E4164] transition-colors" type="button">
+                {{AppointmentTime}}
+              </button>
+<button class="font-mono text-xs px-2 py-1 rounded bg-[#F7F9FD] hover:bg-[#EEF4FF] hover:border-[#1E4164]/50 border border-[#D3DBE6] text-[#1E4164] transition-colors" type="button">
+                {{AppointmentDate}}
+              </button>
+<button class="font-mono text-xs px-2 py-1 rounded bg-[#F7F9FD] hover:bg-[#EEF4FF] hover:border-[#1E4164]/50 border border-[#D3DBE6] text-[#1E4164] transition-colors" type="button">
+                {{Branch}}
+              </button>
+<button class="font-mono text-xs px-2 py-1 rounded bg-[#F7F9FD] hover:bg-[#EEF4FF] hover:border-[#1E4164]/50 border border-[#D3DBE6] text-[#1E4164] transition-colors" type="button">
+                {{BranchAddress}}
+              </button>
+<button class="font-mono text-xs px-2 py-1 rounded bg-[#F7F9FD] hover:bg-[#EEF4FF] hover:border-[#1E4164]/50 border border-[#D3DBE6] text-[#1E4164] transition-colors" type="button">
+                {{TicketNumber}}
+              </button>
+<button class="font-mono text-xs px-2 py-1 rounded bg-[#F7F9FD] hover:bg-[#EEF4FF] hover:border-[#1E4164]/50 border border-[#D3DBE6] text-[#1E4164] transition-colors" type="button">
+                {{FeeAmount}}
+              </button>
+</div>
+</div>
+<!-- Template Text Area -->
+<div class="mt-2 space-y-1.5">
+<div class="flex items-center justify-between">
+<label class="text-xs font-semibold text-[#13263B]" for="templateText">
+                Message Body Content
+              </label>
+<span class="text-[11px] font-mono text-[#5B6573]">Standard GSM Plaintext</span>
+</div>
+<textarea class="w-full p-3 font-mono text-sm bg-white border border-[#C6D0DE] rounded-lg text-[#212427] leading-relaxed focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/15 focus:outline-none transition-all shadow-inner" id="templateText" rows="5">Dear {{PatientName}}, your appointment with Dr. {{DoctorName}} ({{Specialty}}) at ClinicFlow {{Branch}} is confirmed for {{AppointmentDate}} at {{AppointmentTime}}. Ticket: {{TicketNumber}}. Directions: 14 Abbas El Akkad St. Questions? Call 16789.</textarea>
+</div>
+<!-- Live SMS Metrics Bar -->
+<div class="mt-4 p-3 rounded-lg bg-[#F7F9FD] border border-[#D3DBE6] grid grid-cols-1 sm:grid-cols-3 gap-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-[#5B6573]">segment</span>
+<div>
+<span class="text-[10px] uppercase tracking-wider text-[#5B6573] block">Segment Load</span>
+<span class="font-mono text-xs font-semibold text-[#13263B]">148 / 160 chars (1 seg)</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-[#5B6573]">payments</span>
+<div>
+<span class="text-[10px] uppercase tracking-wider text-[#5B6573] block">Estimated Rate</span>
+<span class="font-mono text-xs font-semibold text-[#13263B]">EGP <span class="text-[#FF5E00]">0.18</span> / dispatch</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-[#5B6573]">code</span>
+<div>
+<span class="text-[10px] uppercase tracking-wider text-[#5B6573] block">Encoding</span>
+<span class="font-mono text-xs font-semibold text-[#13263B]">GSM 7-bit (Standard)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- ======================================================= -->
+<!-- Live Mobile Handset Preview Box                         -->
+<!-- ======================================================= -->
+<div class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl shadow-sm p-6">
+<div class="flex items-center justify-between pb-3 mb-4 border-b border-[#D3DBE6]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-[#1E4164]">smartphone</span>
+<h4 class="font-headline-sm text-headline-sm text-[#13263B]">Live Handset Render Preview</h4>
+</div>
+<span class="font-body-sm text-body-sm text-[#5B6573] flex items-center gap-1.5">
+              Sample Patient: <strong class="text-[#13263B]">Hazem Mostafa</strong> (+20 100 234 5678)
+            </span>
+</div>
+<!-- Realistic Phone Mockup Bubble Container -->
+<div class="p-6 rounded-xl bg-[#F0F4FA] border border-[#D3DBE6] flex flex-col items-center">
+<!-- Mobile Screen Frame Representation -->
+<div class="w-full max-w-md bg-white rounded-2xl border border-[#C6D0DE] shadow-sm p-4 space-y-3">
+<!-- Sender Header in Mockup -->
+<div class="flex items-center justify-between border-b border-[#F1F5F9] pb-2">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-primary-container text-white flex items-center justify-center text-[10px] font-bold">
+                    CF
+                  </div>
+<div>
+<span class="text-xs font-bold text-[#13263B] block">ClinicFlow</span>
+<span class="text-[10px] text-[#64748B]">Vodafone Route • Verified Gateway</span>
+</div>
+</div>
+<span class="text-[10px] text-[#64748B] font-mono">Today 14:32</span>
+</div>
+<!-- SMS Chat Bubble -->
+<div class="bg-[#EFF6FF] text-[#13263B] border border-[#DBEAFE] rounded-2xl rounded-tl-sm p-3.5 text-xs leading-relaxed shadow-xs space-y-2">
+<p>
+                  Dear <strong class="text-[#002B4C] font-semibold">Hazem Mostafa</strong>, your appointment with Dr. <strong class="text-[#002B4C] font-semibold">Tarek Mansour</strong> (<span class="text-[#1E4164]">Consultant Cardiology</span>) at ClinicFlow <strong class="text-[#002B4C] font-semibold">Nasr City Hub</strong> is confirmed for <span class="underline decoration-[#015C9A]/40 font-semibold">Thursday, 12 Oct 2024</span> at <span class="font-semibold text-[#002B4C]">06:30 PM</span>.
+                </p>
+<div class="pt-1 flex items-center justify-between text-[11px] text-[#4E6077] border-t border-[#DBEAFE]/80">
+<span>Ticket: <strong class="font-mono text-[#002B4C]">#NC-CAR-882</strong></span>
+<span>14 Abbas El Akkad St.</span>
+</div>
+<p class="text-[11px] text-[#4E6077] italic">Questions or rescheduling? Call 16789.</p>
+</div>
+<!-- SMS Delivery Meta Footer -->
+<div class="flex items-center justify-end gap-1 text-[10px] text-[#64748B]">
+<span class="material-symbols-outlined text-[13px] text-[#059669]">done_all</span>
+<span>Delivered via Egypt SMS Aggregator</span>
+</div>
+</div>
+</div>
+<!-- Bottom Action Controls -->
+<div class="flex flex-wrap items-center justify-between gap-3 pt-6 mt-2">
+<button class="px-4 py-2.5 rounded-lg border border-[#D3DBE6] text-[#5B6573] hover:text-[#DC2626] hover:bg-[#FEF2F2] font-label-md text-label-md transition-colors" type="button">
+              Reset to Default
+            </button>
+<div class="flex items-center gap-3">
+<button class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-[#1E4164] bg-white text-[#1E4164] font-label-md text-label-md hover:bg-[#F7F9FD] transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">send_to_mobile</span>
+<span>Send Sample to My Phone</span>
+</button>
+<button class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#1E4164] text-white font-label-md text-label-md hover:bg-[#13263B] transition-colors shadow-sm active:scale-[0.99]" type="button">
+<span class="material-symbols-outlined text-[18px]">save</span>
+<span>Save Template Changes</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow Egypt - Shift Cash Drawer &amp; Reconciliation</title>
+<!-- Material Symbols & Typography -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed": "#ffdbce",
+            "surface-dim": "#c9dbf7",
+            "primary": "#002b4c",
+            "primary-fixed": "#d1e4ff",
+            "on-error-container": "#93000a",
+            "tertiary-fixed-dim": "#ffb599",
+            "error-container": "#ffdad6",
+            "on-tertiary-container": "#ff8b5b",
+            "tertiary-container": "#722600",
+            "surface-container-high": "#dbe9ff",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "on-secondary-fixed-variant": "#00497c",
+            "secondary-container": "#7cbafe",
+            "secondary-fixed": "#d1e4ff",
+            "on-tertiary": "#ffffff",
+            "on-background": "#081c31",
+            "surface-bright": "#f8f9ff",
+            "secondary-fixed-dim": "#9ecaff",
+            "on-primary-fixed": "#001d36",
+            "on-primary-container": "#8dadd6",
+            "surface-container-highest": "#d2e4ff",
+            "inverse-primary": "#a8c9f3",
+            "surface": "#f8f9ff",
+            "surface-tint": "#406185",
+            "tertiary": "#4e1700",
+            "outline": "#73777f",
+            "outline-variant": "#c3c6cf",
+            "surface-container-low": "#eff4ff",
+            "on-primary": "#ffffff",
+            "error": "#ba1a1a",
+            "on-surface-variant": "#43474e",
+            "on-surface": "#081c31",
+            "on-secondary-fixed": "#001d36",
+            "on-tertiary-fixed": "#370e00",
+            "inverse-on-surface": "#eaf1ff",
+            "surface-container": "#e5eeff",
+            "inverse-surface": "#1f3247",
+            "primary-fixed-dim": "#a8c9f3",
+            "background": "#f8f9ff",
+            "on-secondary": "#ffffff",
+            "secondary": "#1061a0",
+            "on-primary-fixed-variant": "#27496c",
+            "on-secondary-container": "#004a7d",
+            "surface-variant": "#d2e4ff",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "primary-container": "#1e4164"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-lg": "1rem",
+            "space-sm": "0.5rem",
+            "gutter-desktop": "1.5rem",
+            "margin-desktop": "2rem",
+            "space-md": "0.75rem",
+            "space-xl": "1.5rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem",
+            "margin": "1rem"
+          },
+          "fontFamily": {
+            "display-lg": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "tabular-data": ["Inter"],
+            "label-sm": ["Inter"]
+          },
+          "fontSize": {
+            "display-lg": ["2rem", { "lineHeight": "2.5rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-md": ["1.25rem", { "lineHeight": "1.75rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-md": ["0.875rem", { "lineHeight": "1.25rem", "fontWeight": "400" }],
+            "label-md": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.025em", "fontWeight": "600" }],
+            "headline-sm": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "600" }],
+            "body-lg": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "400" }],
+            "body-sm": ["0.75rem", { "lineHeight": "1rem", "fontWeight": "400" }],
+            "headline-lg": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "tabular-data": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0", "fontWeight": "500" }],
+            "label-sm": ["0.6875rem", { "lineHeight": "0.875rem", "letterSpacing": "0.05em", "fontWeight": "600" }]
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .num-tabular {
+      font-feature-settings: "tnum" 1;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased h-full overflow-x-hidden">
+<div class="flex h-screen w-full bg-background">
+<!-- SHARED COMPONENT: SideNavBar (Strict implementation from JSON) -->
+<aside class="fixed top-0 left-0 h-screen w-64 z-40 bg-surface-container-lowest border-r border-outline-variant flex flex-col justify-between p-4 select-none">
+<div class="flex flex-col gap-6">
+<!-- Brand Anchor Header -->
+<div class="flex items-center gap-3 px-2 py-1">
+<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-surface-container-lowest shadow-sm">
+<span class="material-symbols-outlined text-2xl" data-icon="local_hospital">local_hospital</span>
+</div>
+<div>
+<h1 class="text-headline-sm font-headline-sm font-bold text-primary tracking-tight">ClinicFlow Egypt</h1>
+<button class="flex items-center gap-1 text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
+<span>Nasr City ▾</span>
+</button>
+</div>
+</div>
+<!-- Quick CTA Button -->
+<button class="w-full flex items-center justify-center gap-2 bg-primary-container text-on-primary py-2.5 px-4 rounded-xl text-label-md font-label-md font-semibold hover:opacity-95 transition-opacity shadow-sm">
+<span class="material-symbols-outlined text-base" data-icon="add_circle">add_circle</span>
+<span>Quick Check-in</span>
+</button>
+<!-- Navigation Tab Items (Active mapping: Cash session) -->
+<nav aria-label="Main Navigation" class="flex flex-col gap-1.5">
+<!-- 1. Today -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="calendar_today">calendar_today</span>
+<span class="text-label-md font-label-md">Today</span>
+</a>
+<!-- 2. Queue -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="format_list_numbered">format_list_numbered</span>
+<span class="text-label-md font-label-md">Queue</span>
+</a>
+<!-- 3. Patients -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="group">group</span>
+<span class="text-label-md font-label-md">Patients</span>
+</a>
+<!-- 4. Book -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="add_box">add_box</span>
+<span class="text-label-md font-label-md">Book</span>
+</a>
+<!-- 5. Payments -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="payments">payments</span>
+<span class="text-label-md font-label-md">Payments</span>
+</a>
+<!-- 6. Cash session (ACTIVE MATCH: Injected exact style_active_navigation classes) -->
+<a class="flex items-center gap-3 px-3 py-2 bg-surface-container text-primary-container font-semibold rounded-lg border-l-4 border-primary-container" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="point_of_sale" data-weight="fill" style="font-variation-settings: 'FILL' 1;">point_of_sale</span>
+<span class="text-label-md font-label-md">Cash session</span>
+</a>
+</nav>
+</div>
+<!-- Footer User Anchor -->
+<div class="border-t border-outline-variant pt-3">
+<div class="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-surface-container-low transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-2xl text-primary" data-icon="account_circle">account_circle</span>
+<div class="flex flex-col overflow-hidden">
+<span class="text-label-md font-label-md text-on-surface truncate">Mona Samir · Receptionist</span>
+<span class="text-label-sm font-label-sm text-outline">Desk 1 · Morning</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- MAIN WRAPPER: pl-64 for Fixed Sidebar offset -->
+<div class="flex-1 pl-64 flex flex-col h-full overflow-hidden">
+<!-- SHARED COMPONENT: TopNavBar -->
+<header class="w-full h-14 bg-surface-container-lowest border-b border-outline-variant flex items-center justify-between px-6 z-30 shrink-0">
+<!-- Left: Search and Section Title -->
+<div class="flex items-center gap-6 flex-1 max-w-xl">
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="material-symbols-outlined text-xl text-primary" data-icon="payments">payments</span>
+<span class="text-headline-md font-headline-md text-primary">Shift Cash Drawer &amp; Reconciliation</span>
+</div>
+<div class="relative w-72">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg" data-icon="search">search</span>
+<input class="w-full h-9 pl-9 pr-3 rounded-xl border border-outline-variant bg-surface-container-lowest text-body-sm font-body-sm text-on-surface placeholder-outline focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container" placeholder="Search receipt, patient, EGP amount..." type="text"/>
+</div>
+</div>
+<!-- Right Trailing Controls -->
+<div class="flex items-center gap-4">
+<button class="px-2.5 py-1 text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors border border-outline-variant rounded-lg">
+            EN | عربي
+          </button>
+<button aria-label="Notifications" class="relative p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors">
+<span class="material-symbols-outlined text-xl" data-icon="notifications">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-tertiary-container ring-2 ring-surface-container-lowest"></span>
+</button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 bg-error text-on-error rounded-xl text-label-md font-label-md font-semibold hover:opacity-95 transition-opacity">
+<span class="material-symbols-outlined text-sm" data-icon="warning">warning</span>
+<span>Emergency Admit</span>
+</button>
+<div class="h-6 w-[1px] bg-outline-variant"></div>
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary-container text-surface-container-lowest flex items-center justify-center text-label-md font-label-md font-bold">
+              MS
+            </div>
+</div>
+</div>
+</header>
+<!-- SCROLLABLE WORKSPACE CANVAS -->
+<main class="flex-1 overflow-y-auto p-6 bg-background space-y-6">
+<!-- 1. TOP STATUS BANNER -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
+<div class="flex items-start md:items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-primary-container shrink-0">
+<span class="material-symbols-outlined text-2xl" data-icon="point_of_sale">point_of_sale</span>
+</div>
+<div class="space-y-1">
+<div class="flex flex-wrap items-center gap-2.5">
+<h2 class="text-headline-md font-headline-md text-primary font-bold">Open Session: Desk 1 - Morning Shift</h2>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-surface-container text-primary-container font-semibold border border-secondary-container">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+                  Active (5h 32m)
+                </span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant flex flex-wrap items-center gap-2">
+<span>Opened: <strong class="text-on-surface font-medium">Today at 08:02 AM</strong></span>
+<span class="text-outline-variant">•</span>
+<span>By: <strong class="text-on-surface font-medium">Mona Samir</strong></span>
+<span class="text-outline-variant">•</span>
+<span>Opening Float: <strong class="num-tabular text-on-surface font-medium">EGP 500.00</strong></span>
+</p>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-3 shrink-0">
+<button class="h-[38px] px-3.5 rounded-xl border border-outline-variant bg-surface-container-lowest text-primary font-semibold text-label-md font-label-md hover:bg-surface-container-low transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base" data-icon="print">print</span>
+<span>Print Interim Shift X-Report</span>
+</button>
+<button class="h-[38px] px-4 rounded-xl bg-primary-container text-on-primary font-semibold text-label-md font-label-md hover:opacity-95 transition-opacity flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-base" data-icon="lock">lock</span>
+<span>Close Session &amp; Reconcile</span>
+</button>
+</div>
+</section>
+<!-- 2. SUMMARY METRICS ROW (4 Cards) -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Metric 1: Opening Float -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="text-label-sm font-label-sm uppercase tracking-wider font-semibold">Opening Float</span>
+<span class="material-symbols-outlined text-lg text-outline" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+<div class="mt-3">
+<div class="text-headline-lg font-headline-lg font-bold text-primary num-tabular">EGP 500.00</div>
+<span class="text-body-sm font-body-sm text-outline">Verified at shift hand-in</span>
+</div>
+</div>
+<!-- Metric 2: Cash Collected -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="text-label-sm font-label-sm uppercase tracking-wider font-semibold">Cash Collected</span>
+<span class="material-symbols-outlined text-lg text-secondary" data-icon="add_circle">add_circle</span>
+</div>
+<div class="mt-3">
+<div class="text-headline-lg font-headline-lg font-bold text-primary num-tabular">EGP 4,850.00</div>
+<span class="text-body-sm font-body-sm text-on-surface-variant">18 cash transactions today</span>
+</div>
+</div>
+<!-- Metric 3: Cash Refunds / Payouts -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="text-label-sm font-label-sm uppercase tracking-wider font-semibold">Cash Refunds / Payouts</span>
+<span class="material-symbols-outlined text-lg text-error" data-icon="remove_circle">remove_circle</span>
+</div>
+<div class="mt-3">
+<div class="text-headline-lg font-headline-lg font-bold text-error num-tabular">- EGP 150.00</div>
+<span class="text-body-sm font-body-sm text-outline">1 patient refund processed</span>
+</div>
+</div>
+<!-- Metric 4: Expected Drawer Cash -->
+<div class="bg-surface-container-lowest border-2 border-primary-container rounded-xl p-4 flex flex-col justify-between relative overflow-hidden bg-gradient-to-br from-surface-container-lowest to-surface-container-low">
+<div class="flex items-center justify-between text-primary-container">
+<span class="text-label-sm font-label-sm uppercase tracking-wider font-bold">Expected Drawer Cash</span>
+<span class="material-symbols-outlined text-lg text-primary" data-icon="savings">savings</span>
+</div>
+<div class="mt-3">
+<div class="text-headline-lg font-headline-lg font-extrabold text-primary num-tabular">EGP 5,200.00</div>
+<span class="text-body-sm font-body-sm text-on-surface-variant font-medium">Float + Inflows - Outflows</span>
+</div>
+</div>
+</section>
+<!-- 3. PAYMENT METHODS BREAKDOWN BAR & STATS -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 space-y-4">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div>
+<h3 class="text-headline-sm font-headline-sm text-primary font-bold">Payment Methods Breakdown</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Real-time revenue split across registered point-of-sale terminals</p>
+</div>
+<div class="text-right">
+<span class="text-label-sm font-label-sm text-outline uppercase font-semibold">Total Shift Turnover</span>
+<div class="text-headline-md font-headline-md font-bold text-primary num-tabular">EGP 12,450.00</div>
+</div>
+</div>
+<!-- Multi-segment Progress Bar -->
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden flex">
+<!-- Cash: 37.8% -->
+<div class="bg-primary-container h-full transition-all duration-300" style="width: 37.8%;" title="Cash: 37.8%"></div>
+<!-- POS Cards: 50.2% -->
+<div class="bg-secondary h-full transition-all duration-300" style="width: 50.2%;" title="POS Cards: 50.2%"></div>
+<!-- InstaPay / Wallets: 12.0% -->
+<div class="bg-secondary-container h-full transition-all duration-300" style="width: 12.0%;" title="InstaPay / Wallets: 12.0%"></div>
+</div>
+<!-- Legend Cards Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+<div class="p-3 rounded-lg border border-outline-variant flex items-center justify-between bg-surface-bright">
+<div class="flex items-center gap-2.5">
+<span class="w-3 h-3 rounded-full bg-primary-container shrink-0"></span>
+<div>
+<div class="text-label-md font-label-md font-semibold text-primary">Cash</div>
+<div class="text-body-sm font-body-sm text-outline">Physical drawer notes</div>
+</div>
+</div>
+<div class="text-right">
+<div class="text-body-md font-body-md font-bold text-primary num-tabular">EGP 4,700.00</div>
+<div class="text-label-sm font-label-sm text-outline">37.8%</div>
+</div>
+</div>
+<div class="p-3 rounded-lg border border-outline-variant flex items-center justify-between bg-surface-bright">
+<div class="flex items-center gap-2.5">
+<span class="w-3 h-3 rounded-full bg-secondary shrink-0"></span>
+<div>
+<div class="text-label-md font-label-md font-semibold text-primary">POS Cards</div>
+<div class="text-body-sm font-body-sm text-outline">Banque Misr &amp; CIB POS</div>
+</div>
+</div>
+<div class="text-right">
+<div class="text-body-md font-body-md font-bold text-primary num-tabular">EGP 6,250.00</div>
+<div class="text-label-sm font-label-sm text-outline">50.2%</div>
+</div>
+</div>
+<div class="p-3 rounded-lg border border-outline-variant flex items-center justify-between bg-surface-bright">
+<div class="flex items-center gap-2.5">
+<span class="w-3 h-3 rounded-full bg-secondary-container shrink-0"></span>
+<div>
+<div class="text-label-md font-label-md font-semibold text-primary">InstaPay / Wallets</div>
+<div class="text-body-sm font-body-sm text-outline">Instant CBE direct rails</div>
+</div>
+</div>
+<div class="text-right">
+<div class="text-body-md font-body-md font-bold text-primary num-tabular">EGP 1,500.00</div>
+<div class="text-label-sm font-label-sm text-outline">12.0%</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. DUAL COLUMN WORKFLOW: TRANSACTIONS (60%) + RECONCILIATION MODAL (40%) -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<!-- LEFT 7 COLS: RECENT DRAWER TRANSACTIONS TABLE -->
+<div class="lg:col-span-7 bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="p-4 border-b border-outline-variant flex items-center justify-between">
+<div>
+<h3 class="text-headline-sm font-headline-sm font-bold text-primary">Recent Drawer Transactions</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Live audit trail of desk payments and reversals</p>
+</div>
+<span class="text-label-sm font-label-sm text-outline">4 transactions listed</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface border-b border-outline-variant text-label-sm font-label-sm text-primary uppercase tracking-wider">
+<th class="py-2.5 px-3">Time</th>
+<th class="py-2.5 px-3">Receipt #</th>
+<th class="py-2.5 px-3">Patient</th>
+<th class="py-2.5 px-3">Description</th>
+<th class="py-2.5 px-3">Method</th>
+<th class="py-2.5 px-3 text-right">Inflow</th>
+<th class="py-2.5 px-3 text-right">Outflow</th>
+<th class="py-2.5 px-3">Staff</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant text-body-sm font-body-sm">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="py-3 px-3 font-medium num-tabular text-on-surface">10:28 AM</td>
+<td class="py-3 px-3 num-tabular font-medium text-secondary">RC-9945</td>
+<td class="py-3 px-3 font-semibold text-primary">Hazem Mostafa</td>
+<td class="py-3 px-3 text-on-surface-variant">Consultation &amp; ECG</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-label-sm font-label-sm bg-surface-container text-primary-container font-medium">
+                        Cash
+                      </span>
+</td>
+<td class="py-3 px-3 text-right num-tabular font-semibold text-primary">+EGP 350.00</td>
+<td class="py-3 px-3 text-right text-outline">-</td>
+<td class="py-3 px-3 text-on-surface-variant">Mona Samir</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="py-3 px-3 font-medium num-tabular text-on-surface">10:14 AM</td>
+<td class="py-3 px-3 num-tabular font-medium text-secondary">RC-9944</td>
+<td class="py-3 px-3 font-semibold text-primary">Youssef Amr</td>
+<td class="py-3 px-3 text-on-surface-variant">Deposit</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-label-sm font-label-sm bg-surface-container text-primary-container font-medium">
+                        Cash
+                      </span>
+</td>
+<td class="py-3 px-3 text-right num-tabular font-semibold text-primary">+EGP 100.00</td>
+<td class="py-3 px-3 text-right text-outline">-</td>
+<td class="py-3 px-3 text-on-surface-variant">Mona Samir</td>
+</tr>
+<!-- Row 3: Refund -->
+<tr class="hover:bg-surface-bright transition-colors bg-error-container/20">
+<td class="py-3 px-3 font-medium num-tabular text-on-surface">09:45 AM</td>
+<td class="py-3 px-3 num-tabular font-medium text-error">RF-0120</td>
+<td class="py-3 px-3 font-semibold text-primary">Salma Nabil</td>
+<td class="py-3 px-3 text-on-surface-variant">Cancelled Booking Refund</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-label-sm font-label-sm bg-error-container text-on-error-container font-medium">
+                        Cash
+                      </span>
+</td>
+<td class="py-3 px-3 text-right text-outline">-</td>
+<td class="py-3 px-3 text-right num-tabular font-bold text-error">-EGP 150.00</td>
+<td class="py-3 px-3 text-on-surface-variant">Mona Samir</td>
+</tr>
+<!-- Row 4: POS -->
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="py-3 px-3 font-medium num-tabular text-on-surface">09:30 AM</td>
+<td class="py-3 px-3 num-tabular font-medium text-secondary">RC-9943</td>
+<td class="py-3 px-3 font-semibold text-primary">Tarek Mansour</td>
+<td class="py-3 px-3 text-on-surface-variant">Walk-in Consultation</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-label-sm font-label-sm bg-surface-container-high text-on-secondary-fixed-variant font-medium">
+                        POS Card
+                      </span>
+</td>
+<td class="py-3 px-3 text-right num-tabular font-semibold text-primary">+EGP 450.00</td>
+<td class="py-3 px-3 text-right text-outline">-</td>
+<td class="py-3 px-3 text-on-surface-variant">Mona Samir</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-3 border-t border-outline-variant bg-surface flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-outline">Viewing morning session ledger</span>
+<button class="text-label-sm font-label-sm font-semibold text-primary hover:underline flex items-center gap-1">
+<span>Export Audit CSV</span>
+<span class="material-symbols-outlined text-sm" data-icon="download">download</span>
+</button>
+</div>
+</div>
+<!-- RIGHT 5 COLS: EMBEDDED CLOSE SESSION RECONCILIATION DIALOG -->
+<div class="lg:col-span-5 bg-surface-container-lowest border-2 border-primary-container rounded-xl p-5 shadow-lg space-y-5">
+<div class="flex items-center justify-between pb-3 border-b border-outline-variant">
+<div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container" data-icon="fact_check">fact_check</span>
+<h3 class="text-headline-sm font-headline-sm font-bold text-primary">Close Session Reconciliation (Desk 1)</h3>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-0.5">Physical drawer count verification</p>
+</div>
+<span class="material-symbols-outlined text-outline cursor-pointer hover:text-on-surface" data-icon="info">info</span>
+</div>
+<!-- Expected vs Counted Comparison -->
+<div class="grid grid-cols-2 gap-3 p-3 rounded-lg bg-surface border border-outline-variant">
+<div>
+<span class="text-label-sm font-label-sm text-on-surface-variant font-medium">Expected Cash</span>
+<div class="text-headline-md font-headline-md font-bold text-primary num-tabular mt-0.5">EGP 5,200.00</div>
+</div>
+<div>
+<label class="text-label-sm font-label-sm text-on-surface-variant font-medium" for="counted-cash">Counted Cash</label>
+<div class="relative mt-0.5">
+<input class="w-full h-9 px-3 rounded-lg border border-outline-variant font-headline-md font-headline-md font-bold text-primary bg-surface-container-lowest num-tabular focus:border-primary-container focus:ring-1 focus:ring-primary-container" id="counted-cash" type="text" value="EGP 5,200.00"/>
+</div>
+</div>
+</div>
+<!-- Variance Indicator (Requested Pill) -->
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container border border-secondary-container">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span class="text-label-md font-label-md font-bold text-primary">Variance: EGP 0.00 (Perfect Match)</span>
+</div>
+<span class="text-label-sm font-label-sm font-semibold text-secondary num-tabular">0.0% dev</span>
+</div>
+<!-- Denomination Counter Breakdown Pills -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<label class="text-label-sm font-label-sm uppercase font-semibold text-on-surface-variant">Physical Banknote Breakdown</label>
+<span class="text-label-sm font-label-sm text-outline">Egyptian Pound (EGP)</span>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+<!-- 200s -->
+<div class="p-2 rounded-lg border border-outline-variant bg-surface-bright text-center">
+<span class="text-label-sm font-label-sm font-bold text-primary">200s</span>
+<div class="text-label-md font-label-md font-bold text-primary-container num-tabular mt-0.5">18 <span class="text-outline font-normal">pcs</span></div>
+<div class="text-[10px] text-outline num-tabular">EGP 3,600</div>
+</div>
+<!-- 100s -->
+<div class="p-2 rounded-lg border border-outline-variant bg-surface-bright text-center">
+<span class="text-label-sm font-label-sm font-bold text-primary">100s</span>
+<div class="text-label-md font-label-md font-bold text-primary-container num-tabular mt-0.5">12 <span class="text-outline font-normal">pcs</span></div>
+<div class="text-[10px] text-outline num-tabular">EGP 1,200</div>
+</div>
+<!-- 50s -->
+<div class="p-2 rounded-lg border border-outline-variant bg-surface-bright text-center">
+<span class="text-label-sm font-label-sm font-bold text-primary">50s</span>
+<div class="text-label-md font-label-md font-bold text-primary-container num-tabular mt-0.5">6 <span class="text-outline font-normal">pcs</span></div>
+<div class="text-[10px] text-outline num-tabular">EGP 300</div>
+</div>
+<!-- 20s -->
+<div class="p-2 rounded-lg border border-outline-variant bg-surface-bright text-center">
+<span class="text-label-sm font-label-sm font-bold text-primary">20s</span>
+<div class="text-label-md font-label-md font-bold text-primary-container num-tabular mt-0.5">5 <span class="text-outline font-normal">pcs</span></div>
+<div class="text-[10px] text-outline num-tabular">EGP 100</div>
+</div>
+</div>
+</div>
+<!-- Shift Handover Notes Textarea -->
+<div class="space-y-1.5">
+<label class="text-label-sm font-label-sm font-semibold text-on-surface-variant flex items-center justify-between" for="handover-notes">
+<span>Shift Handover Notes</span>
+<span class="text-outline font-normal">Optional</span>
+</label>
+<textarea class="w-full p-2.5 text-body-sm font-body-sm rounded-lg border border-outline-variant text-on-surface bg-surface-container-lowest focus:border-primary-container focus:ring-1 focus:ring-primary-container resize-none" id="handover-notes" rows="3">Morning shift closed smoothly. Handing drawer over to Evening receptionist Salma.</textarea>
+</div>
+<!-- Action Buttons -->
+<div class="pt-2 flex flex-col sm:flex-row items-center gap-3">
+<button class="w-full sm:w-auto px-4 h-[38px] rounded-lg border border-outline-variant bg-surface-container-lowest text-primary font-semibold text-label-md font-label-md hover:bg-surface transition-colors">
+                Save Draft
+              </button>
+<button class="w-full sm:flex-1 h-[38px] px-4 rounded-lg bg-primary-container text-on-primary font-semibold text-label-md font-label-md hover:opacity-95 transition-opacity flex items-center justify-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-base" data-icon="task_alt">task_alt</span>
+<span>Finalize &amp; Close Shift (Print Z-Report)</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+</div>
+</div>
+</body></html>

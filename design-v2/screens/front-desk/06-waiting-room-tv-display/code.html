@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Waiting Room TV Display - ClinicFlow Egypt</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed": "#ffdbce",
+            "surface-dim": "#c9dbf7",
+            "primary": "#002b4c",
+            "primary-fixed": "#d1e4ff",
+            "on-error-container": "#93000a",
+            "tertiary-fixed-dim": "#ffb599",
+            "error-container": "#ffdad6",
+            "on-tertiary-container": "#ff8b5b",
+            "tertiary-container": "#722600",
+            "surface-container-high": "#dbe9ff",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "on-secondary-fixed-variant": "#00497c",
+            "secondary-container": "#7cbafe",
+            "secondary-fixed": "#d1e4ff",
+            "on-tertiary": "#ffffff",
+            "on-background": "#081c31",
+            "surface-bright": "#f8f9ff",
+            "secondary-fixed-dim": "#9ecaff",
+            "on-primary-fixed": "#001d36",
+            "on-primary-container": "#8dadd6",
+            "surface-container-highest": "#d2e4ff",
+            "inverse-primary": "#a8c9f3",
+            "surface": "#f8f9ff",
+            "surface-tint": "#406185",
+            "tertiary": "#4e1700",
+            "outline": "#73777f",
+            "outline-variant": "#c3c6cf",
+            "surface-container-low": "#eff4ff",
+            "on-primary": "#ffffff",
+            "error": "#ba1a1a",
+            "on-surface-variant": "#43474e",
+            "on-surface": "#081c31",
+            "on-secondary-fixed": "#001d36",
+            "on-tertiary-fixed": "#370e00",
+            "inverse-on-surface": "#eaf1ff",
+            "surface-container": "#e5eeff",
+            "inverse-surface": "#1f3247",
+            "primary-fixed-dim": "#a8c9f3",
+            "background": "#f8f9ff",
+            "on-secondary": "#ffffff",
+            "secondary": "#1061a0",
+            "on-primary-fixed-variant": "#27496c",
+            "on-secondary-container": "#004a7d",
+            "surface-variant": "#d2e4ff",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "primary-container": "#1e4164"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "fontFamily": {
+            "display-lg": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "label-md": ["Inter", "sans-serif"],
+            "headline-sm": ["Plus Jakarta Sans", "sans-serif"],
+            "body-lg": ["Inter", "sans-serif"],
+            "body-sm": ["Inter", "sans-serif"],
+            "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
+            "tabular-data": ["Inter", "sans-serif"],
+            "label-sm": ["Inter", "sans-serif"]
+          },
+          "fontSize": {
+            "display-lg": ["2rem", { "lineHeight": "2.5rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-md": ["1.25rem", { "lineHeight": "1.75rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-md": ["0.875rem", { "lineHeight": "1.25rem", "fontWeight": "400" }],
+            "label-md": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.025em", "fontWeight": "600" }],
+            "headline-sm": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "600" }],
+            "body-lg": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "400" }],
+            "body-sm": ["0.75rem", { "lineHeight": "1rem", "fontWeight": "400" }],
+            "headline-lg": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "tabular-data": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0", "fontWeight": "500" }],
+            "label-sm": ["0.6875rem", { "lineHeight": "0.875rem", "letterSpacing": "0.05em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    @keyframes pulse-ring {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(124, 186, 254, 0.4), inset 0 0 0 2px #7cbafe;
+      }
+      50% {
+        box-shadow: 0 0 24px 4px rgba(124, 186, 254, 0.7), inset 0 0 0 2px #d1e4ff;
+      }
+    }
+    .active-glow {
+      animation: pulse-ring 2.2s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="bg-[#13263B] text-surface-container-lowest antialiased h-screen w-screen overflow-hidden flex flex-col justify-between selection:bg-secondary select-none font-body-md">
+<!-- TV Top Navigation & Header Bar -->
+<header class="w-full bg-[#0a1522] border-b border-[#223d5b] px-8 py-4 flex items-center justify-between shrink-0">
+<div class="flex items-center gap-5">
+<!-- ClinicFlow Brand Icon & Identity -->
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center border border-secondary-container/40">
+<span class="material-symbols-outlined text-secondary-fixed text-2xl" data-icon="local_hospital">local_hospital</span>
+</div>
+<div>
+<span class="text-headline-md font-headline-md tracking-tight font-bold text-surface-container-lowest flex items-center gap-2">
+            ClinicFlow Egypt
+            <span class="text-label-sm font-label-sm text-secondary-fixed-dim bg-[#1e4164] px-2 py-0.5 rounded-full border border-secondary/30">PUBLIC MONITOR</span>
+</span>
+<p class="text-label-md font-label-md text-surface-dim tracking-wide">Nasr City Medical Center · Waiting Lounge</p>
+</div>
+</div>
+</div>
+<!-- Live Date & Clock Display -->
+<div class="flex items-center gap-6">
+<div class="text-right">
+<div class="text-label-md font-label-md text-surface-dim" id="live-date">Tuesday, 24 October 2025</div>
+<div class="text-headline-lg font-headline-lg font-bold text-surface-container-lowest font-tabular-data tracking-tight" id="live-clock">10:34 AM</div>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#1c3652] border border-[#2e547c]">
+<span class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+</span>
+<span class="text-label-sm font-label-sm text-surface-container-high tracking-wider uppercase">Live Dispatch</span>
+</div>
+</div>
+</header>
+<!-- Main Stage: Doctor Consultation Stations (3 Columns) -->
+<main class="flex-1 w-full p-8 max-w-[1920px] mx-auto grid grid-cols-3 gap-8 items-stretch">
+<!-- Station 1: Cardiology (Active Pulse State) -->
+<section class="bg-[#1a324d] rounded-xl border-2 border-secondary-container/60 p-6 flex flex-col justify-between shadow-2xl relative overflow-hidden">
+<!-- Glow ambient backdrop effect -->
+<div class="absolute -top-16 -right-16 w-48 h-48 bg-secondary-container/10 rounded-full blur-3xl pointer-events-none"></div>
+<!-- Station Header -->
+<div class="border-b border-[#2d4d73] pb-4">
+<div class="flex items-center justify-between mb-2">
+<span class="text-label-sm font-label-sm tracking-wider uppercase bg-primary-container text-secondary-fixed px-3 py-1 rounded-full border border-secondary/40 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm" data-icon="meeting_room">meeting_room</span>
+            Room 101
+          </span>
+<span class="text-label-md font-label-md text-surface-dim font-medium">1st Floor · East Wing</span>
+</div>
+<h2 class="text-headline-lg font-headline-lg text-surface-container-lowest font-bold">Dr. Ahmed Fathy</h2>
+<p class="text-body-md font-body-md text-secondary-fixed flex items-center gap-1.5 mt-0.5">
+<span class="material-symbols-outlined text-base" data-icon="cardiology">cardiology</span>
+          Cardiology &amp; Cardiac Care
+        </p>
+</div>
+<!-- Now Serving Big Focus Box -->
+<div class="my-4 bg-[#102438] rounded-xl p-5 border border-secondary-container/30 text-center active-glow transition-all">
+<span class="text-label-sm font-label-sm uppercase tracking-widest text-secondary-container font-bold block mb-1">
+          Now Serving
+        </span>
+<div class="text-[72px] leading-none font-bold text-surface-container-lowest font-tabular-data tracking-tight my-2">
+          A-14
+        </div>
+<div class="flex items-center justify-center gap-2 text-label-md font-label-md text-surface-dim mt-2">
+<span class="material-symbols-outlined text-base text-secondary-fixed" data-icon="directions_walk">directions_walk</span>
+          Proceed to Room 101 · 1st Floor
+        </div>
+</div>
+<!-- Next in Line & Station Metrics -->
+<div class="space-y-4">
+<div>
+<div class="text-label-sm font-label-sm text-surface-dim uppercase tracking-wider mb-2 flex items-center justify-between">
+<span>Next In Line</span>
+<span class="text-secondary-fixed">Queue Ahead: 2</span>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-[#102438] border border-[#28486d] rounded-lg py-2.5 px-3 text-center">
+<span class="block text-label-sm font-label-sm text-surface-dim">Next 1</span>
+<span class="text-headline-md font-headline-md font-bold text-surface-container-lowest font-tabular-data">A-15</span>
+</div>
+<div class="bg-[#102438] border border-[#28486d] rounded-lg py-2.5 px-3 text-center">
+<span class="block text-label-sm font-label-sm text-surface-dim">Next 2</span>
+<span class="text-headline-md font-headline-md font-bold text-surface-container-lowest font-tabular-data">T-02</span>
+</div>
+</div>
+</div>
+<!-- Average wait indicator -->
+<div class="flex items-center justify-between pt-2 border-t border-[#2d4d73] text-body-sm font-body-sm text-surface-dim">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base text-secondary-container" data-icon="schedule">schedule</span>
+            Est. Consultation
+          </span>
+<span class="font-bold text-surface-container-lowest font-tabular-data">~12 mins average wait</span>
+</div>
+</div>
+</section>
+<!-- Station 2: Pediatrics -->
+<section class="bg-[#162d46] rounded-xl border border-[#27466c] p-6 flex flex-col justify-between shadow-xl relative overflow-hidden">
+<!-- Station Header -->
+<div class="border-b border-[#264467] pb-4">
+<div class="flex items-center justify-between mb-2">
+<span class="text-label-sm font-label-sm tracking-wider uppercase bg-[#1f3a59] text-surface-container-high px-3 py-1 rounded-full border border-outline/30 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm" data-icon="meeting_room">meeting_room</span>
+            Room 104
+          </span>
+<span class="text-label-md font-label-md text-surface-dim font-medium">Ground Floor · Main Corridor</span>
+</div>
+<h2 class="text-headline-lg font-headline-lg text-surface-container-lowest font-bold">Dr. Laila Hassan</h2>
+<p class="text-body-md font-body-md text-secondary-fixed flex items-center gap-1.5 mt-0.5">
+<span class="material-symbols-outlined text-base" data-icon="child_care">child_care</span>
+          Pediatrics &amp; Neonatology
+        </p>
+</div>
+<!-- Now Serving Big Focus Box -->
+<div class="my-4 bg-[#0e1e2f] rounded-xl p-5 border border-[#234063] text-center">
+<span class="text-label-sm font-label-sm uppercase tracking-widest text-surface-dim font-bold block mb-1">
+          Now Serving
+        </span>
+<div class="text-[72px] leading-none font-bold text-surface-container-lowest font-tabular-data tracking-tight my-2">
+          P-07
+        </div>
+<div class="flex items-center justify-center gap-2 text-label-md font-label-md text-surface-dim mt-2">
+<span class="material-symbols-outlined text-base text-secondary-fixed" data-icon="directions_walk">directions_walk</span>
+          Proceed to Room 104 · Ground Floor
+        </div>
+</div>
+<!-- Next in Line & Station Metrics -->
+<div class="space-y-4">
+<div>
+<div class="text-label-sm font-label-sm text-surface-dim uppercase tracking-wider mb-2 flex items-center justify-between">
+<span>Next In Line</span>
+<span class="text-secondary-fixed">Queue Ahead: 2</span>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-[#0e1e2f] border border-[#234063] rounded-lg py-2.5 px-3 text-center">
+<span class="block text-label-sm font-label-sm text-surface-dim">Next 1</span>
+<span class="text-headline-md font-headline-md font-bold text-surface-container-lowest font-tabular-data">P-08</span>
+</div>
+<div class="bg-[#0e1e2f] border border-[#234063] rounded-lg py-2.5 px-3 text-center">
+<span class="block text-label-sm font-label-sm text-surface-dim">Next 2</span>
+<span class="text-headline-md font-headline-md font-bold text-surface-container-lowest font-tabular-data">P-09</span>
+</div>
+</div>
+</div>
+<!-- Average wait indicator -->
+<div class="flex items-center justify-between pt-2 border-t border-[#264467] text-body-sm font-body-sm text-surface-dim">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base text-secondary-container" data-icon="schedule">schedule</span>
+            Est. Consultation
+          </span>
+<span class="font-bold text-surface-container-lowest font-tabular-data">~8 mins average wait</span>
+</div>
+</div>
+</section>
+<!-- Station 3: Internal Medicine -->
+<section class="bg-[#162d46] rounded-xl border border-[#27466c] p-6 flex flex-col justify-between shadow-xl relative overflow-hidden">
+<!-- Station Header -->
+<div class="border-b border-[#264467] pb-4">
+<div class="flex items-center justify-between mb-2">
+<span class="text-label-sm font-label-sm tracking-wider uppercase bg-[#1f3a59] text-surface-container-high px-3 py-1 rounded-full border border-outline/30 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm" data-icon="meeting_room">meeting_room</span>
+            Room 108
+          </span>
+<span class="text-label-md font-label-md text-surface-dim font-medium">1st Floor · West Wing</span>
+</div>
+<h2 class="text-headline-lg font-headline-lg text-surface-container-lowest font-bold">Dr. Karim Nabil</h2>
+<p class="text-body-md font-body-md text-secondary-fixed flex items-center gap-1.5 mt-0.5">
+<span class="material-symbols-outlined text-base" data-icon="clinical_notes">clinical_notes</span>
+          Internal Medicine &amp; Endocrinology
+        </p>
+</div>
+<!-- Now Serving Big Focus Box -->
+<div class="my-4 bg-[#0e1e2f] rounded-xl p-5 border border-[#234063] text-center">
+<span class="text-label-sm font-label-sm uppercase tracking-widest text-surface-dim font-bold block mb-1">
+          Now Serving
+        </span>
+<div class="text-[72px] leading-none font-bold text-surface-container-lowest font-tabular-data tracking-tight my-2">
+          T-09
+        </div>
+<div class="flex items-center justify-center gap-2 text-label-md font-label-md text-surface-dim mt-2">
+<span class="material-symbols-outlined text-base text-secondary-fixed" data-icon="directions_walk">directions_walk</span>
+          Proceed to Room 108 · 1st Floor
+        </div>
+</div>
+<!-- Next in Line & Station Metrics -->
+<div class="space-y-4">
+<div>
+<div class="text-label-sm font-label-sm text-surface-dim uppercase tracking-wider mb-2 flex items-center justify-between">
+<span>Next In Line</span>
+<span class="text-secondary-fixed">Queue Ahead: 2</span>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-[#0e1e2f] border border-[#234063] rounded-lg py-2.5 px-3 text-center">
+<span class="block text-label-sm font-label-sm text-surface-dim">Next 1</span>
+<span class="text-headline-md font-headline-md font-bold text-surface-container-lowest font-tabular-data">W-03</span>
+</div>
+<div class="bg-[#0e1e2f] border border-[#234063] rounded-lg py-2.5 px-3 text-center">
+<span class="block text-label-sm font-label-sm text-surface-dim">Next 2</span>
+<span class="text-headline-md font-headline-md font-bold text-surface-container-lowest font-tabular-data">T-12</span>
+</div>
+</div>
+</div>
+<!-- Average wait indicator -->
+<div class="flex items-center justify-between pt-2 border-t border-[#264467] text-body-sm font-body-sm text-surface-dim">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base text-secondary-container" data-icon="schedule">schedule</span>
+            Est. Consultation
+          </span>
+<span class="font-bold text-surface-container-lowest font-tabular-data">~15 mins average wait</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Telemetry Strip & Ticker -->
+<footer class="w-full bg-[#0a1522] border-t border-[#223d5b] px-8 py-3 shrink-0 flex flex-col gap-2">
+<!-- Instruction Marquee Banner -->
+<div class="flex items-center gap-3 bg-[#11253a] px-4 py-2 rounded-lg border border-[#234367]">
+<span class="material-symbols-outlined text-amber-400 shrink-0 text-xl" data-icon="info">info</span>
+<p class="text-body-md font-body-md text-surface-container-highest tracking-wide font-medium truncate">
+        Please watch your ticket number on screen. When your number flashes, proceed directly to the designated clinic room.
+      </p>
+</div>
+<!-- Telemetry Indicators -->
+<div class="flex items-center justify-between text-body-sm font-body-sm text-surface-dim px-2 pt-1 font-tabular-data">
+<div class="flex items-center gap-6">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-fixed text-base" data-icon="badge">badge</span>
+          Doctors on Duty: <strong class="text-surface-container-lowest font-semibold">3</strong>
+</span>
+<span class="text-[#2a4d74]">|</span>
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-fixed text-base" data-icon="groups">groups</span>
+          Active Patients in Clinic: <strong class="text-surface-container-lowest font-semibold">12</strong>
+</span>
+<span class="text-[#2a4d74]">|</span>
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-fixed text-base" data-icon="timelapse">timelapse</span>
+          Avg Wait: <strong class="text-surface-container-lowest font-semibold">11 mins</strong>
+</span>
+</div>
+<!-- Emergency/Triage Priority Desk Indicator -->
+<div class="flex items-center gap-2 bg-[#2a1300] border border-[#ff5e00]/50 text-[#ffb599] px-3 py-1 rounded-full">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff5e00] opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-[#ff5e00]"></span>
+</span>
+<span class="text-label-sm font-label-sm font-bold tracking-wider">Emergency / Triage: Desk 1</span>
+</div>
+</div>
+</footer>
+<!-- Micro-interaction / Live Clock JS Script -->
+<script>
+    function updateClock() {
+      const now = new Date();
+      
+      // Update Time
+      let hours = now.getHours();
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      const timeString = `${hours}:${minutes} ${ampm}`;
+      
+      const clockElement = document.getElementById('live-clock');
+      if (clockElement) clockElement.textContent = timeString;
+
+      // Update Date
+      const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+      const dateString = now.toLocaleDateString('en-GB', options);
+      const dateElement = document.getElementById('live-date');
+      if (dateElement) dateElement.textContent = dateString;
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
+</body></html>

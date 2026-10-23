@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<title>ClinicFlow - Records — My visits</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed-variant": "#27496c",
+            "tertiary-fixed": "#ffdbce",
+            "on-secondary-container": "#52647c",
+            "outline-variant": "#c3c6cf",
+            "surface-container": "#e5efff",
+            "primary-container": "#1e4164",
+            "error": "#ba1a1a",
+            "surface-container-low": "#eef4ff",
+            "on-surface": "#121c28",
+            "tertiary-fixed-dim": "#ffb599",
+            "surface-tint": "#406185",
+            "on-error-container": "#93000a",
+            "surface-dim": "#d1dbeb",
+            "surface": "#f8f9ff",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "secondary-fixed": "#d2e4ff",
+            "on-secondary": "#ffffff",
+            "on-background": "#121c28",
+            "tertiary-container": "#722600",
+            "on-secondary-fixed-variant": "#36485f",
+            "on-primary-fixed": "#001d36",
+            "primary-fixed-dim": "#a8c9f3",
+            "secondary-container": "#cee1fd",
+            "inverse-on-surface": "#eaf1ff",
+            "background": "#f8f9ff",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "on-primary": "#ffffff",
+            "inverse-primary": "#a8c9f3",
+            "on-tertiary-fixed": "#370e00",
+            "primary": "#002b4c",
+            "surface-variant": "#d9e3f4",
+            "on-tertiary-container": "#ff8b5b",
+            "inverse-surface": "#27313e",
+            "tertiary": "#4e1700",
+            "secondary": "#4e6077",
+            "surface-bright": "#f8f9ff",
+            "on-primary-container": "#8dadd6",
+            "on-surface-variant": "#43474e",
+            "on-secondary-fixed": "#081c31",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-tertiary": "#ffffff",
+            "error-container": "#ffdad6",
+            "surface-container-high": "#dfe9fa",
+            "primary-fixed": "#d1e4ff",
+            "outline": "#73777f",
+            "surface-container-highest": "#d9e3f4"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1rem",
+            "space-xl": "1.5rem",
+            "space-lg": "1rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem",
+            "space-md": "0.75rem",
+            "margin-tablet": "1.5rem",
+            "gutter-sm": "0.75rem",
+            "margin-desktop": "2rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "label-lg": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "label-md": ["Inter"],
+            "body-sm": ["Inter"]
+          },
+          "fontSize": {
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* Touch optimization */
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-[#F7F9FD] text-on-surface antialiased font-body-md min-h-screen flex justify-center selection:bg-secondary-container">
+<!-- Mobile Viewport Container (390px spec) -->
+<div class="w-full max-w-[390px] min-h-screen flex flex-col bg-[#F7F9FD] relative shadow-xl overflow-x-hidden">
+<!-- TopAppBar (From Shared Components JSON) -->
+<header class="bg-surface-container-lowest dark:bg-inverse-surface border-b border-surface-dim dark:border-outline-variant flex justify-between items-center w-full px-4 h-14 max-w-full sticky top-0 z-40 transition-colors">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary dark:text-inverse-primary text-[24px]" data-icon="local_hospital">local_hospital</span>
+<span class="text-headline-md font-headline-md font-bold text-primary dark:text-inverse-primary tracking-tight">ClinicFlow</span>
+</div>
+<div class="flex items-center gap-2.5">
+<!-- Language Switcher -->
+<button aria-label="Toggle language to Arabic" class="min-h-[44px] px-2 flex items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-on-primary-container text-label-md font-label-md font-semibold active:scale-95 transition-all" type="button">
+<span class="text-[#1E4164] font-semibold">EN</span>
+<span class="text-outline-variant mx-1">|</span>
+<span class="text-secondary font-medium hover:text-[#1E4164]">عربي</span>
+</button>
+<!-- Notification Bell with Accent Orange Dot -->
+<button aria-label="Notifications" class="min-w-[44px] min-h-[44px] relative flex items-center justify-center rounded-full hover:bg-surface-container-low dark:hover:bg-primary-container text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-on-primary-container active:scale-95 transition-all duration-150" type="button">
+<span class="material-symbols-outlined text-[24px]" data-icon="notifications">notifications</span>
+<span class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[#FF5E00] ring-2 ring-white"></span>
+</button>
+</div>
+</header>
+<!-- Sub-navigation Tabs under Header -->
+<nav aria-label="Records Navigation" class="bg-surface-container-lowest border-b border-[#D3DBE6] px-4 flex gap-6 overflow-x-auto no-scrollbar">
+<button class="min-h-[44px] flex items-center text-label-md font-label-md text-[#1E4164] font-semibold border-b-2 border-[#1E4164] pb-0.5 whitespace-nowrap active:scale-95 transition-all" type="button">
+        My Visits
+      </button>
+<button class="min-h-[44px] flex items-center text-label-md font-label-md text-secondary font-medium hover:text-[#1E4164] whitespace-nowrap active:scale-95 transition-all" type="button">
+        Invoices &amp; Receipts
+      </button>
+<button class="min-h-[44px] flex items-center text-label-md font-label-md text-secondary font-medium hover:text-[#1E4164] whitespace-nowrap active:scale-95 transition-all" type="button">
+        Documents &amp; Insurance
+      </button>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 px-4 pt-5 pb-24 space-y-4">
+<!-- Patient Context & Header Title -->
+<section class="space-y-1">
+<div class="flex items-center gap-1.5 text-body-sm font-body-sm text-secondary">
+<span class="material-symbols-outlined text-[16px] text-[#015C9A]" data-icon="badge">badge</span>
+<span>Patient: <strong class="font-semibold text-[#13263B]">Mohamed Adel</strong></span>
+</div>
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile text-[#13263B] font-bold tracking-tight">
+          My Visits
+        </h1>
+<p class="text-body-sm font-body-sm text-secondary leading-relaxed">
+          Review doctor summaries, medicines, and test results from your appointments
+        </p>
+</section>
+<!-- Branch Filter Pills (Horizontal Scrollable) -->
+<section class="pt-1">
+<div aria-label="Branch filters" class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 -mx-4 px-4" role="tablist">
+<!-- Active Pill -->
+<button aria-selected="true" class="min-h-[44px] px-4 py-2 rounded-full text-label-md font-label-md font-semibold bg-[#E8EEF6] text-[#1E4164] border border-[#1E4164] shrink-0 active:scale-95 transition-all shadow-none" role="tab" type="button">
+            All branches (4)
+          </button>
+<!-- Inactive Pills -->
+<button aria-selected="false" class="min-h-[44px] px-4 py-2 rounded-full text-label-md font-label-md font-medium bg-surface-container-lowest text-secondary border border-[#C6D0DE] hover:border-[#1E4164] hover:text-[#1E4164] shrink-0 active:scale-95 transition-all" role="tab" type="button">
+            Nasr City
+          </button>
+<button aria-selected="false" class="min-h-[44px] px-4 py-2 rounded-full text-label-md font-label-md font-medium bg-surface-container-lowest text-secondary border border-[#C6D0DE] hover:border-[#1E4164] hover:text-[#1E4164] shrink-0 active:scale-95 transition-all" role="tab" type="button">
+            Maadi
+          </button>
+<button aria-selected="false" class="min-h-[44px] px-4 py-2 rounded-full text-label-md font-label-md font-medium bg-surface-container-lowest text-secondary border border-[#C6D0DE] hover:border-[#1E4164] hover:text-[#1E4164] shrink-0 active:scale-95 transition-all" role="tab" type="button">
+            Sheikh Zayed
+          </button>
+</div>
+</section>
+<!-- Visits Cards List -->
+<div class="space-y-3 pt-1">
+<!-- Card 1: Yesterday · 24 Oct 2025 -->
+<article class="bg-[#FFFFFF] border border-[#D3DBE6] rounded-xl p-4 transition-all hover:border-[#1E4164] focus-within:border-[#1E4164]">
+<div class="flex items-center justify-between gap-2 pb-2.5 border-b border-[#D3DBE6]/60">
+<span class="inline-flex items-center gap-1.5 text-label-md font-label-md font-semibold text-[#13263B]">
+<span class="material-symbols-outlined text-[16px] text-[#015C9A]" data-icon="event">event</span>
+              Yesterday · 24 Oct 2025
+            </span>
+<span class="text-label-sm font-label-sm text-[#015C9A] bg-[#EFF6FF] px-2 py-0.5 rounded-full font-semibold">Nasr City</span>
+</div>
+<div class="pt-3 pb-2 space-y-2">
+<div>
+<h2 class="text-headline-sm font-headline-sm text-[#13263B] font-bold">
+                Dr. Ahmed Fathy
+              </h2>
+<p class="text-body-sm font-body-sm text-secondary">
+                Cardiology Consultant (Nasr City Branch)
+              </p>
+</div>
+<!-- Plain-language diagnosis badge -->
+<div class="pt-0.5">
+<span class="inline-block bg-[#E8EEF6] text-[#1E4164] border border-[#1E4164]/20 rounded-full px-3 py-1 text-label-md font-label-md font-semibold">
+                Mild High Blood Pressure (Hypertension Stage 1)
+              </span>
+</div>
+<!-- Quick summary indicators -->
+<div class="pt-1.5 space-y-1.5">
+<div class="flex items-center gap-2 text-body-sm font-body-sm text-[#212427]">
+<span class="material-symbols-outlined text-[18px] text-[#1E4164]" data-icon="medication">medication</span>
+<span>3 Medicines prescribed</span>
+</div>
+<div class="flex items-center gap-2 text-body-sm font-body-sm text-[#212427]">
+<span class="material-symbols-outlined text-[18px] text-[#015C9A]" data-icon="monitoring">monitoring</span>
+<span>1 ECG &amp; Blood test ordered</span>
+</div>
+</div>
+</div>
+<!-- CTA Row -->
+<div class="pt-2 border-t border-[#D3DBE6]/60 flex justify-end">
+<button class="min-h-[44px] inline-flex items-center gap-1 text-label-lg font-label-lg font-semibold text-[#1E4164] hover:underline active:scale-95 transition-all" type="button">
+<span>View visit summary</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</article>
+<!-- Card 2: 12 Sep 2025 -->
+<article class="bg-[#FFFFFF] border border-[#D3DBE6] rounded-xl p-4 transition-all hover:border-[#1E4164] focus-within:border-[#1E4164]">
+<div class="flex items-center justify-between gap-2 pb-2.5 border-b border-[#D3DBE6]/60">
+<span class="inline-flex items-center gap-1.5 text-label-md font-label-md font-semibold text-[#13263B]">
+<span class="material-symbols-outlined text-[16px] text-[#015C9A]" data-icon="event">event</span>
+              12 Sep 2025
+            </span>
+<span class="text-label-sm font-label-sm text-[#015C9A] bg-[#EFF6FF] px-2 py-0.5 rounded-full font-semibold">Maadi</span>
+</div>
+<div class="pt-3 pb-2 space-y-2">
+<div>
+<h2 class="text-headline-sm font-headline-sm text-[#13263B] font-bold">
+                Dr. Mona Khalil
+              </h2>
+<p class="text-body-sm font-body-sm text-secondary">
+                Dental Surgeon (Maadi Branch)
+              </p>
+</div>
+<!-- Plain-language diagnosis badge -->
+<div class="pt-0.5">
+<span class="inline-block bg-[#E8EEF6] text-[#1E4164] border border-[#1E4164]/20 rounded-full px-3 py-1 text-label-md font-label-md font-semibold">
+                Routine Dental Cleaning &amp; Plaque Removal
+              </span>
+</div>
+<!-- Quick summary indicators -->
+<div class="pt-1.5">
+<div class="flex items-start gap-2 text-body-sm font-body-sm text-[#212427]">
+<span class="material-symbols-outlined text-[18px] text-[#1E4164] shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<span>No follow-up needed · Next routine checkup in 6 months</span>
+</div>
+</div>
+</div>
+<!-- CTA Row -->
+<div class="pt-2 border-t border-[#D3DBE6]/60 flex justify-end">
+<button class="min-h-[44px] inline-flex items-center gap-1 text-label-lg font-label-lg font-semibold text-[#1E4164] hover:underline active:scale-95 transition-all" type="button">
+<span>View visit summary</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</article>
+<!-- Card 3: 04 Jun 2025 -->
+<article class="bg-[#FFFFFF] border border-[#D3DBE6] rounded-xl p-4 transition-all hover:border-[#1E4164] focus-within:border-[#1E4164]">
+<div class="flex items-center justify-between gap-2 pb-2.5 border-b border-[#D3DBE6]/60">
+<span class="inline-flex items-center gap-1.5 text-label-md font-label-md font-semibold text-[#13263B]">
+<span class="material-symbols-outlined text-[16px] text-[#015C9A]" data-icon="event">event</span>
+              04 Jun 2025
+            </span>
+<span class="text-label-sm font-label-sm text-[#015C9A] bg-[#EFF6FF] px-2 py-0.5 rounded-full font-semibold">Sheikh Zayed</span>
+</div>
+<div class="pt-3 pb-2 space-y-2">
+<div>
+<h2 class="text-headline-sm font-headline-sm text-[#13263B] font-bold">
+                Dr. Tamer El-Sayed
+              </h2>
+<p class="text-body-sm font-body-sm text-secondary">
+                Dermatology Specialist (Sheikh Zayed Branch)
+              </p>
+</div>
+<!-- Plain-language diagnosis badge -->
+<div class="pt-0.5">
+<span class="inline-block bg-[#E8EEF6] text-[#1E4164] border border-[#1E4164]/20 rounded-full px-3 py-1 text-label-md font-label-md font-semibold">
+                Mild Seasonal Skin Allergy (Contact Dermatitis)
+              </span>
+</div>
+<!-- Quick summary indicators -->
+<div class="pt-1.5">
+<div class="flex items-center gap-2 text-body-sm font-body-sm text-[#212427]">
+<span class="material-symbols-outlined text-[18px] text-[#1E4164]" data-icon="medication">medication</span>
+<span>1 Ointment &amp; 1 Antihistamine prescribed</span>
+</div>
+</div>
+</div>
+<!-- CTA Row -->
+<div class="pt-2 border-t border-[#D3DBE6]/60 flex justify-end">
+<button class="min-h-[44px] inline-flex items-center gap-1 text-label-lg font-label-lg font-semibold text-[#1E4164] hover:underline active:scale-95 transition-all" type="button">
+<span>View visit summary</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</article>
+</div>
+<!-- Trust Note / Communication Support Footer Notice -->
+<aside class="p-3.5 bg-surface-container-low rounded-xl border border-[#D3DBE6] mt-4">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-[#015C9A] text-[20px] shrink-0 mt-0.5" data-icon="info">info</span>
+<p class="text-body-sm font-body-sm text-secondary">
+            Need official medical reports or assistance with prescriptions? Inquiries and support are sent securely via SMS or registered email only.
+          </p>
+</div>
+</aside>
+</main>
+<!-- BottomNavBar (From Shared Components JSON) -->
+<!-- Destination count: 5. Exact labels: Home, Book, Appointments, Records, Profile -->
+<!-- Current page intent: Records / My Visits. Therefore 'Records' MUST be active state! -->
+<nav aria-label="Main Navigation" class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin pb-safe h-16 max-w-full bg-surface-container-lowest dark:bg-inverse-surface border-t border-surface-dim dark:border-outline-variant transition-colors">
+<!-- Tab 1: Home -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim min-h-[48px] py-1 hover:text-primary dark:hover:text-inverse-primary active:scale-95 transition-all duration-150 flex-1" href="#home">
+<span class="material-symbols-outlined text-[24px]" data-icon="home">home</span>
+<span class="text-label-sm font-label-sm mt-0.5">Home</span>
+</a>
+<!-- Tab 2: Book -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim min-h-[48px] py-1 hover:text-primary dark:hover:text-inverse-primary active:scale-95 transition-all duration-150 flex-1" href="#book">
+<span class="material-symbols-outlined text-[24px]" data-icon="calendar_add_on">calendar_add_on</span>
+<span class="text-label-sm font-label-sm mt-0.5">Book</span>
+</a>
+<!-- Tab 3: Appointments -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim min-h-[48px] py-1 hover:text-primary dark:hover:text-inverse-primary active:scale-95 transition-all duration-150 flex-1" href="#appointments">
+<span class="material-symbols-outlined text-[24px]" data-icon="calendar_month">calendar_month</span>
+<span class="text-label-sm font-label-sm mt-0.5">Appointments</span>
+</a>
+<!-- Tab 4: Records (ACTIVE KEY: style_active_navigation) -->
+<a aria-current="page" class="flex flex-col items-center justify-center text-primary-container dark:text-inverse-primary font-semibold min-h-[48px] py-1 active:scale-95 transition-all duration-150 flex-1" href="#records">
+<span class="material-symbols-outlined text-[24px]" data-icon="description" data-weight="fill" style="font-variation-settings: 'FILL' 1;">description</span>
+<span class="text-label-sm font-label-sm mt-0.5 text-[#1E4164] dark:text-inverse-primary font-semibold">Records</span>
+</a>
+<!-- Tab 5: Profile -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim min-h-[48px] py-1 hover:text-primary dark:hover:text-inverse-primary active:scale-95 transition-all duration-150 flex-1" href="#profile">
+<span class="material-symbols-outlined text-[24px]" data-icon="person">person</span>
+<span class="text-label-sm font-label-sm mt-0.5">Profile</span>
+</a>
+</nav>
+</div>
+</body></html>

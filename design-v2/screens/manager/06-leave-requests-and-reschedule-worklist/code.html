@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-background" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow Manager - Leave Requests &amp; Reschedule Worklist</title>
+<!-- Material Symbols Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Inter & Plus Jakarta Sans Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Forms and Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-high": "#e6e8ec",
+            "inverse-on-surface": "#eff1f5",
+            "on-tertiary-fixed": "#001d36",
+            "secondary-container": "#ff5e00",
+            "surface-container-lowest": "#ffffff",
+            "primary-fixed-dim": "#a8c9f3",
+            "primary": "#002b4c",
+            "on-primary": "#ffffff",
+            "background": "#f7f9fd",
+            "outline-variant": "#c3c6cf",
+            "error": "#ba1a1a",
+            "on-tertiary-fixed-variant": "#00497c",
+            "on-surface-variant": "#43474e",
+            "on-secondary-fixed": "#370e00",
+            "on-background": "#181c1f",
+            "surface-bright": "#f7f9fd",
+            "on-tertiary": "#ffffff",
+            "secondary-fixed": "#ffdbce",
+            "on-tertiary-container": "#70aff2",
+            "outline": "#73777f",
+            "secondary-fixed-dim": "#ffb599",
+            "surface-container-highest": "#e0e3e6",
+            "surface-tint": "#406185",
+            "surface-container": "#eceef2",
+            "primary-container": "#1e4164",
+            "inverse-primary": "#a8c9f3",
+            "tertiary-fixed": "#d1e4ff",
+            "on-surface": "#181c1f",
+            "on-primary-fixed-variant": "#27496c",
+            "inverse-surface": "#2d3134",
+            "surface-variant": "#e0e3e6",
+            "tertiary-fixed-dim": "#9ecaff",
+            "on-error-container": "#93000a",
+            "on-error": "#ffffff",
+            "error-container": "#ffdad6",
+            "on-primary-container": "#8dadd6",
+            "surface": "#f7f9fd",
+            "secondary": "#a63b00",
+            "tertiary": "#002b4c",
+            "primary-fixed": "#d1e4ff",
+            "surface-container-low": "#f2f4f8",
+            "on-primary-fixed": "#001d36",
+            "tertiary-container": "#00416f",
+            "on-secondary-fixed-variant": "#7f2b00",
+            "surface-dim": "#d8dade",
+            "on-secondary": "#ffffff",
+            "on-secondary-container": "#531900"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-sm": "0.5rem",
+            "gutter": "1.5rem",
+            "margin-mobile": "1rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "margin": "2rem",
+            "gutter-mobile": "1rem",
+            "space-xl": "2rem"
+          },
+          "fontFamily": {
+            "label-sm": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "display-lg-mobile": ["Plus Jakarta Sans"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "label-md": ["Inter"],
+            "body-sm": ["Inter"],
+            "title-sm": ["Plus Jakarta Sans"],
+            "caption": ["Inter"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-xl": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }],
+            "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-md": ["13px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "title-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "caption": ["11px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "headline-xl": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.015em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="h-full font-body-md text-on-surface antialiased bg-background">
+<!-- ========================================================================= -->
+<!-- SIDE NAVIGATION (Shared Component: SideNavBar)                            -->
+<!-- ========================================================================= -->
+<aside class="fixed top-0 left-0 h-screen w-[260px] z-40 bg-surface-container-lowest border-r border-outline-variant shadow-sm flex flex-col justify-between p-4">
+<div class="flex flex-col gap-5">
+<!-- Clinic Brand Header -->
+<div class="flex items-center justify-between px-2 pt-1">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-lg bg-primary-container flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[20px]" data-icon="local_hospital">local_hospital</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">ClinicFlow</h1>
+<p class="font-caption text-caption text-on-surface-variant flex items-center gap-1 cursor-pointer hover:text-primary">
+              All branches ▾
+            </p>
+</div>
+</div>
+</div>
+<!-- Quick CTA Button -->
+<button class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-surface-container-low hover:bg-surface-container text-primary font-label-md transition-colors border border-outline-variant">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+        New Entry
+      </button>
+<!-- Navigation Tabs -->
+<nav class="flex flex-col gap-1">
+<!-- 1. Dashboard -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-body-md hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<!-- 2. Approvals -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-body-md hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="fact_check">fact_check</span>
+<span>Approvals</span>
+</a>
+<!-- 3. Schedules -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-body-md hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="calendar_today">calendar_today</span>
+<span>Schedules</span>
+</a>
+<!-- 4. Leave (ACTIVE ITEM - STRICTLY MAPPED) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container-low text-primary font-label-md border-l-[3px] border-primary" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="event_busy" data-weight="fill" style="font-variation-settings: 'FILL' 1;">event_busy</span>
+<span>Leave</span>
+</a>
+<!-- 5. Recruitment -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-body-md hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="badge">badge</span>
+<span>Recruitment</span>
+</a>
+<!-- 6. Services & prices -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-body-md hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="medical_services">medical_services</span>
+<span>Services &amp; prices</span>
+</a>
+<!-- 7. Daily close -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-body-md hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="point_of_sale">point_of_sale</span>
+<span>Daily close</span>
+</a>
+<!-- 8. Reports -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-body-md hover:bg-surface-container transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="analytics">analytics</span>
+<span>Reports</span>
+</a>
+</nav>
+</div>
+<!-- Sidebar Footer / User Profile -->
+<div class="pt-3 border-t border-outline-variant">
+<div class="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-surface-container transition-colors cursor-pointer">
+<div class="w-8 h-8 rounded-full bg-primary-fixed text-primary flex items-center justify-center font-semibold text-xs">
+          HM
+        </div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate">Dr. Hala Mostafa · Manager</span>
+<span class="font-caption text-caption text-on-surface-variant">Central Operations</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- TOP NAVIGATION BAR (Shared Component: TopNavBar)                          -->
+<!-- ========================================================================= -->
+<header class="fixed top-0 right-0 left-0 pl-[260px] h-16 z-30 bg-surface-container-lowest border-b border-outline-variant shadow-sm flex items-center justify-between px-6">
+<div class="flex items-center gap-6">
+<h2 class="font-title-sm text-title-sm font-bold text-primary tracking-tight">Leave Requests &amp; Patient Rescheduling Worklist</h2>
+<!-- Search Input -->
+<div class="relative w-72">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[18px]" data-icon="search">search</span>
+</span>
+<input class="w-full pl-9 pr-3 py-1.5 bg-surface-container-low text-body-sm rounded-lg border border-outline-variant focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-on-surface placeholder:text-outline" placeholder="Search patient or doctor..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<!-- Quick Action CTA -->
+<button class="px-3 py-1.5 bg-primary-container hover:bg-tertiary text-on-primary font-label-md text-label-md rounded-lg transition-transform active:scale-[0.98] flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="add">add</span>
+        + Quick Action
+      </button>
+<!-- Language Switcher -->
+<button class="px-2.5 py-1.5 text-on-surface-variant hover:text-primary font-label-md text-label-md rounded-lg hover:bg-surface-container-low transition-colors">
+        EN | عربي
+      </button>
+<!-- Store / Branch Quick Icon -->
+<button class="p-2 text-on-surface-variant hover:text-primary rounded-lg hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="store">store</span>
+</button>
+<!-- Notifications Bell with Orange Indicator -->
+<div class="relative">
+<button class="p-2 text-on-surface-variant hover:text-primary rounded-lg hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span>
+</button>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-secondary-container ring-2 ring-surface-container-lowest"></span>
+</div>
+<!-- Small User Avatar Header -->
+<div class="flex items-center pl-2 border-l border-outline-variant">
+<img class="w-8 h-8 rounded-full object-cover ring-1 ring-outline-variant" data-alt="Close up professional portrait of Dr. Hala Mostafa, an experienced female medical manager wearing a white coat and subtle oceanic blue lanyard, looking confident and warm with clean hospital background in soft lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDutdStoRVK7jbnNyt7EaQRv6kW5aHRjEB02NPXEfKbnc7-1UDC7iXIoyj1UOEPEknv-tKwofDH49jk15LnDNU_c02RKPcUYUCAFhcNIy-YCG9h_K3Xc7UbiR454OLW5jQtmY9Tge_-RiwteHVXEOWWEoIkNBB-teXHt0BWIxN1EmdecYoJXRVC2r6JbM47q5KDAPQwEZVSH6jL64BlX18Qh3_-wy1989OPd24zTUpD5cehWStJdNHzC0z1sKuWcNLRyTL66WDoEOk8"/>
+</div>
+</div>
+</header>
+<!-- ========================================================================= -->
+<!-- MAIN WORKSPACE CONTENT                                                    -->
+<!-- ========================================================================= -->
+<main class="ml-[260px] pt-16 min-h-screen bg-background p-6 space-y-6">
+<!-- 1. DOCTOR LEAVE REQUEST CARD (TOP HIGHLIGHT BENTO) -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm">
+<div class="flex items-start justify-between pb-4 border-b border-outline-variant gap-4">
+<!-- Doctor Info Block -->
+<div class="flex items-center gap-4">
+<div class="relative">
+<img class="w-14 h-14 rounded-xl object-cover ring-1 ring-outline-variant" data-alt="Headshot of Dr. Ahmed Fathy, an authoritative male consultant cardiologist in his late forties wearing formal surgical scrubs and navy stethoscope, lit by soft clinic ambient lights projecting precision and credibility." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_V4g4Gg2170kUNN71hhz8seWjXun0-5o3cBVBQL8xkGzkDY79O7008zaKwfec6PUui3bVmOUPwqr-tbqA57NJS-hCd1w0CYZ-X6UBUUdiBFHmrKTOfM_T47NCycDKoFBPT2_wQ3W2lDTXRUSA2gsrcW8TTB9LDYKsRA9Nfpjjes1iUzB5VsZ67_Ghke2KkSFKaul50648jNbZm_JJi2PfpOdz5xorwgXvFGrKIvPOCqUkpVxlCJ9oApf-gJC06aUa7ygpx_c-pJUi"/>
+<span class="absolute -bottom-1 -right-1 bg-secondary-fixed text-on-secondary-fixed text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-secondary">
+              Leave
+            </span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h2 class="font-headline-md text-headline-md font-bold text-primary">Dr. Ahmed Fathy</h2>
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm">
+                Consultant Cardiology
+              </span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm">
+                Nasr City &amp; Maadi
+              </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="calendar_month">calendar_month</span>
+<strong class="text-on-surface">Leave Period:</strong> Tuesday, 04 November 2025 (Full Day · 2 clinic sessions affected)
+            </p>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 border border-outline text-on-surface font-label-md text-label-md rounded-lg hover:bg-surface-container-low transition-colors">
+            Reject Request
+          </button>
+<button class="px-5 py-2 bg-primary-container hover:bg-tertiary text-on-primary font-label-md text-label-md rounded-lg transition-transform active:scale-[0.98] shadow-sm flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]" data-icon="check_circle">check_circle</span>
+            Approve Leave Request
+          </button>
+</div>
+</div>
+<!-- Request Details & Impact Metrics Row -->
+<div class="grid grid-cols-12 gap-4 mt-4 items-center">
+<!-- Reason Box -->
+<div class="col-span-12 md:col-span-5 bg-surface-container-low rounded-lg p-3.5 border border-outline-variant flex items-start gap-3">
+<div class="p-2 rounded-lg bg-surface-container-lowest text-primary">
+<span class="material-symbols-outlined text-[20px]" data-icon="campaign">campaign</span>
+</div>
+<div>
+<span class="font-caption text-caption text-on-surface-variant uppercase tracking-wider block">Official Reason</span>
+<p class="font-body-md text-body-md font-medium text-on-surface mt-0.5">
+              Egyptian Cardiac Society Annual Conference (Guest Speaker)
+            </p>
+</div>
+</div>
+<!-- Metrics Impact Tiles -->
+<div class="col-span-12 md:col-span-7 grid grid-cols-3 gap-3">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3">
+<div class="flex items-center justify-between text-on-surface-variant mb-1">
+<span class="font-caption text-caption">Total Booked</span>
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="groups">groups</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-lg text-headline-lg font-bold text-primary">14</span>
+<span class="font-caption text-caption text-on-surface-variant">visits affected</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3">
+<div class="flex items-center justify-between text-on-surface-variant mb-1">
+<span class="font-caption text-caption">Nasr City Morning</span>
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="wb_sunny">wb_sunny</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-lg text-headline-lg font-bold text-primary">8</span>
+<span class="font-caption text-caption text-on-surface-variant">slots (09:00 - 13:00)</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3">
+<div class="flex items-center justify-between text-on-surface-variant mb-1">
+<span class="font-caption text-caption">Maadi Evening</span>
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="dark_mode">dark_mode</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-lg text-headline-lg font-bold text-primary">6</span>
+<span class="font-caption text-caption text-on-surface-variant">slots (17:00 - 20:00)</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 2. RESCHEDULING WORKLIST SECTION -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden flex flex-col">
+<!-- Section Header & Progress -->
+<div class="p-5 border-b border-outline-variant space-y-4">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h3 class="font-headline-md text-headline-md font-bold text-primary">
+              Rescheduling Worklist Progress: 9 of 14 resolved (64%)
+            </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+              Automated smart reallocation matrix matched with clinical urgency and patient preferences.
+            </p>
+</div>
+<div class="w-full md:w-64 flex flex-col gap-1.5">
+<div class="flex justify-between items-center text-xs font-semibold text-primary">
+<span>Resolution Rate</span>
+<span>64%</span>
+</div>
+<div class="w-full h-2.5 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-primary-container rounded-full" style="width: 64%;"></div>
+</div>
+</div>
+</div>
+<!-- Filter Pills Bar -->
+<div class="flex flex-wrap items-center gap-2 pt-2">
+<button class="px-3 py-1 rounded-full text-label-md font-label-md bg-primary text-on-primary shadow-xs">
+            All (14)
+          </button>
+<button class="px-3 py-1 rounded-full text-label-md font-label-md bg-secondary-fixed text-on-secondary-fixed hover:bg-secondary-fixed-dim transition-colors flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span>
+            Pending Resolution (5)
+          </button>
+<button class="px-3 py-1 rounded-full text-label-md font-label-md bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-colors">
+            Rescheduled with Dr. Ahmed (6)
+          </button>
+<button class="px-3 py-1 rounded-full text-label-md font-label-md bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-colors">
+            Transferred to Colleague (2)
+          </button>
+<button class="px-3 py-1 rounded-full text-label-md font-label-md bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-colors">
+            Cancelled (1)
+          </button>
+</div>
+</div>
+<!-- Worklist Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant text-on-surface-variant font-label-md text-label-md">
+<th class="py-3 px-4">Ticket / MRN</th>
+<th class="py-3 px-4">Patient Name &amp; Phone</th>
+<th class="py-3 px-4">Original Slot</th>
+<th class="py-3 px-4">Current Resolution Recommendation</th>
+<th class="py-3 px-4">Proposed Doctor &amp; Slot</th>
+<th class="py-3 px-4 text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant font-body-sm text-body-sm">
+<!-- Row 1: Hazem Mostafa -->
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="py-3.5 px-4 font-semibold text-primary">
+                CF-002148
+              </td>
+<td class="py-3.5 px-4">
+<div class="font-medium text-on-surface">Hazem Mostafa</div>
+<div class="text-on-surface-variant text-caption flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]" data-icon="call">call</span>
+                  +20 10 2489 3102
+                </div>
+</td>
+<td class="py-3.5 px-4">
+<div class="font-medium text-on-surface">09:30 AM</div>
+<span class="text-caption text-on-surface-variant">Nasr City</span>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm">
+<span class="material-symbols-outlined text-[14px]" data-icon="update">update</span>
+                  Same doctor next free slot
+                </span>
+</td>
+<td class="py-3.5 px-4">
+<div class="font-medium text-primary">Wed 05 Nov at 10:30 AM</div>
+<div class="text-caption text-on-surface-variant">Dr. Ahmed Fathy</div>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="px-3 py-1.5 bg-primary-container hover:bg-tertiary text-on-primary font-label-md text-label-sm rounded-lg transition-transform active:scale-[0.98] inline-flex items-center gap-1 shadow-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="sms">sms</span>
+                  Confirm &amp; Send SMS
+                </button>
+</td>
+</tr>
+<!-- Row 2: Youssef Amr -->
+<tr class="hover:bg-surface-bright transition-colors bg-surface-container-lowest">
+<td class="py-3.5 px-4 font-semibold text-primary">
+                CF-003891
+              </td>
+<td class="py-3.5 px-4">
+<div class="font-medium text-on-surface">Youssef Amr</div>
+<div class="text-on-surface-variant text-caption flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]" data-icon="call">call</span>
+                  +20 11 9876 5432
+                </div>
+</td>
+<td class="py-3.5 px-4">
+<div class="font-medium text-on-surface">10:00 AM</div>
+<span class="text-caption text-on-surface-variant">Nasr City</span>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm">
+<span class="material-symbols-outlined text-[14px]" data-icon="swap_horiz">swap_horiz</span>
+                  Transfer to colleague
+                </span>
+</td>
+<td class="py-3.5 px-4">
+<div class="font-medium text-primary">Dr. Sherif Rostom (Cardiology)</div>
+<div class="text-caption text-on-surface-variant">Same Day 10:00 AM</div>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="px-3 py-1.5 bg-primary-container hover:bg-tertiary text-on-primary font-label-md text-label-sm rounded-lg transition-transform active:scale-[0.98] inline-flex items-center gap-1 shadow-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="sms">sms</span>
+                  Confirm &amp; Send SMS
+                </button>
+</td>
+</tr>
+<!-- Row 3: Mohamed Adel -->
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="py-3.5 px-4 font-semibold text-primary">
+                CF-004512
+              </td>
+<td class="py-3.5 px-4">
+<div class="font-medium text-on-surface">Mohamed Adel</div>
+<div class="text-on-surface-variant text-caption flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]" data-icon="call">call</span>
+                  +20 10 1234 5678
+                </div>
+</td>
+<td class="py-3.5 px-4">
+<div class="font-medium text-on-surface">10:30 AM</div>
+<span class="text-caption text-on-surface-variant">Nasr City</span>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm">
+<span class="material-symbols-outlined text-[14px]" data-icon="update">update</span>
+                  Same doctor next free slot
+                </span>
+</td>
+<td class="py-3.5 px-4">
+<div class="font-medium text-primary">Wed 05 Nov at 11:00 AM</div>
+<div class="text-caption text-on-surface-variant">Dr. Ahmed Fathy</div>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="px-3 py-1.5 bg-primary-container hover:bg-tertiary text-on-primary font-label-md text-label-sm rounded-lg transition-transform active:scale-[0.98] inline-flex items-center gap-1 shadow-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="sms">sms</span>
+                  Confirm &amp; Send SMS
+                </button>
+</td>
+</tr>
+<!-- Row 4: Mona Adel Hassan -->
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="py-3.5 px-4 font-semibold text-primary">
+                CF-007890
+              </td>
+<td class="py-3.5 px-4">
+<div class="font-medium text-on-surface">Mona Adel Hassan</div>
+<div class="text-on-surface-variant text-caption flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]" data-icon="call">call</span>
+                  +20 12 3456 7891
+                </div>
+</td>
+<td class="py-3.5 px-4">
+<div class="font-medium text-on-surface">11:00 AM</div>
+<span class="text-caption text-on-surface-variant">Nasr City</span>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-error-container text-on-error-container font-label-sm">
+<span class="material-symbols-outlined text-[14px]" data-icon="cancel">cancel</span>
+                  Cancel &amp; refund deposit
+                </span>
+</td>
+<td class="py-3.5 px-4">
+<div class="font-medium text-error">Full refund EGP 100 via Paymob</div>
+<div class="text-caption text-on-surface-variant">Payment Ref: PM-9821374</div>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="px-3 py-1.5 border border-error text-error hover:bg-error-container font-label-md text-label-sm rounded-lg transition-colors inline-flex items-center gap-1 shadow-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="receipt_long">receipt_long</span>
+                  Process Refund
+                </button>
+</td>
+</tr>
+<!-- Row 5: Salma Nabil -->
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="py-3.5 px-4 font-semibold text-primary">
+                CF-009120
+              </td>
+<td class="py-3.5 px-4">
+<div class="font-medium text-on-surface">Salma Nabil</div>
+<div class="text-on-surface-variant text-caption flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]" data-icon="call">call</span>
+                  +20 15 5551 2345
+                </div>
+</td>
+<td class="py-3.5 px-4">
+<div class="font-medium text-on-surface">11:30 AM</div>
+<span class="text-caption text-on-surface-variant">Nasr City</span>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm">
+<span class="material-symbols-outlined text-[14px]" data-icon="swap_horiz">swap_horiz</span>
+                  Transfer to colleague
+                </span>
+</td>
+<td class="py-3.5 px-4">
+<div class="font-medium text-primary">Dr. Tamer El-Sayed (Nasr City)</div>
+<div class="text-caption text-on-surface-variant">Tue 04 Nov at 12:00 PM</div>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="px-3 py-1.5 bg-primary-container hover:bg-tertiary text-on-primary font-label-md text-label-sm rounded-lg transition-transform active:scale-[0.98] inline-flex items-center gap-1 shadow-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="sms">sms</span>
+                  Confirm &amp; Send SMS
+                </button>
+</td>
+</tr>
+<!-- Row 6: Tarek Mansour (Resolved state) -->
+<tr class="bg-surface-container-low/60 hover:bg-surface-container-low transition-colors">
+<td class="py-3.5 px-4 font-semibold text-outline">
+                CF-008124
+              </td>
+<td class="py-3.5 px-4">
+<div class="font-medium text-on-surface-variant">Tarek Mansour</div>
+<div class="text-on-surface-variant text-caption flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]" data-icon="call">call</span>
+                  +20 10 9988 7766
+                </div>
+</td>
+<td class="py-3.5 px-4">
+<div class="text-on-surface-variant">17:00 PM</div>
+<span class="text-caption text-on-surface-variant">Maadi</span>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface font-label-sm">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="check" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+                  Resolved
+                </span>
+</td>
+<td class="py-3.5 px-4 text-on-surface-variant">
+                Rebooked for Thu 06 Nov (17:30 PM)
+              </td>
+<td class="py-3.5 px-4 text-right">
+<span class="inline-flex items-center gap-1 text-on-surface-variant text-label-sm font-label-sm bg-surface-container-lowest border border-outline-variant px-3 py-1.5 rounded-lg">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="done_all">done_all</span>
+                  SMS Delivered
+                </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Action Footer Strip inside Card -->
+<div class="p-4 bg-surface-container-low border-t border-outline-variant flex flex-col md:flex-row items-center justify-between gap-4">
+<!-- Toggle Alert Setting -->
+<div class="flex items-center gap-3">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-5 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:border-outline-variant after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+<span class="font-label-md text-label-md text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-primary" data-icon="notifications_active">notifications_active</span>
+            Automatic patient SMS alert toggle (Arabic/English localized)
+          </span>
+</div>
+<!-- Secondary Action Buttons -->
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 border border-outline-variant bg-surface-container-lowest hover:bg-surface-container text-on-surface font-label-md text-label-md rounded-lg transition-colors flex items-center gap-1.5 shadow-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="file_download">file_download</span>
+            Export Worklist CSV
+          </button>
+<button class="px-5 py-2 bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md rounded-lg transition-transform active:scale-[0.98] flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="save">save</span>
+            Save Resolution State
+          </button>
+</div>
+</div>
+</section>
+</main>
+</body></html>

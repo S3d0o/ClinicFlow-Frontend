@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow Admin - 6. Settings</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Inter & Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-bright": "#f8f9ff",
+            "secondary": "#4e6077",
+            "outline": "#73777f",
+            "surface-tint": "#406185",
+            "secondary-container": "#cee1fd",
+            "surface-container-lowest": "#ffffff",
+            "surface-dim": "#d1dbeb",
+            "surface-container-high": "#dfe9fa",
+            "primary-fixed": "#d1e4ff",
+            "inverse-surface": "#27313e",
+            "on-surface": "#121c28",
+            "primary-fixed-dim": "#a8c9f3",
+            "on-primary-fixed": "#001d36",
+            "on-secondary-fixed": "#081c31",
+            "on-secondary": "#ffffff",
+            "surface-container-highest": "#d9e3f4",
+            "surface-container-low": "#eef4ff",
+            "inverse-primary": "#a8c9f3",
+            "error": "#ba1a1a",
+            "tertiary": "#4e1700",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-secondary-fixed-variant": "#36485f",
+            "on-primary-fixed-variant": "#27496c",
+            "surface-variant": "#d9e3f4",
+            "secondary-fixed": "#d2e4ff",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "tertiary-fixed-dim": "#ffb599",
+            "background": "#f8f9ff",
+            "on-tertiary-fixed": "#370e00",
+            "on-error": "#ffffff",
+            "outline-variant": "#c3c6cf",
+            "on-surface-variant": "#43474e",
+            "tertiary-container": "#722600",
+            "on-tertiary": "#ffffff",
+            "on-primary": "#ffffff",
+            "tertiary-fixed": "#ffdbce",
+            "error-container": "#ffdad6",
+            "primary": "#002b4c",
+            "on-error-container": "#93000a",
+            "on-primary-container": "#8dadd6",
+            "on-tertiary-container": "#ff8b5b",
+            "surface-container": "#e5efff",
+            "on-secondary-container": "#52647c",
+            "on-background": "#121c28",
+            "inverse-on-surface": "#eaf1ff",
+            "primary-container": "#1e4164",
+            "surface": "#f8f9ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-sm": "0.5rem",
+            "gutter-sm": "0.75rem",
+            "space-md": "0.75rem",
+            "margin-tablet": "1.5rem",
+            "margin": "1rem",
+            "space-xs": "0.25rem",
+            "space-lg": "1rem",
+            "space-xl": "1.5rem",
+            "gutter": "1rem",
+            "margin-desktop": "2rem"
+          },
+          "fontFamily": {
+            "body-sm": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-lg": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .tnum {
+      font-feature-settings: "tnum";
+      font-variant-numeric: tabular-nums;
+    }
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      display: inline-block;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface antialiased min-h-full flex font-body-md text-body-md">
+<!-- ========================================================================= -->
+<!-- SIDE NAVIGATION (Desktop Fixed: 260px)                                   -->
+<!-- Authority: Shared Components JSON (SideNavBar)                           -->
+<!-- ========================================================================= -->
+<aside class="fixed top-0 left-0 h-screen w-[260px] z-40 border-r border-outline-variant/40 flex flex-col justify-between p-4 bg-surface-container-lowest">
+<!-- Top Branding & Navigation -->
+<div class="flex flex-col gap-6">
+<!-- Network Emblem & Titles -->
+<div class="flex items-center gap-3 px-2 pt-1">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-on-primary shadow-sm shrink-0">
+<span class="material-symbols-outlined text-[24px]">local_hospital</span>
+</div>
+<div class="flex flex-col overflow-hidden">
+<span class="font-headline-md text-headline-md font-bold text-primary tracking-tight truncate">ClinicFlow</span>
+<span class="font-label-sm text-label-sm text-secondary truncate">Egypt Network Admin</span>
+</div>
+</div>
+<!-- Navigation Tabs (JSON: ["Overview", "Staff", "Roles & Permissions", "Branches", "Specialties", "Settings", "Integrations", "Audit Log"]) -->
+<nav aria-label="System Administration Navigation" class="flex flex-col gap-1">
+<!-- Tab 0: Overview (Inactive) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-secondary">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+<!-- Tab 1: Staff (Inactive) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-secondary">badge</span>
+<span class="font-label-md text-label-md">Staff</span>
+</a>
+<!-- Tab 2: Roles & Permissions (Inactive) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-secondary">shield_person</span>
+<span class="font-label-md text-label-md">Roles &amp; Permissions</span>
+</a>
+<!-- Tab 3: Branches (Inactive) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-secondary">apartment</span>
+<span class="font-label-md text-label-md">Branches</span>
+</a>
+<!-- Tab 4: Specialties (Inactive) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-secondary">stethoscope</span>
+<span class="font-label-md text-label-md">Specialties</span>
+</a>
+<!-- Tab 5: Settings (ACTIVE TARGET SCREEN) -->
+<!-- Strict execute: style_active_navigation from JSON -->
+<a aria-current="page" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary-container text-on-primary-container font-semibold border-l-4 border-primary shadow-sm" href="#">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-label-md text-label-md text-white">Settings</span>
+</a>
+<!-- Tab 6: Integrations (Inactive) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-secondary">hub</span>
+<span class="font-label-md text-label-md">Integrations</span>
+</a>
+<!-- Tab 7: Audit Log (Inactive) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-secondary">receipt_long</span>
+<span class="font-label-md text-label-md">Audit Log</span>
+</a>
+</nav>
+</div>
+<!-- Sidebar Bottom: User Profile Dock -->
+<div class="pt-3 border-t border-outline-variant/40 flex items-center justify-between">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-primary font-semibold border border-outline-variant/40 shrink-0">
+          KA
+        </div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-semibold truncate leading-tight">Karim Adel</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="inline-flex items-center px-1.5 py-0.2 rounded-full text-[10px] font-medium bg-purple-100 text-purple-800 leading-tight">
+              Admin
+            </span>
+</div>
+</div>
+</div>
+<button class="text-secondary hover:text-on-surface p-1 rounded hover:bg-surface-container transition-colors" title="User Actions" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- MAIN WORKSPACE WRAPPER (Offset by sidebar 260px)                         -->
+<!-- ========================================================================= -->
+<div class="flex-1 ml-[260px] min-h-screen flex flex-col bg-surface">
+<!-- ======================================================================= -->
+<!-- TOP APP BAR (Sticky Desktop Header)                                      -->
+<!-- Authority: Shared Components JSON (TopNavBar)                           -->
+<!-- ======================================================================= -->
+<header class="sticky top-0 right-0 z-30 w-full h-16 px-6 bg-surface-container-lowest border-b border-outline-variant/40 flex items-center justify-between">
+<!-- Search Input (On Left as specified in JSON) -->
+<div class="flex items-center w-96 relative">
+<span class="material-symbols-outlined text-secondary absolute left-3 pointer-events-none text-[18px]">search</span>
+<input class="w-full pl-9 pr-4 py-2 bg-surface text-on-surface placeholder:text-secondary rounded-lg border border-outline-variant/60 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-body-sm font-body-sm" placeholder="Search system settings, configurations..." type="text"/>
+</div>
+<!-- Trailing Action Cluster -->
+<div class="flex items-center gap-4">
+<!-- Operational Status Indicator (trailing_primary_action) -->
+<div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200">
+<span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+<span class="font-label-md text-label-md text-emerald-800 font-semibold">Network Operational</span>
+</div>
+<!-- Language Switcher (trailing_secondary_action) -->
+<button class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-outline-variant/40 hover:bg-surface-container text-on-surface font-label-md text-label-md transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-secondary">language</span>
+<span>EN / عربي</span>
+</button>
+<!-- Notification Bell (with orange unread badge) -->
+<div class="relative">
+<button class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-surface-container text-secondary transition-colors" title="Notifications" type="button">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#FF5E00]"></span>
+</button>
+</div>
+<div class="h-6 w-px bg-outline-variant/40"></div>
+<!-- Admin Avatar Quick Target -->
+<div class="flex items-center gap-2">
+<img class="w-8 h-8 rounded-full object-cover border border-outline-variant/60" data-alt="Close-up professional studio portrait of Karim Adel, an Egyptian healthcare operations director wearing a crisp navy business suit against a clean, softly lit architectural interior with cool corporate tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcuCH3qsK-gkEKT7TEjxcg3iDithjrVBo3S4yPkhGr-Mxp61jhiVhbEZx74Hr8sAqDFk-KdVOKWxe24ZCQyx0TU3Cgu4oWvh-IUdxPtLctEk5xDeHvg0nwiruVfTZkeL7vwIXE-nkptQ6Z8B0NdVRWhkQWCEpDOudwfMUmo4fHKWNlBu3e8D5Hg9Gf4Si0MdhT6zvwWHYKoVlWP-n0d1F-2ipUiTeAp5ZP8u44ezTP_CkHd1iuM94V_zE02radqQOCR6tOjViaKI5r"/>
+<span class="font-label-md text-label-md text-on-surface font-medium hidden md:inline">Karim A.</span>
+</div>
+</div>
+</header>
+<!-- ======================================================================= -->
+<!-- WORKSPACE CANVAS CONTENT                                                -->
+<!-- ======================================================================= -->
+<main class="flex-1 p-6 max-w-[1400px] w-full mx-auto space-y-6">
+<!-- Breadcrumbs & Page Header Section -->
+<div class="space-y-2">
+<nav aria-label="Breadcrumb" class="flex items-center gap-1.5 font-label-sm text-label-sm text-secondary">
+<span>ClinicFlow</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span>System Administration</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-semibold">Global Settings</span>
+</nav>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">
+              Global System Settings &amp; Operational Governance
+            </h1>
+<p class="font-body-md text-body-md text-secondary mt-1 max-w-3xl">
+              Configure network-wide scheduling rules, financial approval delegation, multi-branch data visibility, and compliance policies.
+            </p>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<button class="px-4 py-2.5 rounded-lg bg-surface-container-lowest border border-primary text-primary font-label-lg text-label-lg hover:bg-surface-container transition-colors shadow-sm" type="button">
+              Export Audit Trail
+            </button>
+</div>
+</div>
+</div>
+<!-- Immutable Ledger Callout Banner -->
+<div class="rounded-xl border border-outline-variant/60 bg-surface-container-lowest p-4 flex items-start gap-3.5 shadow-sm">
+<div class="w-9 h-9 rounded-lg bg-primary-container text-white flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">shield</span>
+</div>
+<div class="flex-1">
+<h2 class="font-label-lg text-label-lg text-primary font-semibold">Immutable System Audit Enforcement</h2>
+<p class="font-body-sm text-body-sm text-secondary mt-0.5">
+            Every change is audited — modifying these parameters writes an immutable record to the system audit ledger with admin IP and timestamp.
+          </p>
+</div>
+<div class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container text-secondary font-label-sm text-label-sm tnum">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+<span>Node #EGY-CAI-04</span>
+</div>
+</div>
+<!-- Settings Cards Grid (2-Column Responsive Layout) -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+<!-- =================================================================== -->
+<!-- CARD 1: Appointments & Queue Rules                                   -->
+<!-- =================================================================== -->
+<section class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl overflow-hidden shadow-sm flex flex-col justify-between">
+<div class="p-5 border-b border-outline-variant/40 flex items-center justify-between bg-surface-container-low/40">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-primary text-[22px]">calendar_month</span>
+<h2 class="font-headline-sm text-headline-sm text-primary">Appointments &amp; Queue Rules</h2>
+</div>
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-primary-fixed text-on-primary-fixed">
+              4 Active Rules
+            </span>
+</div>
+<div class="p-5 space-y-5">
+<!-- Setting 1.1: Patient Cancellation Window -->
+<div class="space-y-1.5">
+<div class="flex items-center justify-between">
+<label class="font-label-lg text-label-lg text-on-surface font-semibold" for="cancel-window">
+                  Patient Cancellation Notice Window
+                </label>
+<span class="font-label-sm text-label-sm text-secondary">Default: <strong class="text-primary tnum">2 hours</strong></span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary">Minimum lead time for patients to cancel without forfeit.</p>
+<div class="relative w-full">
+<select class="w-full h-11 px-3 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary tnum" id="cancel-window">
+<option value="1">1 hour prior</option>
+<option selected="" value="2">2 hours prior (Standard Egyptian Network Default)</option>
+<option value="4">4 hours prior</option>
+<option value="6">6 hours prior</option>
+<option value="12">12 hours prior</option>
+</select>
+</div>
+</div>
+<!-- Setting 1.2: Reschedule Window -->
+<div class="space-y-1.5 pt-3 border-t border-outline-variant/30">
+<div class="flex items-center justify-between">
+<label class="font-label-lg text-label-lg text-on-surface font-semibold" for="resched-window">
+                  Reschedule Window
+                </label>
+<span class="font-label-sm text-label-sm text-secondary">Default: <strong class="text-primary tnum">2 hours</strong></span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary">Minimum advance notification permitted to modify an appointment slot.</p>
+<select class="w-full h-11 px-3 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary tnum" id="resched-window">
+<option value="1">1 hour prior</option>
+<option selected="" value="2">2 hours</option>
+<option value="3">3 hours</option>
+<option value="4">4 hours</option>
+</select>
+</div>
+<!-- Setting 1.3: No-Show Grace Period -->
+<div class="space-y-1.5 pt-3 border-t border-outline-variant/30">
+<div class="flex items-center justify-between">
+<label class="font-label-lg text-label-lg text-on-surface font-semibold" for="noshow-grace">
+                  No-Show Grace Period
+                </label>
+<span class="font-label-sm text-label-sm text-secondary">Default: <strong class="text-primary tnum">15 min</strong></span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary">Time before desk marks an unattended slot as no-show.</p>
+<div class="relative w-full">
+<input class="w-full h-11 pl-3 pr-14 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary tnum" id="noshow-grace" type="number" value="15"/>
+<span class="absolute right-3.5 top-3 text-secondary font-label-md text-label-md pointer-events-none">min</span>
+</div>
+</div>
+<!-- Setting 1.4: Walk-in Quota Cap -->
+<div class="space-y-1.5 pt-3 border-t border-outline-variant/30">
+<div class="flex items-center justify-between">
+<label class="font-label-lg text-label-lg text-on-surface font-semibold" for="walkin-cap">
+                  Walk-in Quota Cap (per doctor/day)
+                </label>
+<span class="font-label-sm text-label-sm text-secondary">Default: <strong class="text-primary tnum">10 patients</strong></span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary">Maximum urgent unbooked admissions allowed per provider shift.</p>
+<div class="flex items-center gap-3">
+<input class="w-full accent-primary h-2 bg-surface-container rounded-lg cursor-pointer" id="walkin-cap" max="25" min="0" oninput="document.getElementById('walkin-display').innerText = this.value" type="range" value="10"/>
+<span class="w-24 text-right font-label-lg text-label-lg text-primary font-bold tnum">
+<span id="walkin-display">10</span> patients
+                </span>
+</div>
+</div>
+</div>
+<div class="px-5 py-3.5 bg-surface-container-low/60 border-t border-outline-variant/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<span class="font-label-sm text-label-sm text-secondary">
+              Last modified 14 Oct 2025 by <strong class="text-on-surface">Karim Adel</strong>
+</span>
+<button class="h-10 px-4 rounded-lg bg-primary text-white font-label-lg text-label-lg hover:bg-primary/90 transition-all active:scale-[0.99] shadow-sm" type="button">
+              Save Appointments Settings
+            </button>
+</div>
+</section>
+<!-- =================================================================== -->
+<!-- CARD 2: Payments, Deposits & Surcharges                             -->
+<!-- =================================================================== -->
+<section class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl overflow-hidden shadow-sm flex flex-col justify-between">
+<div class="p-5 border-b border-outline-variant/40 flex items-center justify-between bg-surface-container-low/40">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-primary text-[22px]">payments</span>
+<h2 class="font-headline-sm text-headline-sm text-primary">Payments, Deposits &amp; Surcharges</h2>
+</div>
+<span class="font-label-sm text-label-sm text-secondary flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-[#FF5E00]"></span>
+              Billing Tier I
+            </span>
+</div>
+<div class="p-5 space-y-5">
+<!-- Setting 2.1: No-Show Fee Policy -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<label class="font-label-lg text-label-lg text-on-surface font-semibold">
+                  No-Show Fee Policy
+                </label>
+<span class="font-label-sm text-label-sm text-secondary">Default: <strong class="text-primary tnum">EGP 100.00</strong></span>
+</div>
+<div class="relative w-full">
+<span class="absolute left-3.5 top-3 text-secondary font-label-md text-label-md pointer-events-none">EGP</span>
+<input class="w-full h-11 pl-12 pr-4 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary tnum font-semibold" type="text" value="100.00"/>
+</div>
+<div class="flex items-center gap-2 pt-1">
+<input checked="" class="w-4 h-4 text-primary focus:ring-primary border-outline-variant" id="deduct-deposit" name="noshow-radio" type="radio"/>
+<label class="font-body-sm text-body-sm text-on-surface" for="deduct-deposit">
+                  Deduct from next booking deposit
+                </label>
+</div>
+</div>
+<!-- Setting 2.2: Mandatory Booking Deposit -->
+<div class="space-y-2 pt-3 border-t border-outline-variant/30">
+<div class="flex items-center justify-between">
+<div>
+<label class="font-label-lg text-label-lg text-on-surface font-semibold block">
+                    Mandatory Booking Deposit
+                  </label>
+<p class="font-body-sm text-body-sm text-secondary">Default: <strong class="text-primary tnum">EGP 100.00</strong></p>
+</div>
+<!-- Toggle Switch -->
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-outline-variant after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="p-3 bg-surface rounded-lg border border-outline-variant/50 space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface">Deposit Amount</span>
+<span class="font-label-md text-label-md text-primary font-bold tnum">EGP 100.00 per service</span>
+</div>
+<div class="flex items-center gap-2">
+<input checked="" class="w-4 h-4 text-primary rounded border-outline-variant focus:ring-primary" id="high-demand" type="checkbox"/>
+<label class="font-body-sm text-body-sm text-secondary" for="high-demand">
+                    Applies to high-demand specialties (Cardiology, Orthopedics)
+                  </label>
+</div>
+</div>
+</div>
+<!-- Setting 2.3: Deposit Refund Rule -->
+<div class="space-y-1.5 pt-3 border-t border-outline-variant/30">
+<div class="flex items-center justify-between">
+<label class="font-label-lg text-label-lg text-on-surface font-semibold" for="refund-rule">
+                  Deposit Refund Rule
+                </label>
+<span class="font-label-sm text-label-sm text-secondary">Default: <strong class="text-primary">2h rule</strong></span>
+</div>
+<select class="w-full h-11 px-3 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary" id="refund-rule">
+<option selected="">Full refund if cancelled &gt; 2h prior; Non-refundable within 2h</option>
+<option>Full refund if cancelled &gt; 24h prior</option>
+<option>Credit note to patient wallet only (Zero cash refund)</option>
+</select>
+</div>
+</div>
+<div class="px-5 py-3.5 bg-surface-container-low/60 border-t border-outline-variant/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<span class="font-label-sm text-label-sm text-secondary">
+              Last modified 02 Oct 2025 by <strong class="text-on-surface">Karim Adel</strong>
+</span>
+<button class="h-10 px-4 rounded-lg bg-primary text-white font-label-lg text-label-lg hover:bg-primary/90 transition-all active:scale-[0.99] shadow-sm" type="button">
+              Save Payment Settings
+            </button>
+</div>
+</section>
+<!-- =================================================================== -->
+<!-- CARD 3: Financial Approvals & Delegations Card                      -->
+<!-- =================================================================== -->
+<section class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl overflow-hidden shadow-sm flex flex-col justify-between">
+<div class="p-5 border-b border-outline-variant/40 flex items-center justify-between bg-surface-container-low/40">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-primary text-[22px]">verified_user</span>
+<h2 class="font-headline-sm text-headline-sm text-primary">Delegation of Financial Authority</h2>
+</div>
+<span class="font-label-sm text-label-sm text-secondary">Fiscal Policy 2025</span>
+</div>
+<div class="p-5 space-y-4">
+<!-- Setting 3.1 & 3.2: Discount Caps Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Receptionist Cap -->
+<div class="space-y-1.5">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-on-surface font-semibold" for="recep-cap">
+                    Receptionist Courtesy Cap
+                  </label>
+<span class="font-label-sm text-label-sm text-secondary tnum">Def: 10%</span>
+</div>
+<div class="relative">
+<input class="w-full h-11 pl-3 pr-8 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary tnum font-semibold" id="recep-cap" type="number" value="10"/>
+<span class="absolute right-3 top-3 text-secondary font-label-md text-label-md pointer-events-none">%</span>
+</div>
+<p class="text-[11px] text-secondary leading-tight">Discounts above 10% require Branch Manager approval.</p>
+</div>
+<!-- Accountant Cap -->
+<div class="space-y-1.5">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-on-surface font-semibold" for="acct-cap">
+                    Accountant Courtesy Cap
+                  </label>
+<span class="font-label-sm text-label-sm text-secondary tnum">Def: 20%</span>
+</div>
+<div class="relative">
+<input class="w-full h-11 pl-3 pr-8 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary tnum font-semibold" id="acct-cap" type="number" value="20"/>
+<span class="absolute right-3 top-3 text-secondary font-label-md text-label-md pointer-events-none">%</span>
+</div>
+<p class="text-[11px] text-secondary leading-tight">Max discretionary adjustment before audit tag.</p>
+</div>
+</div>
+<!-- Setting 3.3: Mandatory Manager Refund Threshold -->
+<div class="space-y-1.5 pt-3 border-t border-outline-variant/30">
+<div class="flex items-center justify-between">
+<label class="font-label-lg text-label-lg text-on-surface font-semibold" for="refund-threshold">
+                  Mandatory Manager Approval Refund Threshold
+                </label>
+<span class="font-label-sm text-label-sm text-secondary">Default: <strong class="text-primary tnum">EGP 1,000.00</strong></span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary">Encounter refunds exceeding this amount escalate to Manager inbox.</p>
+<div class="relative w-full">
+<span class="absolute left-3.5 top-3 text-secondary font-label-md text-label-md pointer-events-none">EGP</span>
+<input class="w-full h-11 pl-12 pr-4 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary tnum font-semibold" id="refund-threshold" type="text" value="1,000.00"/>
+</div>
+</div>
+<!-- Setting 3.4: Cash Drawer Variance Alert Threshold -->
+<div class="space-y-1.5 pt-3 border-t border-outline-variant/30">
+<div class="flex items-center justify-between">
+<label class="font-label-lg text-label-lg text-on-surface font-semibold" for="cash-variance">
+                  Cash Drawer Variance Alert Threshold
+                </label>
+<span class="font-label-sm text-label-sm text-secondary">Default: <strong class="text-primary tnum">EGP 50.00</strong></span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary">Physical count discrepancies &gt; EGP 50 flag shift as unbalanced.</p>
+<div class="relative w-full">
+<span class="absolute left-3.5 top-3 text-secondary font-label-md text-label-md pointer-events-none">EGP</span>
+<input class="w-full h-11 pl-12 pr-4 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary tnum font-semibold" id="cash-variance" type="text" value="50.00"/>
+</div>
+</div>
+</div>
+<div class="px-5 py-3.5 bg-surface-container-low/60 border-t border-outline-variant/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<span class="font-label-sm text-label-sm text-secondary">
+              Last modified 24 Sep 2025 by <strong class="text-on-surface">Dr. Hala Mostafa</strong>
+</span>
+<button class="h-10 px-4 rounded-lg bg-primary text-white font-label-lg text-label-lg hover:bg-primary/90 transition-all active:scale-[0.99] shadow-sm" type="button">
+              Save Approvals Policy
+            </button>
+</div>
+</section>
+<!-- =================================================================== -->
+<!-- CARD 4: Medical Records & Data Visibility Card                      -->
+<!-- =================================================================== -->
+<section class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl overflow-hidden shadow-sm flex flex-col justify-between">
+<div class="p-5 border-b border-outline-variant/40 flex items-center justify-between bg-surface-container-low/40">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-primary text-[22px]">description</span>
+<h2 class="font-headline-sm text-headline-sm text-primary">Patient Records Governance</h2>
+</div>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-100 text-emerald-800">
+              HIPAA / MoHP Compliant
+            </span>
+</div>
+<div class="p-5 space-y-5">
+<!-- Setting 4.1: Cross-Branch Sharing Toggle -->
+<div class="flex items-start justify-between gap-4">
+<div class="space-y-1">
+<label class="font-label-lg text-label-lg text-on-surface font-semibold block">
+                  Share Records Across Network Branches
+                </label>
+<p class="font-body-sm text-body-sm text-secondary leading-relaxed">
+                  Allows attending clinicians in Nasr City, Maadi, and Sheikh Zayed to view longitudinal visit notes and allergies.
+                </p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0 mt-1">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-outline-variant after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Setting 4.2: Automated Lab Sync Window -->
+<div class="space-y-1.5 pt-3 border-t border-outline-variant/30">
+<label class="font-label-lg text-label-lg text-on-surface font-semibold block" for="lab-sync">
+                Automated Lab Sync Window
+              </label>
+<p class="font-body-sm text-body-sm text-secondary">Frequency of telemetry and diagnostic intake polling from partner laboratory networks.</p>
+<select class="w-full h-11 px-3 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary" id="lab-sync">
+<option selected="">Instantaneous on result upload</option>
+<option>Batch sync every 15 minutes</option>
+<option>Hourly synchronization</option>
+<option>Manual triage release by Lab Officer</option>
+</select>
+</div>
+<!-- Setting 4.3: Emergency Override Toggle -->
+<div class="pt-3 border-t border-outline-variant/30 flex items-start justify-between gap-4">
+<div class="space-y-1">
+<label class="font-label-lg text-label-lg text-on-surface font-semibold block">
+                  Emergency Medical Override Access
+                </label>
+<p class="font-body-sm text-body-sm text-secondary leading-relaxed">
+                  Allows on-duty triage nurses to view critical allergies without doctor check-in.
+                </p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0 mt-1">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-outline-variant after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+<div class="px-5 py-3.5 bg-surface-container-low/60 border-t border-outline-variant/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<span class="font-label-sm text-label-sm text-secondary">
+              Last modified 19 Sep 2025
+            </span>
+<button class="h-10 px-4 rounded-lg bg-primary text-white font-label-lg text-label-lg hover:bg-primary/90 transition-all active:scale-[0.99] shadow-sm" type="button">
+              Save Records Policy
+            </button>
+</div>
+</section>
+<!-- =================================================================== -->
+<!-- CARD 5: Recruitment & Candidate Retention Card                      -->
+<!-- =================================================================== -->
+<section class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl overflow-hidden shadow-sm flex flex-col justify-between lg:col-span-2">
+<div class="p-5 border-b border-outline-variant/40 flex items-center justify-between bg-surface-container-low/40">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-primary text-[22px]">badge</span>
+<h2 class="font-headline-sm text-headline-sm text-primary">Medical Talent &amp; Recruitment Parameters</h2>
+</div>
+<span class="font-label-sm text-label-sm text-secondary">HR Bylaws Chapter 4</span>
+</div>
+<div class="p-5 grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Setting 5.1: CV Retention Window -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<label class="font-label-lg text-label-lg text-on-surface font-semibold" for="cv-window">
+                  CV Retention Window
+                </label>
+<span class="font-label-sm text-label-sm text-secondary tnum">Def: 6 mo</span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary">Complies with Egyptian workforce archive bylaws.</p>
+<select class="w-full h-11 px-3 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary tnum" id="cv-window">
+<option value="3">3 months</option>
+<option selected="" value="6">6 months</option>
+<option value="12">12 months</option>
+</select>
+</div>
+<!-- Setting 5.2: Re-application Cool-Down Period -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<label class="font-label-lg text-label-lg text-on-surface font-semibold" for="reapp-period">
+                  Cool-Down Period
+                </label>
+<span class="font-label-sm text-label-sm text-secondary tnum">Def: 90 days</span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary">Mandatory wait before a rejected candidate can submit a new application.</p>
+<div class="relative w-full">
+<input class="w-full h-11 pl-3 pr-14 bg-surface border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary tnum font-semibold" id="reapp-period" type="number" value="90"/>
+<span class="absolute right-3.5 top-3 text-secondary font-label-md text-label-md pointer-events-none">days</span>
+</div>
+</div>
+<!-- Setting 5.3: Syndicate Verification Auto-Check -->
+<div class="space-y-2 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between">
+<label class="font-label-lg text-label-lg text-on-surface font-semibold">
+                    Syndicate Auto-Check
+                  </label>
+<span class="font-label-sm text-label-sm text-emerald-700 font-semibold">Active</span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary mt-1">
+                  Automated background query to Egyptian Medical Syndicate database for license validation.
+                </p>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface rounded-lg border border-outline-variant/50">
+<span class="font-label-md text-label-md text-on-surface">Enable Syndicate API</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-outline-variant after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</div>
+<div class="px-5 py-3.5 bg-surface-container-low/60 border-t border-outline-variant/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<span class="font-label-sm text-label-sm text-secondary">
+              Last modified 10 Aug 2025
+            </span>
+<button class="h-10 px-4 rounded-lg bg-primary text-white font-label-lg text-label-lg hover:bg-primary/90 transition-all active:scale-[0.99] shadow-sm self-end sm:self-auto" type="button">
+              Save Recruitment Settings
+            </button>
+</div>
+</section>
+</div>
+</main>
+<!-- Workspace Footer -->
+<footer class="mt-auto px-8 py-4 border-t border-outline-variant/40 bg-surface-container-lowest text-secondary font-body-sm text-body-sm flex flex-col sm:flex-row items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<span>© 2025 ClinicFlow Egypt Healthcare Network. All rights reserved.</span>
+<span>•</span>
+<span class="text-xs bg-surface-container px-2 py-0.5 rounded text-on-surface font-mono">v4.8.2-prod</span>
+</div>
+<div class="flex items-center gap-4 text-xs">
+<a class="hover:text-primary transition-colors" href="#">Security Whitepaper</a>
+<a class="hover:text-primary transition-colors" href="#">Audit Protocols</a>
+<a class="hover:text-primary transition-colors" href="#">Syndicate Gateway</a>
+</div>
+</footer>
+</div>
+</body></html>

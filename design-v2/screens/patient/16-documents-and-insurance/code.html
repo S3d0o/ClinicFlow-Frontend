@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow - Documents & Insurance</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Plus+Jakarta+Sans:wght@100..900&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed-variant": "#27496c",
+            "tertiary-fixed": "#ffdbce",
+            "on-secondary-container": "#52647c",
+            "outline-variant": "#c3c6cf",
+            "surface-container": "#e5efff",
+            "primary-container": "#1e4164",
+            "error": "#ba1a1a",
+            "surface-container-low": "#eef4ff",
+            "on-surface": "#121c28",
+            "tertiary-fixed-dim": "#ffb599",
+            "surface-tint": "#406185",
+            "on-error-container": "#93000a",
+            "surface-dim": "#d1dbeb",
+            "surface": "#f8f9ff",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "secondary-fixed": "#d2e4ff",
+            "on-secondary": "#ffffff",
+            "on-background": "#121c28",
+            "tertiary-container": "#722600",
+            "on-secondary-fixed-variant": "#36485f",
+            "on-primary-fixed": "#001d36",
+            "primary-fixed-dim": "#a8c9f3",
+            "secondary-container": "#cee1fd",
+            "inverse-on-surface": "#eaf1ff",
+            "background": "#f8f9ff",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "on-primary": "#ffffff",
+            "inverse-primary": "#a8c9f3",
+            "on-tertiary-fixed": "#370e00",
+            "primary": "#002b4c",
+            "surface-variant": "#d9e3f4",
+            "on-tertiary-container": "#ff8b5b",
+            "inverse-surface": "#27313e",
+            "tertiary": "#4e1700",
+            "secondary": "#4e6077",
+            "surface-bright": "#f8f9ff",
+            "on-primary-container": "#8dadd6",
+            "on-surface-variant": "#43474e",
+            "on-secondary-fixed": "#081c31",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-tertiary": "#ffffff",
+            "error-container": "#ffdad6",
+            "surface-container-high": "#dfe9fa",
+            "primary-fixed": "#d1e4ff",
+            "outline": "#73777f",
+            "surface-container-highest": "#d9e3f4"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1rem",
+            "space-xl": "1.5rem",
+            "space-lg": "1rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem",
+            "space-md": "0.75rem",
+            "margin-tablet": "1.5rem",
+            "gutter-sm": "0.75rem",
+            "margin-desktop": "2rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "label-lg": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "label-md": ["Inter"],
+            "body-sm": ["Inter"]
+          },
+          "fontSize": {
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-[#F7F9FD] text-on-surface antialiased min-h-screen flex justify-center selection:bg-secondary-container">
+<!-- Device Frame for Mobile (390px) -->
+<main class="w-full max-w-[390px] min-h-screen bg-[#F7F9FD] flex flex-col relative pb-28">
+<!-- Top App Bar Component -->
+<header class="bg-surface-container-lowest sticky top-0 z-40 w-full h-14 px-4 flex justify-between items-center shadow-sm">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-primary text-[24px]">local_hospital</span>
+<span class="text-headline-md font-headline-md font-bold text-primary tracking-tight">ClinicFlow</span>
+</div>
+<div class="flex items-center space-x-3">
+<!-- Arabic / English Localization Switcher -->
+<button aria-label="Switch Language" class="px-2 py-1 rounded bg-[#F7F9FD] border border-[#D3DBE6] text-label-sm font-label-md text-primary font-semibold flex items-center min-h-[36px] active:scale-95 transition-all" type="button">
+          EN <span class="mx-1 text-secondary opacity-40">|</span> عربي
+        </button>
+<!-- Notification Bell with Egyptian Patient Queue Pip -->
+<button aria-label="Notifications" class="relative p-2 rounded-full hover:bg-surface-container-low text-primary active:scale-95 transition-all min-h-[44px] min-w-[44px] flex items-center justify-center" type="button">
+<span class="material-symbols-outlined text-[24px]">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#FF5E00] ring-2 ring-surface-container-lowest"></span>
+</button>
+</div>
+</header>
+<!-- Sub-navigation Tabs (Records & Patient Hub) -->
+<nav aria-label="Patient portal records navigation" class="bg-surface-container-lowest border-b border-[#D3DBE6] px-4 flex items-center space-x-6 overflow-x-auto no-scrollbar">
+<button class="py-3 text-body-md font-body-md text-secondary whitespace-nowrap border-b-2 border-transparent active:scale-95 transition-all" type="button">
+        My Visits
+      </button>
+<button class="py-3 text-body-md font-body-md text-secondary whitespace-nowrap border-b-2 border-transparent active:scale-95 transition-all" type="button">
+        Invoices & Receipts
+      </button>
+<button aria-current="page" class="py-3 text-body-md font-label-lg text-[#1E4164] font-semibold whitespace-nowrap border-b-2 border-[#1E4164] active:scale-95 transition-all" type="button">
+        Documents & Insurance
+      </button>
+</nav>
+<!-- Main Canvas Content -->
+<div class="px-4 pt-5 pb-6 flex flex-col space-y-6">
+<!-- Page Header Banner -->
+<section>
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile text-[#13263B] tracking-tight">Documents & Insurance</h1>
+<p class="text-body-sm font-body-sm text-[#5B6573] mt-0.5">Manage your health insurance cards and medical files</p>
+</section>
+<!-- Section 1: Insurance Cards -->
+<section class="flex flex-col space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-1.5">
+<span class="material-symbols-outlined text-[#015C9A] text-[20px]">badge</span>
+<h2 class="text-headline-sm font-headline-sm text-[#13263B]">My insurance cards</h2>
+</div>
+<span class="text-label-sm font-label-sm text-[#5B6573]">1 Registered</span>
+</div>
+<!-- Stylized Digital Insurance Card Container -->
+<div class="bg-surface-container-lowest rounded-xl border border-[#D3DBE6] overflow-hidden shadow-sm flex flex-col">
+<!-- Deep Navy Card Upper Band -->
+<div class="bg-[#13263B] text-surface-container-lowest p-4 relative overflow-hidden">
+<!-- Subtle Watermark Graphic -->
+<div class="absolute -right-6 -bottom-6 opacity-10 text-surface-container-lowest pointer-events-none select-none">
+<span class="material-symbols-outlined text-[120px]">verified_user</span>
+</div>
+<div class="flex justify-between items-start mb-3 relative z-10">
+<div class="flex items-center space-x-2">
+<div class="w-8 h-8 rounded bg-surface-container-lowest/10 backdrop-blur-sm flex items-center justify-center border border-white/20">
+<span class="material-symbols-outlined text-[20px] text-surface-container-lowest">health_and_safety</span>
+</div>
+<div>
+<span class="text-body-sm font-label-sm text-[#D3DBE6] block text-[10px] tracking-wider uppercase">Payer / Network</span>
+<span class="text-headline-sm font-headline-sm text-surface-container-lowest leading-tight">Allianz Healthcare Egypt</span>
+</div>
+</div>
+<!-- Default Badge -->
+<span class="bg-[#1E4164] border border-white/20 text-surface-container-lowest px-2.5 py-1 rounded-full text-label-sm font-label-md tracking-wide">
+                Default card
+              </span>
+</div>
+<!-- Member Key Identifiers -->
+<div class="mt-4 pt-2 border-t border-white/10 relative z-10 grid grid-cols-2 gap-3">
+<div>
+<span class="text-[10px] uppercase font-label-sm tracking-wider text-surface-variant block">Member Name</span>
+<span class="text-body-md font-headline-sm text-surface-container-lowest truncate block">Mohamed Adel Hassan</span>
+</div>
+<div>
+<span class="text-[10px] uppercase font-label-sm tracking-wider text-surface-variant block">Policy Number</span>
+<span class="text-body-md font-headline-sm tracking-wider text-surface-container-lowest block font-mono">ALLZ-994022-EG-01</span>
+</div>
+</div>
+</div>
+<!-- Card Lower Spec / Metadata -->
+<div class="p-3.5 bg-surface-container-lowest flex justify-between items-center text-body-sm">
+<div>
+<span class="text-body-sm text-[#5B6573] block text-[11px]">Coverage Tier</span>
+<div class="flex items-center space-x-1.5 mt-0.5">
+<span class="text-label-md font-label-md text-[#13263B]">Gold Comprehensive</span>
+<span class="bg-surface-container-low text-[#015C9A] text-label-sm font-label-sm px-1.5 py-0.5 rounded border border-[#C6D0DE]">80% Outpatient</span>
+</div>
+</div>
+<div class="text-right">
+<span class="text-body-sm text-[#5B6573] block text-[11px]">Valid Until</span>
+<span class="text-label-md font-label-md text-[#13263B] mt-0.5 block">31 Dec 2026</span>
+</div>
+</div>
+</div>
+<!-- Add Insurance Card Action Button / Banner -->
+<button class="w-full bg-surface-container-lowest border border-dashed border-[#1E4164] rounded-xl p-3.5 flex items-center justify-between text-left hover:bg-surface-container-low transition-all active:scale-[0.99] min-h-[48px]" type="button">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-[#1E4164] flex-shrink-0">
+<span class="material-symbols-outlined text-[22px]">add_a_photo</span>
+</div>
+<div>
+<span class="text-label-lg font-headline-sm text-[#1E4164] block leading-snug">+ Add insurance card</span>
+<span class="text-body-sm font-body-sm text-[#5B6573] block text-[12px]">Take a photo of front and back of your card</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary text-[20px]">chevron_right</span>
+</button>
+</section>
+<!-- Section 2: Uploaded Clinical Documents -->
+<section class="flex flex-col space-y-3 pt-2">
+<div>
+<div class="flex items-center space-x-1.5">
+<span class="material-symbols-outlined text-[#015C9A] text-[20px]">folder_shared</span>
+<h2 class="text-headline-sm font-headline-sm text-[#13263B]">My documents</h2>
+</div>
+<p class="text-body-sm font-body-sm text-[#5B6573] mt-1 leading-relaxed">
+            Upload medical reports or scans from external clinics to share with your ClinicFlow doctors.
+          </p>
+</div>
+<!-- External Diagnostic Upload Box -->
+<div class="w-full bg-surface-container-lowest border-2 border-dashed border-[#C6D0DE] hover:border-[#015C9A] rounded-xl p-5 flex flex-col items-center justify-center text-center cursor-pointer transition-colors active:scale-[0.99]">
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-[#015C9A] mb-2">
+<span class="material-symbols-outlined text-[26px]">upload_file</span>
+</div>
+<span class="text-label-lg font-label-lg text-[#13263B]">Tap to upload report or lab result</span>
+<span class="text-body-sm font-body-sm text-[#5B6573] mt-0.5">PDF or image, up to 20 MB</span>
+</div>
+<!-- Document List -->
+<div class="flex flex-col space-y-2.5 pt-1">
+<!-- Document 1: CBC -->
+<article class="bg-surface-container-lowest rounded-xl border border-[#D3DBE6] p-3.5 flex items-start justify-between shadow-sm">
+<div class="flex items-start space-x-3 max-w-[76%]">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-[#1E4164] flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[24px]">picture_as_pdf</span>
+</div>
+<div class="overflow-hidden">
+<h3 class="text-body-md font-label-lg text-[#13263B] truncate leading-tight">Complete Blood Count (CBC) - Alfa Scan.pdf</h3>
+<p class="text-body-sm font-body-sm text-[#5B6573] mt-1 text-[11px] leading-snug">
+                  Uploaded 18 Oct 2025 · 2.4 MB · <span class="text-[#015C9A] font-medium">Shared with Dr. Ahmed Fathy</span>
+</p>
+</div>
+</div>
+<!-- Contextual Actions -->
+<div class="flex items-center space-x-1 flex-shrink-0 ml-1">
+<button aria-label="Download document" class="w-9 h-9 rounded-lg flex items-center justify-center text-secondary hover:text-[#1E4164] hover:bg-surface-container-low active:scale-95 transition-all min-h-[44px] min-w-[44px]" type="button">
+<span class="material-symbols-outlined text-[20px]">download</span>
+</button>
+<button aria-label="Delete document" class="w-9 h-9 rounded-lg flex items-center justify-center text-secondary hover:text-error hover:bg-error-container/20 active:scale-95 transition-all min-h-[44px] min-w-[44px]" type="button">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</article>
+<!-- Document 2: Chest X-Ray -->
+<article class="bg-surface-container-lowest rounded-xl border border-[#D3DBE6] p-3.5 flex items-start justify-between shadow-sm">
+<div class="flex items-start space-x-3 max-w-[76%]">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-[#1E4164] flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[24px]">image</span>
+</div>
+<div class="overflow-hidden">
+<h3 class="text-body-md font-label-lg text-[#13263B] truncate leading-tight">Chest X-Ray Imaging Report - Cairo Scan.pdf</h3>
+<p class="text-body-sm font-body-sm text-[#5B6573] mt-1 text-[11px] leading-snug">
+                  Uploaded 02 Jun 2025 · 8.1 MB
+                </p>
+</div>
+</div>
+<!-- Contextual Actions -->
+<div class="flex items-center space-x-1 flex-shrink-0 ml-1">
+<button aria-label="Download document" class="w-9 h-9 rounded-lg flex items-center justify-center text-secondary hover:text-[#1E4164] hover:bg-surface-container-low active:scale-95 transition-all min-h-[44px] min-w-[44px]" type="button">
+<span class="material-symbols-outlined text-[20px]">download</span>
+</button>
+<button aria-label="Delete document" class="w-9 h-9 rounded-lg flex items-center justify-center text-secondary hover:text-error hover:bg-error-container/20 active:scale-95 transition-all min-h-[44px] min-w-[44px]" type="button">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</article>
+</div>
+</section>
+<!-- Trust, Medical Encryption & Privacy Banner -->
+<footer class="mt-4 p-3 rounded-lg bg-surface-container-low/60 border border-[#D3DBE6] flex items-center space-x-2.5 text-secondary">
+<span class="material-symbols-outlined text-[#015C9A] text-[20px] flex-shrink-0">lock</span>
+<p class="text-body-sm font-body-sm text-[11px] leading-snug">
+          Your documents are securely encrypted and only accessible by your attending physicians.
+        </p>
+</footer>
+</div>
+<!-- Bottom Navigation Bar (Docked Patient Shell) -->
+<nav aria-label="Main application navigation" class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin pb-safe h-16 max-w-full bg-surface-container-lowest shadow-[0_-4px_16px_rgba(19,38,59,0.05)]">
+<!-- Home -->
+<a class="flex flex-col items-center justify-center text-secondary min-h-[48px] py-1 active:scale-95 transition-all hover:text-primary" href="#">
+<span class="material-symbols-outlined text-[24px]">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</a>
+<!-- Book -->
+<a class="flex flex-col items-center justify-center text-secondary min-h-[48px] py-1 active:scale-95 transition-all hover:text-primary" href="#">
+<span class="material-symbols-outlined text-[24px]">calendar_add_on</span>
+<span class="text-label-sm font-label-sm">Book</span>
+</a>
+<!-- Appointments -->
+<a class="flex flex-col items-center justify-center text-secondary min-h-[48px] py-1 active:scale-95 transition-all hover:text-primary" href="#">
+<span class="material-symbols-outlined text-[24px]">calendar_month</span>
+<span class="text-label-sm font-label-sm">Appointments</span>
+</a>
+<!-- Records (Active Destination for Documents & Insurance) -->
+<a aria-current="page" class="flex flex-col items-center justify-center text-primary-container font-semibold min-h-[48px] py-1 active:scale-95 transition-all" href="#">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">description</span>
+<span class="text-label-sm font-label-sm font-semibold text-primary-container">Records</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-secondary min-h-[48px] py-1 active:scale-95 transition-all hover:text-primary" href="#">
+<span class="material-symbols-outlined text-[24px]">person</span>
+<span class="text-label-sm font-label-sm">Profile</span>
+</a>
+</nav>
+</main>
+</body></html>

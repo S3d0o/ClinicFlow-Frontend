@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow Egypt - Doctor Workspace | Schedule &amp; Leave Management</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-fixed-variant": "#36485f",
+            "tertiary-fixed-dim": "#ffb599",
+            "surface-tint": "#406185",
+            "on-error-container": "#93000a",
+            "outline": "#73777f",
+            "on-surface": "#121c28",
+            "surface-dim": "#d1dbeb",
+            "tertiary-fixed": "#ffdbce",
+            "on-primary-fixed": "#001d36",
+            "surface-container-high": "#dfe9fa",
+            "secondary": "#4e6077",
+            "surface-container": "#e5efff",
+            "surface-container-lowest": "#ffffff",
+            "tertiary": "#4e1700",
+            "error-container": "#ffdad6",
+            "on-primary-fixed-variant": "#27496c",
+            "on-surface-variant": "#43474e",
+            "surface": "#f8f9ff",
+            "primary-fixed-dim": "#a8c9f3",
+            "primary-fixed": "#d1e4ff",
+            "on-tertiary-fixed": "#370e00",
+            "inverse-primary": "#a8c9f3",
+            "secondary-container": "#cee1fd",
+            "primary-container": "#1e4164",
+            "inverse-surface": "#27313e",
+            "surface-container-low": "#eef4ff",
+            "surface-container-highest": "#d9e3f4",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "on-tertiary-container": "#ff8b5b",
+            "primary": "#002b4c",
+            "on-background": "#121c28",
+            "background": "#f8f9ff",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-secondary": "#ffffff",
+            "inverse-on-surface": "#eaf1ff",
+            "surface-bright": "#f8f9ff",
+            "tertiary-container": "#722600",
+            "on-secondary-container": "#52647c",
+            "on-error": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "on-secondary-fixed": "#081c31",
+            "on-primary": "#ffffff",
+            "secondary-fixed": "#d2e4ff",
+            "outline-variant": "#c3c6cf",
+            "error": "#ba1a1a",
+            "surface-variant": "#d9e3f4",
+            "on-primary-container": "#8dadd6"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1rem",
+            "space-xl": "1.5rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "gutter-sm": "0.75rem",
+            "space-lg": "1rem",
+            "margin-desktop": "2rem",
+            "margin-tablet": "1.5rem",
+            "space-md": "0.75rem",
+            "gutter": "1rem"
+          },
+          "fontFamily": {
+            "headline-sm": ["Plus Jakarta Sans"],
+            "label-sm": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    /* Custom scrollbars for clean UI */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F7F9FD;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #C3C6CF;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface antialiased font-body-md min-h-screen">
+<!-- ======================================================== -->
+<!-- 1. SHARED COMPONENT: SideNavBar                          -->
+<!-- ======================================================== -->
+<aside class="fixed top-0 left-0 h-screen w-[260px] z-40 bg-surface-container-lowest border-r border-outline-variant flex flex-col justify-between p-4">
+<div class="flex flex-col gap-6">
+<!-- Brand & Facility Selector -->
+<div class="flex items-center gap-3 px-2 pt-1">
+<div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center text-white font-headline-md shadow-sm">
+<span class="material-symbols-outlined text-surface-container-lowest" data-icon="cardiology">cardiology</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">ClinicFlow Egypt</span>
+<div class="flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span>New Cairo Branch</span>
+</div>
+</div>
+</div>
+<!-- Quick Action: CTA Button from Shared Components -->
+<button class="w-full flex items-center justify-center gap-2 bg-primary-container text-white py-2.5 px-4 rounded-lg font-label-lg text-label-lg shadow-sm hover:bg-primary transition-all duration-150 active:scale-[0.99]" onclick="openLeaveModal()">
+<span class="material-symbols-outlined text-[18px]" data-icon="add_circle">add_circle</span>
+<span>New Consultation</span>
+</button>
+<!-- Primary Navigation Cluster -->
+<!-- Semantic Active State determined: Schedule & Leave is active for this screen -->
+<nav class="flex flex-col gap-1">
+<span class="px-3 text-[10px] uppercase font-bold tracking-wider text-outline mb-1">Doctor Portal</span>
+<!-- Tab 1: Today (Inactive) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container hover:text-on-surface transition-colors active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-outline" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-md text-label-md">Today</span>
+</a>
+<!-- Tab 2: Patients (Inactive) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container hover:text-on-surface transition-colors active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-outline" data-icon="groups">groups</span>
+<span class="font-label-md text-label-md">Patients</span>
+</a>
+<!-- Tab 3: Schedule & Leave (ACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container-low text-primary font-semibold hover:bg-surface-container transition-colors active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-primary" data-icon="event_available">event_available</span>
+<span class="font-label-md text-label-md flex-1">Schedule &amp; Leave</span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+</a>
+<!-- Tab 4: Unsigned Notes (Inactive with badge) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container hover:text-on-surface transition-colors active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-outline" data-icon="edit_note">edit_note</span>
+<span class="font-label-md text-label-md flex-1">Unsigned Notes</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-primary font-label-sm text-[11px] font-bold">2</span>
+</a>
+</nav>
+<!-- Department Context Section -->
+<div class="px-3 pt-3 border-t border-outline-variant flex flex-col gap-2">
+<span class="text-[10px] uppercase font-bold tracking-wider text-outline">Affiliated Centers</span>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-[#015C9A]"></span>
+<span>Nasr City Branch</span>
+</span>
+<span class="font-label-sm text-outline">OPD</span>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-[#4e6077]"></span>
+<span>Maadi Polyclinic</span>
+</span>
+<span class="font-label-sm text-outline">Eve</span>
+</div>
+</div>
+</div>
+<!-- Doctor Profile Footer (from JSON blueprint) -->
+<div class="border-t border-outline-variant pt-3">
+<div class="flex items-center gap-3 p-2 rounded-lg bg-surface-container-low">
+<div class="w-10 h-10 rounded-full bg-primary-container text-white flex items-center justify-center font-bold">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-bold truncate">Dr. Ahmed Fathy</span>
+<div class="flex items-center gap-1 text-[11px] text-on-surface-variant truncate">
+<span class="material-symbols-outlined text-[13px] text-primary" data-icon="stethoscope">stethoscope</span>
+<span class="truncate">Consultant Cardiology</span>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- ======================================================== -->
+<!-- 2. SHARED COMPONENT: TopNavBar                           -->
+<!-- ======================================================== -->
+<header class="docked full-width top-0 pl-[260px] sticky z-30 bg-surface-container-lowest border-b border-outline-variant">
+<div class="flex items-center justify-between h-16 px-8 w-full">
+<!-- Left: Title & Context Navigation Links -->
+<div class="flex items-center gap-6">
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Doctor Workspace</h1>
+<div class="flex items-center gap-2 text-body-sm font-body-sm text-on-surface-variant">
+<span>Doctor Rosters &amp; Leave Management</span>
+<span class="text-outline">·</span>
+<span class="text-primary font-semibold">Dr. Ahmed Fathy</span>
+</div>
+</div>
+<div class="hidden xl:flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-low text-primary text-label-sm font-label-sm border border-outline-variant">
+<span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span>
+<span>Cairo - New Cairo Clinic</span>
+</div>
+</div>
+<!-- Center: Schedule Week Navigation -->
+<div class="flex items-center gap-2 bg-surface border border-outline-variant rounded-lg p-1">
+<button class="p-1.5 rounded hover:bg-surface-container-low text-on-surface-variant transition-colors" title="Previous Week">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_left">chevron_left</span>
+</button>
+<div class="flex items-center gap-2 px-2 text-label-md font-label-md text-primary">
+<span class="material-symbols-outlined text-[18px] text-primary" data-icon="date_range">date_range</span>
+<span class="tabular-nums">Current Week: 20 Oct - 26 Oct 2025</span>
+</div>
+<button class="p-1.5 rounded hover:bg-surface-container-low text-on-surface-variant transition-colors" title="Next Week">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="px-2.5 py-1 text-label-sm font-label-sm font-semibold rounded bg-surface-container-lowest text-primary border border-outline-variant hover:bg-surface-container-low transition-colors ml-1">
+          Today
+        </button>
+</div>
+<!-- Right: Actions + Header CTAs -->
+<div class="flex items-center gap-3">
+<!-- Prominent action button in header -->
+<button class="flex items-center gap-2 bg-primary-container text-white px-4 py-2 rounded-lg font-label-md text-label-md font-semibold hover:bg-primary transition-all duration-150 shadow-sm active:scale-[0.98]" onclick="openLeaveModal()">
+<span class="material-symbols-outlined text-[18px]" data-icon="event_busy">event_busy</span>
+<span>+ Request Leave / Shift Swap</span>
+</button>
+<div class="h-6 w-[1px] bg-outline-variant"></div>
+<!-- Language Switch Action (Exact from JSON trailing_primary_action) -->
+<button class="px-2.5 py-1.5 rounded-lg border border-outline-variant hover:bg-surface-container-low text-primary font-bold font-label-md text-label-md transition-colors">
+          عربي
+        </button>
+<!-- Notification with red dot -->
+<button class="relative p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#FF5E00]"></span>
+</button>
+<!-- Help Icon -->
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="help_outline">help_outline</span>
+</button>
+</div>
+</div>
+</header>
+<!-- ======================================================== -->
+<!-- 3. MAIN WORKSPACE CANVAS                                 -->
+<!-- ======================================================== -->
+<main class="pl-[260px] p-8 max-w-[1500px] mx-auto space-y-6">
+<!-- 1. SHIFT OVERVIEW CARDS (Weekly Summary Bento Grid) -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Total Hours Scheduled -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div>
+<span class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Weekly Commitment</span>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-headline-xl text-headline-xl text-primary tabular-nums">32</span>
+<span class="font-body-md text-body-md text-on-surface-variant">hrs total</span>
+</div>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]" data-icon="timer">timer</span>
+</div>
+</div>
+<div class="mt-3 pt-3 border-t border-outline-variant flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-on-surface-variant">Spread across 2 clinics</span>
+<span class="font-semibold text-[#015C9A] bg-[#EFF6FF] px-2 py-0.5 rounded-full">Optimal Load</span>
+</div>
+</div>
+<!-- Nasr City OPD -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-[#015C9A]"></span>
+<span class="text-primary font-headline-sm text-headline-sm">Nasr City OPD</span>
+</div>
+<div class="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+              Mon, Tue, Thu
+            </div>
+</div>
+<span class="px-2 py-1 rounded bg-[#EFF6FF] text-[#015C9A] font-label-sm text-[11px] font-bold">Morning</span>
+</div>
+<div class="mt-3 pt-3 border-t border-outline-variant flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline" data-icon="schedule">schedule</span>
+<span class="tabular-nums">09:00 - 13:30</span>
+</span>
+<span class="font-semibold text-primary tabular-nums">13.5 hrs/wk</span>
+</div>
+</div>
+<!-- Maadi OPD & Cath Lab Procedures -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-primary font-headline-sm text-headline-sm">Maadi Polyclinic</span>
+</div>
+<div class="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+              Tue, Wed, Sat + Cath Lab
+            </div>
+</div>
+<span class="px-2 py-1 rounded bg-surface-container-high text-on-secondary-fixed-variant font-label-sm text-[11px] font-bold">Evening</span>
+</div>
+<div class="mt-3 pt-3 border-t border-outline-variant flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline" data-icon="local_hospital">local_hospital</span>
+<span class="tabular-nums">Al-Hayat Cath Lab (Thu)</span>
+</span>
+<span class="font-semibold text-primary tabular-nums">15.5 hrs/wk</span>
+</div>
+</div>
+<!-- Remaining Annual Leave Balance -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-start justify-between">
+<div>
+<span class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Leave Balance</span>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-headline-xl text-headline-xl text-primary tabular-nums">18</span>
+<span class="font-body-md text-body-md text-on-surface-variant">/ 30 days left</span>
+</div>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]" data-icon="beach_access">beach_access</span>
+</div>
+</div>
+<div class="mt-3 pt-3 border-t border-outline-variant flex items-center justify-between font-label-sm text-label-sm">
+<div class="w-full bg-surface-container-high rounded-full h-1.5 overflow-hidden mr-3">
+<div class="bg-primary-container h-1.5 rounded-full" style="width: 60%"></div>
+</div>
+<span class="text-on-surface-variant whitespace-nowrap tabular-nums">12 used</span>
+</div>
+</div>
+</section>
+<!-- 2. WEEKLY INTERACTIVE MULTI-BRANCH SCHEDULE GRID -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-none overflow-hidden">
+<!-- Schedule Grid Header with Legend -->
+<div class="px-6 py-4 border-b border-outline-variant flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<h2 class="font-headline-md text-headline-md font-bold text-primary">Weekly Roster &amp; Shift Allocations</h2>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container-low text-primary font-label-sm text-label-sm font-semibold border border-outline-variant">
+            Week 43
+          </span>
+</div>
+<!-- Legend -->
+<div class="flex items-center gap-4 text-body-sm font-body-sm">
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 rounded bg-[#015C9A]"></span>
+<span class="text-on-surface-variant font-medium">Nasr City OPD</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 rounded bg-secondary"></span>
+<span class="text-on-surface-variant font-medium">Maadi Evening OPD</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 rounded bg-tertiary-container"></span>
+<span class="text-on-surface-variant font-medium">Cath Lab Procedures</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 rounded bg-surface-variant"></span>
+<span class="text-on-surface-variant font-medium">Rest Day / Inactive</span>
+</div>
+</div>
+</div>
+<!-- 7-Column Day Cards -->
+<div class="grid grid-cols-7 divide-x divide-outline-variant border-b border-outline-variant bg-surface">
+<!-- Day 1: Monday -->
+<div class="p-3 text-center">
+<div class="font-label-sm text-label-sm uppercase text-outline">Mon</div>
+<div class="font-headline-md text-headline-md font-bold text-primary tabular-nums">20 Oct</div>
+<div class="mt-1 text-[11px] font-semibold text-secondary tabular-nums">4.5 hrs</div>
+</div>
+<!-- Day 2: Tuesday -->
+<div class="p-3 text-center">
+<div class="font-label-sm text-label-sm uppercase text-outline">Tue</div>
+<div class="font-headline-md text-headline-md font-bold text-primary tabular-nums">21 Oct</div>
+<div class="mt-1 text-[11px] font-semibold text-secondary tabular-nums">8.5 hrs (Dual)</div>
+</div>
+<!-- Day 3: Wednesday (Today) -->
+<div class="p-3 text-center bg-surface-container-low border-b-2 border-primary">
+<div class="font-label-sm text-label-sm uppercase text-primary font-bold">Wed · Today</div>
+<div class="font-headline-md text-headline-md font-bold text-primary tabular-nums">22 Oct</div>
+<div class="mt-1 text-[11px] font-semibold text-primary tabular-nums">4.0 hrs</div>
+</div>
+<!-- Day 4: Thursday -->
+<div class="p-3 text-center">
+<div class="font-label-sm text-label-sm uppercase text-outline">Thu</div>
+<div class="font-headline-md text-headline-md font-bold text-primary tabular-nums">23 Oct</div>
+<div class="mt-1 text-[11px] font-semibold text-secondary tabular-nums">7.5 hrs</div>
+</div>
+<!-- Day 5: Friday -->
+<div class="p-3 text-center bg-surface-container-lowest">
+<div class="font-label-sm text-label-sm uppercase text-outline">Fri</div>
+<div class="font-headline-md text-headline-md font-bold text-outline tabular-nums">24 Oct</div>
+<div class="mt-1 text-[11px] font-semibold text-outline">OFF</div>
+</div>
+<!-- Day 6: Saturday -->
+<div class="p-3 text-center">
+<div class="font-label-sm text-label-sm uppercase text-outline">Sat</div>
+<div class="font-headline-md text-headline-md font-bold text-primary tabular-nums">25 Oct</div>
+<div class="mt-1 text-[11px] font-semibold text-secondary tabular-nums">4.0 hrs</div>
+</div>
+<!-- Day 7: Sunday -->
+<div class="p-3 text-center bg-surface-container-lowest">
+<div class="font-label-sm text-label-sm uppercase text-outline">Sun</div>
+<div class="font-headline-md text-headline-md font-bold text-outline tabular-nums">26 Oct</div>
+<div class="mt-1 text-[11px] font-semibold text-outline">Admin / Prep</div>
+</div>
+</div>
+<!-- 7 Column Schedule Canvas Body -->
+<div class="grid grid-cols-7 divide-x divide-outline-variant min-h-[460px] p-2 bg-surface-container-lowest">
+<!-- Column 1: Mon 20 Oct -->
+<div class="p-2 space-y-3">
+<div class="bg-surface border border-outline-variant rounded-lg p-3 relative hover:border-primary transition-colors">
+<div class="flex items-center justify-between mb-1.5">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#EFF6FF] text-[#015C9A]">Nasr City OPD</span>
+<span class="material-symbols-outlined text-[16px] text-[#4e6077]" data-icon="check_circle">check_circle</span>
+</div>
+<div class="font-headline-sm text-[13px] font-bold text-primary">Cardiology Consultations</div>
+<div class="text-[12px] text-on-surface-variant tabular-nums mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="schedule">schedule</span>
+<span>09:00 - 13:30</span>
+</div>
+<div class="mt-2.5 pt-2 border-t border-outline-variant flex items-center justify-between text-[11px]">
+<span class="text-on-surface-variant font-medium">Slots Filled:</span>
+<span class="font-bold text-primary tabular-nums">14 / 14 (100%)</span>
+</div>
+</div>
+<div class="text-center py-6 text-outline text-[11px] font-medium border border-dashed border-outline-variant rounded-lg">
+            No Evening Session
+          </div>
+</div>
+<!-- Column 2: Tue 21 Oct -->
+<div class="p-2 space-y-3">
+<!-- Morning Shift -->
+<div class="bg-surface border border-outline-variant rounded-lg p-3 relative hover:border-primary transition-colors">
+<div class="flex items-center justify-between mb-1.5">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#EFF6FF] text-[#015C9A]">Nasr City OPD</span>
+<span class="material-symbols-outlined text-[16px] text-[#4e6077]" data-icon="check_circle">check_circle</span>
+</div>
+<div class="font-headline-sm text-[13px] font-bold text-primary">Cardiology Consultations</div>
+<div class="text-[12px] text-on-surface-variant tabular-nums mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="schedule">schedule</span>
+<span>09:00 - 13:30</span>
+</div>
+<div class="mt-2.5 pt-2 border-t border-outline-variant flex items-center justify-between text-[11px]">
+<span class="text-on-surface-variant font-medium">Slots Filled:</span>
+<span class="font-bold text-primary tabular-nums">16 / 16 (100%)</span>
+</div>
+</div>
+<!-- Evening Shift -->
+<div class="bg-surface border border-outline-variant rounded-lg p-3 relative hover:border-primary transition-colors">
+<div class="flex items-center justify-between mb-1.5">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-surface-container-high text-on-secondary-fixed-variant">Maadi Evening</span>
+<span class="material-symbols-outlined text-[16px] text-[#4e6077]" data-icon="check_circle">check_circle</span>
+</div>
+<div class="font-headline-sm text-[13px] font-bold text-primary">Hypertension &amp; Follow-up</div>
+<div class="text-[12px] text-on-surface-variant tabular-nums mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="schedule">schedule</span>
+<span>17:00 - 21:00</span>
+</div>
+<div class="mt-2.5 pt-2 border-t border-outline-variant flex items-center justify-between text-[11px]">
+<span class="text-on-surface-variant font-medium">Completed:</span>
+<span class="font-bold text-primary tabular-nums">10 / 10 slots</span>
+</div>
+</div>
+</div>
+<!-- Column 3: Wed 22 Oct (Active Today) -->
+<div class="p-2 space-y-3 bg-surface-container-low/40">
+<div class="text-center py-4 text-on-surface-variant text-[11px] font-medium border border-dashed border-outline-variant rounded-lg bg-surface">
+            Morning: Free / Inpatient Rounds
+          </div>
+<!-- Evening Shift - UPCOMING TODAY -->
+<div class="bg-surface-container-lowest border-2 border-primary rounded-lg p-3 shadow-sm relative">
+<div class="absolute -top-2 right-2 px-1.5 py-0.2 bg-primary text-white text-[9px] font-bold rounded">TODAY</div>
+<div class="flex items-center justify-between mb-1.5">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-surface-container-high text-on-secondary-fixed-variant">Maadi Evening</span>
+<span class="w-2 h-2 rounded-full bg-[#015C9A] animate-pulse"></span>
+</div>
+<div class="font-headline-sm text-[13px] font-bold text-primary">Evening Consultations</div>
+<div class="text-[12px] text-on-surface-variant tabular-nums mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="schedule">schedule</span>
+<span class="font-semibold text-primary">17:00 - 21:00</span>
+</div>
+<div class="mt-2.5 pt-2 border-t border-outline-variant flex items-center justify-between text-[11px]">
+<span class="text-on-surface-variant font-medium">Registered:</span>
+<span class="font-bold text-[#015C9A] tabular-nums">8 patients booked</span>
+</div>
+</div>
+</div>
+<!-- Column 4: Thu 23 Oct -->
+<div class="p-2 space-y-3">
+<!-- Morning Shift -->
+<div class="bg-surface border border-outline-variant rounded-lg p-3 relative hover:border-primary transition-colors">
+<div class="flex items-center justify-between mb-1.5">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#EFF6FF] text-[#015C9A]">Nasr City OPD</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-[9px] text-on-surface-variant font-bold">Planned</span>
+</div>
+<div class="font-headline-sm text-[13px] font-bold text-primary">OPD Clinic Session</div>
+<div class="text-[12px] text-on-surface-variant tabular-nums mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="schedule">schedule</span>
+<span>09:00 - 13:30</span>
+</div>
+<div class="mt-2.5 pt-2 border-t border-outline-variant flex items-center justify-between text-[11px]">
+<span class="text-on-surface-variant font-medium">Booked:</span>
+<span class="font-bold text-primary tabular-nums">12 / 14</span>
+</div>
+</div>
+<!-- Cath Lab Session -->
+<div class="bg-[#FFF8F5] border border-[#ffdbce] rounded-lg p-3 relative hover:border-tertiary-container transition-colors">
+<div class="flex items-center justify-between mb-1.5">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#722600] text-white">Cath Lab Procedure</span>
+<span class="material-symbols-outlined text-[16px] text-tertiary-container" data-icon="vital_signs">vital_signs</span>
+</div>
+<div class="font-headline-sm text-[13px] font-bold text-tertiary">Diagnostic Echo &amp; Angio</div>
+<div class="text-[12px] text-on-surface-variant tabular-nums mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="schedule">schedule</span>
+<span>14:30 - 17:30</span>
+</div>
+<div class="mt-2.5 pt-2 border-t border-[#ffdbce] flex items-center justify-between text-[11px]">
+<span class="text-on-surface-variant font-medium">Al-Hayat Hospital:</span>
+<span class="font-bold text-tertiary tabular-nums">3 Stents</span>
+</div>
+</div>
+</div>
+<!-- Column 5: Fri 24 Oct (OFF) -->
+<div class="p-3 flex flex-col items-center justify-center text-center h-full min-h-[300px] bg-surface rounded-lg m-1 border border-dashed border-outline-variant">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-outline mb-2">
+<span class="material-symbols-outlined text-[20px]" data-icon="bedtime">bedtime</span>
+</div>
+<span class="font-headline-sm text-[13px] font-bold text-on-surface-variant">Weekly Rest Day</span>
+<span class="text-body-sm text-outline text-[11px] mt-0.5">Off Duty</span>
+</div>
+<!-- Column 6: Sat 25 Oct -->
+<div class="p-2 space-y-3">
+<div class="text-center py-6 text-outline text-[11px] font-medium border border-dashed border-outline-variant rounded-lg">
+            Morning: Free
+          </div>
+<!-- Evening Shift -->
+<div class="bg-surface border border-outline-variant rounded-lg p-3 relative hover:border-primary transition-colors">
+<div class="flex items-center justify-between mb-1.5">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-surface-container-high text-on-secondary-fixed-variant">Maadi Evening</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-[9px] text-on-surface-variant font-bold">Planned</span>
+</div>
+<div class="font-headline-sm text-[13px] font-bold text-primary">Walk-in &amp; Scheduled OPD</div>
+<div class="text-[12px] text-on-surface-variant tabular-nums mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="schedule">schedule</span>
+<span>17:00 - 21:00</span>
+</div>
+<div class="mt-2.5 pt-2 border-t border-outline-variant flex items-center justify-between text-[11px]">
+<span class="text-on-surface-variant font-medium">Appointments:</span>
+<span class="font-bold text-primary tabular-nums">9 registered</span>
+</div>
+</div>
+</div>
+<!-- Column 7: Sun 26 Oct -->
+<div class="p-3 flex flex-col items-center justify-center text-center h-full min-h-[300px] bg-surface rounded-lg m-1 border border-dashed border-outline-variant">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-outline mb-2">
+<span class="material-symbols-outlined text-[20px]" data-icon="menu_book">menu_book</span>
+</div>
+<span class="font-headline-sm text-[13px] font-bold text-on-surface-variant">Administrative Work</span>
+<span class="text-body-sm text-outline text-[11px] mt-0.5">Chart Review / Peer Audits</span>
+</div>
+</div>
+</section>
+<!-- 3. REQUEST LEAVE MODAL / OVERLAY PANEL -->
+<!-- Controlled functionally via inline javascript toggle -->
+<section class="bg-surface-container-lowest border-2 border-primary-container rounded-xl p-6 shadow-sm relative" id="leaveApplicationSection">
+<div class="flex items-center justify-between pb-4 border-b border-outline-variant">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit_calendar">edit_calendar</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md font-bold text-primary">Medical Leave &amp; Shift Coverage Application</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Submit official absence request to Medical Administration and trigger automated patient protection workflows.</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-1 rounded-full bg-[#FFFBEB] text-[#D97706] font-label-sm text-label-sm font-semibold flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#D97706]"></span>
+<span>Draft Form</span>
+</span>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+<!-- Form Inputs (Left 7 Cols) -->
+<div class="lg:col-span-7 space-y-5">
+<!-- Leave Type Selector -->
+<div>
+<label class="block font-label-md text-label-md text-primary font-bold mb-2">Leave Type Category</label>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+<label class="cursor-pointer">
+<input class="peer sr-only" name="leave_type" type="radio" value="annual"/>
+<div class="border border-outline-variant rounded-lg p-2.5 text-center peer-checked:border-primary-container peer-checked:bg-surface-container-low peer-checked:text-primary transition-all font-label-md text-label-md">
+                  Annual Leave
+                </div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="leave_type" type="radio" value="emergency"/>
+<div class="border border-outline-variant rounded-lg p-2.5 text-center peer-checked:border-primary-container peer-checked:bg-surface-container-low peer-checked:text-primary transition-all font-label-md text-label-md">
+                  Emergency
+                </div>
+</label>
+<label class="cursor-pointer">
+<input checked="" class="peer sr-only" name="leave_type" type="radio" value="cme"/>
+<div class="border border-primary-container bg-surface-container-low text-primary rounded-lg p-2.5 text-center font-label-md text-label-md font-bold shadow-xs">
+                  Conference / CME
+                </div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="leave_type" type="radio" value="sick"/>
+<div class="border border-outline-variant rounded-lg p-2.5 text-center peer-checked:border-primary-container peer-checked:bg-surface-container-low peer-checked:text-primary transition-all font-label-md text-label-md">
+                  Sick Leave
+                </div>
+</label>
+</div>
+</div>
+<!-- Date Range & Duration -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="block font-label-md text-label-md text-primary font-semibold mb-1.5">From Date</label>
+<div class="flex items-center border border-outline-variant rounded-lg px-3 py-2 bg-surface-container-lowest focus-within:border-[#015C9A] focus-within:ring-2 focus-within:ring-[#015C9A]/15 transition-all">
+<span class="material-symbols-outlined text-[18px] text-outline mr-2" data-icon="event">event</span>
+<input class="w-full bg-transparent border-none p-0 text-body-md font-body-md text-on-surface focus:ring-0 tabular-nums" type="text" value="02 Nov 2025"/>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-primary font-semibold mb-1.5">To Date</label>
+<div class="flex items-center border border-outline-variant rounded-lg px-3 py-2 bg-surface-container-lowest focus-within:border-[#015C9A] focus-within:ring-2 focus-within:ring-[#015C9A]/15 transition-all">
+<span class="material-symbols-outlined text-[18px] text-outline mr-2" data-icon="event">event</span>
+<input class="w-full bg-transparent border-none p-0 text-body-md font-body-md text-on-surface focus:ring-0 tabular-nums" type="text" value="04 Nov 2025"/>
+</div>
+</div>
+</div>
+<!-- Shift Scope -->
+<div>
+<span class="block font-label-md text-label-md text-primary font-semibold mb-1.5">Absence Scope</span>
+<div class="flex items-center gap-6">
+<label class="flex items-center gap-2 cursor-pointer font-body-md text-body-md text-on-surface">
+<input checked="" class="text-primary-container focus:ring-primary-container h-4 w-4" name="scope" type="radio"/>
+<span>All Day Shifts (3 clinic working days affected)</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer font-body-md text-body-md text-on-surface-variant">
+<input class="text-primary-container focus:ring-primary-container h-4 w-4" name="scope" type="radio"/>
+<span>Specific Shift Hours Only</span>
+</label>
+</div>
+</div>
+<!-- Reason & Objective -->
+<div>
+<label class="block font-label-md text-label-md text-primary font-semibold mb-1.5">Official Clinical Justification</label>
+<textarea class="w-full border border-outline-variant rounded-lg p-3 text-body-md font-body-md text-on-surface focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/15 transition-all" placeholder="Specify academic purpose, emergency cause, or coverage details..." rows="2">Attending Egyptian Society of Cardiology Annual Scientific Sessions (Alexandria)</textarea>
+</div>
+</div>
+<!-- CLINICAL IMPACT & AUTOMATIC RESCHEDULING ENGINE NOTICE (Right 5 Cols) -->
+<div class="lg:col-span-5 flex flex-col justify-between">
+<div class="bg-[#FFF8F5] border-2 border-[#FF5E00]/40 rounded-xl p-4 space-y-3">
+<div class="flex items-start gap-2.5">
+<div class="w-8 h-8 rounded-full bg-[#FF5E00]/15 flex items-center justify-center text-[#FF5E00] shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[18px]" data-icon="warning">warning</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm font-bold text-tertiary flex items-center gap-2">
+<span>Patient Scheduling Impact Detected</span>
+</h4>
+<div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#FF5E00] text-white font-label-sm text-[11px] font-bold mt-1">
+<span class="tabular-nums">14 appointments affected</span>
+</div>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+<span class="font-semibold text-on-surface">14 booked appointments</span> will need rescheduling across <span class="font-semibold text-primary">Nasr City (8 patients)</span> and <span class="font-semibold text-primary">Maadi (6 patients)</span>.
+            </p>
+<!-- Dispatch Smart Action Box -->
+<div class="bg-surface-container-lowest border border-[#ffdbce] rounded-lg p-3 text-body-sm font-body-sm text-on-surface-variant space-y-2">
+<div class="flex items-center gap-2 font-label-md text-label-md font-bold text-primary">
+<span class="material-symbols-outlined text-[16px] text-[#015C9A]" data-icon="smart_toy">smart_toy</span>
+<span>ClinicFlow Smart Dispatch Engine</span>
+</div>
+<p class="text-[12px] text-on-surface-variant leading-normal">
+                Can automatically offer patients alternative slots with <span class="font-semibold text-on-surface">Dr. Sherif Rostom</span> (Cardiology Registrar) or move them to your <span class="font-semibold text-on-surface">06 Nov clinic</span> with 1-tap SMS &amp; WhatsApp confirmation.
+              </p>
+<label class="flex items-center gap-2 pt-1 cursor-pointer">
+<input checked="" class="rounded border-outline-variant text-primary-container focus:ring-primary-container" type="checkbox"/>
+<span class="font-label-sm text-[11px] font-semibold text-primary">Trigger patient auto-rebooking upon approval</span>
+</label>
+</div>
+</div>
+<!-- Action Buttons Area -->
+<div class="pt-4 flex items-center justify-end gap-3">
+<button class="px-4 py-2.5 rounded-lg border border-outline-variant font-label-md text-label-md font-semibold text-on-surface-variant hover:bg-surface-container transition-colors" onclick="dismissLeaveModal()" type="button">
+              Cancel
+            </button>
+<button class="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary-container text-white font-label-md text-label-md font-bold hover:bg-primary transition-all duration-150 shadow-sm active:scale-[0.98]" onclick="submitLeaveRequest()" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="send">send</span>
+<span>Submit Leave Request to Medical Director</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. MY LEAVE REQUESTS & HISTORY TABLE -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-none overflow-hidden">
+<div class="px-6 py-4 border-b border-outline-variant flex items-center justify-between">
+<div>
+<h3 class="font-headline-md text-headline-md font-bold text-primary">My Leave Requests &amp; History</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Log of active absence applications, approvals, and clinical swap endorsements</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-outline-variant font-label-sm text-label-sm font-semibold text-on-surface hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="filter_list">filter_list</span>
+<span>Filter Status</span>
+</button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-outline-variant font-label-sm text-label-sm font-semibold text-on-surface hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="download">download</span>
+<span>Export Roster</span>
+</button>
+</div>
+</div>
+<!-- Historical Requests Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant bg-surface font-label-sm text-label-sm text-outline uppercase tracking-wider">
+<th class="py-3 px-6">Request ID</th>
+<th class="py-3 px-6">Leave Duration</th>
+<th class="py-3 px-6">Category &amp; Clinical Reason</th>
+<th class="py-3 px-6">Scheduling Conflicts</th>
+<th class="py-3 px-6">Approval Status</th>
+<th class="py-3 px-6 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant font-body-sm text-body-sm text-on-surface">
+<!-- Row 1: Active Pending Application -->
+<tr class="hover:bg-surface transition-colors bg-surface-container-low/20">
+<td class="py-4 px-6 font-semibold text-primary tabular-nums">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="receipt_long">receipt_long</span>
+<span>#LV-2025-084</span>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="font-bold text-primary tabular-nums">02 Nov - 04 Nov 2025</div>
+<div class="text-[11px] text-on-surface-variant">3 clinic working days</div>
+</td>
+<td class="py-4 px-6">
+<div class="font-semibold text-on-surface">Conference / CME Training</div>
+<div class="text-[12px] text-on-surface-variant truncate max-w-xs">Egyptian Society of Cardiology Annual Sessions (Alexandria)</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FFF8F5] border border-[#FF5E00]/30 text-[#FF5E00] font-label-sm text-[11px] font-bold tabular-nums">
+<span class="material-symbols-outlined text-[14px]" data-icon="error_outline">error_outline</span>
+<span>14 patients impacted</span>
+</span>
+</td>
+<td class="py-4 px-6">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FFFBEB] text-[#D97706] font-label-sm text-[12px] font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-[#D97706]"></span>
+<span>Pending Medical Director</span>
+</div>
+<div class="text-[11px] text-outline mt-0.5">Assigned to Dr. Hazem Mostafa</div>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="px-2.5 py-1 rounded text-primary hover:bg-surface-container font-label-sm text-label-sm font-semibold transition-colors">
+                    Edit
+                  </button>
+<button class="px-2.5 py-1 rounded text-error hover:bg-error-container/40 font-label-sm text-label-sm font-semibold transition-colors">
+                    Cancel Req
+                  </button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Approved Annual Leave -->
+<tr class="hover:bg-surface transition-colors">
+<td class="py-4 px-6 font-semibold text-primary tabular-nums">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-outline" data-icon="receipt_long">receipt_long</span>
+<span>#LV-2025-061</span>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="font-bold text-on-surface tabular-nums">18 Aug - 22 Aug 2025</div>
+<div class="text-[11px] text-on-surface-variant">5 calendar days</div>
+</td>
+<td class="py-4 px-6">
+<div class="font-semibold text-on-surface">Annual Vacation</div>
+<div class="text-[12px] text-on-surface-variant">Summer Medical Recess</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#ECFDF5] text-[#059669] font-label-sm text-[11px] font-semibold tabular-nums">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+<span>0 conflicts (Advanced Notice)</span>
+</span>
+</td>
+<td class="py-4 px-6">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ECFDF5] text-[#059669] font-label-sm text-[12px] font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+<span>Approved · Logged</span>
+</div>
+<div class="text-[11px] text-outline mt-0.5">By Medical Administration</div>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="px-2.5 py-1 rounded text-on-surface-variant hover:bg-surface-container font-label-sm text-label-sm font-medium transition-colors">
+                  View Slip
+                </button>
+</td>
+</tr>
+<!-- Row 3: Approved Shift Swap -->
+<tr class="hover:bg-surface transition-colors">
+<td class="py-4 px-6 font-semibold text-primary tabular-nums">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-outline" data-icon="receipt_long">receipt_long</span>
+<span>#LV-2025-029</span>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="font-bold text-on-surface tabular-nums">10 May 2025</div>
+<div class="text-[11px] text-on-surface-variant">Half Day (Evening Shift)</div>
+</td>
+<td class="py-4 px-6">
+<div class="font-semibold text-on-surface">Shift Swap Mutual Coverage</div>
+<div class="text-[12px] text-on-surface-variant">Endorsed with Dr. Tamer (Cardio Registrar)</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#ECFDF5] text-[#059669] font-label-sm text-[11px] font-semibold tabular-nums">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+<span>Covered by Colleague</span>
+</span>
+</td>
+<td class="py-4 px-6">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ECFDF5] text-[#059669] font-label-sm text-[12px] font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+<span>Approved &amp; Completed</span>
+</div>
+<div class="text-[11px] text-outline mt-0.5">Reciprocal on 24 May</div>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="px-2.5 py-1 rounded text-on-surface-variant hover:bg-surface-container font-label-sm text-label-sm font-medium transition-colors">
+                  Details
+                </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footnote & Doctor Assurance -->
+<div class="px-6 py-3 bg-surface border-t border-outline-variant flex items-center justify-between text-body-sm font-body-sm text-outline">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]" data-icon="verified_user">verified_user</span>
+<span>In accordance with Egyptian Syndicate of Medicine leave protocols &amp; ClinicFlow Cairo bylaws.</span>
+</div>
+<div class="font-label-sm text-label-sm tabular-nums">
+          Showing 3 of 12 historical records
+        </div>
+</div>
+</section>
+</main>
+<!-- ======================================================== -->
+<!-- Micro-interactions Script                                -->
+<!-- ======================================================== -->
+<script>
+    function openLeaveModal() {
+      const panel = document.getElementById('leaveApplicationSection');
+      if (panel) {
+        panel.scrollIntoView({ behavior: 'smooth' });
+        panel.classList.add('ring-4', 'ring-[#015C9A]/20');
+        setTimeout(() => {
+          panel.classList.remove('ring-4', 'ring-[#015C9A]/20');
+        }, 2000);
+      }
+    }
+
+    function dismissLeaveModal() {
+      const panel = document.getElementById('leaveApplicationSection');
+      if (panel) {
+        panel.style.opacity = '0.7';
+        setTimeout(() => {
+          panel.style.opacity = '1';
+        }, 300);
+      }
+    }
+
+    function submitLeaveRequest() {
+      alert("Leave Request #LV-2025-084 submitted successfully to Medical Director (Dr. Hazem Mostafa). 14 patient notifications queued for dispatch.");
+    }
+  </script>
+</body></html>

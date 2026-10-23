@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow Egypt - Patient Check-in Panel</title>
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed": "#ffdbce",
+            "surface-dim": "#c9dbf7",
+            "primary": "#002b4c",
+            "primary-fixed": "#d1e4ff",
+            "on-error-container": "#93000a",
+            "tertiary-fixed-dim": "#ffb599",
+            "error-container": "#ffdad6",
+            "on-tertiary-container": "#ff8b5b",
+            "tertiary-container": "#722600",
+            "surface-container-high": "#dbe9ff",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "on-secondary-fixed-variant": "#00497c",
+            "secondary-container": "#7cbafe",
+            "secondary-fixed": "#d1e4ff",
+            "on-tertiary": "#ffffff",
+            "on-background": "#081c31",
+            "surface-bright": "#f8f9ff",
+            "secondary-fixed-dim": "#9ecaff",
+            "on-primary-fixed": "#001d36",
+            "on-primary-container": "#8dadd6",
+            "surface-container-highest": "#d2e4ff",
+            "inverse-primary": "#a8c9f3",
+            "surface": "#f8f9ff",
+            "surface-tint": "#406185",
+            "tertiary": "#4e1700",
+            "outline": "#73777f",
+            "outline-variant": "#c3c6cf",
+            "surface-container-low": "#eff4ff",
+            "on-primary": "#ffffff",
+            "error": "#ba1a1a",
+            "on-surface-variant": "#43474e",
+            "on-surface": "#081c31",
+            "on-secondary-fixed": "#001d36",
+            "on-tertiary-fixed": "#370e00",
+            "inverse-on-surface": "#eaf1ff",
+            "surface-container": "#e5eeff",
+            "inverse-surface": "#1f3247",
+            "primary-fixed-dim": "#a8c9f3",
+            "background": "#f8f9ff",
+            "on-secondary": "#ffffff",
+            "secondary": "#1061a0",
+            "on-primary-fixed-variant": "#27496c",
+            "on-secondary-container": "#004a7d",
+            "surface-variant": "#d2e4ff",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "primary-container": "#1e4164",
+            "nawy-border": "#D3DBE6",
+            "nawy-dark": "#13263B",
+            "solar-orange": "#FF5E00"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "fontFamily": {
+            "display-lg": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "tabular-data": ["Inter"],
+            "label-sm": ["Inter"]
+          },
+          "fontSize": {
+            "display-lg": ["2rem", { "lineHeight": "2.5rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-md": ["1.25rem", { "lineHeight": "1.75rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-md": ["0.875rem", { "lineHeight": "1.25rem", "fontWeight": "400" }],
+            "label-md": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.025em", "fontWeight": "600" }],
+            "headline-sm": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "600" }],
+            "body-lg": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "400" }],
+            "body-sm": ["0.75rem", { "lineHeight": "1rem", "fontWeight": "400" }],
+            "headline-lg": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "tabular-data": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0", "fontWeight": "500" }],
+            "label-sm": ["0.6875rem", { "lineHeight": "0.875rem", "letterSpacing": "0.05em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #F7F9FD;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #D3DBE6;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #73777f;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface h-full overflow-hidden font-body-md select-none">
+<!-- ========================================================================= -->
+<!-- SIDE NAVIGATION (Shared Component: SideNavBar)                            -->
+<!-- ========================================================================= -->
+<aside class="fixed top-0 left-0 h-screen w-64 z-40 bg-surface-container-lowest border-r border-outline-variant flex flex-col justify-between p-4">
+<div class="flex flex-col gap-6">
+<!-- Clinic Brand Header -->
+<div class="flex items-center gap-3 px-2">
+<div class="w-9 h-9 rounded-xl bg-primary-container flex items-center justify-center text-on-primary font-headline-md font-bold text-headline-sm">
+          CF
+        </div>
+<div>
+<div class="text-headline-md font-headline-md font-bold text-primary tracking-tight leading-none">
+            ClinicFlow Egypt
+          </div>
+<div class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1 mt-1 cursor-pointer hover:text-primary">
+<span>Nasr City ▾</span>
+</div>
+</div>
+</div>
+<!-- Quick Action CTA -->
+<button class="w-full h-10 bg-primary-container text-on-primary font-headline-sm text-headline-sm rounded-xl flex items-center justify-center gap-2 shadow-sm hover:opacity-95 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span>Quick Check-in</span>
+</button>
+<!-- Navigation Tabs (Today is ACTIVE as requested by page context) -->
+<nav class="flex flex-col gap-1">
+<!-- Item 1: Today (ACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2 bg-surface-container text-primary-container font-semibold rounded-lg border-l-4 border-primary-container" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+<span class="text-label-md font-label-md">Today</span>
+</a>
+<!-- Item 2: Queue -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">format_list_numbered</span>
+<span class="text-label-md font-label-md">Queue</span>
+</a>
+<!-- Item 3: Patients -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span class="text-label-md font-label-md">Patients</span>
+</a>
+<!-- Item 4: Book -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">add_box</span>
+<span class="text-label-md font-label-md">Book</span>
+</a>
+<!-- Item 5: Payments -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">payments</span>
+<span class="text-label-md font-label-md">Payments</span>
+</a>
+<!-- Item 6: Cash session -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">point_of_sale</span>
+<span class="text-label-md font-label-md">Cash session</span>
+</a>
+</nav>
+</div>
+<!-- Sidebar Footer / Receptionist Profile -->
+<div class="pt-4 border-t border-outline-variant flex items-center justify-between px-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline text-[28px]">account_circle</span>
+<div class="flex flex-col">
+<span class="text-label-md font-label-md text-on-surface leading-tight">Mona Samir · Receptionist</span>
+<span class="text-label-sm font-label-sm text-outline">Nasr City Branch</span>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-primary p-1">
+<span class="material-symbols-outlined text-[18px]">logout</span>
+</button>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- TOP NAVIGATION BAR (Shared Component: TopNavBar)                          -->
+<!-- ========================================================================= -->
+<header class="fixed top-0 right-0 left-0 pl-64 z-30 bg-surface-container-lowest border-b border-outline-variant h-14 flex items-center justify-between px-6">
+<!-- Left: Title & Quick Search -->
+<div class="flex items-center gap-6">
+<h1 class="text-headline-md font-headline-md font-bold text-primary tracking-tight">
+        Reception Workspace
+      </h1>
+<div class="relative w-80">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+<input class="w-full h-9 pl-9 pr-4 bg-surface text-body-md font-body-md border border-nawy-border rounded-xl focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all placeholder:text-outline" placeholder="Search patient name, MRN, mobile, doctor..." type="text" value="CF-003891"/>
+</div>
+</div>
+<!-- Right: Context, Alerts & Actions -->
+<div class="flex items-center gap-4">
+<!-- Language Switcher -->
+<button class="text-label-md font-label-md text-on-surface-variant hover:text-primary px-2.5 py-1 rounded border border-nawy-border bg-surface-container-lowest">
+        EN | عربي
+      </button>
+<!-- Alert Notification Icon with Solar Orange Pulse -->
+<div class="relative cursor-pointer p-1.5 text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined text-[22px]">notifications</span>
+<span class="absolute top-1 right-1 w-2.5 h-2.5 bg-solar-orange rounded-full ring-2 ring-surface-container-lowest"></span>
+</div>
+<!-- Emergency Admit Action -->
+<button class="h-9 px-4 rounded-xl border border-error text-error hover:bg-error-container hover:text-on-error-container font-headline-sm text-headline-sm flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[18px]">emergency</span>
+<span>Emergency Admit</span>
+</button>
+</div>
+</header>
+<!-- ========================================================================= -->
+<!-- BASE WORKSPACE: Today Day Calendar Screen (Dimmed Backdrop Context)        -->
+<!-- ========================================================================= -->
+<main class="pl-64 pt-14 h-full flex flex-col bg-surface overflow-hidden relative">
+<!-- Sub-header Bar -->
+<div class="h-12 border-b border-nawy-border bg-surface-container-lowest px-6 flex items-center justify-between flex-shrink-0">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1 text-headline-sm font-headline-sm text-primary">
+<span>Today · Thursday, 24 October 2024</span>
+<span class="px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-secondary-fixed text-on-secondary-fixed-variant">Shift: 08:00 - 16:00</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-label-md font-label-md text-outline">Filter Clinic:</span>
+<select class="h-8 px-2.5 text-body-sm font-body-sm bg-surface border border-nawy-border rounded-lg text-on-surface focus:outline-none">
+<option>All Clinics (Cardiology, Orthopedics, Pediatrics)</option>
+</select>
+<div class="flex items-center border border-nawy-border rounded-lg overflow-hidden">
+<button class="px-3 py-1 bg-surface-container-high text-primary font-semibold text-label-sm">Timeline</button>
+<button class="px-3 py-1 bg-surface-container-lowest text-on-surface-variant text-label-sm hover:bg-surface-container-low">List</button>
+</div>
+</div>
+</div>
+<!-- Calendar Matrix Grid (Simulated Background) -->
+<div class="flex-1 p-6 grid grid-cols-12 gap-6 overflow-hidden select-none opacity-40 filter blur-[0.5px]">
+<!-- Left 8 cols: Time schedule table -->
+<div class="col-span-8 bg-surface-container-lowest rounded-xl border border-nawy-border p-4 flex flex-col gap-4">
+<div class="flex items-center justify-between pb-3 border-b border-nawy-border">
+<span class="text-headline-sm font-headline-sm text-nawy-dark">Consultation Schedule - Dr. Ahmed Fathy</span>
+<span class="text-label-sm font-label-sm text-outline">Room 101 · First Floor</span>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-3 rounded-xl border border-nawy-border bg-surface">
+<div class="flex items-center gap-3">
+<span class="font-tabular-data text-headline-sm text-primary">10:00 AM</span>
+<div>
+<p class="font-headline-sm text-on-surface">Khaled Mostafa</p>
+<p class="text-label-sm text-outline">Follow-up ECG · Completed</p>
+</div>
+</div>
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-label-sm bg-emerald-50 text-emerald-800">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>Completed
+            </span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl border-2 border-primary-container bg-surface-container-low shadow-sm">
+<div class="flex items-center gap-3">
+<span class="font-tabular-data text-headline-sm text-primary font-bold">10:30 AM</span>
+<div>
+<p class="font-headline-sm text-primary font-bold">Youssef Amr El-Sayed</p>
+<p class="text-label-sm text-primary">First Visit · CF-003891 · Cardiology</p>
+</div>
+</div>
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-label-sm bg-amber-50 text-amber-800">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5"></span>Checking In
+            </span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl border border-nawy-border bg-surface">
+<div class="flex items-center gap-3">
+<span class="font-tabular-data text-headline-sm text-outline">11:00 AM</span>
+<div>
+<p class="font-headline-sm text-on-surface">Fatma Hassan Mahmoud</p>
+<p class="text-label-sm text-outline">Echo Stress Test · CF-001923</p>
+</div>
+</div>
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-label-sm bg-emerald-50 text-emerald-800">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>Confirmed
+            </span>
+</div>
+</div>
+</div>
+<!-- Right 4 cols: Room status summary -->
+<div class="col-span-4 bg-surface-container-lowest rounded-xl border border-nawy-border p-4">
+<h3 class="text-headline-sm font-headline-sm text-nawy-dark mb-4">Clinic Status Overview</h3>
+<div class="space-y-3">
+<div class="p-3 border border-nawy-border rounded-xl">
+<div class="flex justify-between items-center text-label-md">
+<span class="font-semibold text-primary">Cardiology (Dr. Fathy)</span>
+<span class="text-emerald-700 font-bold">ACTIVE</span>
+</div>
+<div class="text-label-sm text-outline mt-1">Queue: 4 Waiting · 1 In-Room</div>
+</div>
+<div class="p-3 border border-nawy-border rounded-xl">
+<div class="flex justify-between items-center text-label-md">
+<span class="font-semibold text-primary">Pediatrics (Dr. Sarah)</span>
+<span class="text-emerald-700 font-bold">ACTIVE</span>
+</div>
+<div class="text-label-sm text-outline mt-1">Queue: 2 Waiting · 1 In-Room</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- CLEAN MODAL BACKDROP OVERLAY                                              -->
+<!-- ========================================================================= -->
+<div class="absolute inset-0 bg-nawy-dark/30 backdrop-blur-[2px] z-40 transition-opacity"></div>
+<!-- ========================================================================= -->
+<!-- SCREEN 4: CHECK-IN PANEL (Side Drawer over Today Schedule)                -->
+<!-- Specifications: width 480px, pure white, 1px left border #D3DBE6, shadow  -->
+<!-- ========================================================================= -->
+<section class="absolute top-0 right-0 h-full w-[480px] bg-surface-container-lowest border-l border-nawy-border shadow-2xl z-50 flex flex-col justify-between">
+<!-- Drawer Header -->
+<div class="p-5 border-b border-nawy-border bg-surface-container-lowest flex-shrink-0">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-container"></span>
+<h2 class="text-headline-md font-headline-md font-bold text-nawy-dark tracking-tight">
+              Patient Check-in · Ticket Generator
+            </h2>
+</div>
+<!-- Close Button with Esc shortcut indicator -->
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-nawy-dark p-1 rounded-md hover:bg-surface transition-colors" title="Close drawer (Esc)">
+<span class="text-label-sm font-label-sm text-outline border border-nawy-border px-1.5 py-0.5 rounded bg-surface">Esc</span>
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Patient Summary Card -->
+<div class="bg-surface-container-low rounded-xl p-3.5 border border-nawy-border">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm font-bold text-primary tracking-tight">
+                  Youssef Amr El-Sayed
+                </span>
+<span class="px-2 py-0.5 rounded text-label-sm font-label-sm bg-surface-container-high text-on-primary-fixed-variant font-medium">
+                  CF-003891
+                </span>
+</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-[16px] text-outline">call</span>
+<span class="font-tabular-data text-tabular-data">+20 11 9876 5432</span>
+</div>
+</div>
+<!-- Status Badge -->
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-label-sm font-label-sm bg-amber-50 text-amber-900 border border-amber-200">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5 animate-pulse"></span>Arrived At Desk
+            </span>
+</div>
+<div class="mt-3 pt-2.5 border-t border-nawy-border/70 flex items-center justify-between text-label-md font-label-md">
+<div class="flex items-center gap-1.5 text-primary">
+<span class="material-symbols-outlined text-[16px] text-primary">schedule</span>
+<span>10:30 AM Slot</span>
+</div>
+<div class="text-nawy-dark font-medium flex items-center gap-1">
+<span>Dr. Ahmed Fathy</span>
+<span class="text-secondary font-normal">(Cardiology)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Drawer Scrollable Body -->
+<div class="flex-1 overflow-y-auto p-5 space-y-5 custom-scrollbar">
+<!-- STEP 1: Identity & Phone Confirmation -->
+<div class="rounded-xl border border-nawy-border p-4 bg-surface-container-lowest">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<span class="w-5 h-5 rounded-full bg-primary-container text-on-primary text-[11px] font-bold flex items-center justify-center">1</span>
+<span class="text-headline-sm font-headline-sm text-nawy-dark">Identity &amp; Phone Confirmation</span>
+</div>
+<span class="text-label-sm text-emerald-600 flex items-center gap-0.5 font-semibold">
+<span class="material-symbols-outlined text-[16px]">verified</span> Pre-verified
+            </span>
+</div>
+<div class="space-y-3">
+<!-- Verified Checkbox -->
+<label class="flex items-start gap-3 p-2.5 rounded-lg border border-nawy-border bg-surface cursor-pointer hover:bg-surface-container-low transition-colors">
+<input checked="" class="mt-0.5 h-4 w-4 rounded text-primary-container focus:ring-secondary border-nawy-border" type="checkbox"/>
+<div class="text-body-sm font-body-sm text-on-surface">
+<span class="font-medium text-nawy-dark">Confirm national ID / Identity matches patient profile</span>
+<p class="text-label-sm text-outline mt-0.5">Egyptian National ID: 29803120104892 presented</p>
+</div>
+</label>
+<!-- Phone Confirmation Bar -->
+<div class="flex items-center justify-between px-3 py-2 bg-surface-bright rounded-lg border border-nawy-border">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline text-[18px]">smartphone</span>
+<span class="text-body-sm font-tabular-data text-nawy-dark font-medium">+20 11 9876 5432</span>
+</div>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-label-sm font-label-sm bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1"></span>Verified Mobile
+              </span>
+</div>
+</div>
+</div>
+<!-- STEP 2: Financials & Deposit -->
+<div class="rounded-xl border border-nawy-border p-4 bg-surface-container-lowest">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<span class="w-5 h-5 rounded-full bg-primary-container text-on-primary text-[11px] font-bold flex items-center justify-center">2</span>
+<span class="text-headline-sm font-headline-sm text-nawy-dark">Financials &amp; Deposit</span>
+</div>
+<span class="text-label-sm font-label-sm text-outline">Egyptian Pounds (EGP)</span>
+</div>
+<!-- Ledger Table -->
+<div class="space-y-2 border-b border-nawy-border pb-3">
+<div class="flex justify-between items-center text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Consultation Fee</span>
+<span class="font-tabular-data text-tabular-data font-semibold text-nawy-dark">EGP 450.00</span>
+</div>
+<div class="flex justify-between items-center text-body-sm font-body-sm">
+<div class="flex items-center gap-1.5">
+<span class="text-emerald-700">Deposit Already Paid</span>
+<span class="text-label-sm font-label-sm text-outline bg-surface px-1.5 py-0.2 rounded border border-nawy-border">RC-9921</span>
+</div>
+<span class="font-tabular-data text-tabular-data font-semibold text-emerald-700">- EGP 100.00</span>
+</div>
+</div>
+<!-- Balance Due Highlight -->
+<div class="py-3 flex justify-between items-baseline">
+<div>
+<span class="text-headline-sm font-headline-sm text-nawy-dark font-bold">Balance Due at Desk</span>
+<p class="text-label-sm font-label-sm text-outline">Payable now or at pharmacy/checkout</p>
+</div>
+<div class="text-right">
+<span class="text-headline-lg font-headline-lg font-bold text-primary font-tabular-data">EGP 350</span>
+<span class="text-label-sm font-label-sm text-outline">.00</span>
+</div>
+</div>
+<!-- Quick Payment Toggle -->
+<div class="mt-2 grid grid-cols-2 gap-2 bg-surface p-1 rounded-xl border border-nawy-border">
+<button class="py-2 px-3 text-label-md font-label-md font-semibold rounded-lg bg-primary-container text-on-primary shadow-sm flex items-center justify-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">payments</span>
+<span>Collect EGP 350 Now</span>
+</button>
+<button class="py-2 px-3 text-label-md font-label-md font-medium rounded-lg text-on-surface-variant hover:text-nawy-dark hover:bg-surface-container-low transition-colors flex items-center justify-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">receipt_long</span>
+<span>Bill to Checkout</span>
+</button>
+</div>
+</div>
+<!-- STEP 3: Insurance Status & Warning -->
+<div class="rounded-xl border border-nawy-border p-4 bg-surface-container-lowest">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<span class="w-5 h-5 rounded-full bg-primary-container text-on-primary text-[11px] font-bold flex items-center justify-center">3</span>
+<span class="text-headline-sm font-headline-sm text-nawy-dark">Insurance Status &amp; Policy</span>
+</div>
+<span class="text-label-sm font-label-sm px-2 py-0.5 rounded bg-surface-container text-on-primary-fixed-variant font-medium">Bupa Network</span>
+</div>
+<!-- Policy Card -->
+<div class="flex items-center justify-between p-2.5 bg-surface-container-low rounded-lg border border-nawy-border mb-3">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center text-primary font-bold text-[12px]">
+                BUPA
+              </div>
+<div>
+<p class="text-body-sm font-body-sm font-semibold text-nawy-dark">Bupa Egypt Gold</p>
+<p class="text-label-sm font-label-sm text-outline font-tabular-data">Policy #BUP-884102 · Copay: 15%</p>
+</div>
+</div>
+<span class="text-label-sm text-outline">Exp: 12/2025</span>
+</div>
+<!-- Warning Card with Amber Alert Styling & Solar Orange Utility Touch -->
+<div class="p-3 bg-amber-50 rounded-xl border border-amber-200">
+<div class="flex items-start gap-2.5">
+<span class="text-solar-orange text-headline-sm mt-0.5">⚠️</span>
+<div class="space-y-1">
+<p class="text-body-sm font-body-sm text-amber-950 font-medium leading-snug">
+                  Eligibility not checked today.
+                </p>
+<p class="text-label-sm font-label-sm text-amber-800 leading-normal">
+                  Copay/deductible approval requires online portal claim sync before prescription discharge.
+                </p>
+</div>
+</div>
+<div class="mt-3 flex justify-end">
+<button class="h-8 px-3 rounded-lg bg-surface-container-lowest text-amber-950 border border-amber-300 text-label-md font-label-md font-semibold hover:bg-amber-100 flex items-center gap-1.5 transition-colors shadow-xs">
+<span class="material-symbols-outlined text-[16px]">sync</span>
+<span>Check Portal Eligibility</span>
+</button>
+</div>
+</div>
+</div>
+<!-- GENERATED TICKET PREVIEW CARD (Clinical High Fidelity) -->
+<div class="rounded-xl border border-nawy-border bg-surface-bright p-4 relative overflow-hidden">
+<div class="absolute top-0 right-0 transform translate-x-2 -translate-y-2 w-16 h-16 bg-surface-container-high/40 rounded-full pointer-events-none"></div>
+<div class="flex items-center justify-between pb-2 mb-3 border-b border-nawy-border">
+<span class="text-label-sm font-label-sm uppercase tracking-wider text-outline font-bold">Ticket Queue Preview</span>
+<span class="text-label-sm font-label-sm text-secondary font-semibold">Priority Outpatient</span>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<span class="text-display-lg font-display-lg font-bold text-nawy-dark tracking-tight">A-14</span>
+<p class="text-headline-sm font-headline-sm text-primary font-semibold mt-0.5">Dr. Ahmed Fathy · Cardiology</p>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Clinic 101 - 1st Floor</p>
+</div>
+<div class="text-right">
+<div class="inline-flex flex-col items-end">
+<span class="px-2 py-0.5 rounded text-label-sm font-label-sm bg-secondary-fixed text-on-secondary-fixed-variant font-bold">
+                  Est. wait 12 mins
+                </span>
+<span class="text-label-sm font-label-sm text-outline mt-1 font-tabular-data">Checked in at 10:18 AM</span>
+</div>
+</div>
+</div>
+<!-- Action Shortcuts -->
+<div class="mt-4 pt-3 border-t border-nawy-border grid grid-cols-2 gap-2">
+<button class="h-8 rounded-lg bg-surface-container-lowest border border-nawy-border text-label-md font-label-md font-semibold text-nawy-dark hover:bg-surface-container-low flex items-center justify-center gap-1.5 transition-colors">
+<span>🖨️</span>
+<span>Print Ticket</span>
+</button>
+<button class="h-8 rounded-lg bg-surface-container-lowest border border-nawy-border text-label-md font-label-md font-semibold text-nawy-dark hover:bg-surface-container-low flex items-center justify-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[16px] text-primary">sms</span>
+<span>Send SMS Ticket</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Drawer Footer Action -->
+<div class="p-5 border-t border-nawy-border bg-surface-container-lowest flex-shrink-0 space-y-2">
+<button class="w-full h-11 bg-primary-container hover:bg-primary text-on-primary rounded-xl font-headline-sm text-headline-sm font-semibold flex items-center justify-center gap-2 shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-secondary">
+<span class="material-symbols-outlined text-[20px]">how_to_reg</span>
+<span>Complete Check-in &amp; Print Ticket (Enter)</span>
+</button>
+<p class="text-center text-label-sm font-label-sm text-outline">
+          Press <kbd class="px-1.5 py-0.5 rounded border border-nawy-border bg-surface font-mono">Enter</kbd> to confirm or <kbd class="px-1.5 py-0.5 rounded border border-nawy-border bg-surface font-mono">Esc</kbd> to dismiss
+        </p>
+</div>
+</section>
+</main>
+<!-- Interactive Hotkeys Script for Desk Efficiency -->
+<script>
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        console.log('Close check-in panel requested via Esc');
+      } else if (event.key === 'Enter') {
+        console.log('Complete Check-in triggered via Enter key');
+      }
+    });
+  </script>
+</body></html>

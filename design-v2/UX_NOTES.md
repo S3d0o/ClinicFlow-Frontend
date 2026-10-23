@@ -1,0 +1,16 @@
+# ClinicFlow V2 — UX enhancements from research (2026-10-23)
+
+| # | Finding | Enhancement | Screens |
+|---|---|---|---|
+| U1 | Vezeeta reviews: bookings that never reached the clinic, patients waiting at a closed clinic, unreachable phone numbers | Booking success shows a booking reference, "Confirmed by the clinic" status, clinic phone (tap to call), Get directions, Add to calendar; booking appears in the clinic's own calendar (already one calendar in V2) | Booking confirmed, appointment details |
+| U2 | Reminders raise attendance (~68% → ~79–80%); reminders with only "cancel" are a missed chance; two-way confirm helps | Reminder link opens a one-tap page: Confirm I'm coming / Reschedule / Cancel; desk sees "Patient confirmed" | Reminder page, front desk calendar |
+| U3 | Patients want wait times shown (90.8% in one survey); queue systems raised satisfaction in an RCT | On the visit day the patient card shows ticket number, position in queue, estimated wait, and a "Doctor running ~20 min late" banner; waiting-room TV shows tickets + estimated wait | Patient home, appointments, waiting-room display, queue board |
+| U4 | Patients don't know the price or insurance coverage (persona pain) | Price breakdown before confirming: visit price, optional deposit, "pay the rest at the desk", insurance note | Booking, doctor profile |
+| U5 | OTP best practice (Twilio, Visa): one-time-code autofill, numeric keypad, auto-submit, 60 s resend countdown, distinct states for wrong/expired/locked, edit number | Apply to SMS code screens | Sign-up code, forgot password, phone change |
+| U6 | Portal studies: login/access and navigation are top problems; low health literacy users need more time | One identifier field for login (no role tabs), 5-item bottom nav, plain language, big targets, progressive disclosure, Arabic default | Sign in, patient portal |
+| U7 | Front desk: one receptionist juggles calls, walk-ins and payments; re-keying slows check-in (target < 3 min) | Keyboard-first global search (phone/name/MRN, "/" shortcut), check-in in ≤ 3 clicks with data pre-filled from the online booking, status counters, "needs action" strip (late, unconfirmed, unpaid) | Front desk, check-in, queue |
+| U8 | EHR burden: re-typing data that exists, forced template fields, task switching | Vitals and complaint flow in from triage, previous-visit summary in a side panel, document by exception (no forced fields), autosave indicator, carry-forward marked clearly | Encounter workspace, triage |
+| U9 | RTL guidance (Material): mirror layout and directional icons only; numerals, charts, photos stay unmirrored | Applied in code (i18n), noted in prompts | All |
+| U10 | Support unreachable is a top complaint | Every patient screen has "Contact the branch" (phone + hours) in reach | Patient portal |
+
+Sources: apps.apple.com Vezeeta reviews; trustpilot.com/review/vezeeta.com; play.google.com Vezeeta listings; PMC8288327 (dental reminders); PMC8084678 (ED wait-time needs); journals.sbmu.ac.ir AAEM 1335 (queue RCT); twilio.com OTP best practices; design.visa.com OTP pattern; humanfactors.jmir.org 2023 e46044; healthexec.com portal frustrations; m2.material.io bidirectionality; healthdatamanagement.com Ideal Note.

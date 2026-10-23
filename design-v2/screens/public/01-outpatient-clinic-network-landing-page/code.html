@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow Egypt | Outpatient Clinics &amp; Transparent Healthcare</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "canvas": "#F7F9FD",
+            "primary-navy": "#1E4164",
+            "navy-hover": "#16324E",
+            "deep-navy": "#13263B",
+            "accent-orange": "#FF5E00",
+            "orange-light": "#FFF1E8",
+            "orange-dark": "#B33F00",
+            "navy-light": "#E8EEF6",
+            "border-ui": "#D3DBE6",
+            "border-input": "#C6D0DE",
+            "text-main": "#212427",
+            "text-secondary": "#5B6573",
+            "focus-blue": "#015C9A"
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            full: "9999px"
+          },
+          fontFamily: {
+            display: ["Plus Jakarta Sans", "sans-serif"],
+            body: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body class="bg-[#F7F9FD] text-[#212427] antialiased selection:bg-[#E8EEF6] selection:text-[#1E4164]">
+<!-- TOP NAVBAR COMPONENT -->
+<header class="sticky top-0 z-50 bg-white border-b border-[#D3DBE6]">
+<div class="flex justify-between items-center w-full px-6 md:px-8 max-w-7xl mx-auto h-20">
+<!-- Brand Logo -->
+<a class="flex items-center gap-2.5 group" href="#">
+<div class="w-10 h-10 rounded-lg bg-[#E8EEF6] flex items-center justify-center text-[#13263B] border border-[#D3DBE6] group-hover:bg-[#1E4164] group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">local_hospital</span>
+</div>
+<span class="text-2xl font-bold font-display text-[#13263B] tracking-tight">ClinicFlow</span>
+</a>
+<!-- Desktop Navigation Links -->
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-[#1E4164] font-semibold border-b-2 border-[#FF5E00] pb-1 text-sm font-display tracking-tight" href="#search">Find a doctor</a>
+<a class="text-[#5B6573] text-sm font-display font-medium hover:text-[#13263B] transition-colors" href="#branches">Branches</a>
+<a class="text-[#5B6573] text-sm font-display font-medium hover:text-[#13263B] transition-colors" href="#services">Services &amp; prices</a>
+<a class="text-[#5B6573] text-sm font-display font-medium hover:text-[#13263B] transition-colors" href="#join">Join as a doctor</a>
+</nav>
+<!-- Trailing Action Cluster -->
+<div class="flex items-center gap-3">
+<!-- Bilingual Toggle -->
+<button aria-label="Toggle language to Arabic" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-[#D3DBE6] text-[#212427] hover:bg-[#E8EEF6] transition-colors text-xs font-semibold" type="button">
+<span class="material-symbols-outlined text-base">language</span>
+<span>EN</span>
+<span class="text-[#D3DBE6]">|</span>
+<span class="text-[#5B6573] font-normal">عربي</span>
+</button>
+<!-- Ghost Sign in -->
+<a class="hidden sm:inline-flex items-center justify-center px-3.5 py-2 rounded-lg text-sm font-semibold font-display text-[#212427] hover:bg-[#E8EEF6] transition-colors" href="#signin">
+          Sign in
+        </a>
+<!-- Primary Navy CTA -->
+<a class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-[#1E4164] hover:bg-[#16324E] text-white text-sm font-semibold font-display transition-all shadow-sm active:scale-[0.99]" href="#register">
+          Create account
+        </a>
+</div>
+</div>
+</header>
+<main>
+<!-- HERO SECTION -->
+<section class="relative pt-10 pb-16 md:pt-16 md:pb-24">
+<div class="max-w-7xl mx-auto px-6 md:px-8">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<!-- Left Column Content -->
+<div class="lg:col-span-7 flex flex-col items-start">
+<!-- Headline -->
+<h1 class="text-3xl md:text-5xl font-extrabold font-display text-[#13263B] tracking-tight mb-4 leading-tight">
+              Your clinic visit, from booking to prescription
+            </h1>
+<!-- Subcopy -->
+<p class="text-base md:text-lg font-body text-[#5B6573] max-w-2xl mb-8 leading-relaxed">
+              Transparent consultation fees in Egyptian Pounds (EGP), accredited senior medical consultants, and zero waiting queues across Nasr City, Maadi, and Sheikh Zayed. Instant booking confirmations via SMS and email.
+            </p>
+<!-- Actions Cluster -->
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
+<a class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-[#1E4164] hover:bg-[#16324E] text-white font-semibold font-display text-sm transition-all shadow-sm active:scale-[0.99]" href="#quick-booking">
+<span class="material-symbols-outlined text-lg">calendar_today</span>
+<span>Book an appointment</span>
+</a>
+<a class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-white border border-[#D3DBE6] text-[#1E4164] font-semibold font-display text-sm hover:bg-[#E8EEF6] transition-all" href="#search">
+<span class="material-symbols-outlined text-lg text-[#1E4164]">search</span>
+<span>Find a doctor</span>
+</a>
+</div>
+</div>
+<!-- Right Column: Interactive Quick Booking Preview Card -->
+<div class="lg:col-span-5" id="quick-booking">
+<div class="bg-white rounded-xl border border-[#D3DBE6] p-6 shadow-sm">
+<!-- Header with live slot indicator -->
+<div class="flex items-center justify-between pb-4 border-b border-[#D3DBE6]">
+<div>
+<h3 class="text-base font-bold font-display text-[#13263B]">Quick Appointment</h3>
+<p class="text-xs text-[#5B6573]">Reserve slot in 30 seconds</p>
+</div>
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FFF1E8] text-[#B33F00] text-xs font-semibold">
+<span class="w-2 h-2 rounded-full bg-[#FF5E00]"></span>
+<span>Instant Slot</span>
+</div>
+</div>
+<!-- Branch Selector -->
+<div class="mt-4">
+<label class="block text-xs font-semibold text-[#5B6573] mb-1.5">Selected Clinic</label>
+<div class="flex items-center justify-between px-3.5 py-2.5 rounded-lg bg-[#F7F9FD] border border-[#C6D0DE] text-[#212427] text-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#1E4164] text-lg">location_on</span>
+<span class="font-medium">Nasr City — Abbas El Akkad</span>
+</div>
+<span class="material-symbols-outlined text-[#5B6573] text-base">expand_more</span>
+</div>
+</div>
+<!-- Doctor Card Snippet -->
+<div class="mt-4 p-3 rounded-lg bg-[#F7F9FD] border border-[#D3DBE6] flex items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-[#E8EEF6] flex items-center justify-center text-[#1E4164] font-bold border border-[#D3DBE6]">
+<span class="material-symbols-outlined text-[#1E4164] text-2xl">person</span>
+</div>
+<div>
+<h3 class="text-sm font-bold font-display text-[#13263B]">Dr. Tamer El-Sayed</h3>
+<p class="text-xs text-[#5B6573]">Cardiology Consultant · MSc, MRCP</p>
+<p class="text-xs text-[#1E4164] font-medium">30 min consultation</p>
+</div>
+</div>
+<div class="text-right shrink-0">
+<span class="inline-block px-2.5 py-1 rounded bg-[#FFF1E8] text-[#B33F00] text-xs font-bold font-display">
+                    EGP 450
+                  </span>
+<p class="text-[10px] text-[#5B6573] mt-0.5">Fixed tariff</p>
+</div>
+</div>
+<!-- Date Picker Chips -->
+<div class="mt-5">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-semibold text-[#5B6573]">Available Days</span>
+<span class="text-xs font-medium text-[#1E4164]">October 2025</span>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<button class="p-2 text-center rounded-lg border-2 border-[#1E4164] bg-[#E8EEF6] text-[#1E4164] transition-all" type="button">
+<span class="block text-xs font-medium">Today</span>
+<span class="block text-sm font-bold font-display">Oct 24</span>
+</button>
+<button class="p-2 text-center rounded-lg border border-[#D3DBE6] hover:border-[#1E4164] bg-white text-[#212427] transition-all" type="button">
+<span class="block text-xs text-[#5B6573]">Fri</span>
+<span class="block text-sm font-semibold font-display">Oct 25</span>
+</button>
+<button class="p-2 text-center rounded-lg border border-[#D3DBE6] hover:border-[#1E4164] bg-white text-[#212427] transition-all" type="button">
+<span class="block text-xs text-[#5B6573]">Sat</span>
+<span class="block text-sm font-semibold font-display">Oct 26</span>
+</button>
+</div>
+</div>
+<!-- Slot Selection -->
+<div class="mt-4">
+<label class="block text-xs font-semibold text-[#5B6573] mb-2">Afternoon Slots</label>
+<div class="grid grid-cols-3 gap-2">
+<button class="py-2 px-1 text-center rounded-lg border border-[#D3DBE6] hover:bg-[#E8EEF6] text-xs text-[#212427] transition-colors" type="button">
+                    09:30 AM
+                  </button>
+<button class="py-2 px-1 text-center rounded-lg border-2 border-[#1E4164] bg-[#E8EEF6] text-[#1E4164] font-semibold text-xs ring-1 ring-[#1E4164]" type="button">
+                    10:00 AM
+                  </button>
+<button class="py-2 px-1 text-center rounded-lg border border-[#D3DBE6] hover:bg-[#E8EEF6] text-xs text-[#212427] transition-colors" type="button">
+                    10:30 AM
+                  </button>
+</div>
+</div>
+<!-- Payment Note & Submit -->
+<div class="mt-5 pt-4 border-t border-[#D3DBE6]">
+<div class="flex items-center gap-2 mb-4 text-xs text-[#5B6573]">
+<span class="material-symbols-outlined text-[#1E4164] text-sm">shield</span>
+<span>Pay online via Paymob or at clinic reception upon arrival.</span>
+</div>
+<button class="w-full py-3 px-4 rounded-lg bg-[#1E4164] hover:bg-[#16324E] text-white font-semibold font-display text-sm transition-all flex items-center justify-center gap-2" type="button">
+<span>Confirm booking</span>
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- GLOBAL CLINIC SEARCH DOCKED BAR -->
+<section class="relative -mt-6 mb-16 z-20" id="search">
+<div class="max-w-7xl mx-auto px-6 md:px-8">
+<div class="bg-white rounded-xl border border-[#D3DBE6] p-4 md:p-6 shadow-sm">
+<form class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 items-end">
+<!-- Field 1: Branch -->
+<div>
+<label class="block text-xs font-semibold text-[#5B6573] mb-1.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-base text-[#1E4164]">apartment</span>
+<span>Branch Location</span>
+</label>
+<select class="w-full h-11 px-3 rounded-lg bg-[#F7F9FD] border border-[#C6D0DE] text-xs text-[#212427] focus:border-[#1E4164] focus:ring-1 focus:ring-[#015C9A]">
+<option selected="">All branches (Nasr City, Maadi, Zayed)</option>
+<option>Nasr City (Abbas El Akkad)</option>
+<option>Maadi (Degla Road 9)</option>
+<option>Sheikh Zayed (Twin Towers)</option>
+</select>
+</div>
+<!-- Field 2: Specialty -->
+<div>
+<label class="block text-xs font-semibold text-[#5B6573] mb-1.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-base text-[#1E4164]">stethoscope</span>
+<span>Medical Specialty</span>
+</label>
+<select class="w-full h-11 px-3 rounded-lg bg-[#F7F9FD] border border-[#C6D0DE] text-xs text-[#212427] focus:border-[#1E4164] focus:ring-1 focus:ring-[#015C9A]">
+<option selected="">Cardiology</option>
+<option>Internal Medicine</option>
+<option>Pediatrics &amp; Neonatology</option>
+<option>Dermatology &amp; Laser</option>
+<option>Orthopedic Surgery</option>
+<option>ENT (Otolaryngology)</option>
+</select>
+</div>
+<!-- Field 3: Service Purpose -->
+<div>
+<label class="block text-xs font-semibold text-[#5B6573] mb-1.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-base text-[#1E4164]">medical_services</span>
+<span>Visit Purpose</span>
+</label>
+<select class="w-full h-11 px-3 rounded-lg bg-[#F7F9FD] border border-[#C6D0DE] text-xs text-[#212427] focus:border-[#1E4164] focus:ring-1 focus:ring-[#015C9A]">
+<option selected="">Consultation (New Patient)</option>
+<option>Follow-up visit (Re-examination)</option>
+<option>ECG / Cardiac Echo procedure</option>
+<option>Routine Health Checkup</option>
+</select>
+</div>
+<!-- Field 4: Preferred Date -->
+<div>
+<label class="block text-xs font-semibold text-[#5B6573] mb-1.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-base text-[#1E4164]">calendar_month</span>
+<span>Preferred Date</span>
+</label>
+<input class="w-full h-11 px-3 rounded-lg bg-[#F7F9FD] border border-[#C6D0DE] text-xs text-[#212427] focus:border-[#1E4164] focus:ring-1 focus:ring-[#015C9A]" type="date" value="2025-10-24"/>
+</div>
+<!-- Field 5: CTA Action -->
+<div>
+<button class="w-full h-11 px-4 rounded-lg bg-[#1E4164] hover:bg-[#16324E] text-white font-semibold font-display text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.99]" type="submit">
+<span class="material-symbols-outlined text-base">search</span>
+<span>Search availability</span>
+</button>
+</div>
+</form>
+</div>
+</div>
+</section>
+<!-- OUR BRANCHES SECTION -->
+<section class="py-12 md:py-20" id="branches">
+<div class="max-w-7xl mx-auto px-6 md:px-8">
+<!-- Section Header -->
+<div class="mb-12">
+<div>
+<div class="inline-flex items-center gap-1.5 text-[#FF5E00] text-xs font-bold font-display uppercase tracking-wider mb-2">
+<span>Outpatient Clinics</span>
+</div>
+<h2 class="text-2xl md:text-3xl font-extrabold font-display text-[#13263B] tracking-tight">
+              Three modern clinics across Greater Cairo
+            </h2>
+<p class="text-sm md:text-base text-[#5B6573] max-w-3xl mt-2">
+              State-of-the-art diagnostic suites, pharmacy counters, and dedicated physician practices.
+            </p>
+</div>
+</div>
+<!-- 3 Branch Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Branch Card 1: Nasr City -->
+<div class="bg-white rounded-xl border border-[#D3DBE6] p-6 flex flex-col justify-between hover:border-[#1E4164] transition-colors group">
+<div>
+<div class="flex items-center justify-between mb-3">
+<span class="px-2.5 py-1 rounded bg-[#E8EEF6] text-[#1E4164] text-xs font-semibold">
+                  Cairo East
+                </span>
+<span class="flex items-center gap-1.5 text-xs text-emerald-700 font-medium">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  Open Today
+                </span>
+</div>
+<h3 class="text-lg font-bold font-display text-[#13263B] group-hover:text-[#1E4164] transition-colors mb-2">
+                Nasr City Branch
+              </h3>
+<div class="space-y-2 mb-5">
+<p class="text-xs text-[#5B6573] flex items-start gap-2">
+<span class="material-symbols-outlined text-[#5B6573] text-base shrink-0 mt-0.5">schedule</span>
+<span>08:30 AM – 10:00 PM</span>
+</p>
+<p class="text-xs text-[#5B6573] flex items-start gap-2">
+<span class="material-symbols-outlined text-[#5B6573] text-base shrink-0 mt-0.5">place</span>
+<span>14 Abbas El Akkad St., Area 1, Nasr City, Cairo</span>
+</p>
+<p class="text-xs text-[#5B6573] flex items-center gap-2">
+<span class="material-symbols-outlined text-[#5B6573] text-base shrink-0">call</span>
+<a class="hover:text-[#1E4164]" href="tel:+20224018890">+20 2 2401 8890</a>
+</p>
+</div>
+<!-- Specialties Tags -->
+<div class="flex flex-wrap gap-1.5 mb-6">
+<span class="px-2 py-0.5 rounded-full bg-[#F7F9FD] border border-[#D3DBE6] text-xs text-[#5B6573]">Cardiology</span>
+<span class="px-2 py-0.5 rounded-full bg-[#F7F9FD] border border-[#D3DBE6] text-xs text-[#5B6573]">Internal Medicine</span>
+<span class="px-2 py-0.5 rounded-full bg-[#F7F9FD] border border-[#D3DBE6] text-xs text-[#5B6573]">ENT</span>
+<span class="px-2 py-0.5 rounded-full bg-[#F7F9FD] border border-[#D3DBE6] text-xs text-[#5B6573]">Pediatrics</span>
+</div>
+</div>
+<div class="pt-4 border-t border-[#D3DBE6]">
+<a class="w-full inline-flex items-center justify-between text-[#1E4164] font-semibold text-xs group-hover:translate-x-1 transition-transform" href="#quick-booking">
+<span>View doctors &amp; book</span>
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Branch Card 2: Maadi -->
+<div class="bg-white rounded-xl border border-[#D3DBE6] p-6 flex flex-col justify-between hover:border-[#1E4164] transition-colors group">
+<div>
+<div class="flex items-center justify-between mb-3">
+<span class="px-2.5 py-1 rounded bg-[#E8EEF6] text-[#1E4164] text-xs font-semibold">
+                  Cairo South
+                </span>
+<span class="flex items-center gap-1.5 text-xs text-emerald-700 font-medium">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  Open Today
+                </span>
+</div>
+<h3 class="text-lg font-bold font-display text-[#13263B] group-hover:text-[#1E4164] transition-colors mb-2">
+                Maadi Branch
+              </h3>
+<div class="space-y-2 mb-5">
+<p class="text-xs text-[#5B6573] flex items-start gap-2">
+<span class="material-symbols-outlined text-[#5B6573] text-base shrink-0 mt-0.5">schedule</span>
+<span>09:00 AM – 10:30 PM</span>
+</p>
+<p class="text-xs text-[#5B6573] flex items-start gap-2">
+<span class="material-symbols-outlined text-[#5B6573] text-base shrink-0 mt-0.5">place</span>
+<span>26 Road 9, Near Maadi Metro, Degla, Cairo</span>
+</p>
+<p class="text-xs text-[#5B6573] flex items-center gap-2">
+<span class="material-symbols-outlined text-[#5B6573] text-base shrink-0">call</span>
+<a class="hover:text-[#1E4164]" href="tel:+20223581120">+20 2 2358 1120</a>
+</p>
+</div>
+<!-- Specialties Tags -->
+<div class="flex flex-wrap gap-1.5 mb-6">
+<span class="px-2 py-0.5 rounded-full bg-[#F7F9FD] border border-[#D3DBE6] text-xs text-[#5B6573]">Dermatology</span>
+<span class="px-2 py-0.5 rounded-full bg-[#F7F9FD] border border-[#D3DBE6] text-xs text-[#5B6573]">Dental</span>
+<span class="px-2 py-0.5 rounded-full bg-[#F7F9FD] border border-[#D3DBE6] text-xs text-[#5B6573]">Orthopedics</span>
+<span class="px-2 py-0.5 rounded-full bg-[#F7F9FD] border border-[#D3DBE6] text-xs text-[#5B6573]">Family Medicine</span>
+</div>
+</div>
+<div class="pt-4 border-t border-[#D3DBE6]">
+<a class="w-full inline-flex items-center justify-between text-[#1E4164] font-semibold text-xs group-hover:translate-x-1 transition-transform" href="#quick-booking">
+<span>View doctors &amp; book</span>
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Branch Card 3: Sheikh Zayed -->
+<div class="bg-white rounded-xl border border-[#D3DBE6] p-6 flex flex-col justify-between hover:border-[#1E4164] transition-colors group">
+<div>
+<div class="flex items-center justify-between mb-3">
+<span class="px-2.5 py-1 rounded bg-[#E8EEF6] text-[#1E4164] text-xs font-semibold">
+                  Giza West
+                </span>
+<span class="flex items-center gap-1.5 text-xs text-emerald-700 font-medium">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  Open Today
+                </span>
+</div>
+<h3 class="text-lg font-bold font-display text-[#13263B] group-hover:text-[#1E4164] transition-colors mb-2">
+                Sheikh Zayed Branch
+              </h3>
+<div class="space-y-2 mb-5">
+<p class="text-xs text-[#5B6573] flex items-start gap-2">
+<span class="material-symbols-outlined text-[#5B6573] text-base shrink-0 mt-0.5">schedule</span>
+<span>09:00 AM – 09:30 PM</span>
+</p>
+<p class="text-xs text-[#5B6573] flex items-start gap-2">
+<span class="material-symbols-outlined text-[#5B6573] text-base shrink-0 mt-0.5">place</span>
+<span>Twin Towers Medical Center, Block 4, Sheikh Zayed</span>
+</p>
+<p class="text-xs text-[#5B6573] flex items-center gap-2">
+<span class="material-symbols-outlined text-[#5B6573] text-base shrink-0">call</span>
+<a class="hover:text-[#1E4164]" href="tel:+20238514400">+20 2 3851 4400</a>
+</p>
+</div>
+<!-- Specialties Tags -->
+<div class="flex flex-wrap gap-1.5 mb-6">
+<span class="px-2 py-0.5 rounded-full bg-[#F7F9FD] border border-[#D3DBE6] text-xs text-[#5B6573]">Ophthalmology</span>
+<span class="px-2 py-0.5 rounded-full bg-[#F7F9FD] border border-[#D3DBE6] text-xs text-[#5B6573]">Gynecology</span>
+<span class="px-2 py-0.5 rounded-full bg-[#F7F9FD] border border-[#D3DBE6] text-xs text-[#5B6573]">General Surgery</span>
+<span class="px-2 py-0.5 rounded-full bg-[#F7F9FD] border border-[#D3DBE6] text-xs text-[#5B6573]">Cardiology</span>
+</div>
+</div>
+<div class="pt-4 border-t border-[#D3DBE6]">
+<a class="w-full inline-flex items-center justify-between text-[#1E4164] font-semibold text-xs group-hover:translate-x-1 transition-transform" href="#quick-booking">
+<span>View doctors &amp; book</span>
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- HOW A VISIT WORKS (PATIENT JOURNEY) -->
+<section class="py-14 md:py-24 bg-[#E8EEF6]/50 border-y border-[#D3DBE6]">
+<div class="max-w-7xl mx-auto px-6 md:px-8">
+<div class="text-center max-w-2xl mx-auto mb-14">
+<span class="text-xs text-[#FF5E00] uppercase tracking-wider font-bold font-display">Effortless Care Experience</span>
+<h2 class="text-2xl md:text-3xl font-extrabold font-display text-[#13263B] tracking-tight mt-1 mb-3">
+            A calm, seamless medical journey
+          </h2>
+<p class="text-sm md:text-base text-[#5B6573]">
+            From the minute you pick an appointment to post-consultation prescription pickup, we remove clinic anxiety through predictability and smart flow.
+          </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Step 01 -->
+<div class="bg-white p-6 rounded-xl border border-[#D3DBE6] relative">
+<div class="flex items-center justify-between mb-4">
+<span class="text-2xl font-bold font-display text-[#1E4164]">01</span>
+<div class="w-10 h-10 rounded-lg bg-[#E8EEF6] flex items-center justify-center text-[#1E4164]">
+<span class="material-symbols-outlined text-[#1E4164]">devices</span>
+</div>
+</div>
+<h3 class="text-base font-bold font-display text-[#13263B] mb-2">Book online or by phone</h3>
+<p class="text-xs text-[#5B6573] leading-relaxed">
+              Choose specialist, branch, and exact time slot with guaranteed pricing in EGP. Receive prompt SMS or email alerts.
+            </p>
+</div>
+<!-- Step 02 -->
+<div class="bg-white p-6 rounded-xl border border-[#D3DBE6] relative">
+<div class="flex items-center justify-between mb-4">
+<span class="text-2xl font-bold font-display text-[#1E4164]">02</span>
+<div class="w-10 h-10 rounded-lg bg-[#E8EEF6] flex items-center justify-center text-[#1E4164]">
+<span class="material-symbols-outlined text-[#1E4164]">qr_code_scanner</span>
+</div>
+</div>
+<h3 class="text-base font-bold font-display text-[#13263B] mb-2">Check in at the desk</h3>
+<p class="text-xs text-[#5B6573] leading-relaxed">
+              Arrive 10 minutes early. Scan your QR appointment code or provide your national ID/mobile. Zero physical line waiting.
+            </p>
+</div>
+<!-- Step 03 -->
+<div class="bg-white p-6 rounded-xl border border-[#D3DBE6] relative">
+<div class="flex items-center justify-between mb-4">
+<span class="text-2xl font-bold font-display text-[#1E4164]">03</span>
+<div class="w-10 h-10 rounded-lg bg-[#E8EEF6] flex items-center justify-center text-[#1E4164]">
+<span class="material-symbols-outlined text-[#1E4164]">clinical_notes</span>
+</div>
+</div>
+<h3 class="text-base font-bold font-display text-[#13263B] mb-2">See your doctor</h3>
+<p class="text-xs text-[#5B6573] leading-relaxed">
+              Dedicated consultation time without rushed schedules. Comprehensive examination, diagnostics, and patient Q&amp;A.
+            </p>
+</div>
+<!-- Step 04 -->
+<div class="bg-white p-6 rounded-xl border border-[#D3DBE6] relative">
+<div class="flex items-center justify-between mb-4">
+<span class="text-2xl font-bold font-display text-[#1E4164]">04</span>
+<div class="w-10 h-10 rounded-lg bg-[#E8EEF6] flex items-center justify-center text-[#1E4164]">
+<span class="material-symbols-outlined text-[#1E4164]">receipt_long</span>
+</div>
+</div>
+<h3 class="text-base font-bold font-display text-[#13263B] mb-2">Portal prescriptions &amp; receipts</h3>
+<p class="text-xs text-[#5B6573] leading-relaxed">
+              Access your digital diagnosis, prescription, and official tax invoice on your phone immediately following your visit.
+            </p>
+</div>
+</div>
+</div>
+</section>
+<!-- SPLIT FEATURE BANNER: PATIENT TRUST & DOCTOR RECRUITMENT -->
+<section class="py-14 md:py-24" id="services">
+<div class="max-w-7xl mx-auto px-6 md:px-8">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+<!-- Left Card: Patient Guarantees -->
+<div class="bg-white rounded-xl border border-[#D3DBE6] p-8 md:p-10 flex flex-col justify-between">
+<div>
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8EEF6] text-[#1E4164] text-xs font-semibold mb-4">
+<span class="material-symbols-outlined text-sm text-[#1E4164]">verified</span>
+<span>Transparent Healthcare Promise</span>
+</div>
+<h3 class="text-xl md:text-2xl font-bold font-display text-[#13263B] mb-4">
+                Care built around your schedule and budget
+              </h3>
+<p class="text-sm text-[#5B6573] mb-6 leading-relaxed">
+                Medical care in Egypt should not come with unexpected bills or endless wait times. We provide absolute clarity on all tariffs.
+              </p>
+<!-- Checklist -->
+<ul class="space-y-3.5 mb-8">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[#1E4164] text-lg mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-xs text-[#212427]"><strong>Clear upfront EGP pricing</strong> published directly on every specialist’s profile.</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[#1E4164] text-lg mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-xs text-[#212427]"><strong>Flexible payments:</strong> Credit cards via Paymob, ValU medical installments, or cash at reception.</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[#1E4164] text-lg mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-xs text-[#212427]"><strong>Automated SMS &amp; email appointment reminders</strong> with Google Maps directions to your branch.</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[#1E4164] text-lg mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-xs text-[#212427]"><strong>Encrypted cloud record:</strong> Review your lab results, imaging orders, and drug regimens anytime.</span>
+</li>
+</ul>
+</div>
+<div>
+<a class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-[#D3DBE6] text-[#1E4164] hover:bg-[#E8EEF6] font-semibold text-xs transition-all" href="#branches">
+<span>Explore patient services</span>
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Right Card: Join as a Doctor -->
+<div class="bg-[#13263B] text-white rounded-xl border border-[#13263B] p-8 md:p-10 flex flex-col justify-between" id="join">
+<div>
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-semibold mb-4">
+<span class="material-symbols-outlined text-sm">badge</span>
+<span>Medical Careers</span>
+</div>
+<h3 class="text-xl md:text-2xl font-bold font-display text-white mb-4">
+                Join our team of elite medical consultants
+              </h3>
+<p class="text-sm text-slate-300 mb-6 leading-relaxed">
+                Practice outpatient medicine in world-class clinics with state-of-the-art diagnostic equipment and dedicated medical assistants.
+              </p>
+<!-- Doctor Perks Checklist -->
+<ul class="space-y-3.5 mb-8">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[#FF5E00] text-lg mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-xs text-slate-200"><strong>Full administrative &amp; nursing support</strong> so you focus solely on diagnosis and patient outcomes.</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[#FF5E00] text-lg mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-xs text-slate-200"><strong>Integrated smart scheduling</strong> preventing double-bookings and respecting physician hours.</span>
+</li>
+</ul>
+</div>
+<div>
+<a class="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg bg-white text-[#13263B] font-bold font-display text-xs hover:bg-[#F7F9FD] transition-all" href="mailto:careers@clinicflow.eg">
+<span>Apply as a doctor (Submit CV)</span>
+<span class="material-symbols-outlined text-base">send</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- FOOTER COMPONENT -->
+<footer class="bg-white border-t border-[#D3DBE6]">
+<div class="w-full px-6 md:px-8 max-w-7xl mx-auto py-12">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+<!-- Brand & Info Col -->
+<div class="md:col-span-1">
+<div class="flex items-center gap-2.5 mb-3">
+<div class="w-8 h-8 rounded bg-[#E8EEF6] flex items-center justify-center text-[#13263B] border border-[#D3DBE6]">
+<span class="material-symbols-outlined text-[#13263B] text-base" style="font-variation-settings: 'FILL' 1;">local_hospital</span>
+</div>
+<span class="text-xl font-bold font-display text-[#13263B] tracking-tight">ClinicFlow</span>
+</div>
+<p class="text-xs text-[#5B6573] leading-relaxed">
+            Egypt’s premier network of synchronized outpatient centers offering transparent pricing and humanized care.
+          </p>
+</div>
+<!-- Links Col 1: Branches -->
+<div>
+<h4 class="text-sm font-bold font-display text-[#13263B] mb-3">Clinic Branches</h4>
+<ul class="space-y-2 text-xs text-[#5B6573]">
+<li><a class="hover:text-[#1E4164] transition-colors" href="#branches">Nasr City (Abbas El Akkad)</a></li>
+<li><a class="hover:text-[#1E4164] transition-colors" href="#branches">Maadi (Degla Road 9)</a></li>
+<li><a class="hover:text-[#1E4164] transition-colors" href="#branches">Sheikh Zayed (Twin Towers)</a></li>
+<li><a class="hover:text-[#1E4164] transition-colors" href="#branches">New Cairo (Opening 2026)</a></li>
+</ul>
+</div>
+<!-- Links Col 2: Services & Pricing -->
+<div>
+<h4 class="text-sm font-bold font-display text-[#13263B] mb-3">Patient Portal</h4>
+<ul class="space-y-2 text-xs text-[#5B6573]">
+<li><a class="hover:text-[#1E4164] transition-colors" href="#search">Find a doctor</a></li>
+<li><a class="hover:text-[#1E4164] transition-colors" href="#quick-booking">Services &amp; transparent EGP pricing</a></li>
+<li><a class="hover:text-[#1E4164] transition-colors" href="#register">Patient Portal &amp; Lab Results</a></li>
+<li><a class="hover:text-[#1E4164] transition-colors" href="#join">Join as a doctor</a></li>
+</ul>
+</div>
+<!-- Links Col 3: Compliance & Legal -->
+<div>
+<h4 class="text-sm font-bold font-display text-[#13263B] mb-3">Help &amp; Compliance</h4>
+<ul class="space-y-2 text-xs text-[#5B6573]">
+<li><a class="hover:text-[#1E4164] transition-colors" href="#privacy">Privacy Policy</a></li>
+<li><a class="hover:text-[#1E4164] transition-colors" href="#terms">Terms of Service</a></li>
+<li><a class="hover:text-[#1E4164] transition-colors" href="#rights">Patient Rights &amp; Licensing</a></li>
+<li><a class="hover:text-[#1E4164] transition-colors" href="#contact">Contact &amp; Emergencies</a></li>
+</ul>
+</div>
+</div>
+<!-- Bottom Bar -->
+<div class="pt-8 border-t border-[#D3DBE6] flex flex-col sm:flex-row items-center justify-between gap-4">
+<p class="text-xs text-[#5B6573] text-center sm:text-left">
+          © 2025 ClinicFlow Egypt. All rights reserved.
+        </p>
+<div class="flex items-center gap-6">
+<span class="text-xs text-[#5B6573] flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-[#1E4164]">phone_in_talk</span>
+<span>Cairo Central Line: 19822</span>
+</span>
+<button class="text-xs text-[#1E4164] font-medium hover:underline" type="button">
+            English / العربية
+          </button>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

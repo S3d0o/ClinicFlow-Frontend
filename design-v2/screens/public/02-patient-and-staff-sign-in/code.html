@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sign in — ClinicFlow Egypt</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-error-container": "#93000a",
+            "surface-bright": "#f8f9fd",
+            "surface-tint": "#1E4164",
+            "surface-container-low": "#f2f5fa",
+            "surface": "#F7F9FD",
+            "surface-container": "#E8EEF6",
+            "error-container": "#ffdad6",
+            "background": "#F7F9FD",
+            "surface-dim": "#d8dade",
+            "surface-container-lowest": "#ffffff",
+            "on-primary": "#ffffff",
+            "primary": "#1E4164",
+            "primary-dark": "#13263B",
+            "primary-hover": "#16324E",
+            "primary-focus": "#015C9A",
+            "on-surface": "#212427",
+            "on-surface-variant": "#5B6573",
+            "border-card": "#D3DBE6",
+            "border-input": "#C6D0DE",
+            "navy-soft": "#E8EEF6",
+            "error": "#ba1a1a"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "btn": "10px",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "2rem",
+            "space-lg": "1.5rem",
+            "gutter": "1.5rem",
+            "space-md": "1rem",
+            "gutter-mobile": "1rem",
+            "space-sm": "0.5rem",
+            "margin-mobile": "1rem",
+            "space-xs": "0.25rem",
+            "space-xl": "2rem"
+          },
+          "fontFamily": {
+            "label-sm": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "caption": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "title-sm": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "display-lg-mobile": ["Plus Jakarta Sans"],
+            "display-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "600" }],
+            "label-md": ["13px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "caption": ["11px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }],
+            "title-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "headline-xl": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#F7F9FD] text-[#212427] min-h-screen flex flex-col justify-between selection:bg-[#E8EEF6] selection:text-[#13263B] antialiased">
+<!-- Header Navigation -->
+<header class="w-full bg-[#FFFFFF] border-b border-[#D3DBE6]">
+<div class="max-w-7xl mx-auto h-20 px-space-lg md:px-margin flex items-center justify-between">
+<!-- Brand Anchor -->
+<a class="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-[#015C9A] rounded-lg" href="#">
+<div class="w-10 h-10 rounded-lg bg-[#E8EEF6] flex items-center justify-center text-[#13263B] border border-[#C6D0DE]">
+<span class="material-symbols-outlined text-2xl" data-icon="local_hospital">local_hospital</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-[#13263B] font-bold tracking-tight leading-tight">ClinicFlow</span>
+<span class="font-caption text-caption text-[#5B6573] font-medium">Egypt Medical Network</span>
+</div>
+</a>
+<!-- Trailing Action: Return link & Language switcher -->
+<div class="flex items-center gap-6">
+<a class="hidden sm:flex items-center gap-1.5 font-label-md text-label-md text-[#5B6573] hover:text-[#1E4164] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-base" data-icon="arrow_back">arrow_back</span>
+<span>Return to homepage</span>
+</a>
+<div class="h-4 w-[1px] bg-[#D3DBE6] hidden sm:block"></div>
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#C6D0DE] bg-[#FFFFFF] hover:bg-[#E8EEF6] transition-colors text-[#212427] font-label-md text-label-md" type="button">
+<span class="material-symbols-outlined text-base text-[#1E4164]" data-icon="language">language</span>
+<span class="font-medium text-[#13263B]">EN</span>
+<span class="text-[#C6D0DE]">|</span>
+<span class="text-[#5B6573] font-normal">عربي</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Canvas: Focused Auth Stage -->
+<main class="flex-grow flex items-center justify-center py-10 px-space-md sm:px-margin">
+<div class="w-full max-w-[460px]">
+<!-- Surface Card -->
+<div class="bg-[#FFFFFF] rounded-xl border border-[#D3DBE6] shadow-sm p-6 sm:p-8">
+<!-- Portal Title -->
+<div class="mb-6 text-center sm:text-left">
+<h1 class="font-headline-lg text-headline-lg text-[#13263B] font-bold tracking-tight">Sign in</h1>
+<p class="font-body-md text-body-md text-[#5B6573] mt-1.5">
+            Access your appointments, medical records, or clinician workspace.
+          </p>
+</div>
+<!-- Role Indicator Pill Switcher -->
+<div class="grid grid-cols-2 p-1 bg-[#F7F9FD] rounded-lg mb-6 border border-[#C6D0DE]">
+<button class="py-2 text-center rounded-md font-label-md text-label-md font-semibold bg-[#FFFFFF] text-[#1E4164] shadow-xs transition-all" id="tab-patient" type="button">
+            Patient
+          </button>
+<button class="py-2 text-center rounded-md font-label-md text-label-md text-[#5B6573] hover:text-[#212427] transition-all" id="tab-staff" type="button">
+            Doctor / Staff
+          </button>
+</div>
+<!-- Form Stage -->
+<form class="space-y-4" id="loginForm" onsubmit="event.preventDefault();">
+<!-- Identifier Input -->
+<div>
+<label class="block font-label-md text-label-md text-[#212427] mb-1.5" for="identifier">
+              Phone or email
+            </label>
+<div class="relative rounded-lg">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#5B6573]">
+<span class="material-symbols-outlined text-lg" data-icon="badge">badge</span>
+</div>
+<input class="w-full pl-10 pr-3.5 py-2.5 bg-[#FFFFFF] border border-[#C6D0DE] rounded-lg font-body-md text-body-md text-[#212427] placeholder:text-[#5B6573] focus:border-[#015C9A] focus:ring-1 focus:ring-[#015C9A] focus:bg-[#FFFFFF] transition-colors" id="identifier" name="identifier" placeholder="e.g., +20 10 1234 5678 or name@domain.com" required="" type="text"/>
+</div>
+</div>
+<!-- Password Input -->
+<div>
+<div class="flex items-center justify-between mb-1.5">
+<label class="block font-label-md text-label-md text-[#212427] mb-1.5" for="password">
+                Password
+              </label>
+<a class="font-label-md text-label-md text-[#1E4164] hover:underline focus:outline-none" href="#">
+                Forgot password?
+              </a>
+</div>
+<div class="relative rounded-lg">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#5B6573]">
+<span class="material-symbols-outlined text-lg" data-icon="lock">lock</span>
+</div>
+<input class="w-full pl-10 pr-11 py-2.5 bg-[#FFFFFF] border border-[#C6D0DE] rounded-lg font-body-md text-body-md text-[#212427] placeholder:text-[#5B6573] focus:border-[#015C9A] focus:ring-1 focus:ring-[#015C9A] focus:bg-[#FFFFFF] transition-colors" id="password" name="password" placeholder="••••••••••••" required="" type="password"/>
+<button aria-label="Toggle password visibility" class="absolute inset-y-0 right-0 pr-3 flex items-center text-[#5B6573] hover:text-[#212427] focus:outline-none" id="togglePassword" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="visibility" id="passwordEye">visibility</span>
+</button>
+</div>
+</div>
+<!-- Checkbox / Remember Device -->
+<div class="flex items-center justify-between pt-1">
+<label class="flex items-center gap-2 cursor-pointer select-none">
+<input class="w-4 h-4 rounded border-[#C6D0DE] text-[#1E4164] focus:ring-[#015C9A] focus:ring-offset-0 bg-[#FFFFFF]" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-[#5B6573]">Remember this device for 30 days</span>
+</label>
+</div>
+<!-- Primary Submit Action -->
+<button class="w-full mt-2 bg-[#1E4164] hover:bg-[#16324E] text-[#ffffff] font-label-md text-label-md font-semibold py-3 px-4 rounded-[10px] shadow-sm active:scale-[0.99] transition-all flex items-center justify-center gap-2 focus:ring-2 focus:ring-[#015C9A] focus:ring-offset-2" type="submit">
+<span>Sign in</span>
+<span class="material-symbols-outlined text-base" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</form>
+<!-- Divider -->
+<div class="relative my-6 text-center">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-[#D3DBE6]"></div>
+</div>
+<span class="relative px-3 bg-[#FFFFFF] font-caption text-caption text-[#5B6573] tracking-wider uppercase">or</span>
+</div>
+<!-- Secondary Access Links -->
+<div class="space-y-3">
+<!-- Patient Register -->
+<a class="flex items-center justify-between p-3 rounded-lg border border-[#D3DBE6] bg-[#FFFFFF] hover:bg-[#F7F9FD] transition-colors group" href="#">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-full bg-[#E8EEF6] flex items-center justify-center text-[#1E4164]">
+<span class="material-symbols-outlined text-base" data-icon="person_add">person_add</span>
+</div>
+<div class="text-left">
+<p class="font-label-md text-label-md text-[#212427] font-semibold group-hover:text-[#1E4164] transition-colors">New to ClinicFlow?</p>
+<p class="font-caption text-caption text-[#5B6573]">Create a patient account</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-[#5B6573] group-hover:text-[#1E4164] group-hover:translate-x-0.5 transition-all text-base" data-icon="chevron_right">chevron_right</span>
+</a>
+<!-- Doctor Registration Portal Link -->
+<a class="flex items-center justify-between p-3 rounded-lg border border-[#D3DBE6] bg-[#FFFFFF] hover:bg-[#F7F9FD] transition-colors group" href="#">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-full bg-[#E8EEF6] flex items-center justify-center text-[#1E4164]">
+<span class="material-symbols-outlined text-base" data-icon="stethoscope">stethoscope</span>
+</div>
+<div class="text-left">
+<p class="font-label-md text-label-md text-[#212427] font-semibold group-hover:text-[#1E4164] transition-colors">Healthcare consultant?</p>
+<p class="font-caption text-caption text-[#5B6573]">Join as a doctor</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-[#5B6573] group-hover:text-[#1E4164] group-hover:translate-x-0.5 transition-all text-base" data-icon="chevron_right">chevron_right</span>
+</a>
+</div>
+<!-- Trust & Security Seal -->
+<div class="mt-6 pt-4 border-t border-[#D3DBE6] flex items-center justify-center gap-2 text-center text-[#5B6573] font-caption text-caption">
+<span class="material-symbols-outlined text-sm text-[#1E4164]" data-icon="shield">shield</span>
+<span>Protected by 256-bit SSL encryption</span>
+</div>
+</div>
+<!-- Quick Context Links -->
+<div class="mt-4 flex items-center justify-center gap-6 font-body-sm text-body-sm text-[#5B6573]">
+<a class="hover:text-[#1E4164] transition-colors flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="help">help</span>
+<span>Need help signing in?</span>
+</a>
+<span>•</span>
+<a class="hover:text-[#1E4164] transition-colors flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="phone_in_talk">phone_in_talk</span>
+<span>Hotline: 16789</span>
+</a>
+</div>
+</div>
+</main>
+<!-- Minimal Footer -->
+<footer class="w-full bg-[#FFFFFF] border-t border-[#D3DBE6] py-4">
+<div class="max-w-7xl mx-auto px-space-lg md:px-margin flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+<p class="font-body-sm text-body-sm text-[#5B6573]">
+        © 2025 ClinicFlow Egypt. All rights reserved.
+      </p>
+<div class="flex items-center gap-4 font-body-sm text-body-sm text-[#5B6573]">
+<a class="hover:text-[#1E4164] transition-colors" href="#">Privacy Policy</a>
+<span>•</span>
+<a class="hover:text-[#1E4164] transition-colors" href="#">Terms of Service</a>
+<span>•</span>
+<a class="hover:text-[#1E4164] transition-colors" href="#">Patient Rights &amp; Licensing</a>
+</div>
+</div>
+</footer>
+<!-- Micro-interactions: Password toggle & role switcher -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Toggle Password Visibility
+      const togglePasswordBtn = document.getElementById('togglePassword');
+      const passwordInput = document.getElementById('password');
+      const passwordEye = document.getElementById('passwordEye');
+
+      if (togglePasswordBtn && passwordInput && passwordEye) {
+        togglePasswordBtn.addEventListener('click', () => {
+          const isPassword = passwordInput.type === 'password';
+          passwordInput.type = isPassword ? 'text' : 'password';
+          passwordEye.textContent = isPassword ? 'visibility_off' : 'visibility';
+          passwordEye.setAttribute('data-icon', isPassword ? 'visibility_off' : 'visibility');
+        });
+      }
+
+      // Role Switcher Interaction
+      const tabPatient = document.getElementById('tab-patient');
+      const tabStaff = document.getElementById('tab-staff');
+      const idInput = document.getElementById('identifier');
+
+      if (tabPatient && tabStaff && idInput) {
+        tabPatient.addEventListener('click', () => {
+          tabPatient.className = 'py-2 text-center rounded-md font-label-md text-label-md font-semibold bg-[#FFFFFF] text-[#1E4164] shadow-xs transition-all';
+          tabStaff.className = 'py-2 text-center rounded-md font-label-md text-label-md text-[#5B6573] hover:text-[#212427] transition-all';
+          idInput.placeholder = 'e.g., +20 10 1234 5678 or patient@domain.com';
+        });
+
+        tabStaff.addEventListener('click', () => {
+          tabStaff.className = 'py-2 text-center rounded-md font-label-md text-label-md font-semibold bg-[#FFFFFF] text-[#1E4164] shadow-xs transition-all';
+          tabPatient.className = 'py-2 text-center rounded-md font-label-md text-label-md text-[#5B6573] hover:text-[#212427] transition-all';
+          idInput.placeholder = 'e.g., staff.id@clinicflow.eg or Syndicate ID';
+        });
+      }
+    });
+  </script>
+</body></html>

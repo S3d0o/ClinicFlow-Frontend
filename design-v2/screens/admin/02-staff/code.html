@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow Egypt Network Admin - Staff Directory</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-fixed-dim": "#a8c9f3",
+            "surface-tint": "#406185",
+            "on-error-container": "#93000a",
+            "primary-container": "#1e4164",
+            "on-primary-fixed": "#001d36",
+            "inverse-surface": "#27313e",
+            "outline-variant": "#c3c6cf",
+            "on-tertiary-fixed": "#370e00",
+            "on-primary-fixed-variant": "#27496c",
+            "on-surface": "#121c28",
+            "on-secondary-container": "#52647c",
+            "on-primary": "#ffffff",
+            "on-secondary-fixed-variant": "#36485f",
+            "surface": "#f8f9ff",
+            "surface-dim": "#d1dbeb",
+            "tertiary-container": "#722600",
+            "on-primary-container": "#8dadd6",
+            "inverse-on-surface": "#eaf1ff",
+            "surface-container-highest": "#d9e3f4",
+            "on-tertiary-container": "#ff8b5b",
+            "on-error": "#ffffff",
+            "surface-variant": "#d9e3f4",
+            "error": "#ba1a1a",
+            "background": "#f8f9ff",
+            "on-secondary": "#ffffff",
+            "outline": "#73777f",
+            "on-tertiary": "#ffffff",
+            "surface-container": "#e5efff",
+            "secondary-fixed": "#d2e4ff",
+            "inverse-primary": "#a8c9f3",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-secondary-fixed": "#081c31",
+            "tertiary-fixed-dim": "#ffb599",
+            "surface-container-lowest": "#ffffff",
+            "tertiary-fixed": "#ffdbce",
+            "surface-container-low": "#eef4ff",
+            "secondary-container": "#cee1fd",
+            "on-surface-variant": "#43474e",
+            "primary-fixed": "#d1e4ff",
+            "tertiary": "#4e1700",
+            "error-container": "#ffdad6",
+            "surface-bright": "#f8f9ff",
+            "surface-container-high": "#dfe9fa",
+            "primary": "#002b4c",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "secondary": "#4e6077",
+            "on-background": "#121c28"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter-sm": "0.75rem",
+            "margin-tablet": "1.5rem",
+            "gutter": "1rem",
+            "space-xl": "1.5rem",
+            "margin": "1rem",
+            "margin-desktop": "2rem",
+            "space-md": "0.75rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1rem"
+          },
+          "fontFamily": {
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "body-sm": ["Inter"],
+            "label-lg": ["Inter"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .tnum {
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+</head>
+<body class="bg-[#F7F9FD] text-[#212427] font-body-md text-body-md antialiased h-full overflow-x-hidden flex flex-col">
+<!-- Fixed Left Sidebar (260px) -->
+<aside class="fixed top-0 left-0 h-screen w-64 bg-surface-container-lowest border-r border-outline-variant flex flex-col justify-between z-30 select-none">
+<div class="p-4 flex flex-col gap-6">
+<!-- Header Brand -->
+<div class="flex items-center gap-3 px-2">
+<div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center text-on-primary font-headline-md text-headline-md font-bold tracking-tight shadow-sm">
+          CF
+        </div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">ClinicFlow</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Egypt Network Admin</span>
+</div>
+</div>
+<!-- Navigation Tabs -->
+<nav class="flex flex-col gap-1">
+<!-- 1. Overview -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+<!-- 2. Staff (Active) -->
+<a class="flex items-center justify-between px-3 py-2.5 rounded-lg bg-surface-container text-primary font-semibold relative transition-colors duration-150 active:scale-[0.99] border-l-[3px] border-primary" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">badge</span>
+<span class="font-label-md text-label-md">Staff</span>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-primary-container text-on-primary">124</span>
+</a>
+<!-- 3. Roles & permissions -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-[20px]">admin_panel_settings</span>
+<span class="font-label-md text-label-md">Roles &amp; permissions</span>
+</a>
+<!-- 4. Branches -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-[20px]">apartment</span>
+<span class="font-label-md text-label-md">Branches</span>
+</a>
+<!-- 5. Specialties -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-[20px]">medical_services</span>
+<span class="font-label-md text-label-md">Specialties</span>
+</a>
+<!-- 6. Settings -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<!-- 7. Integrations -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-[20px]">hub</span>
+<span class="font-label-md text-label-md">Integrations</span>
+</a>
+<!-- 8. Audit log -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-[20px]">history</span>
+<span class="font-label-md text-label-md">Audit log</span>
+</a>
+</nav>
+</div>
+<!-- Bottom User Footer -->
+<div class="p-4 border-t border-outline-variant bg-surface-container-lowest">
+<div class="flex items-center justify-between p-2 rounded-xl hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-label-md text-label-md font-bold tracking-tight shadow-sm">
+            KA
+          </div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-semibold text-[#13263B]">Karim Adel</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="px-1.5 py-0.2 rounded font-label-sm text-[10px] font-semibold bg-[#F5F3FF] text-[#7C3AED] border border-[#DDD6FE]">Admin</span>
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+</div>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1" title="User Menu">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- Top Bar -->
+<header class="ml-64 w-[calc(100%-16rem)] h-16 bg-surface-container-lowest border-b border-outline-variant fixed top-0 right-0 z-20 flex items-center justify-between px-8 select-none">
+<!-- Left: Global Search Input -->
+<div class="relative w-96">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full h-10 pl-10 pr-4 bg-[#FFFFFF] border border-[#C6D0DE] rounded-lg text-body-sm font-body-sm text-[#212427] placeholder-[#5B6573] focus:outline-none focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/20 transition-all duration-150" placeholder="Search staff by name, email, role..." type="text"/>
+</div>
+<!-- Right Controls -->
+<div class="flex items-center gap-5">
+<!-- System Status Indicator -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#EFF6FF] border border-[#CEE1FD]">
+<span class="w-2 h-2 rounded-full bg-[#015C9A] animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-[#015C9A] font-medium tracking-tight">Node: Cairo-North (EG-01)</span>
+</div>
+<div class="h-5 w-px bg-outline-variant"></div>
+<!-- Language Switch -->
+<button class="px-2.5 py-1 rounded text-body-sm font-label-md font-semibold text-[#13263B] hover:bg-surface-container-low transition-colors">
+        EN | عربي
+      </button>
+<!-- Notification Action -->
+<button class="relative p-2 text-on-surface-variant hover:text-primary rounded-lg hover:bg-surface-container-low transition-colors" title="Notifications">
+<span class="material-symbols-outlined text-[22px]">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#FF5E00]"></span>
+</button>
+<!-- Network Hub Selector -->
+<div class="flex items-center gap-2 pl-2 border-l border-outline-variant text-[#5B6573]">
+<span class="material-symbols-outlined text-[20px]">apartment</span>
+<span class="font-label-sm text-label-sm font-semibold text-[#13263B]">Greater Cairo</span>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas Layout -->
+<main class="ml-64 pt-16 flex-1 flex flex-col p-8 min-h-screen">
+<div class="max-w-[1360px] w-full mx-auto flex flex-col gap-6">
+<!-- Breadcrumbs & Page Header -->
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+<div>
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm mb-1">
+<span>Administration</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-semibold">Staff Directory &amp; Access Control</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-[#13263B] font-bold tracking-tight">
+            Staff Directory &amp; Access Control
+          </h1>
+<p class="font-body-md text-body-md text-[#5B6573] mt-1 max-w-3xl">
+            Manage user access, role assignments, multi-factor authentication, and branch authorizations across Greater Cairo facilities.
+          </p>
+</div>
+<!-- Quick Summary Mini-pills -->
+<div class="flex items-center gap-3">
+<div class="px-3.5 py-2 bg-surface-container-lowest border border-[#D3DBE6] rounded-xl flex items-center gap-3">
+<span class="font-label-sm text-label-sm text-[#5B6573]">Total Staff</span>
+<span class="font-headline-sm text-headline-sm text-[#13263B] font-bold tnum">124</span>
+</div>
+<div class="px-3.5 py-2 bg-surface-container-lowest border border-[#D3DBE6] rounded-xl flex items-center gap-3">
+<span class="font-label-sm text-label-sm text-[#5B6573]">MFA Enrolled</span>
+<span class="font-headline-sm text-headline-sm text-[#059669] font-bold tnum">96.8%</span>
+</div>
+</div>
+</div>
+<!-- Action & Filter Bar -->
+<div class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+<div class="flex flex-wrap items-center gap-3 flex-1">
+<!-- Search input inside action bar -->
+<div class="relative min-w-[240px] flex-1 max-w-xs">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-[#5B6573] text-[18px]">filter_list</span>
+<input class="w-full h-10 pl-9 pr-3 bg-[#FFFFFF] border border-[#C6D0DE] rounded-lg text-body-sm font-body-sm text-[#212427] placeholder-[#5B6573] focus:outline-none focus:border-[#015C9A] focus:ring-1 focus:ring-[#015C9A]" placeholder="Filter names or emails..." type="text"/>
+</div>
+<!-- Role Filter -->
+<div class="relative">
+<select class="h-10 pl-3 pr-8 bg-[#FFFFFF] border border-[#C6D0DE] rounded-lg text-body-sm font-label-md text-[#212427] appearance-none focus:outline-none focus:border-[#015C9A] cursor-pointer">
+<option>All Roles</option>
+<option>Doctor</option>
+<option>Nurse</option>
+<option>Receptionist</option>
+<option>Accountant</option>
+<option>Manager</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-2.5 text-[#5B6573] pointer-events-none text-[18px]">expand_more</span>
+</div>
+<!-- Branch Filter -->
+<div class="relative">
+<select class="h-10 pl-3 pr-8 bg-[#FFFFFF] border border-[#C6D0DE] rounded-lg text-body-sm font-label-md text-[#212427] appearance-none focus:outline-none focus:border-[#015C9A] cursor-pointer">
+<option>All Branches</option>
+<option>Nasr City</option>
+<option>Maadi</option>
+<option>Sheikh Zayed</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-2.5 text-[#5B6573] pointer-events-none text-[18px]">expand_more</span>
+</div>
+<!-- Status Filter -->
+<div class="relative">
+<select class="h-10 pl-3 pr-8 bg-[#FFFFFF] border border-[#C6D0DE] rounded-lg text-body-sm font-label-md text-[#212427] appearance-none focus:outline-none focus:border-[#015C9A] cursor-pointer">
+<option>All Statuses</option>
+<option>Active</option>
+<option>Invited</option>
+<option>Suspended</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-2.5 text-[#5B6573] pointer-events-none text-[18px]">expand_more</span>
+</div>
+<!-- Clear Filters Button -->
+<button class="h-10 px-3 text-[#5B6573] hover:text-[#13263B] font-label-md text-label-md flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[16px]">refresh</span>
+            Reset
+          </button>
+</div>
+<!-- Primary Navy Button: + Invite Staff -->
+<button class="h-11 px-5 rounded-lg bg-[#1E4164] hover:bg-[#16324E] text-white font-label-lg text-label-lg font-semibold flex items-center gap-2 shadow-sm transition-all duration-150 active:scale-95" onclick="document.getElementById('flyout-drawer').classList.remove('translate-x-full'); document.getElementById('drawer-backdrop').classList.remove('hidden');">
+<span class="material-symbols-outlined text-[20px]">person_add</span>
+          + Invite Staff
+        </button>
+</div>
+<!-- Staff Data Table Card -->
+<div class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl overflow-hidden shadow-sm flex flex-col">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-[#F8F9FF] border-b border-[#D3DBE6] text-[#5B6573] font-label-md text-label-md select-none">
+<th class="py-3.5 px-5 font-semibold">Staff Member</th>
+<th class="py-3.5 px-4 font-semibold">Roles</th>
+<th class="py-3.5 px-4 font-semibold">Branch Scope</th>
+<th class="py-3.5 px-4 font-semibold">Status</th>
+<th class="py-3.5 px-4 font-semibold">MFA Status</th>
+<th class="py-3.5 px-4 font-semibold">Last Sign-in</th>
+<th class="py-3.5 px-4 font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#D3DBE6] text-body-sm font-body-sm">
+<!-- Row 1: Dr. Ahmed Fathy -->
+<tr class="hover:bg-[#F8F9FF]/80 transition-colors">
+<td class="py-4 px-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-[#1E4164] text-white flex items-center justify-center font-label-md font-bold tracking-tight">
+                      AF
+                    </div>
+<div>
+<div class="font-headline-sm text-headline-sm font-semibold text-[#13263B]">Dr. Ahmed Fathy</div>
+<div class="text-[#5B6573] font-body-sm">ahmed.fathy@clinicflow.eg</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-label-sm font-semibold bg-[#1E4164]/10 text-[#1E4164] border border-[#1E4164]/20">
+                    Doctor
+                  </span>
+</td>
+<td class="py-4 px-4">
+<span class="text-[#212427] font-medium">Nasr City, Maadi</span>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ECFDF5] text-[#059669] font-label-md text-label-md font-semibold">
+<span class="w-2 h-2 rounded-full bg-[#059669]"></span>
+                    Active
+                  </span>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 text-[#059669] font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+                    Enrolled / Authenticator
+                  </span>
+</td>
+<td class="py-4 px-4 tnum text-[#5B6573]">
+                  Today, 08:30 AM
+                </td>
+<td class="py-4 px-4 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1.5 rounded-lg text-[#5B6573] hover:text-[#1E4164] hover:bg-surface-container-low transition-colors" title="Edit Profile">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 rounded-lg text-[#5B6573] hover:text-[#1E4164] hover:bg-surface-container-low transition-colors" title="More Options">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Sara Ibrahim -->
+<tr class="hover:bg-[#F8F9FF]/80 transition-colors">
+<td class="py-4 px-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-[#4E6077] text-white flex items-center justify-center font-label-md font-bold tracking-tight">
+                      SI
+                    </div>
+<div>
+<div class="font-headline-sm text-headline-sm font-semibold text-[#13263B]">Sara Ibrahim</div>
+<div class="text-[#5B6573] font-body-sm">sara.ibrahim@clinicflow.eg</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-label-sm font-semibold bg-[#F1F5F9] text-[#475569] border border-[#CBD5E1]">
+                    Nurse
+                  </span>
+</td>
+<td class="py-4 px-4">
+<span class="text-[#212427] font-medium">Nasr City</span>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ECFDF5] text-[#059669] font-label-md text-label-md font-semibold">
+<span class="w-2 h-2 rounded-full bg-[#059669]"></span>
+                    Active
+                  </span>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 text-[#059669] font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+                    Enrolled / Authenticator
+                  </span>
+</td>
+<td class="py-4 px-4 tnum text-[#5B6573]">
+                  Today, 07:45 AM
+                </td>
+<td class="py-4 px-4 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1.5 rounded-lg text-[#5B6573] hover:text-[#1E4164] hover:bg-surface-container-low transition-colors" title="Edit Profile">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 rounded-lg text-[#5B6573] hover:text-[#1E4164] hover:bg-surface-container-low transition-colors" title="More Options">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Mona Samir -->
+<tr class="hover:bg-[#F8F9FF]/80 transition-colors">
+<td class="py-4 px-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-[#0284C7] text-white flex items-center justify-center font-label-md font-bold tracking-tight">
+                      MS
+                    </div>
+<div>
+<div class="font-headline-sm text-headline-sm font-semibold text-[#13263B]">Mona Samir</div>
+<div class="text-[#5B6573] font-body-sm">mona.samir@clinicflow.eg</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-label-sm font-semibold bg-[#E0F2FE] text-[#0284C7] border border-[#BAE6FD]">
+                    Receptionist
+                  </span>
+</td>
+<td class="py-4 px-4">
+<span class="text-[#212427] font-medium">Nasr City</span>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ECFDF5] text-[#059669] font-label-md text-label-md font-semibold">
+<span class="w-2 h-2 rounded-full bg-[#059669]"></span>
+                    Active
+                  </span>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 text-[#0284C7] font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px]">sms</span>
+                    Enrolled / SMS
+                  </span>
+</td>
+<td class="py-4 px-4 tnum text-[#5B6573]">
+                  Today, 08:00 AM
+                </td>
+<td class="py-4 px-4 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1.5 rounded-lg text-[#5B6573] hover:text-[#1E4164] hover:bg-surface-container-low transition-colors" title="Edit Profile">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 rounded-lg text-[#5B6573] hover:text-[#1E4164] hover:bg-surface-container-low transition-colors" title="More Options">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4: Youssef Kamal -->
+<tr class="hover:bg-[#F8F9FF]/80 transition-colors">
+<td class="py-4 px-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-[#D97706] text-white flex items-center justify-center font-label-md font-bold tracking-tight">
+                      YK
+                    </div>
+<div>
+<div class="font-headline-sm text-headline-sm font-semibold text-[#13263B]">Youssef Kamal</div>
+<div class="text-[#5B6573] font-body-sm">youssef.kamal@clinicflow.eg</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-label-sm font-semibold bg-[#FEF3C7] text-[#D97706] border border-[#FDE68A]">
+                    Accountant
+                  </span>
+</td>
+<td class="py-4 px-4">
+<span class="text-[#212427] font-medium">All Branches</span>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ECFDF5] text-[#059669] font-label-md text-label-md font-semibold">
+<span class="w-2 h-2 rounded-full bg-[#059669]"></span>
+                    Active
+                  </span>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 text-[#059669] font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+                    Enrolled / Authenticator
+                  </span>
+</td>
+<td class="py-4 px-4 tnum text-[#5B6573]">
+                  Yesterday, 05:10 PM
+                </td>
+<td class="py-4 px-4 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1.5 rounded-lg text-[#5B6573] hover:text-[#1E4164] hover:bg-surface-container-low transition-colors" title="Edit Profile">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 rounded-lg text-[#5B6573] hover:text-[#1E4164] hover:bg-surface-container-low transition-colors" title="More Options">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 5: Dr. Laila Hassan -->
+<tr class="hover:bg-[#F8F9FF]/80 transition-colors">
+<td class="py-4 px-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-[#1E4164] text-white flex items-center justify-center font-label-md font-bold tracking-tight">
+                      LH
+                    </div>
+<div>
+<div class="font-headline-sm text-headline-sm font-semibold text-[#13263B]">Dr. Laila Hassan</div>
+<div class="text-[#5B6573] font-body-sm">laila.hassan@clinicflow.eg</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-label-sm font-semibold bg-[#1E4164]/10 text-[#1E4164] border border-[#1E4164]/20">
+                    Doctor
+                  </span>
+</td>
+<td class="py-4 px-4">
+<span class="text-[#212427] font-medium">Maadi</span>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ECFDF5] text-[#059669] font-label-md text-label-md font-semibold">
+<span class="w-2 h-2 rounded-full bg-[#059669]"></span>
+                    Active
+                  </span>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 text-[#059669] font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+                    Enrolled / Authenticator
+                  </span>
+</td>
+<td class="py-4 px-4 tnum text-[#5B6573]">
+                  22 Oct, 11:15 AM
+                </td>
+<td class="py-4 px-4 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1.5 rounded-lg text-[#5B6573] hover:text-[#1E4164] hover:bg-surface-container-low transition-colors" title="Edit Profile">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 rounded-lg text-[#5B6573] hover:text-[#1E4164] hover:bg-surface-container-low transition-colors" title="More Options">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 6: Tarek Said (Not configured MFA & Warning alert) -->
+<tr class="hover:bg-[#F8F9FF]/80 transition-colors">
+<td class="py-4 px-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-[#0284C7] text-white flex items-center justify-center font-label-md font-bold tracking-tight">
+                      TS
+                    </div>
+<div>
+<div class="font-headline-sm text-headline-sm font-semibold text-[#13263B]">Tarek Said</div>
+<div class="text-[#5B6573] font-body-sm">tarek.said@clinicflow.eg</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-label-sm font-semibold bg-[#E0F2FE] text-[#0284C7] border border-[#BAE6FD]">
+                    Receptionist
+                  </span>
+</td>
+<td class="py-4 px-4">
+<span class="text-[#212427] font-medium">Maadi</span>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ECFDF5] text-[#059669] font-label-md text-label-md font-semibold">
+<span class="w-2 h-2 rounded-full bg-[#059669]"></span>
+                    Active
+                  </span>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FEF2F2] text-[#DC2626] font-label-md text-label-md font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-[#DC2626]"></span>
+                    Not configured
+                  </span>
+</td>
+<td class="py-4 px-4 tnum text-[#5B6573]">
+                  21 Oct, 09:00 AM
+                </td>
+<td class="py-4 px-4 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1.5 rounded-lg text-[#DC2626] hover:bg-[#FEF2F2] transition-colors" title="Send MFA Reminder">
+<span class="material-symbols-outlined text-[18px]">phonelink_lock</span>
+</button>
+<button class="p-1.5 rounded-lg text-[#5B6573] hover:text-[#1E4164] hover:bg-surface-container-low transition-colors" title="More Options">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 7: Dr. Karim Nabil -->
+<tr class="hover:bg-[#F8F9FF]/80 transition-colors">
+<td class="py-4 px-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-[#1E4164] text-white flex items-center justify-center font-label-md font-bold tracking-tight">
+                      KN
+                    </div>
+<div>
+<div class="font-headline-sm text-headline-sm font-semibold text-[#13263B]">Dr. Karim Nabil</div>
+<div class="text-[#5B6573] font-body-sm">karim.nabil@clinicflow.eg</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-label-sm font-semibold bg-[#1E4164]/10 text-[#1E4164] border border-[#1E4164]/20">
+                    Doctor
+                  </span>
+</td>
+<td class="py-4 px-4">
+<span class="text-[#212427] font-medium">Sheikh Zayed</span>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ECFDF5] text-[#059669] font-label-md text-label-md font-semibold">
+<span class="w-2 h-2 rounded-full bg-[#059669]"></span>
+                    Active
+                  </span>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 text-[#059669] font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+                    Enrolled / Authenticator
+                  </span>
+</td>
+<td class="py-4 px-4 tnum text-[#5B6573]">
+                  Today, 09:12 AM
+                </td>
+<td class="py-4 px-4 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1.5 rounded-lg text-[#5B6573] hover:text-[#1E4164] hover:bg-surface-container-low transition-colors" title="Edit Profile">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 rounded-lg text-[#5B6573] hover:text-[#1E4164] hover:bg-surface-container-low transition-colors" title="More Options">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 8: Invited Member (Pending with Orange Accent) -->
+<tr class="hover:bg-[#F8F9FF]/80 transition-colors bg-[#FFFBF7]/40">
+<td class="py-4 px-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-[#FF5E00]/20 text-[#FF5E00] flex items-center justify-center font-label-md font-bold tracking-tight border border-[#FF5E00]/30">
+                      SR
+                    </div>
+<div>
+<div class="font-headline-sm text-headline-sm font-semibold text-[#13263B]">Dr. Sherif Rostom</div>
+<div class="text-[#5B6573] font-body-sm">sherif.rostom@clinicflow.eg</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-label-sm font-semibold bg-[#1E4164]/10 text-[#1E4164] border border-[#1E4164]/20">
+                    Doctor
+                  </span>
+</td>
+<td class="py-4 px-4">
+<span class="text-[#212427] font-medium">Nasr City</span>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FFF5ED] text-[#FF5E00] font-label-md text-label-md font-semibold border border-[#FF5E00]/20">
+<span class="w-2 h-2 rounded-full bg-[#FF5E00]"></span>
+                    Pending Invitation
+                  </span>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 text-[#5B6573] font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px]">hourglass_top</span>
+                    Awaiting Enrollment
+                  </span>
+</td>
+<td class="py-4 px-4 tnum text-[#5B6573] italic">
+                  Never
+                </td>
+<td class="py-4 px-4 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1.5 rounded-lg text-[#FF5E00] hover:bg-[#FFF5ED] transition-colors" title="Resend Invitation">
+<span class="material-symbols-outlined text-[18px]">forward_to_inbox</span>
+</button>
+<button class="p-1.5 rounded-lg text-[#5B6573] hover:text-[#1E4164] hover:bg-surface-container-low transition-colors" title="More Options">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="px-6 py-4 bg-surface-container-lowest border-t border-[#D3DBE6] flex items-center justify-between">
+<div class="font-body-sm text-body-sm text-[#5B6573]">
+            Showing <span class="font-semibold text-[#13263B]">1</span> to <span class="font-semibold text-[#13263B]">8</span> of <span class="font-semibold text-[#13263B]">124</span> staff members
+          </div>
+<div class="flex items-center gap-2">
+<button class="h-9 px-3 rounded-lg border border-[#C6D0DE] bg-white text-[#5B6573] hover:bg-[#F7F9FD] disabled:opacity-50 text-body-sm font-label-md flex items-center gap-1" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+              Previous
+            </button>
+<div class="flex items-center gap-1">
+<button class="w-9 h-9 rounded-lg bg-[#1E4164] text-white font-label-md text-label-md font-semibold">1</button>
+<button class="w-9 h-9 rounded-lg border border-[#C6D0DE] text-[#212427] hover:bg-[#F7F9FD] font-label-md text-label-md">2</button>
+<button class="w-9 h-9 rounded-lg border border-[#C6D0DE] text-[#212427] hover:bg-[#F7F9FD] font-label-md text-label-md">3</button>
+<span class="px-1 text-[#5B6573]">...</span>
+<button class="w-9 h-9 rounded-lg border border-[#C6D0DE] text-[#212427] hover:bg-[#F7F9FD] font-label-md text-label-md">16</button>
+</div>
+<button class="h-9 px-3 rounded-lg border border-[#C6D0DE] bg-white text-[#212427] hover:bg-[#F7F9FD] text-body-sm font-label-md flex items-center gap-1">
+              Next
+              <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Flyout Overlay Backdrop -->
+<div class="fixed inset-0 bg-[#13263B]/40 backdrop-blur-[2px] z-40 transition-opacity duration-200" id="drawer-backdrop" onclick="document.getElementById('flyout-drawer').classList.add('translate-x-full'); this.classList.add('hidden');"></div>
+<!-- Overlay / Right Flyout Drawer: "Invite Staff Member" (Width 440px) -->
+<div class="fixed top-0 right-0 h-screen w-[440px] max-w-full bg-surface-container-lowest border-l border-[#D3DBE6] shadow-2xl z-50 flex flex-col justify-between transform transition-transform duration-300 ease-in-out" id="flyout-drawer">
+<!-- Drawer Header -->
+<div class="p-6 border-b border-[#D3DBE6] flex items-center justify-between bg-surface-container-lowest">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-surface-container text-[#1E4164] flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">person_add</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md font-bold text-[#13263B]">Invite Staff Member</h2>
+<p class="font-body-sm text-body-sm text-[#5B6573]">Network credentials &amp; permission allocation</p>
+</div>
+</div>
+<button class="w-8 h-8 rounded-lg text-[#5B6573] hover:text-[#13263B] hover:bg-surface-container flex items-center justify-center transition-colors" onclick="document.getElementById('flyout-drawer').classList.add('translate-x-full'); document.getElementById('drawer-backdrop').classList.add('hidden');">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Drawer Body (Scrollable Form) -->
+<div class="flex-1 overflow-y-auto p-6 space-y-6">
+<!-- Work Email Address -->
+<div class="space-y-1.5">
+<label class="block font-label-md text-label-md font-semibold text-[#13263B]">
+          Work Email Address <span class="text-[#DC2626]">*</span>
+</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-3 text-[#5B6573] text-[18px]">mail</span>
+<input class="w-full h-11 pl-10 pr-3 bg-white border border-[#C6D0DE] rounded-lg text-body-md font-body-md text-[#212427] placeholder-[#5B6573] focus:outline-none focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/20" placeholder="e.g. name@clinicflow.eg" type="email" value="sherif.rostom@clinicflow.eg"/>
+</div>
+<p class="font-body-sm text-[11px] text-[#5B6573]">Must belong to the verified domain @clinicflow.eg</p>
+</div>
+<!-- Full Legal Name -->
+<div class="space-y-1.5">
+<label class="block font-label-md text-label-md font-semibold text-[#13263B]">
+          Full Legal Name <span class="text-[#DC2626]">*</span>
+</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-3 text-[#5B6573] text-[18px]">badge</span>
+<input class="w-full h-11 pl-10 pr-3 bg-white border border-[#C6D0DE] rounded-lg text-body-md font-body-md text-[#212427] placeholder-[#5B6573] focus:outline-none focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/20" placeholder="e.g. Dr. Sherif Rostom" type="text" value="Dr. Sherif Rostom"/>
+</div>
+</div>
+<!-- Assigned Roles (Multi-select Chip Selector) -->
+<div class="space-y-2">
+<label class="block font-label-md text-label-md font-semibold text-[#13263B]">
+          Assigned Roles <span class="text-[#DC2626]">*</span>
+</label>
+<div class="flex flex-wrap gap-2">
+<!-- Doctor (Selected) -->
+<button class="px-3.5 py-1.5 rounded-full text-label-md font-semibold bg-[#1E4164] text-white flex items-center gap-1.5 shadow-sm" type="button">
+<span>Doctor</span>
+<span class="material-symbols-outlined text-[16px]">check</span>
+</button>
+<!-- Nurse -->
+<button class="px-3.5 py-1.5 rounded-full text-label-md font-semibold bg-white border border-[#C6D0DE] text-[#5B6573] hover:border-[#1E4164] hover:text-[#1E4164] transition-colors" type="button">
+            Nurse
+          </button>
+<!-- Receptionist -->
+<button class="px-3.5 py-1.5 rounded-full text-label-md font-semibold bg-white border border-[#C6D0DE] text-[#5B6573] hover:border-[#1E4164] hover:text-[#1E4164] transition-colors" type="button">
+            Receptionist
+          </button>
+<!-- Accountant -->
+<button class="px-3.5 py-1.5 rounded-full text-label-md font-semibold bg-white border border-[#C6D0DE] text-[#5B6573] hover:border-[#1E4164] hover:text-[#1E4164] transition-colors" type="button">
+            Accountant
+          </button>
+<!-- Manager -->
+<button class="px-3.5 py-1.5 rounded-full text-label-md font-semibold bg-white border border-[#C6D0DE] text-[#5B6573] hover:border-[#1E4164] hover:text-[#1E4164] transition-colors" type="button">
+            Manager
+          </button>
+<!-- Admin -->
+<button class="px-3.5 py-1.5 rounded-full text-label-md font-semibold bg-white border border-[#C6D0DE] text-[#5B6573] hover:border-[#1E4164] hover:text-[#1E4164] transition-colors" type="button">
+            Admin
+          </button>
+</div>
+</div>
+<!-- Branch Scope -->
+<div class="space-y-3">
+<label class="block font-label-md text-label-md font-semibold text-[#13263B]">
+          Branch Scope <span class="text-[#DC2626]">*</span>
+</label>
+<!-- Radio Segment -->
+<div class="grid grid-cols-2 gap-2">
+<label class="flex items-center gap-2 p-2.5 rounded-lg border border-[#C6D0DE] bg-white cursor-pointer hover:bg-[#F8F9FF] text-body-sm">
+<input class="text-[#1E4164] focus:ring-[#1E4164]" name="scope_type" type="radio"/>
+<span class="font-medium text-[#212427]">All Branches</span>
+</label>
+<label class="flex items-center gap-2 p-2.5 rounded-lg border border-[#1E4164] bg-[#EFF6FF] cursor-pointer text-body-sm">
+<input checked="" class="text-[#1E4164] focus:ring-[#1E4164]" name="scope_type" type="radio"/>
+<span class="font-medium text-[#1E4164]">Specific Branches</span>
+</label>
+</div>
+<!-- Specific Branch Checkboxes -->
+<div class="space-y-2 pl-1 pt-1">
+<label class="flex items-center gap-2.5 cursor-pointer select-none text-body-sm text-[#212427]">
+<input checked="" class="w-4 h-4 rounded border-[#C6D0DE] text-[#1E4164] focus:ring-[#1E4164]" type="checkbox"/>
+<span>Nasr City Medical Center</span>
+</label>
+<label class="flex items-center gap-2.5 cursor-pointer select-none text-body-sm text-[#5B6573]">
+<input class="w-4 h-4 rounded border-[#C6D0DE] text-[#1E4164] focus:ring-[#1E4164]" type="checkbox"/>
+<span>Maadi Heights Facility</span>
+</label>
+<label class="flex items-center gap-2.5 cursor-pointer select-none text-body-sm text-[#5B6573]">
+<input class="w-4 h-4 rounded border-[#C6D0DE] text-[#1E4164] focus:ring-[#1E4164]" type="checkbox"/>
+<span>Sheikh Zayed Specialty Complex</span>
+</label>
+</div>
+</div>
+<!-- Doctor-Only Fields Section (Highlighted for Doctor Role) -->
+<div class="p-4 rounded-xl border border-[#CEE1FD] bg-[#F7F9FD] space-y-4">
+<div class="flex items-center gap-2 text-[#015C9A]">
+<span class="material-symbols-outlined text-[20px]">stethoscope</span>
+<span class="font-label-md text-label-md font-bold tracking-tight">Doctor Credentialing</span>
+</div>
+<!-- Specialty Dropdown -->
+<div class="space-y-1.5">
+<label class="block font-label-sm text-label-sm font-semibold text-[#13263B]">
+            Primary Specialty
+          </label>
+<div class="relative">
+<select class="w-full h-10 pl-3 pr-8 bg-white border border-[#C6D0DE] rounded-lg text-body-sm text-[#212427] appearance-none focus:outline-none focus:border-[#015C9A]">
+<option selected="">Cardiology</option>
+<option>Pediatrics</option>
+<option>Orthopedics</option>
+<option>Neurology</option>
+<option>Internal Medicine</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-[#5B6573] pointer-events-none text-[18px]">expand_more</span>
+</div>
+</div>
+<!-- Services Checklist -->
+<div class="space-y-2">
+<label class="block font-label-sm text-label-sm font-semibold text-[#13263B]">
+            Authorized Services
+          </label>
+<div class="grid grid-cols-1 gap-2 text-body-sm">
+<label class="flex items-center gap-2 cursor-pointer text-[#212427]">
+<input checked="" class="rounded border-[#C6D0DE] text-[#1E4164] focus:ring-[#1E4164]" type="checkbox"/>
+<span>In-clinic Consultations</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer text-[#212427]">
+<input checked="" class="rounded border-[#C6D0DE] text-[#1E4164] focus:ring-[#1E4164]" type="checkbox"/>
+<span>Electrocardiogram (ECG) Interpretation</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer text-[#5B6573]">
+<input class="rounded border-[#C6D0DE] text-[#1E4164] focus:ring-[#1E4164]" type="checkbox"/>
+<span>Telehealth Sessions</span>
+</label>
+</div>
+</div>
+</div>
+<!-- Security Note Box -->
+<div class="p-3.5 rounded-lg border border-[#CEE1FD] bg-[#EFF6FF] flex items-start gap-3">
+<span class="material-symbols-outlined text-[#015C9A] text-[20px] shrink-0 mt-0.5">schedule</span>
+<div class="text-[12px] leading-relaxed text-[#1E4164]">
+<span class="font-semibold text-[#015C9A]">Invitation link valid for 72 hours.</span> 
+          Staff member will be prompted to configure mandatory Two-Factor Authentication (MFA) upon initial sign-in.
+        </div>
+</div>
+</div>
+<!-- Drawer Footer Actions -->
+<div class="p-6 border-t border-[#D3DBE6] bg-surface-container-lowest flex items-center justify-end gap-3">
+<button class="h-11 px-5 rounded-lg border border-[#C6D0DE] bg-white hover:bg-[#F7F9FD] text-[#1E4164] font-label-md text-label-md font-semibold transition-colors" onclick="document.getElementById('flyout-drawer').classList.add('translate-x-full'); document.getElementById('drawer-backdrop').classList.add('hidden');" type="button">
+        Cancel
+      </button>
+<button class="h-11 px-6 rounded-lg bg-[#1E4164] hover:bg-[#16324E] text-white font-label-md text-label-md font-semibold flex items-center gap-2 shadow-sm transition-all duration-150 active:scale-95" onclick="document.getElementById('flyout-drawer').classList.add('translate-x-full'); document.getElementById('drawer-backdrop').classList.add('hidden');" type="button">
+<span class="material-symbols-outlined text-[18px]">send</span>
+        Send Invitation
+      </button>
+</div>
+</div>
+</body></html>
