@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow - Notifications</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed-variant": "#27496c",
+            "tertiary-fixed": "#ffdbce",
+            "on-secondary-container": "#52647c",
+            "outline-variant": "#c3c6cf",
+            "surface-container": "#e5efff",
+            "primary-container": "#1e4164",
+            "error": "#ba1a1a",
+            "surface-container-low": "#eef4ff",
+            "on-surface": "#121c28",
+            "tertiary-fixed-dim": "#ffb599",
+            "surface-tint": "#406185",
+            "on-error-container": "#93000a",
+            "surface-dim": "#d1dbeb",
+            "surface": "#f8f9ff",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "secondary-fixed": "#d2e4ff",
+            "on-secondary": "#ffffff",
+            "on-background": "#121c28",
+            "tertiary-container": "#722600",
+            "on-secondary-fixed-variant": "#36485f",
+            "on-primary-fixed": "#001d36",
+            "primary-fixed-dim": "#a8c9f3",
+            "secondary-container": "#cee1fd",
+            "inverse-on-surface": "#eaf1ff",
+            "background": "#f8f9ff",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "on-primary": "#ffffff",
+            "inverse-primary": "#a8c9f3",
+            "on-tertiary-fixed": "#370e00",
+            "primary": "#002b4c",
+            "surface-variant": "#d9e3f4",
+            "on-tertiary-container": "#ff8b5b",
+            "inverse-surface": "#27313e",
+            "tertiary": "#4e1700",
+            "secondary": "#4e6077",
+            "surface-bright": "#f8f9ff",
+            "on-primary-container": "#8dadd6",
+            "on-surface-variant": "#43474e",
+            "on-secondary-fixed": "#081c31",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-tertiary": "#ffffff",
+            "error-container": "#ffdad6",
+            "surface-container-high": "#dfe9fa",
+            "primary-fixed": "#d1e4ff",
+            "outline": "#73777f",
+            "surface-container-highest": "#d9e3f4",
+            /* Style Guidance Custom Tokens */
+            "clinic-navy": "#1E4164",
+            "deep-navy": "#13263B",
+            "accent-orange": "#FF5E00",
+            "info-blue": "#015C9A",
+            "border-subtle": "#D3DBE6",
+            "canvas-bg": "#F7F9FD",
+            "card-tint": "#F0F4FA"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1rem",
+            "space-xl": "1.5rem",
+            "space-lg": "1rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem",
+            "space-md": "0.75rem",
+            "margin-tablet": "1.5rem",
+            "gutter-sm": "0.75rem",
+            "margin-desktop": "2rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "headline-sm": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-lg-mobile": ["Plus Jakarta Sans", "sans-serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "body-lg": ["Inter", "sans-serif"],
+            "headline-xl": ["Plus Jakarta Sans", "sans-serif"],
+            "label-lg": ["Inter", "sans-serif"],
+            "label-sm": ["Inter", "sans-serif"],
+            "headline-xl-mobile": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+            "label-md": ["Inter", "sans-serif"],
+            "body-sm": ["Inter", "sans-serif"]
+          },
+          "fontSize": {
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    /* Hide scrollbar for clean horizontal pill scrolling */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-canvas-bg text-on-surface antialiased flex justify-center min-h-screen">
+<!-- Mobile Device Simulation Frame (390px width) -->
+<main class="w-full max-w-[390px] bg-canvas-bg min-h-screen relative flex flex-col shadow-sm pb-24">
+<!-- Top Bar Component -->
+<header class="sticky top-0 z-40 bg-surface-container-lowest border-b border-border-subtle px-margin h-14 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<button aria-label="Go back" class="min-w-[44px] min-h-[44px] -ml-2 flex items-center justify-center text-clinic-navy active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md text-deep-navy font-bold tracking-tight">Notifications</h1>
+</div>
+<button class="min-h-[44px] px-2 flex items-center text-clinic-navy font-label-md text-label-md font-semibold active:opacity-75 transition-opacity" type="button">
+        Mark all as read
+      </button>
+</header>
+<!-- Filter Segment Bar -->
+<nav aria-label="Notification filters" class="bg-surface-container-lowest border-b border-border-subtle py-2.5 px-margin overflow-x-auto no-scrollbar flex items-center gap-2">
+<button class="min-h-[44px] px-4 rounded-full bg-clinic-navy text-white font-label-md text-label-md font-semibold shrink-0 shadow-sm transition-transform active:scale-95 flex items-center" type="button">
+        All
+      </button>
+<button class="min-h-[44px] px-4 rounded-full bg-surface-container-lowest border border-border-subtle text-secondary font-label-md text-label-md shrink-0 hover:bg-surface-container-low transition-all active:scale-95 flex items-center" type="button">
+        Appointments
+      </button>
+<button class="min-h-[44px] px-4 rounded-full bg-surface-container-lowest border border-border-subtle text-secondary font-label-md text-label-md shrink-0 hover:bg-surface-container-low transition-all active:scale-95 flex items-center" type="button">
+        Invoices
+      </button>
+<button class="min-h-[44px] px-4 rounded-full bg-surface-container-lowest border border-border-subtle text-secondary font-label-md text-label-md shrink-0 hover:bg-surface-container-low transition-all active:scale-95 flex items-center" type="button">
+        Prescriptions
+      </button>
+</nav>
+<!-- Main Content Stream -->
+<div class="p-margin flex flex-col gap-space-xl">
+<!-- Patient Context Badge -->
+<section class="flex items-center justify-between px-3 py-2 bg-surface-container-lowest border border-border-subtle rounded-xl text-body-sm text-secondary">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-clinic-navy" data-icon="account_circle">account_circle</span>
+<span>Patient: <strong class="text-deep-navy font-semibold">Mohamed Adel</strong></span>
+</div>
+<span class="font-label-sm text-label-sm text-info-blue bg-surface-container-low px-2 py-0.5 rounded-full font-medium">Nasr City</span>
+</section>
+<!-- Group 1: Today -->
+<section aria-labelledby="heading-today" class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-sm text-headline-sm text-deep-navy" id="heading-today">Today</h2>
+<span class="font-label-sm text-label-sm text-clinic-navy font-semibold bg-surface-container px-2 py-0.5 rounded-full">2 New</span>
+</div>
+<div class="flex flex-col gap-space-md">
+<!-- Item 1: Prescription ready (Unread) -->
+<article class="relative bg-card-tint border border-border-subtle rounded-xl p-4 flex gap-3.5 transition-all hover:border-clinic-navy/40">
+<!-- Icon Container -->
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest border border-border-subtle flex items-center justify-center shrink-0 text-clinic-navy mt-0.5">
+<span class="material-symbols-outlined text-[22px]" data-icon="medication">medication</span>
+</div>
+<div class="flex flex-col flex-1 pr-4">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-headline-sm text-headline-sm text-deep-navy">Prescription ready</span>
+</div>
+<p class="font-body-md text-body-md text-deep-navy/90 mb-2 leading-relaxed">
+                Dr. Ahmed Fathy has finalized your e-prescription (Rx #EGY-8842-CF). You can view dosages or download the PDF now.
+              </p>
+<div class="flex items-center gap-1.5 text-body-sm font-body-sm text-secondary">
+<span class="material-symbols-outlined text-[15px]" data-icon="schedule">schedule</span>
+<span>2 hours ago · Nasr City Branch</span>
+</div>
+</div>
+<!-- Unread Pip -->
+<span aria-label="Unread notification" class="absolute top-4 right-4 w-2.5 h-2.5 rounded-full bg-accent-orange ring-4 ring-card-tint"></span>
+</article>
+<!-- Item 2: New Invoice Issued (Unread) -->
+<article class="relative bg-card-tint border border-border-subtle rounded-xl p-4 flex gap-3.5 transition-all hover:border-clinic-navy/40">
+<!-- Icon Container -->
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest border border-border-subtle flex items-center justify-center shrink-0 text-clinic-navy mt-0.5">
+<span class="material-symbols-outlined text-[22px]" data-icon="receipt_long">receipt_long</span>
+</div>
+<div class="flex flex-col flex-1 pr-4">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-headline-sm text-headline-sm text-deep-navy">New Invoice Issued</span>
+</div>
+<p class="font-body-md text-body-md text-deep-navy/90 mb-2 leading-relaxed">
+                Invoice #NC-2026-000412 for <span class="font-semibold text-accent-orange">EGP 350.00</span> is ready for payment via Paymob or reception desk.
+              </p>
+<div class="flex items-center gap-1.5 text-body-sm font-body-sm text-secondary">
+<span class="material-symbols-outlined text-[15px]" data-icon="schedule">schedule</span>
+<span>3 hours ago</span>
+</div>
+</div>
+<!-- Unread Pip -->
+<span aria-label="Unread notification" class="absolute top-4 right-4 w-2.5 h-2.5 rounded-full bg-accent-orange ring-4 ring-card-tint"></span>
+</article>
+</div>
+</section>
+<!-- Group 2: Earlier -->
+<section aria-labelledby="heading-earlier" class="flex flex-col gap-space-md">
+<h2 class="font-headline-sm text-headline-sm text-deep-navy" id="heading-earlier">Earlier</h2>
+<div class="flex flex-col gap-space-md">
+<!-- Item 3: Appointment confirmed (Read) -->
+<article class="bg-surface-container-lowest border border-border-subtle rounded-xl p-4 flex gap-3.5 transition-all">
+<div class="w-10 h-10 rounded-lg bg-canvas-bg border border-border-subtle flex items-center justify-center shrink-0 text-clinic-navy mt-0.5">
+<span class="material-symbols-outlined text-[22px]" data-icon="event_available">event_available</span>
+</div>
+<div class="flex flex-col flex-1">
+<span class="font-headline-sm text-headline-sm text-deep-navy mb-1">Appointment confirmed</span>
+<p class="font-body-md text-body-md text-secondary mb-2 leading-relaxed">
+                Your consultation with Dr. Ahmed Fathy has been confirmed for 24 Oct at 10:30 AM.
+              </p>
+<div class="flex items-center gap-1.5 text-body-sm font-body-sm text-secondary">
+<span class="material-symbols-outlined text-[15px]" data-icon="calendar_today">calendar_today</span>
+<span>Yesterday at 04:15 PM</span>
+</div>
+</div>
+</article>
+<!-- Item 4: Visit rescheduled (Read) -->
+<article class="bg-surface-container-lowest border border-border-subtle rounded-xl p-4 flex gap-3.5 transition-all">
+<div class="w-10 h-10 rounded-lg bg-canvas-bg border border-border-subtle flex items-center justify-center shrink-0 text-clinic-navy mt-0.5">
+<span class="material-symbols-outlined text-[22px]" data-icon="update">update</span>
+</div>
+<div class="flex flex-col flex-1">
+<span class="font-headline-sm text-headline-sm text-deep-navy mb-1">Visit rescheduled</span>
+<p class="font-body-md text-body-md text-secondary mb-2 leading-relaxed">
+                Your dental follow-up was rescheduled to 28 Oct at 04:00 PM upon your request.
+              </p>
+<div class="flex items-center gap-1.5 text-body-sm font-body-sm text-secondary">
+<span class="material-symbols-outlined text-[15px]" data-icon="calendar_today">calendar_today</span>
+<span>21 Oct 2025</span>
+</div>
+</div>
+</article>
+<!-- Item 5: Visit reminder (Read) -->
+<article class="bg-surface-container-lowest border border-border-subtle rounded-xl p-4 flex gap-3.5 transition-all">
+<div class="w-10 h-10 rounded-lg bg-canvas-bg border border-border-subtle flex items-center justify-center shrink-0 text-clinic-navy mt-0.5">
+<span class="material-symbols-outlined text-[22px]" data-icon="notifications">notifications</span>
+</div>
+<div class="flex flex-col flex-1">
+<span class="font-headline-sm text-headline-sm text-deep-navy mb-1">Visit reminder</span>
+<p class="font-body-md text-body-md text-secondary mb-2 leading-relaxed">
+                Reminder: Upcoming appointment tomorrow at 10:30 AM at Nasr City Branch. Free valet parking available.
+              </p>
+<div class="flex items-center gap-1.5 text-body-sm font-body-sm text-secondary">
+<span class="material-symbols-outlined text-[15px]" data-icon="calendar_today">calendar_today</span>
+<span>23 Oct 2025</span>
+</div>
+</div>
+</article>
+<!-- Item 6: Appointment cancelled (Read) -->
+<article class="bg-surface-container-lowest border border-border-subtle rounded-xl p-4 flex gap-3.5 transition-all">
+<div class="w-10 h-10 rounded-lg bg-canvas-bg border border-border-subtle flex items-center justify-center shrink-0 text-clinic-navy mt-0.5">
+<span class="material-symbols-outlined text-[22px]" data-icon="cancel">cancel</span>
+</div>
+<div class="flex flex-col flex-1">
+<span class="font-headline-sm text-headline-sm text-deep-navy mb-1">Appointment cancelled</span>
+<p class="font-body-md text-body-md text-secondary mb-2 leading-relaxed">
+                Dermatology consultation for 15 Oct was cancelled. Deposit of EGP 100 refunded to your wallet.
+              </p>
+<div class="flex items-center gap-1.5 text-body-sm font-body-sm text-secondary">
+<span class="material-symbols-outlined text-[15px]" data-icon="calendar_today">calendar_today</span>
+<span>14 Oct 2025</span>
+</div>
+</div>
+</article>
+</div>
+</section>
+<!-- Notification Settings Shortcut Link -->
+<section class="pt-2 pb-6">
+<a class="min-h-[48px] px-4 py-3 bg-surface-container-lowest border border-border-subtle rounded-xl flex items-center justify-between text-clinic-navy hover:bg-card-tint transition-colors group" href="#settings">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[20px] text-clinic-navy" data-icon="tune">tune</span>
+<span class="font-label-md text-label-md font-semibold">Manage notification preferences in Profile &amp; Settings</span>
+</div>
+<span class="material-symbols-outlined text-[20px] group-hover:translate-x-0.5 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</section>
+</div>
+<!-- Bottom Navigation Bar (Semantic Shell from Shared Components) -->
+<nav aria-label="Main Navigation" class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin pb-safe h-16 max-w-full bg-surface-container-lowest border-t border-surface-dim shadow-sm md:hidden">
+<!-- Home Tab -->
+<a class="flex flex-col items-center justify-center text-secondary min-h-[48px] py-1 active:scale-95 transition-all duration-150 hover:text-primary" href="#home">
+<span class="material-symbols-outlined text-[24px]" data-icon="home">home</span>
+<span class="text-label-sm font-label-sm mt-0.5">Home</span>
+</a>
+<!-- Book Tab -->
+<a class="flex flex-col items-center justify-center text-secondary min-h-[48px] py-1 active:scale-95 transition-all duration-150 hover:text-primary" href="#book">
+<span class="material-symbols-outlined text-[24px]" data-icon="calendar_add_on">calendar_add_on</span>
+<span class="text-label-sm font-label-sm mt-0.5">Book</span>
+</a>
+<!-- Appointments Tab -->
+<a class="flex flex-col items-center justify-center text-secondary min-h-[48px] py-1 active:scale-95 transition-all duration-150 hover:text-primary" href="#appointments">
+<span class="material-symbols-outlined text-[24px]" data-icon="calendar_month">calendar_month</span>
+<span class="text-label-sm font-label-sm mt-0.5">Appointments</span>
+</a>
+<!-- Records Tab -->
+<a class="flex flex-col items-center justify-center text-secondary min-h-[48px] py-1 active:scale-95 transition-all duration-150 hover:text-primary" href="#records">
+<span class="material-symbols-outlined text-[24px]" data-icon="description">description</span>
+<span class="text-label-sm font-label-sm mt-0.5">Records</span>
+</a>
+<!-- Profile Tab (Contextually parent category for notifications / settings) -->
+<a class="flex flex-col items-center justify-center text-primary-container font-semibold min-h-[48px] py-1 active:scale-95 transition-all duration-150 hover:text-primary relative" href="#profile">
+<div class="relative">
+<span class="material-symbols-outlined text-[24px]" data-icon="person">person</span>
+<!-- Orange accent indicator for unread profile-bound notifications -->
+<span class="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-accent-orange"></span>
+</div>
+<span class="text-label-sm font-label-sm mt-0.5">Profile</span>
+</a>
+</nav>
+</main>
+<script>
+    // Micro-interactions: Filtering simulation and "Mark all as read"
+    document.addEventListener('DOMContentLoaded', () => {
+      const markAllBtn = document.querySelector('header button');
+      markAllBtn?.addEventListener('click', () => {
+        // Remove unread dots
+        document.querySelectorAll('.bg-accent-orange').forEach(dot => {
+          dot.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+          dot.style.opacity = '0';
+          dot.style.transform = 'scale(0.5)';
+          setTimeout(() => dot.remove(), 200);
+        });
+        
+        // Revert card background tints to standard surface-container-lowest
+        document.querySelectorAll('.bg-card-tint').forEach(card => {
+          card.classList.remove('bg-card-tint');
+          card.classList.add('bg-surface-container-lowest');
+        });
+
+        // Update counter badge
+        const badge = document.querySelector('#heading-today + span');
+        if (badge) {
+          badge.textContent = '0 New';
+          badge.classList.remove('bg-surface-container', 'text-clinic-navy');
+          badge.classList.add('bg-surface-container-low', 'text-secondary');
+        }
+
+        markAllBtn.textContent = 'All Read';
+        markAllBtn.disabled = true;
+        markAllBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      });
+    });
+  </script>
+</body></html>

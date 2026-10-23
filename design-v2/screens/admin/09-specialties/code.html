@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow Admin - 9. Specialties</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Plus Jakarta Sans, Inter, Cairo -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with custom configuration -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-bright": "#f8f9ff",
+            "secondary": "#4e6077",
+            "outline": "#73777f",
+            "surface-tint": "#406185",
+            "secondary-container": "#cee1fd",
+            "surface-container-lowest": "#ffffff",
+            "surface-dim": "#d1dbeb",
+            "surface-container-high": "#dfe9fa",
+            "primary-fixed": "#d1e4ff",
+            "inverse-surface": "#27313e",
+            "on-surface": "#121c28",
+            "primary-fixed-dim": "#a8c9f3",
+            "on-primary-fixed": "#001d36",
+            "on-secondary-fixed": "#081c31",
+            "on-secondary": "#ffffff",
+            "surface-container-highest": "#d9e3f4",
+            "surface-container-low": "#eef4ff",
+            "inverse-primary": "#a8c9f3",
+            "error": "#ba1a1a",
+            "tertiary": "#4e1700",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-secondary-fixed-variant": "#36485f",
+            "on-primary-fixed-variant": "#27496c",
+            "surface-variant": "#d9e3f4",
+            "secondary-fixed": "#d2e4ff",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "tertiary-fixed-dim": "#ffb599",
+            "background": "#f8f9ff",
+            "on-tertiary-fixed": "#370e00",
+            "on-error": "#ffffff",
+            "outline-variant": "#c3c6cf",
+            "on-surface-variant": "#43474e",
+            "tertiary-container": "#722600",
+            "on-tertiary": "#ffffff",
+            "on-primary": "#ffffff",
+            "tertiary-fixed": "#ffdbce",
+            "error-container": "#ffdad6",
+            "primary": "#002b4c",
+            "on-error-container": "#93000a",
+            "on-primary-container": "#8dadd6",
+            "on-tertiary-container": "#ff8b5b",
+            "surface-container": "#e5efff",
+            "on-secondary-container": "#52647c",
+            "on-background": "#121c28",
+            "inverse-on-surface": "#eaf1ff",
+            "primary-container": "#1e4164",
+            "surface": "#f8f9ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-sm": "0.5rem",
+            "gutter-sm": "0.75rem",
+            "space-md": "0.75rem",
+            "margin-tablet": "1.5rem",
+            "margin": "1rem",
+            "space-xs": "0.25rem",
+            "space-lg": "1rem",
+            "space-xl": "1.5rem",
+            "gutter": "1rem",
+            "margin-desktop": "2rem"
+          },
+          "fontFamily": {
+            "body-sm": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-lg": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "arabic": ["Cairo", "sans-serif"]
+          },
+          "fontSize": {
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased h-full overflow-hidden flex flex-col">
+<!-- ========================================================================= -->
+<!-- FIXED DESKTOP SIDEBAR (Shared Component: SideNavBar)                       -->
+<!-- ========================================================================= -->
+<aside class="fixed top-0 left-0 h-screen w-[260px] z-40 border-r border-outline-variant/40 bg-surface-container-lowest flex flex-col justify-between p-4 select-none">
+<!-- Top Branding & Navigation -->
+<div class="flex flex-col gap-6">
+<!-- Brand Logo / Emblem Anchor -->
+<div class="flex items-center gap-3 px-2 py-1">
+<div class="w-10 h-10 rounded-lg bg-primary-container text-on-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[24px]">local_hospital</span>
+</div>
+<div>
+<div class="font-headline-sm text-headline-sm font-bold text-primary tracking-tight">ClinicFlow Egypt</div>
+<div class="font-label-sm text-label-sm text-secondary">Network Administration</div>
+</div>
+</div>
+<!-- Navigation Tabs (8 tabs from Shared Components JSON) -->
+<nav class="flex flex-col gap-1">
+<!-- 1. Overview -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+<!-- 2. Staff -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">badge</span>
+<span class="font-label-md text-label-md">Staff</span>
+</a>
+<!-- 3. Roles & Permissions -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">shield_person</span>
+<span class="font-label-md text-label-md">Roles &amp; Permissions</span>
+</a>
+<!-- 4. Branches -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">apartment</span>
+<span class="font-label-md text-label-md">Branches</span>
+</a>
+<!-- 5. Specialties (ACTIVE SELECTION) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary-container text-on-primary-container font-semibold border-l-4 border-primary" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">stethoscope</span>
+<span class="font-label-md text-label-md text-on-primary">Specialties</span>
+</a>
+<!-- 6. Settings -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<!-- 7. Integrations -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">hub</span>
+<span class="font-label-md text-label-md">Integrations</span>
+</a>
+<!-- 8. Audit Log -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+<span class="font-label-md text-label-md">Audit Log</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Footer User Profile (Karim Adel · Admin Pill) -->
+<div class="pt-3 border-t border-outline-variant/30">
+<div class="flex items-center justify-between p-2 rounded-xl bg-surface-container-low/60 border border-outline-variant/30">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-full bg-secondary-container text-primary flex items-center justify-center font-bold text-xs">
+            KA
+          </div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-semibold text-primary leading-tight">Karim Adel</span>
+<span class="font-body-sm text-[10px] text-secondary">Network Admin</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-[#EDE9FE] text-[#6D28D9] font-label-sm text-[10px] font-semibold tracking-wide">
+          Admin
+        </span>
+</div>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- TOP NAVIGATION BAR (Shared Component: TopNavBar)                           -->
+<!-- ========================================================================= -->
+<header class="sticky top-0 right-0 z-30 w-[calc(100%-260px)] ml-[260px] border-b border-outline-variant/40 bg-surface-container-lowest h-16 flex items-center justify-between px-6 select-none">
+<!-- Left Search Cluster -->
+<div class="flex items-center gap-4 w-96">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-[18px]">search</span>
+<input class="w-full h-10 pl-9 pr-4 rounded-lg bg-surface border border-outline-variant/60 font-body-sm text-body-sm text-on-surface placeholder:text-secondary focus:outline-none focus:border-surface-tint focus:ring-1 focus:ring-surface-tint transition-all" placeholder="Search medical specialties, clinic departments..." type="text"/>
+</div>
+</div>
+<!-- Trailing Actions & Profile Cluster -->
+<div class="flex items-center gap-5">
+<!-- Operational Status Pill -->
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#ECFDF5] border border-[#A7F3D0]">
+<span class="w-2 h-2 rounded-full bg-[#059669]"></span>
+<span class="font-label-md text-label-md text-[#059669]">Network Operational</span>
+</div>
+<!-- Language Toggle -->
+<button class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-outline-variant/50 text-secondary hover:text-on-surface hover:bg-surface transition-colors font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px]">language</span>
+<span>EN / عربي</span>
+</button>
+<!-- Notification Action with Orange Pip -->
+<button class="relative p-2 rounded-lg text-secondary hover:text-on-surface hover:bg-surface transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#FF5E00] ring-2 ring-white"></span>
+</button>
+<!-- Divider -->
+<div class="h-6 w-[1px] bg-outline-variant/40"></div>
+<!-- Karim Adel Top Profile Photo & Badge -->
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-container text-white flex items-center justify-center font-bold text-xs ring-2 ring-primary/20">
+          KA
+        </div>
+<div class="text-left hidden lg:block">
+<div class="font-label-md text-label-md text-primary font-bold">Karim Adel</div>
+<div class="font-body-sm text-[11px] text-secondary">Director of Clinical Ops</div>
+</div>
+</div>
+</div>
+</header>
+<!-- ========================================================================= -->
+<!-- MAIN WORKSPACE CONTENT CONTAINER (Offset for 260px sidebar)               -->
+<!-- ========================================================================= -->
+<main class="ml-[260px] flex-1 flex flex-col min-h-0 bg-[#F7F9FD] overflow-y-auto relative">
+<!-- Workspace Canvas Padding Container -->
+<div class="p-8 max-w-[1400px] w-full mx-auto flex flex-col gap-6">
+<!-- Breadcrumbs & Institutional Governance Header -->
+<div class="flex flex-col gap-2">
+<nav class="flex items-center gap-2 font-label-sm text-label-sm text-secondary">
+<span class="hover:text-primary cursor-pointer transition-colors">ClinicFlow</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="hover:text-primary cursor-pointer transition-colors">Clinical Governance</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-semibold">Specialties Directory</span>
+</nav>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mt-1">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-[#13263B] font-bold tracking-tight">
+              Medical Specialties &amp; Clinical Services
+            </h1>
+<p class="font-body-md text-body-md text-[#5B6573] mt-0.5">
+              Manage the master clinical specialty registry, multi-lingual taxonomy, room allocation tags, and active doctor affiliations across network clinics.
+            </p>
+</div>
+<!-- Quick Stat Badge / Summary -->
+<div class="flex items-center gap-2 self-start md:self-auto">
+<span class="px-3 py-1.5 rounded-lg bg-surface-container border border-outline-variant/40 font-label-md text-label-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">domain</span>
+              7 Operational Disciplines
+            </span>
+</div>
+</div>
+</div>
+<!-- Controls & Filter Toolbar -->
+<div class="flex flex-wrap items-center justify-between gap-4 bg-surface-container-lowest p-4 rounded-xl border border-[#D3DBE6]">
+<!-- Left: Search and Segment Filter -->
+<div class="flex flex-wrap items-center gap-3 flex-1 min-w-[320px]">
+<!-- Inner Search -->
+<div class="relative w-72">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-[18px]">filter_alt</span>
+<input class="w-full h-10 pl-9 pr-3 rounded-lg border border-[#C6D0DE] text-sm focus:border-surface-tint focus:ring-1 focus:ring-surface-tint text-on-surface placeholder:text-[#5B6573]" placeholder="Search by English or Arabic specialty name..." type="text" value=""/>
+</div>
+<!-- Segment Tabs -->
+<div class="inline-flex p-1 rounded-lg bg-surface-container-low border border-outline-variant/30">
+<button class="px-3 py-1.5 rounded-md font-label-md text-label-md bg-surface-container-lowest text-primary shadow-xs font-semibold">
+              All (12)
+            </button>
+<button class="px-3 py-1.5 rounded-md font-label-md text-label-md text-secondary hover:text-on-surface transition-colors">
+              Active (10)
+            </button>
+<button class="px-3 py-1.5 rounded-md font-label-md text-label-md text-secondary hover:text-on-surface transition-colors">
+              Inactive (2)
+            </button>
+</div>
+</div>
+<!-- Right: Primary Action with Accent Pip -->
+<div class="flex items-center gap-3">
+<button class="px-4 py-2.5 rounded-lg border border-[#1E4164] bg-surface-container-lowest text-[#1E4164] hover:bg-[#F7F9FD] font-label-md text-label-md transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">file_download</span>
+            Export Registry
+          </button>
+<button class="px-4 py-2.5 rounded-lg bg-[#1E4164] hover:bg-[#13263B] text-white font-label-md text-label-md font-semibold transition-all shadow-sm flex items-center gap-2 group">
+<span class="w-2 h-2 rounded-full bg-[#FF5E00] ring-2 ring-white/30"></span>
+<span class="material-symbols-outlined text-[18px]">add</span>
+            + Add Specialty
+          </button>
+</div>
+</div>
+<!-- Master Table Section (Card encapsulating tabular data) -->
+<div class="bg-surface-container-lowest rounded-xl border border-[#D3DBE6] shadow-none overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/70 border-b border-[#D3DBE6] font-label-md text-label-md text-[#5B6573]">
+<th class="py-3.5 px-4 text-left font-semibold">Code</th>
+<th class="py-3.5 px-4 text-left font-semibold">English Name</th>
+<th class="py-3.5 px-4 text-right font-semibold">Arabic Name</th>
+<th class="py-3.5 px-4 text-center font-semibold">Icon</th>
+<th class="py-3.5 px-4 text-left font-semibold">Affiliated Doctors</th>
+<th class="py-3.5 px-4 text-left font-semibold">Branches Offered</th>
+<th class="py-3.5 px-4 text-center font-semibold">Status</th>
+<th class="py-3.5 px-4 text-right font-semibold">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#D3DBE6] font-body-md text-body-md">
+<!-- Row 1: Cardiology -->
+<tr class="hover:bg-[#F8F9FF] transition-colors">
+<td class="py-3.5 px-4">
+<span class="font-mono text-xs px-2 py-1 rounded bg-surface-container text-[#1E4164] font-bold border border-outline-variant/30">
+                    CARD-01
+                  </span>
+</td>
+<td class="py-3.5 px-4 font-semibold text-[#13263B]">
+                  Cardiology
+                </td>
+<td class="py-3.5 px-4 text-right font-arabic font-semibold text-[#13263B] dir-rtl">
+                  أمراض القلب والأوعية الدموية
+                </td>
+<td class="py-3.5 px-4 text-center">
+<div class="w-8 h-8 mx-auto rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">ecg_heart</span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-1.5">
+<span class="font-semibold text-primary">6</span>
+<span class="text-[#5B6573] text-xs">Doctors active</span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<div class="flex flex-wrap gap-1">
+<span class="px-2 py-0.5 rounded bg-surface border border-outline-variant/30 text-[11px] text-secondary">Nasr City</span>
+<span class="px-2 py-0.5 rounded bg-surface border border-outline-variant/30 text-[11px] text-secondary">Maadi</span>
+<span class="px-2 py-0.5 rounded bg-surface border border-outline-variant/30 text-[11px] text-secondary">Sheikh Zayed</span>
+</div>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ECFDF5] text-[#059669] font-label-md text-label-md">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+                    Active
+                  </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="font-label-md text-label-md text-[#1E4164] hover:text-[#13263B] font-semibold hover:underline">
+                    Edit Rules
+                  </button>
+</td>
+</tr>
+<!-- Row 2: Pediatrics & Neonatology -->
+<tr class="hover:bg-[#F8F9FF] transition-colors">
+<td class="py-3.5 px-4">
+<span class="font-mono text-xs px-2 py-1 rounded bg-surface-container text-[#1E4164] font-bold border border-outline-variant/30">
+                    PEDI-01
+                  </span>
+</td>
+<td class="py-3.5 px-4 font-semibold text-[#13263B]">
+                  Pediatrics &amp; Neonatology
+                </td>
+<td class="py-3.5 px-4 text-right font-arabic font-semibold text-[#13263B] dir-rtl">
+                  طب الأطفال وحديثي الولادة
+                </td>
+<td class="py-3.5 px-4 text-center">
+<div class="w-8 h-8 mx-auto rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">child_care</span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-1.5">
+<span class="font-semibold text-primary">5</span>
+<span class="text-[#5B6573] text-xs">Doctors active</span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<div class="flex flex-wrap gap-1">
+<span class="px-2 py-0.5 rounded bg-surface border border-outline-variant/30 text-[11px] text-secondary">Nasr City</span>
+<span class="px-2 py-0.5 rounded bg-surface border border-outline-variant/30 text-[11px] text-secondary">Maadi</span>
+</div>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ECFDF5] text-[#059669] font-label-md text-label-md">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+                    Active
+                  </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="font-label-md text-label-md text-[#1E4164] hover:text-[#13263B] font-semibold hover:underline">
+                    Edit Rules
+                  </button>
+</td>
+</tr>
+<!-- Row 3: Dermatology & Laser -->
+<tr class="hover:bg-[#F8F9FF] transition-colors">
+<td class="py-3.5 px-4">
+<span class="font-mono text-xs px-2 py-1 rounded bg-surface-container text-[#1E4164] font-bold border border-outline-variant/30">
+                    DERM-01
+                  </span>
+</td>
+<td class="py-3.5 px-4 font-semibold text-[#13263B]">
+                  Dermatology &amp; Laser
+                </td>
+<td class="py-3.5 px-4 text-right font-arabic font-semibold text-[#13263B] dir-rtl">
+                  الأمراض الجلدية والتجميل
+                </td>
+<td class="py-3.5 px-4 text-center">
+<div class="w-8 h-8 mx-auto rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">face_retouching_natural</span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-1.5">
+<span class="font-semibold text-primary">4</span>
+<span class="text-[#5B6573] text-xs">Doctors active</span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<div class="flex flex-wrap gap-1">
+<span class="px-2 py-0.5 rounded bg-surface border border-outline-variant/30 text-[11px] text-secondary">Maadi</span>
+<span class="px-2 py-0.5 rounded bg-surface border border-outline-variant/30 text-[11px] text-secondary">Sheikh Zayed</span>
+</div>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ECFDF5] text-[#059669] font-label-md text-label-md">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+                    Active
+                  </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="font-label-md text-label-md text-[#1E4164] hover:text-[#13263B] font-semibold hover:underline">
+                    Edit Rules
+                  </button>
+</td>
+</tr>
+<!-- Row 4: Orthopedics & Sports Medicine -->
+<tr class="hover:bg-[#F8F9FF] transition-colors">
+<td class="py-3.5 px-4">
+<span class="font-mono text-xs px-2 py-1 rounded bg-surface-container text-[#1E4164] font-bold border border-outline-variant/30">
+                    ORTH-01
+                  </span>
+</td>
+<td class="py-3.5 px-4 font-semibold text-[#13263B]">
+                  Orthopedics &amp; Sports Medicine
+                </td>
+<td class="py-3.5 px-4 text-right font-arabic font-semibold text-[#13263B] dir-rtl">
+                  جراحة العظام والمفاصل
+                </td>
+<td class="py-3.5 px-4 text-center">
+<div class="w-8 h-8 mx-auto rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">orthopedics</span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-1.5">
+<span class="font-semibold text-primary">4</span>
+<span class="text-[#5B6573] text-xs">Doctors active</span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<div class="flex flex-wrap gap-1">
+<span class="px-2 py-0.5 rounded bg-surface border border-outline-variant/30 text-[11px] text-secondary">Nasr City</span>
+<span class="px-2 py-0.5 rounded bg-surface border border-outline-variant/30 text-[11px] text-secondary">Sheikh Zayed</span>
+</div>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ECFDF5] text-[#059669] font-label-md text-label-md">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+                    Active
+                  </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="font-label-md text-label-md text-[#1E4164] hover:text-[#13263B] font-semibold hover:underline">
+                    Edit Rules
+                  </button>
+</td>
+</tr>
+<!-- Row 5: Internal Medicine & Endocrinology -->
+<tr class="hover:bg-[#F8F9FF] transition-colors">
+<td class="py-3.5 px-4">
+<span class="font-mono text-xs px-2 py-1 rounded bg-surface-container text-[#1E4164] font-bold border border-outline-variant/30">
+                    INTM-01
+                  </span>
+</td>
+<td class="py-3.5 px-4 font-semibold text-[#13263B]">
+                  Internal Medicine &amp; Endocrinology
+                </td>
+<td class="py-3.5 px-4 text-right font-arabic font-semibold text-[#13263B] dir-rtl">
+                  الأمراض الباطنية والغدد الصماء
+                </td>
+<td class="py-3.5 px-4 text-center">
+<div class="w-8 h-8 mx-auto rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">stethoscope</span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-1.5">
+<span class="font-semibold text-primary">5</span>
+<span class="text-[#5B6573] text-xs">Doctors active</span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="px-2 py-0.5 rounded bg-surface border border-outline-variant/30 text-[11px] text-primary font-semibold">All 3 Branches</span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ECFDF5] text-[#059669] font-label-md text-label-md">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+                    Active
+                  </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="font-label-md text-label-md text-[#1E4164] hover:text-[#13263B] font-semibold hover:underline">
+                    Edit Rules
+                  </button>
+</td>
+</tr>
+<!-- Row 6: Dental & Oral Surgery -->
+<tr class="hover:bg-[#F8F9FF] transition-colors">
+<td class="py-3.5 px-4">
+<span class="font-mono text-xs px-2 py-1 rounded bg-surface-container text-[#1E4164] font-bold border border-outline-variant/30">
+                    DENT-01
+                  </span>
+</td>
+<td class="py-3.5 px-4 font-semibold text-[#13263B]">
+                  Dental &amp; Oral Surgery
+                </td>
+<td class="py-3.5 px-4 text-right font-arabic font-semibold text-[#13263B] dir-rtl">
+                  طب وجراحة الأسنان
+                </td>
+<td class="py-3.5 px-4 text-center">
+<div class="w-8 h-8 mx-auto rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">dentistry</span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-1.5">
+<span class="font-semibold text-primary">3</span>
+<span class="text-[#5B6573] text-xs">Doctors active</span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="px-2 py-0.5 rounded bg-surface border border-outline-variant/30 text-[11px] text-secondary">Maadi</span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ECFDF5] text-[#059669] font-label-md text-label-md">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+                    Active
+                  </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="font-label-md text-label-md text-[#1E4164] hover:text-[#13263B] font-semibold hover:underline">
+                    Edit Rules
+                  </button>
+</td>
+</tr>
+<!-- Row 7: Clinical Oncology (Inactive Row) -->
+<tr class="bg-surface/50 hover:bg-[#F8F9FF] transition-colors">
+<td class="py-3.5 px-4">
+<span class="font-mono text-xs px-2 py-1 rounded bg-surface-container text-[#5B6573] font-bold border border-outline-variant/30">
+                    ONCO-01
+                  </span>
+</td>
+<td class="py-3.5 px-4 font-semibold text-[#5B6573]">
+                  Clinical Oncology
+                </td>
+<td class="py-3.5 px-4 text-right font-arabic font-semibold text-[#5B6573] dir-rtl">
+                  علاج الأورام
+                </td>
+<td class="py-3.5 px-4 text-center">
+<div class="w-8 h-8 mx-auto rounded-lg bg-surface-container/60 flex items-center justify-center text-[#5B6573]">
+<span class="material-symbols-outlined text-[18px]">shield</span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-1.5">
+<span class="font-semibold text-[#5B6573]">0</span>
+<span class="text-[#5B6573] text-xs">Doctors</span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="px-2 py-0.5 rounded bg-surface-container-high/60 text-[11px] text-[#5B6573] italic">In Planning</span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#F1F5F9] text-[#64748B] font-label-md text-label-md">
+<span class="w-1.5 h-1.5 rounded-full bg-[#64748B]"></span>
+                    Inactive
+                  </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="font-label-md text-label-md text-[#015C9A] hover:text-primary font-semibold hover:underline">
+                    Activate
+                  </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Pagination Footer -->
+<div class="p-4 border-t border-[#D3DBE6] flex items-center justify-between text-xs text-[#5B6573] bg-surface-container-lowest">
+<div>Showing <span class="font-semibold text-primary">1 to 7</span> of 12 registered clinical specialties</div>
+<div class="flex items-center gap-2">
+<button class="px-2.5 py-1 rounded border border-outline-variant/40 bg-white hover:bg-surface disabled:opacity-50" disabled="">Previous</button>
+<button class="px-2.5 py-1 rounded border border-primary bg-primary text-white font-semibold">1</button>
+<button class="px-2.5 py-1 rounded border border-outline-variant/40 bg-white hover:bg-surface">2</button>
+<button class="px-2.5 py-1 rounded border border-outline-variant/40 bg-white hover:bg-surface">Next</button>
+</div>
+</div>
+</div>
+</div>
+<!-- ========================================================================= -->
+<!-- "ADD SPECIALTY" MODAL DIALOG OVERLAY (Centered Active Modal Display)      -->
+<!-- ========================================================================= -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#13263B]/40 backdrop-blur-[4px] ml-[260px]">
+<!-- Modal Panel Container -->
+<div class="bg-surface-container-lowest rounded-xl border border-[#D3DBE6] shadow-2xl w-full max-w-2xl max-h-[921px] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+<!-- Modal Header -->
+<div class="px-6 py-4 border-b border-[#D3DBE6] flex items-center justify-between bg-surface-container-low/40">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-lg bg-primary-container text-white flex items-center justify-center shadow-xs">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-[#13263B] font-bold">Register New Clinical Specialty</h2>
+<p class="font-body-sm text-body-sm text-[#5B6573]">Master directory configuration and multi-lingual taxonomy</p>
+</div>
+</div>
+<!-- Close button -->
+<button class="p-1.5 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Modal Scrollable Body / Form -->
+<div class="p-6 overflow-y-auto space-y-4 custom-scroll">
+<!-- Dual Language Specialty Names (English & Arabic) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Field 1: English -->
+<div class="space-y-1.5">
+<label class="block font-label-md text-label-md text-[#13263B]">
+                Specialty Name (English) <span class="text-[#DC2626]">*</span>
+</label>
+<input class="w-full h-11 px-3.5 rounded-lg border border-[#C6D0DE] bg-white text-on-surface font-body-md text-body-md focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/15 outline-none transition-all" type="text" value="Ophthalmology"/>
+</div>
+<!-- Field 2: Arabic -->
+<div class="space-y-1.5">
+<label class="block font-label-md text-label-md text-[#13263B] text-right font-arabic">
+                اسم التخصص الطبي (العربية) <span class="text-[#DC2626]">*</span>
+</label>
+<input class="w-full h-11 px-3.5 rounded-lg border border-[#C6D0DE] bg-white text-on-surface font-arabic text-sm focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/15 outline-none transition-all" dir="rtl" type="text" value="طب وجراحة العيون"/>
+</div>
+</div>
+<!-- Department Code & Icon / Glyph URL -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Field 3: Clinical Department Code -->
+<div class="space-y-1.5">
+<div class="flex items-center justify-between">
+<label class="block font-label-md text-label-md text-[#13263B]">
+                  Clinical Department Code
+                </label>
+<span class="font-label-sm text-[10px] text-secondary">Auto-generated</span>
+</div>
+<div class="relative">
+<input class="w-full h-11 px-3.5 rounded-lg border border-[#C6D0DE] bg-surface font-mono text-sm text-[#1E4164] font-semibold focus:border-[#015C9A] outline-none" type="text" value="OPHT-01"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-secondary text-[18px]">lock</span>
+</div>
+</div>
+<!-- Field 4: Specialty Icon / Glyph URL -->
+<div class="space-y-1.5">
+<label class="block font-label-md text-label-md text-[#13263B]">
+                Specialty Icon / Glyph URL
+              </label>
+<div class="flex items-center gap-2">
+<div class="w-11 h-11 rounded-lg bg-surface-container border border-[#C6D0DE] flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-[22px]">visibility</span>
+</div>
+<div class="relative flex-1">
+<input class="w-full h-11 px-3.5 rounded-lg border border-[#C6D0DE] bg-white text-on-surface font-body-md text-body-md focus:border-[#015C9A] outline-none" type="text" value="icon:visibility"/>
+</div>
+</div>
+<div class="text-right">
+<a class="font-label-sm text-[11px] text-[#1E4164] hover:underline font-medium" href="#">Browse icon library →</a>
+</div>
+</div>
+</div>
+<!-- Field 5: Description & Clinical Scope -->
+<div class="space-y-1.5">
+<label class="block font-label-md text-label-md text-[#13263B]">
+              Description &amp; Clinical Scope
+            </label>
+<textarea class="w-full p-3 rounded-lg border border-[#C6D0DE] bg-white text-on-surface font-body-sm text-body-sm focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/15 outline-none transition-all leading-relaxed" rows="3">Comprehensive outpatient ophthalmic examination, funduscopy, refraction assessment, and diabetic retinopathy screening.</textarea>
+</div>
+<!-- Field 7: Initial Branch Provisioning -->
+<div class="space-y-2 pt-1">
+<label class="block font-label-md text-label-md text-[#13263B]">
+              Initial Branch Provisioning
+            </label>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+<!-- Nasr City Checkbox -->
+<label class="flex items-center gap-3 p-2.5 rounded-lg border border-[#C6D0DE] bg-white hover:bg-surface-container-low/40 cursor-pointer transition-colors">
+<input checked="" class="w-4 h-4 rounded text-[#1E4164] focus:ring-[#1E4164] border-[#C6D0DE]" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-[#13263B]">Nasr City Branch</span>
+<span class="font-body-sm text-[10px] text-secondary">Wings A &amp; C · 4 Examination Suites</span>
+</div>
+</label>
+<!-- Sheikh Zayed Checkbox -->
+<label class="flex items-center gap-3 p-2.5 rounded-lg border border-[#C6D0DE] bg-white hover:bg-surface-container-low/40 cursor-pointer transition-colors">
+<input checked="" class="w-4 h-4 rounded text-[#1E4164] focus:ring-[#1E4164] border-[#C6D0DE]" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-[#13263B]">Sheikh Zayed Branch</span>
+<span class="font-body-sm text-[10px] text-secondary">West Clinic Complex · Laser Unit</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Field 6: Active Status & Public Visibility -->
+<div class="pt-2">
+<div class="p-3 rounded-lg bg-[#EFF6FF] border border-[#BFDBFE] flex items-start gap-3">
+<input checked="" class="mt-0.5 w-4 h-4 rounded text-[#1E4164] focus:ring-[#1E4164] border-[#C6D0DE]" id="visibility_toggle" type="checkbox"/>
+<label class="cursor-pointer" for="visibility_toggle">
+<span class="block font-label-md text-label-md text-[#002B4C] font-semibold">Active Status &amp; Public Visibility</span>
+<span class="block font-body-sm text-[11px] text-[#4E6077] mt-0.5">
+                  Enable specialty for online booking, doctor roster assignments, and reception triage immediately upon saving.
+                </span>
+</label>
+</div>
+</div>
+</div>
+<!-- Modal Footer -->
+<div class="px-6 py-4 border-t border-[#D3DBE6] bg-surface-container-low/50 flex flex-col sm:flex-row items-center justify-between gap-3">
+<div class="flex items-center gap-1.5 text-[11px] text-[#5B6573]">
+<span class="material-symbols-outlined text-[14px] text-secondary">verified_user</span>
+<span>Specialty creation is audited under Admin <strong>Karim Adel</strong>.</span>
+</div>
+<div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+<button class="px-4 py-2 rounded-lg border border-transparent text-[#1E4164] hover:bg-surface-container font-label-md text-label-md font-semibold transition-colors">
+              Cancel
+            </button>
+<button class="px-5 py-2.5 rounded-lg bg-[#1E4164] hover:bg-[#13263B] text-white font-label-md text-label-md font-semibold shadow-sm transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">check</span>
+              Save &amp; Register Specialty
+            </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

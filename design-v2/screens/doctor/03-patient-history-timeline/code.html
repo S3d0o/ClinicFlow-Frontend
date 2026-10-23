@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow Doctor Workspace - Patient History Timeline</title>
+<!-- Google Fonts & Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS Play CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration verbatim from Design System -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-fixed-variant": "#36485f",
+            "tertiary-fixed-dim": "#ffb599",
+            "surface-tint": "#406185",
+            "on-error-container": "#93000a",
+            "outline": "#73777f",
+            "on-surface": "#121c28",
+            "surface-dim": "#d1dbeb",
+            "tertiary-fixed": "#ffdbce",
+            "on-primary-fixed": "#001d36",
+            "surface-container-high": "#dfe9fa",
+            "secondary": "#4e6077",
+            "surface-container": "#e5efff",
+            "surface-container-lowest": "#ffffff",
+            "tertiary": "#4e1700",
+            "error-container": "#ffdad6",
+            "on-primary-fixed-variant": "#27496c",
+            "on-surface-variant": "#43474e",
+            "surface": "#f8f9ff",
+            "primary-fixed-dim": "#a8c9f3",
+            "primary-fixed": "#d1e4ff",
+            "on-tertiary-fixed": "#370e00",
+            "inverse-primary": "#a8c9f3",
+            "secondary-container": "#cee1fd",
+            "primary-container": "#1e4164",
+            "inverse-surface": "#27313e",
+            "surface-container-low": "#eef4ff",
+            "surface-container-highest": "#d9e3f4",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "on-tertiary-container": "#ff8b5b",
+            "primary": "#002b4c",
+            "on-background": "#121c28",
+            "background": "#f8f9ff",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-secondary": "#ffffff",
+            "inverse-on-surface": "#eaf1ff",
+            "surface-bright": "#f8f9ff",
+            "tertiary-container": "#722600",
+            "on-secondary-container": "#52647c",
+            "on-error": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "on-secondary-fixed": "#081c31",
+            "on-primary": "#ffffff",
+            "secondary-fixed": "#d2e4ff",
+            "outline-variant": "#c3c6cf",
+            "error": "#ba1a1a",
+            "surface-variant": "#d9e3f4",
+            "on-primary-container": "#8dadd6"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1rem",
+            "space-xl": "1.5rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "gutter-sm": "0.75rem",
+            "space-lg": "1rem",
+            "margin-desktop": "2rem",
+            "margin-tablet": "1.5rem",
+            "space-md": "0.75rem",
+            "gutter": "1rem"
+          },
+          "fontFamily": {
+            "headline-sm": [
+              "Plus Jakarta Sans"
+            ],
+            "label-sm": [
+              "Inter"
+            ],
+            "headline-lg": [
+              "Plus Jakarta Sans"
+            ],
+            "headline-xl": [
+              "Plus Jakarta Sans"
+            ],
+            "body-md": [
+              "Inter"
+            ],
+            "label-lg": [
+              "Inter"
+            ],
+            "headline-lg-mobile": [
+              "Plus Jakarta Sans"
+            ],
+            "body-lg": [
+              "Inter"
+            ],
+            "label-md": [
+              "Inter"
+            ],
+            "headline-md": [
+              "Plus Jakarta Sans"
+            ],
+            "body-sm": [
+              "Inter"
+            ],
+            "headline-xl-mobile": [
+              "Plus Jakarta Sans"
+            ]
+          },
+          "fontSize": {
+            "headline-sm": [
+              "16px",
+              {
+                "lineHeight": "24px",
+                "fontWeight": "600"
+              }
+            ],
+            "label-sm": [
+              "11px",
+              {
+                "lineHeight": "14px",
+                "letterSpacing": "0.02em",
+                "fontWeight": "500"
+              }
+            ],
+            "headline-lg": [
+              "24px",
+              {
+                "lineHeight": "32px",
+                "letterSpacing": "-0.01em",
+                "fontWeight": "700"
+              }
+            ],
+            "headline-xl": [
+              "32px",
+              {
+                "lineHeight": "40px",
+                "letterSpacing": "-0.02em",
+                "fontWeight": "700"
+              }
+            ],
+            "body-md": [
+              "14px",
+              {
+                "lineHeight": "20px",
+                "fontWeight": "400"
+              }
+            ],
+            "label-lg": [
+              "14px",
+              {
+                "lineHeight": "20px",
+                "fontWeight": "600"
+              }
+            ],
+            "headline-lg-mobile": [
+              "20px",
+              {
+                "lineHeight": "28px",
+                "letterSpacing": "-0.01em",
+                "fontWeight": "600"
+              }
+            ],
+            "body-lg": [
+              "16px",
+              {
+                "lineHeight": "24px",
+                "fontWeight": "400"
+              }
+            ],
+            "label-md": [
+              "12px",
+              {
+                "lineHeight": "16px",
+                "fontWeight": "600"
+              }
+            ],
+            "headline-md": [
+              "18px",
+              {
+                "lineHeight": "26px",
+                "fontWeight": "600"
+              }
+            ],
+            "body-sm": [
+              "12px",
+              {
+                "lineHeight": "16px",
+                "fontWeight": "400"
+              }
+            ],
+            "headline-xl-mobile": [
+              "26px",
+              {
+                "lineHeight": "34px",
+                "letterSpacing": "-0.015em",
+                "fontWeight": "700"
+              }
+            ]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    /* Tabular figures for telemetry & numbers */
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    /* Precision scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f8f9ff;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #c3c6cf;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #73777f;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface h-full font-body-md text-body-md antialiased selection:bg-secondary-container selection:text-primary">
+<!-- ========================================================================= -->
+<!-- SIDE NAV BAR (Source of Truth JSON Executed Verbatim)                     -->
+<!-- ========================================================================= -->
+<aside class="fixed top-0 left-0 h-screen w-[260px] z-40 bg-surface-container-lowest border-r border-outline-variant flex flex-col justify-between p-4">
+<div class="flex flex-col gap-6">
+<!-- Brand & Header -->
+<div class="flex items-center gap-3 px-2 pt-1">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-on-primary font-headline-md font-bold shadow-sm">
+          CF
+        </div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">ClinicFlow Egypt</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">New Cairo Branch</span>
+</div>
+</div>
+<!-- Quick Consultation CTA Button -->
+<button class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-primary-container text-on-primary hover:bg-primary transition-colors font-label-lg text-label-lg active:scale-[0.99] duration-150">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span>New Consultation</span>
+</button>
+<!-- Navigation Tabs (Patients is Active) -->
+<nav class="flex flex-col space-y-1">
+<!-- Tab 1: Today -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-primary transition-colors active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-[20px]">calendar_today</span>
+<span class="font-label-md text-label-md">Today</span>
+</a>
+<!-- Tab 2: Patients (ACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container-low text-primary font-semibold hover:bg-surface-container transition-colors active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">groups</span>
+<span class="font-label-md text-label-md">Patients</span>
+<span class="ml-auto w-2 h-2 rounded-full bg-primary"></span>
+</a>
+<!-- Tab 3: Schedule & Leave -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-primary transition-colors active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-[20px]">event_available</span>
+<span class="font-label-md text-label-md">Schedule &amp; Leave</span>
+</a>
+<!-- Tab 4: Unsigned Notes -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-primary transition-colors active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-[20px]">edit_note</span>
+<span class="font-label-md text-label-md">Unsigned Notes</span>
+<span class="ml-auto bg-primary text-on-primary font-label-sm text-label-sm px-1.5 py-0.5 rounded-full font-bold">2</span>
+</a>
+</nav>
+</div>
+<!-- Doctor Profile Footer (Dr. Ahmed Fathy) -->
+<div class="pt-4 border-t border-outline-variant flex items-center gap-3 px-2">
+<div class="w-10 h-10 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-[24px]">account_circle</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-semibold truncate">Dr. Ahmed Fathy</span>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-sm text-body-sm truncate">
+<span class="material-symbols-outlined text-[14px]">stethoscope</span>
+<span class="truncate">Consultant Cardiology</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- TOP APP BAR & WORKSPACE HEADER                                            -->
+<!-- ========================================================================= -->
+<header class="fixed top-0 left-[260px] right-0 h-16 z-30 bg-surface-container-lowest border-b border-outline-variant px-6 flex items-center justify-between">
+<!-- Left Cluster: Patient Meta Anchored In Context -->
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary tracking-tight">
+          Patient Longitudinal Record · Mohamed Adel Hassan
+        </h1>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container-low text-primary font-mono border border-outline-variant">
+          CF-004512
+        </span>
+</div>
+<div class="hidden xl:flex items-center gap-3 pl-4 border-l border-outline-variant text-on-surface-variant font-body-sm text-body-sm">
+<span>Age: <strong class="text-on-surface font-semibold">37 yrs</strong> (Male)</span>
+<span class="text-outline-variant">|</span>
+<span>Nat ID: <strong class="text-on-surface font-semibold font-mono tabular-nums">28805140103456</strong></span>
+<span class="text-outline-variant">|</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">phone</span>
+<span class="font-mono tabular-nums text-on-surface font-medium">+20 10 1234 5678</span>
+</span>
+</div>
+</div>
+<!-- Right Cluster: Actions & Shared Components Triggers -->
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-primary text-primary hover:bg-surface-container-low font-label-md text-label-md transition-colors active:scale-[0.98]">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+<span>Back to Encounter</span>
+</button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary-container text-on-primary hover:bg-primary font-label-md text-label-md transition-colors shadow-sm active:scale-[0.98]">
+<span class="material-symbols-outlined text-[16px]">picture_as_pdf</span>
+<span>Export Medical Summary (PDF)</span>
+</button>
+<div class="h-6 w-px bg-outline-variant mx-1"></div>
+<!-- Quick Action Icons -->
+<button class="w-9 h-9 rounded-lg border border-outline-variant flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-container-low transition-colors" title="Notifications">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="px-2.5 py-1 rounded-lg border border-outline-variant text-primary font-label-md text-label-md hover:bg-surface-container-low font-bold">
+        عربي
+      </button>
+</div>
+</header>
+<!-- ========================================================================= -->
+<!-- MAIN WORKSPACE CANVAS                                                     -->
+<!-- ========================================================================= -->
+<main class="ml-[260px] pt-16 min-h-screen pb-12">
+<div class="max-w-[1440px] mx-auto p-6 flex flex-col gap-6">
+<!-- ===================================================================== -->
+<!-- 1. PATIENT BANNER HEADER & DEMOGRAPHIC CARD                           -->
+<!-- ===================================================================== -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+<!-- Avatar + Vital Badges -->
+<div class="flex items-start sm:items-center gap-4">
+<div class="relative w-16 h-16 rounded-xl bg-surface-container-low border border-outline-variant flex items-center justify-center text-primary font-headline-lg font-bold flex-shrink-0">
+              MA
+              <span class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-600 border-2 border-surface-container-lowest flex items-center justify-center" title="Verified Egyptian Resident">
+<span class="material-symbols-outlined text-[12px] text-white">verified</span>
+</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3 flex-wrap">
+<h2 class="font-headline-md text-headline-md font-bold text-on-surface tracking-tight">Mohamed Adel Hassan</h2>
+<!-- Blood Group Badge -->
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-50 border border-rose-200 text-rose-800 font-label-sm text-label-sm font-bold">
+<span class="material-symbols-outlined text-[14px]">bloodtype</span>
+                  A+ (Positive)
+                </span>
+<!-- Verified National ID Badge -->
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container border border-outline-variant text-primary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">badge</span>
+                  Egyptian ID Verified
+                </span>
+</div>
+<!-- Metadata Row -->
+<div class="flex items-center gap-4 text-on-surface-variant font-body-sm text-body-sm flex-wrap">
+<span>Insurer: <strong class="text-on-surface font-semibold">Allianz Healthcare Egypt</strong></span>
+<span class="text-outline-variant">•</span>
+<span>Policy ID: <span class="font-mono text-on-surface font-medium">ALLZ-994022-EG</span></span>
+<span class="text-outline-variant">•</span>
+<span>Branch Registered: <strong class="text-on-surface">New Cairo</strong></span>
+</div>
+</div>
+</div>
+<!-- Active Allergies Pill Banner -->
+<div class="flex flex-col sm:items-end justify-center gap-1.5 bg-rose-50/80 border border-rose-200/90 rounded-lg p-3 lg:max-w-md w-full sm:w-auto">
+<div class="flex items-center gap-1.5 text-rose-800 font-label-sm text-label-sm font-bold">
+<span class="material-symbols-outlined text-[16px] text-rose-700">warning</span>
+              ACTIVE CLINICAL ALLERGIES (2 DETECTED)
+            </div>
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-0.5 rounded-full bg-rose-200/70 text-rose-900 font-label-md text-label-md font-semibold border border-rose-300">
+                Penicillin (Anaphylactoid)
+              </span>
+<span class="px-2.5 py-0.5 rounded-full bg-rose-200/70 text-rose-900 font-label-md text-label-md font-semibold border border-rose-300">
+                Aspirin (Bronchospasm)
+              </span>
+</div>
+</div>
+</div>
+<!-- Filter Sub-Bar -->
+<div class="mt-5 pt-4 border-t border-outline-variant flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+<div class="flex items-center gap-3 flex-wrap">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-semibold">Timeline Filters:</span>
+<!-- Branch Dropdown -->
+<div class="relative">
+<select class="h-9 appearance-none bg-surface-container-low border border-outline-variant rounded-lg pl-3 pr-8 font-label-md text-label-md text-on-surface focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary cursor-pointer">
+<option selected="">All branches (Nasr City, Maadi, Zayed)</option>
+<option>Nasr City Branch</option>
+<option>Maadi Specialist Clinic</option>
+<option>Sheikh Zayed Polyclinic</option>
+</select>
+<span class="material-symbols-outlined pointer-events-none absolute right-2 top-2 text-[18px] text-on-surface-variant">expand_more</span>
+</div>
+<!-- Specialty Dropdown -->
+<div class="relative">
+<select class="h-9 appearance-none bg-surface-container-low border border-outline-variant rounded-lg pl-3 pr-8 font-label-md text-label-md text-on-surface focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary cursor-pointer">
+<option selected="">Specialty: All (Cardiology, Diagnostics, Labs)</option>
+<option>Cardiology Only</option>
+<option>Diagnostic Radiology</option>
+<option>Clinical Pathology</option>
+</select>
+<span class="material-symbols-outlined pointer-events-none absolute right-2 top-2 text-[18px] text-on-surface-variant">expand_more</span>
+</div>
+</div>
+<!-- Date Range Selector -->
+<div class="flex items-center bg-surface-container-low p-1 rounded-lg border border-outline-variant self-start md:self-auto">
+<button class="px-3 py-1 rounded-md text-primary font-label-sm text-label-sm font-semibold bg-surface-container-lowest shadow-xs">Last 12 months</button>
+<button class="px-3 py-1 rounded-md text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-medium">2 years</button>
+<button class="px-3 py-1 rounded-md text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-medium">All time</button>
+</div>
+</div>
+</section>
+<!-- ===================================================================== -->
+<!-- 2. VITALS TRENDS SECTION (Interactive Telemetry & Mini-Charts)       -->
+<!-- ===================================================================== -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-outline-variant gap-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-primary">monitoring</span>
+<h3 class="font-headline-sm text-headline-sm font-bold text-primary">Longitudinal Vitals &amp; Hemodynamic Telemetry</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant">(Last 4 Recorded Encounters)</span>
+</div>
+<!-- Insight callout chip with tiny orange accent pip -->
+<div class="flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-900 font-label-sm text-label-sm">
+<span class="w-2 h-2 rounded-full bg-[#FF5E00]"></span>
+<span><strong>Clinical Alert:</strong> Systolic BP elevated +12 mmHg vs 3-month baseline (Work stress correlate).</span>
+</div>
+</div>
+<!-- Telemetry Metrics Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-5 items-stretch">
+<!-- Blood Pressure Progression (Systolic / Diastolic Trend SVG) -->
+<div class="lg:col-span-8 flex flex-col justify-between p-4 rounded-lg bg-surface-container-low/40 border border-outline-variant">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-4">
+<div>
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">Latest BP (Today):</span>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-lg text-headline-lg font-bold text-primary tabular-nums">150 / 95</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">mmHg</span>
+<span class="ml-2 font-label-sm text-label-sm text-rose-700 bg-rose-100 px-1.5 py-0.5 rounded font-bold">Stage 1 HTN</span>
+</div>
+</div>
+</div>
+<!-- Legend -->
+<div class="flex items-center gap-4 font-label-sm text-label-sm">
+<span class="flex items-center gap-1.5 text-primary font-semibold">
+<span class="w-3 h-1 bg-[#1E4164] rounded-full"></span> Systolic
+                </span>
+<span class="flex items-center gap-1.5 text-[#015C9A] font-semibold">
+<span class="w-3 h-1 bg-[#015C9A] rounded-full"></span> Diastolic
+                </span>
+</div>
+</div>
+<!-- SVG Data Chart for Blood Pressure -->
+<div class="relative w-full h-36">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 600 130">
+<!-- Background Gridlines -->
+<line stroke="#D3DBE6" stroke-dasharray="3 3" stroke-width="1" x1="0" x2="600" y1="20" y2="20"></line>
+<line stroke="#D3DBE6" stroke-dasharray="3 3" stroke-width="1" x1="0" x2="600" y1="60" y2="60"></line>
+<line stroke="#D3DBE6" stroke-dasharray="3 3" stroke-width="1" x1="0" x2="600" y1="100" y2="100"></line>
+<!-- Systolic Line (#1E4164) : 130 -> 138 -> 142 -> 150 -->
+<polyline fill="none" points="60,65 220,50 380,38 540,15" stroke="#1E4164" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></polyline>
+<!-- Diastolic Line (#015C9A) : 82 -> 88 -> 90 -> 95 -->
+<polyline fill="none" points="60,110 220,98 380,94 540,82" stroke="#015C9A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></polyline>
+<!-- Systolic Points & Labels -->
+<!-- Jan 2025: 130 -->
+<circle class="hover:scale-125 transition-transform" cx="60" cy="65" fill="#1E4164" r="4.5"></circle>
+<text class="tabular-nums" fill="#1E4164" font-size="11" font-weight="600" text-anchor="middle" x="60" y="55">130</text>
+<!-- Jun 2025: 138 -->
+<circle cx="220" cy="50" fill="#1E4164" r="4.5"></circle>
+<text class="tabular-nums" fill="#1E4164" font-size="11" font-weight="600" text-anchor="middle" x="220" y="40">138</text>
+<!-- Sep 2025: 142 -->
+<circle cx="380" cy="38" fill="#1E4164" r="4.5"></circle>
+<text class="tabular-nums" fill="#1E4164" font-size="11" font-weight="600" text-anchor="middle" x="380" y="28">142</text>
+<!-- Today Oct 2025: 150 -->
+<circle cx="540" cy="15" fill="#1E4164" r="5" stroke="#ffffff" stroke-width="2"></circle>
+<text class="tabular-nums" fill="#1E4164" font-size="12" font-weight="700" text-anchor="middle" x="540" y="5">150</text>
+<!-- Diastolic Points & Labels -->
+<circle cx="60" cy="110" fill="#015C9A" r="4"></circle>
+<text class="tabular-nums" fill="#015C9A" font-size="11" font-weight="600" text-anchor="middle" x="60" y="125">82</text>
+<circle cx="220" cy="98" fill="#015C9A" r="4"></circle>
+<text class="tabular-nums" fill="#015C9A" font-size="11" font-weight="600" text-anchor="middle" x="220" y="113">88</text>
+<circle cx="380" cy="94" fill="#015C9A" r="4"></circle>
+<text class="tabular-nums" fill="#015C9A" font-size="11" font-weight="600" text-anchor="middle" x="380" y="109">90</text>
+<circle cx="540" cy="82" fill="#015C9A" r="4.5" stroke="#ffffff" stroke-width="2"></circle>
+<text class="tabular-nums" fill="#015C9A" font-size="11" font-weight="700" text-anchor="middle" x="540" y="97">95</text>
+</svg>
+</div>
+<!-- Timeline Date Footers -->
+<div class="flex justify-between px-6 pt-3 font-label-sm text-label-sm text-on-surface-variant font-mono">
+<span class="text-center">18 Jan 2025</span>
+<span class="text-center">04 Jun 2025</span>
+<span class="text-center">12 Sep 2025</span>
+<span class="text-center font-bold text-primary">Today (24 Oct)</span>
+</div>
+</div>
+<!-- Secondary Metrics (Heart Rate & Body Composition) -->
+<div class="lg:col-span-4 flex flex-col justify-between gap-3">
+<!-- Resting Heart Rate Box -->
+<div class="p-3.5 rounded-lg bg-surface-container-low/40 border border-outline-variant flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Resting Heart Rate</span>
+<div class="flex items-baseline gap-1.5 mt-0.5">
+<span class="font-headline-lg text-headline-lg font-bold text-primary tabular-nums">84</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">bpm</span>
+</div>
+<div class="text-[11px] text-on-surface-variant font-mono mt-1">
+                  Trend: 76 → 78 → <span class="font-bold text-primary">84 bpm</span>
+</div>
+</div>
+<!-- Mini pulse icon indicator -->
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest border border-outline-variant flex items-center justify-center text-[#015C9A]">
+<span class="material-symbols-outlined text-[22px]">cardiology</span>
+</div>
+</div>
+<!-- Body Weight & BMI Box -->
+<div class="p-3.5 rounded-lg bg-surface-container-low/40 border border-outline-variant flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Weight / BMI (Calculated)</span>
+<div class="flex items-baseline gap-2 mt-0.5">
+<span class="font-headline-lg text-headline-lg font-bold text-primary tabular-nums">82.0</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">kg</span>
+<span class="text-outline-variant">|</span>
+<span class="font-label-md text-label-md font-semibold text-on-surface tabular-nums">26.2 BMI</span>
+</div>
+<div class="text-[11px] text-on-surface-variant font-mono mt-1">
+                  Trend: 84.0 → 83.5 → <span class="font-bold text-primary">82.0 kg (-2.0kg)</span>
+</div>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest border border-outline-variant flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[22px]">fitness_center</span>
+</div>
+</div>
+<!-- Fasting Blood Sugar / Lab Quick Stat -->
+<div class="p-3 rounded-lg bg-surface-container-low/40 border border-outline-variant flex items-center justify-between text-on-surface">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-[#015C9A]">water_drop</span>
+<span class="font-label-sm text-label-sm font-medium">Total Cholesterol / LDL:</span>
+</div>
+<span class="font-label-md text-label-md font-bold tabular-nums text-primary">210 / 135 mg/dL</span>
+</div>
+</div>
+</div>
+</section>
+<!-- ===================================================================== -->
+<!-- 3. TIMELINE & RIGHT RAIL SPLIT CONTAINER                              -->
+<!-- ===================================================================== -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+<!-- =================================================================== -->
+<!-- TIMELINE: LONGITUDINAL ENCOUNTERS & MILESTONES (Left 8 Cols)       -->
+<!-- =================================================================== -->
+<section class="xl:col-span-8 flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm font-bold text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">history_edu</span>
+<span>Longitudinal Clinical Encounters &amp; Historical Notes</span>
+</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant">4 milestones recorded</span>
+</div>
+<!-- Vertical Timeline Container -->
+<div class="relative pl-6 space-y-6 before:absolute before:left-[11px] before:top-3 before:bottom-3 before:w-0.5 before:bg-outline-variant">
+<!-- EVENT 1: TODAY (IN PROGRESS) -->
+<div class="relative group">
+<!-- Timeline Pip -->
+<div class="absolute -left-[29px] top-1.5 w-6 h-6 rounded-full bg-surface-container-lowest border-2 border-primary flex items-center justify-center z-10 shadow-xs">
+<span class="w-2.5 h-2.5 rounded-full bg-[#015C9A] animate-ping opacity-75"></span>
+<span class="absolute w-2 h-2 rounded-full bg-[#015C9A]"></span>
+</div>
+<!-- Event Card -->
+<div class="bg-surface-container-lowest border-2 border-[#015C9A]/30 rounded-xl p-5 shadow-xs transition-shadow hover:shadow-sm">
+<!-- Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-outline-variant gap-2">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-headline-sm text-headline-sm font-bold text-primary">Today, 24 Oct 2025</span>
+<span class="text-outline-variant">•</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">Nasr City Branch</span>
+<span class="text-outline-variant">•</span>
+<span class="font-label-md text-label-md text-primary font-semibold">Dr. Ahmed Fathy (Cardiology)</span>
+</div>
+<!-- Status Chip: In Progress -->
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 text-[#015C9A] font-label-md text-label-md font-semibold border border-blue-200 self-start sm:self-auto">
+<span class="w-2 h-2 rounded-full bg-[#015C9A]"></span>
+<span>In Progress</span>
+</div>
+</div>
+<!-- Clinical Content -->
+<div class="pt-3">
+<div class="font-label-md text-label-md text-on-surface-variant font-semibold uppercase tracking-wider mb-1">Chief Complaint &amp; Preliminary Assessment:</div>
+<p class="font-body-md text-body-md text-on-surface leading-relaxed">
+                    Patient presents with 4-day history of retrosternal pressure, precipitated by ascending stairs at workplace. Suspected exertional angina vs atypical chest pain. Rest BP elevated at 150/95 mmHg. In-office 12-lead ECG demonstrated normal sinus rhythm at 84 bpm without acute ST-segment shifts. 24-hour ambulatory Holter monitoring ordered.
+                  </p>
+<!-- Inline Quick Tags -->
+<div class="mt-3 flex items-center gap-2 flex-wrap font-label-sm text-label-sm">
+<span class="px-2 py-0.5 rounded bg-surface-container-low text-primary border border-outline-variant font-medium">
+                      Order: 24h Ambulatory Holter
+                    </span>
+<span class="px-2 py-0.5 rounded bg-surface-container-low text-primary border border-outline-variant font-medium">
+                      ECG: Normal Sinus (Attached)
+                    </span>
+<span class="px-2 py-0.5 rounded bg-surface-container-low text-primary border border-outline-variant font-medium">
+                      ICD-10: I20.9 (Angina Pectoris)
+                    </span>
+</div>
+</div>
+</div>
+</div>
+<!-- EVENT 2: 12 SEP 2025 (SIGNED WITH ADDENDUM) -->
+<div class="relative group">
+<!-- Timeline Pip -->
+<div class="absolute -left-[29px] top-1.5 w-6 h-6 rounded-full bg-surface-container-lowest border-2 border-primary flex items-center justify-center z-10 shadow-xs">
+<span class="material-symbols-outlined text-[14px] text-primary">done_all</span>
+</div>
+<!-- Event Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-xs">
+<!-- Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-outline-variant gap-2">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">12 Sep 2025</span>
+<span class="text-outline-variant">•</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">Nasr City Branch</span>
+<span class="text-outline-variant">•</span>
+<span class="font-label-md text-label-md text-primary font-semibold">Dr. Ahmed Fathy</span>
+</div>
+<!-- Status Chip: Confirmed / Signed -->
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 font-label-md text-label-md font-semibold border border-emerald-200 self-start sm:self-auto">
+<span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+<span>Signed Encounter</span>
+</div>
+</div>
+<!-- Clinical Content -->
+<div class="pt-3">
+<p class="font-body-md text-body-md text-on-surface leading-relaxed">
+                    Routine Cardiology Follow-up. Well-controlled baseline BP (142/90 mmHg). Patient tolerating current regimen without syncope or peripheral edema. Maintained on <strong>Concor 5mg daily</strong>. Fasting lipid panel and serum creatinine ordered to monitor renal safety profile.
+                  </p>
+<div class="mt-3 flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm pt-2 border-t border-outline-variant/60">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-emerald-700">verified</span>
+<span>Signed by: <strong class="text-on-surface">Dr. Ahmed Fathy, MD</strong> on 12 Sep 2025 at 11:42 AM</span>
+</div>
+<span class="font-mono text-outline-variant text-[11px]">Hash: 8f4c-2290-a3e1</span>
+</div>
+<!-- CLINICAL ADDENDUM BOX (Nested under signed note with distinct left border) -->
+<div class="mt-4 p-4 rounded-lg bg-surface-container-low/70 border-l-4 border-l-primary border border-outline-variant">
+<div class="flex items-center justify-between gap-2 mb-1.5">
+<div class="flex items-center gap-2 font-label-md text-label-md text-primary font-bold">
+<span class="material-symbols-outlined text-[18px]">post_add</span>
+<span>CLINICAL ADDENDUM (Appended Post-Signature)</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">14 Sep 2025 • 02:15 PM</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface leading-relaxed">
+                      "Reviewed fasting lipid panel results transmitted electronically from Alfa Scan. Total cholesterol elevated at <strong>210 mg/dL</strong>, LDL <strong>135 mg/dL</strong>. Contacted patient directly to initiate <strong>Atorvastatin 20mg nocte</strong> and recheck lipid profile in 12 weeks. Patient acknowledged via phone consultation."
+                    </p>
+<div class="mt-2.5 flex items-center justify-between font-label-sm text-label-sm text-on-surface-variant">
+<span>Entered by: <strong class="text-on-surface">Dr. Ahmed Fathy (Consultant Cardiology)</strong></span>
+<span class="px-2 py-0.5 bg-surface-container-lowest border border-outline-variant rounded font-mono text-[10px]">
+                        Phone Consent Recorded
+                      </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- EVENT 3: 04 JUN 2025 (DENTAL CLEARANCE) -->
+<div class="relative group">
+<!-- Timeline Pip -->
+<div class="absolute -left-[29px] top-1.5 w-6 h-6 rounded-full bg-surface-container-lowest border-2 border-outline-variant flex items-center justify-center z-10 shadow-xs">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">dentistry</span>
+</div>
+<!-- Event Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-xs">
+<!-- Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-outline-variant gap-2">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">04 Jun 2025</span>
+<span class="text-outline-variant">•</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">Sheikh Zayed Branch</span>
+<span class="text-outline-variant">•</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Dr. Mona Khalil (Dental Surgery)</span>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-medium border border-outline-variant self-start sm:self-auto">
+                    Dental Clearance
+                  </span>
+</div>
+<div class="pt-3">
+<p class="font-body-md text-body-md text-on-surface leading-relaxed">
+                    Pre-cardiac dental prophylaxis and supra-gingival scaling completed. Oral mucosa intact. No active gingival bleeding or signs of odontogenic focal infection. Cleared unconditionally for cardiac protocol and any invasive catheterization.
+                  </p>
+<div class="mt-2 text-on-surface-variant font-body-sm text-body-sm">
+                    Re-evaluation advised in 6 months.
+                  </div>
+</div>
+</div>
+</div>
+<!-- EVENT 4: 18 JAN 2025 (DIAGNOSTIC REPORT) -->
+<div class="relative group">
+<!-- Timeline Pip -->
+<div class="absolute -left-[29px] top-1.5 w-6 h-6 rounded-full bg-surface-container-lowest border-2 border-outline-variant flex items-center justify-center z-10 shadow-xs">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">radiology</span>
+</div>
+<!-- Event Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-xs">
+<!-- Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-outline-variant gap-2">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">18 Jan 2025</span>
+<span class="text-outline-variant">•</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">Maadi Branch</span>
+<span class="text-outline-variant">•</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Cairo Scan Diagnostics</span>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container text-primary font-label-sm text-label-sm font-semibold border border-outline-variant self-start sm:self-auto">
+                    Diagnostic Imaging
+                  </span>
+</div>
+<div class="pt-3 flex flex-col sm:flex-row items-start justify-between gap-4">
+<div>
+<span class="font-label-md text-label-md text-primary font-bold">Chest X-Ray (PA View):</span>
+<p class="font-body-md text-body-md text-on-surface mt-1 leading-relaxed">
+                      Normal cardiothoracic ratio (&lt; 0.50). Clear bilateral lung parenchyma. Costophrenic and cardiophrenic angles are acute and free. No pulmonary venous congestion or active parenchymal infiltration detected.
+                    </p>
+</div>
+<!-- PDF Document Thumbnail & Download Action -->
+<div class="flex items-center gap-3 p-3 rounded-lg bg-surface-container-low border border-outline-variant min-w-[220px] flex-shrink-0">
+<div class="w-10 h-10 rounded bg-surface-container-lowest border border-outline-variant flex items-center justify-center text-rose-700">
+<span class="material-symbols-outlined text-[24px]">picture_as_pdf</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm font-bold text-on-surface truncate max-w-[120px]">CXR_CairoScan.pdf</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant">1.4 MB • Verified</span>
+<button class="mt-1 text-primary font-label-sm text-label-sm font-semibold flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-[14px]">download</span>
+<span>Download</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- =================================================================== -->
+<!-- RIGHT RAIL / SIDE DRAWER (Historical Meds, Labs, Care Team)         -->
+<!-- =================================================================== -->
+<aside class="xl:col-span-4 flex flex-col gap-5">
+<!-- HISTORICAL PRESCRIPTIONS -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm">
+<div class="flex items-center justify-between pb-3 border-b border-outline-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-primary">medication</span>
+<h4 class="font-headline-sm text-headline-sm font-bold text-primary">Historical Prescriptions</h4>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">3 Active</span>
+</div>
+<div class="mt-4 flex flex-col space-y-3">
+<!-- Drug 1 -->
+<div class="p-3 rounded-lg bg-surface-container-low/50 border border-outline-variant flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-bold text-on-surface">Concor 5mg (Bisoprolol)</span>
+<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-label-sm text-[11px] font-bold">Active</span>
+</div>
+<span class="text-body-sm font-body-sm text-on-surface-variant">1 tablet daily in the morning</span>
+<div class="flex items-center justify-between text-[11px] text-outline pt-1 mt-1 border-t border-outline-variant/60 font-mono">
+<span>Started: 15 Jan 2025</span>
+<span>Dr. Ahmed Fathy</span>
+</div>
+</div>
+<!-- Drug 2 -->
+<div class="p-3 rounded-lg bg-surface-container-low/50 border border-outline-variant flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-bold text-on-surface">Atorvastatin 20mg (Lipitor)</span>
+<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-label-sm text-[11px] font-bold">Active</span>
+</div>
+<span class="text-body-sm font-body-sm text-on-surface-variant">1 tablet nocte at bedtime</span>
+<div class="flex items-center justify-between text-[11px] text-outline pt-1 mt-1 border-t border-outline-variant/60 font-mono">
+<span>Started: 14 Sep 2025 (Addendum)</span>
+<span>Dr. Ahmed Fathy</span>
+</div>
+</div>
+<!-- Drug 3 -->
+<div class="p-3 rounded-lg bg-surface-container-low/50 border border-outline-variant flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-bold text-on-surface">Ezapril 10mg (Enalapril)</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-[11px]">Discontinued</span>
+</div>
+<span class="text-body-sm font-body-sm text-on-surface-variant">Discontinued due to persistent dry cough</span>
+<div class="flex items-center justify-between text-[11px] text-outline pt-1 mt-1 border-t border-outline-variant/60 font-mono">
+<span>Ended: 12 Sep 2025</span>
+<span>Switched to ARB</span>
+</div>
+</div>
+</div>
+</div>
+<!-- DIAGNOSTIC ATTACHMENTS & SCANS GRID -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm">
+<div class="flex items-center justify-between pb-3 border-b border-outline-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-primary">folder_open</span>
+<h4 class="font-headline-sm text-headline-sm font-bold text-primary">Scans &amp; Lab Diagnostics</h4>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">6 Files</span>
+</div>
+<!-- Grid of Thumbnails -->
+<div class="grid grid-cols-2 gap-3 mt-4">
+<!-- Item 1: ECG Strip -->
+<div class="p-3 rounded-lg border border-outline-variant bg-surface-container-low/40 flex flex-col gap-2 group hover:border-primary cursor-pointer transition-colors">
+<div class="w-full h-16 rounded bg-surface-container-lowest border border-outline-variant flex items-center justify-center text-[#015C9A] relative overflow-hidden">
+<span class="material-symbols-outlined text-[28px]">vital_signs</span>
+<span class="absolute bottom-1 right-1 text-[9px] font-mono text-outline-variant bg-surface-container px-1 rounded">24 Oct</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm font-bold text-on-surface truncate">12-Lead ECG Strip</span>
+<span class="text-[11px] text-on-surface-variant">Normal Sinus</span>
+</div>
+</div>
+<!-- Item 2: Lipid Panel -->
+<div class="p-3 rounded-lg border border-outline-variant bg-surface-container-low/40 flex flex-col gap-2 group hover:border-primary cursor-pointer transition-colors">
+<div class="w-full h-16 rounded bg-surface-container-lowest border border-outline-variant flex items-center justify-center text-rose-700 relative overflow-hidden">
+<span class="material-symbols-outlined text-[28px]">science</span>
+<span class="absolute bottom-1 right-1 text-[9px] font-mono text-outline-variant bg-surface-container px-1 rounded">Alfa Scan</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm font-bold text-on-surface truncate">Lipid Profile &amp; CBC</span>
+<span class="text-[11px] text-on-surface-variant">14 Sep 2025</span>
+</div>
+</div>
+<!-- Item 3: CXR -->
+<div class="p-3 rounded-lg border border-outline-variant bg-surface-container-low/40 flex flex-col gap-2 group hover:border-primary cursor-pointer transition-colors">
+<div class="w-full h-16 rounded bg-surface-container-lowest border border-outline-variant flex items-center justify-center text-primary relative overflow-hidden">
+<span class="material-symbols-outlined text-[28px]">radiology</span>
+<span class="absolute bottom-1 right-1 text-[9px] font-mono text-outline-variant bg-surface-container px-1 rounded">18 Jan</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm font-bold text-on-surface truncate">Chest X-Ray PA</span>
+<span class="text-[11px] text-on-surface-variant">Cairo Scan</span>
+</div>
+</div>
+<!-- Item 4: Echocardiogram baseline -->
+<div class="p-3 rounded-lg border border-outline-variant bg-surface-container-low/40 flex flex-col gap-2 group hover:border-primary cursor-pointer transition-colors">
+<div class="w-full h-16 rounded bg-surface-container-lowest border border-outline-variant flex items-center justify-center text-secondary relative overflow-hidden">
+<span class="material-symbols-outlined text-[28px]">video_file</span>
+<span class="absolute bottom-1 right-1 text-[9px] font-mono text-outline-variant bg-surface-container px-1 rounded">Archive</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm font-bold text-on-surface truncate">Echo Doppler 2D</span>
+<span class="text-[11px] text-on-surface-variant">EF 62% • Normal</span>
+</div>
+</div>
+</div>
+</div>
+<!-- CLINICFLOW CARE TEAM -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm">
+<div class="flex items-center justify-between pb-3 border-b border-outline-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-primary">diversity_1</span>
+<h4 class="font-headline-sm text-headline-sm font-bold text-primary">ClinicFlow Care Team</h4>
+</div>
+</div>
+<div class="mt-4 flex flex-col space-y-3">
+<!-- Dr. Ahmed -->
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center text-primary font-bold">
+                  AF
+                </div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold text-on-surface">Dr. Ahmed Fathy</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">Consultant Cardiology (Primary)</span>
+<span class="text-[11px] text-primary font-medium">New Cairo &amp; Nasr City</span>
+</div>
+</div>
+<!-- Dr. Mona -->
+<div class="flex items-center gap-3 pt-2 border-t border-outline-variant/60">
+<div class="w-10 h-10 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center text-secondary font-bold">
+                  MK
+                </div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold text-on-surface">Dr. Mona Khalil</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">Specialist Dental Surgery</span>
+<span class="text-[11px] text-secondary font-medium">Sheikh Zayed Clinic</span>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</main>
+</body></html>

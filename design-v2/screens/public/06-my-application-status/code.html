@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Application Status | ClinicFlow Healthcare Network</title>
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN with form and container query plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-tint": "#406185",
+            "on-primary-container": "#8dadd6",
+            "surface-container-lowest": "#ffffff",
+            "secondary": "#4e6077",
+            "outline": "#73777f",
+            "on-primary-fixed": "#001d36",
+            "tertiary": "#4e1700",
+            "surface-dim": "#d1dbeb",
+            "on-surface-variant": "#43474e",
+            "primary-fixed": "#d1e4ff",
+            "inverse-surface": "#27313e",
+            "on-primary-fixed-variant": "#27496c",
+            "inverse-primary": "#a8c9f3",
+            "tertiary-fixed": "#ffdbce",
+            "surface-container-high": "#dfe9fa",
+            "inverse-on-surface": "#eaf1ff",
+            "error": "#ba1a1a",
+            "surface-container": "#e5efff",
+            "on-secondary-fixed": "#081c31",
+            "secondary-fixed": "#d2e4ff",
+            "outline-variant": "#c3c6cf",
+            "tertiary-container": "#722600",
+            "surface-variant": "#d9e3f4",
+            "on-surface": "#121c28",
+            "on-background": "#121c28",
+            "tertiary-fixed-dim": "#ffb599",
+            "primary-container": "#1e4164",
+            "background": "#f8f9ff",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-tertiary-fixed": "#370e00",
+            "on-secondary-fixed-variant": "#36485f",
+            "surface-container-highest": "#d9e3f4",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "on-secondary-container": "#52647c",
+            "on-error": "#ffffff",
+            "on-primary": "#ffffff",
+            "on-error-container": "#93000a",
+            "surface": "#f8f9ff",
+            "primary-fixed-dim": "#a8c9f3",
+            "on-tertiary": "#ffffff",
+            "surface-bright": "#f8f9ff",
+            "on-secondary": "#ffffff",
+            "secondary-container": "#cee1fd",
+            "surface-container-low": "#eef4ff",
+            "on-tertiary-container": "#ff8b5b",
+            "error-container": "#ffdad6",
+            "primary": "#002b4c"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1rem",
+            "margin-tablet": "1.5rem",
+            "space-md": "0.75rem",
+            "margin": "1rem",
+            "gutter": "1rem",
+            "gutter-sm": "0.75rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-xl": "1.5rem",
+            "margin-desktop": "2rem"
+          },
+          "fontFamily": {
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "label-lg": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-md": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-full flex flex-col font-body-md text-body-md selection:bg-secondary-container selection:text-primary">
+<!-- Desktop Header (Shared Component: TopNavBar) -->
+<header class="w-full bg-surface-container-lowest dark:bg-inverse-surface border-b border-outline-variant dark:border-outline z-30 sticky top-0">
+<div class="max-w-7xl mx-auto px-8 w-full flex justify-between items-center h-16">
+<!-- Brand & Navigation Cluster -->
+<div class="flex items-center space-x-10">
+<a class="flex items-center gap-2 group" href="#">
+<div class="w-9 h-9 rounded-lg bg-primary-container flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-xl" data-icon="local_hospital">local_hospital</span>
+</div>
+<span class="text-headline-md font-headline-md font-bold text-primary dark:text-inverse-primary tracking-tight">ClinicFlow</span>
+</a>
+<!-- Desktop Navigation Items -->
+<nav class="hidden md:flex items-center space-x-8">
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors duration-150 text-label-lg font-label-lg" href="#">Find a doctor</a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors duration-150 text-label-lg font-label-lg" href="#">Branches</a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed transition-colors duration-150 text-label-lg font-label-lg" href="#">Services &amp; prices</a>
+<a class="text-primary dark:text-inverse-primary font-semibold border-b-2 border-primary dark:border-inverse-primary pb-1 text-label-lg font-label-lg" href="#">Join as a doctor</a>
+</nav>
+</div>
+<!-- Trailing Action: Applicant Profile & Language -->
+<div class="flex items-center space-x-5">
+<button class="text-secondary dark:text-secondary-fixed-dim hover:text-primary transition-colors flex items-center gap-1 text-body-md font-body-md" title="Switch Language" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="language">language</span>
+<span class="text-label-md font-label-md">العربية</span>
+</button>
+<div class="h-5 w-px bg-outline-variant"></div>
+<div class="flex items-center gap-3 pl-2">
+<div class="w-9 h-9 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-headline-sm text-sm font-bold border border-outline-variant">
+            KN
+          </div>
+<div class="flex flex-col text-left">
+<span class="text-label-md font-label-md text-primary font-bold leading-tight">Dr. Karim Nabil</span>
+<span class="text-label-sm font-label-sm text-secondary">Applicant Portal</span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 max-w-7xl mx-auto px-8 py-8 w-full">
+<!-- Page Header & Identification Banner -->
+<div class="mb-8">
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-outline-variant pb-6">
+<div>
+<div class="flex items-center gap-2.5 mb-2">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-surface-container text-primary font-semibold border border-outline-variant">
+<span class="w-2 h-2 rounded-full bg-surface-tint"></span>
+              Faculty Recruitment 2025
+            </span>
+<span class="text-body-sm font-body-sm text-secondary">Application Ref: <strong class="text-on-surface font-semibold">#APP-2025-0842</strong></span>
+</div>
+<h1 class="text-headline-lg font-headline-lg text-primary tracking-tight">Application Status: Consultant Internal Medicine &amp; Endocrinology</h1>
+<div class="flex flex-wrap items-center gap-y-1 gap-x-4 mt-2 text-body-sm font-body-sm text-secondary">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="calendar_today">calendar_today</span>
+              Submitted on: 20 Oct 2025
+            </span>
+<span class="text-outline-variant">•</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="location_on">location_on</span>
+              Preferred Branch: <span class="font-medium text-on-surface">Nasr City Branch</span>
+</span>
+<span class="text-outline-variant">•</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="timer">timer</span>
+              Review Cycle: Q4 Medical Staff Appointments
+            </span>
+</div>
+</div>
+<!-- Quick Status Pill -->
+<div class="flex items-center">
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FFFBEB] border border-[#FDE68A] text-[#B45309]">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D97706] opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-[#D97706]"></span>
+</span>
+<span class="text-label-md font-label-md font-semibold">Stage 2 of 3: Interview Scheduled</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Stage Progress Tracker (3 Stages) -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 mb-8">
+<div class="relative">
+<!-- Connecting Track Line -->
+<div class="absolute top-5 left-8 right-8 h-0.5 bg-outline-variant -z-0">
+<!-- Active Progress Line -->
+<div class="h-full bg-primary-container" style="width: 50%;"></div>
+</div>
+<div class="grid grid-cols-3 relative z-10">
+<!-- Stage 1: Applied (Completed) -->
+<div class="flex flex-col items-center text-center">
+<div class="w-10 h-10 rounded-full bg-[#ECFDF5] border-2 border-[#059669] flex items-center justify-center text-[#059669] shadow-sm mb-3">
+<span class="material-symbols-outlined text-xl" data-icon="check">check</span>
+</div>
+<span class="text-label-lg font-label-lg text-primary font-bold">1. Applied</span>
+<span class="text-body-sm font-body-sm text-[#059669] font-medium flex items-center gap-1 mt-0.5">
+              Completed on 20 Oct 2025
+            </span>
+</div>
+<!-- Stage 2: Interview (Active Stage) -->
+<div class="flex flex-col items-center text-center">
+<div class="w-10 h-10 rounded-full bg-primary-container border-2 border-primary-container text-on-primary flex items-center justify-center shadow-md ring-4 ring-primary-fixed mb-3">
+<span class="material-symbols-outlined text-xl" data-icon="event">event</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="text-label-lg font-label-lg text-primary-container font-bold">2. Interview</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-[#EFF6FF] text-[#015C9A] font-semibold border border-[#BFDBFE]">
+                Active
+              </span>
+</div>
+<span class="text-body-sm font-body-sm text-secondary font-medium mt-0.5">Scheduled for 4 Nov 2025</span>
+</div>
+<!-- Stage 3: Accepted (Pending) -->
+<div class="flex flex-col items-center text-center opacity-65">
+<div class="w-10 h-10 rounded-full bg-surface-container-low border-2 border-outline-variant text-secondary flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-xl" data-icon="verified">verified</span>
+</div>
+<span class="text-label-lg font-label-lg text-secondary font-semibold">3. Accepted</span>
+<span class="text-body-sm font-body-sm text-secondary mt-0.5">Pending interview outcome</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Two-Column Primary Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Left / Main Column (8 Cols) -->
+<div class="lg:col-span-8 space-y-6">
+<!-- Primary Active Interview Card -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 relative overflow-hidden shadow-sm">
+<!-- Subtle top accent line using brand primary -->
+<div class="absolute top-0 left-0 right-0 h-1 bg-primary-container"></div>
+<div class="flex items-start justify-between mb-5">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-primary-container text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl" data-icon="calendar_month">calendar_month</span>
+</div>
+<div>
+<span class="text-label-sm font-label-sm text-[#015C9A] bg-[#EFF6FF] px-2 py-0.5 rounded font-semibold border border-[#BFDBFE]">MANDATORY INTERVIEW</span>
+<h2 class="text-headline-md font-headline-md text-primary mt-1 font-bold">Upcoming Clinical Interview</h2>
+</div>
+</div>
+<div class="text-right">
+<span class="text-label-sm font-label-sm text-secondary block">Status</span>
+<span class="text-label-md font-label-md text-[#059669] font-semibold flex items-center justify-end gap-1">
+<span class="w-2 h-2 rounded-full bg-[#059669]"></span> Confirmed by Panel
+              </span>
+</div>
+</div>
+<!-- Structured Interview Details Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-background p-4 rounded-lg border border-outline-variant mb-6">
+<!-- Date & Time -->
+<div class="flex items-start gap-3">
+<div class="p-2 bg-surface-container-lowest rounded-lg border border-outline-variant text-primary mt-0.5">
+<span class="material-symbols-outlined text-xl" data-icon="schedule">schedule</span>
+</div>
+<div>
+<span class="text-label-sm font-label-sm text-secondary uppercase tracking-wider block font-semibold">Date &amp; Time</span>
+<p class="text-body-md font-body-md text-primary font-bold mt-0.5">Tuesday, 4 November 2025</p>
+<p class="text-body-sm font-body-sm text-secondary">11:00 AM (Cairo Local Time)</p>
+</div>
+</div>
+<!-- Location -->
+<div class="flex items-start gap-3">
+<div class="p-2 bg-surface-container-lowest rounded-lg border border-outline-variant text-primary mt-0.5">
+<span class="material-symbols-outlined text-xl" data-icon="apartment">apartment</span>
+</div>
+<div>
+<span class="text-label-sm font-label-sm text-secondary uppercase tracking-wider block font-semibold">Location &amp; Room</span>
+<p class="text-body-md font-body-md text-primary font-bold mt-0.5">Nasr City Branch</p>
+<p class="text-body-sm font-body-sm text-secondary">14 Abbas El Akkad St. · Exec Meeting Room 3 (2nd Fl.)</p>
+</div>
+</div>
+<!-- Interviewer Lead -->
+<div class="flex items-start gap-3 md:col-span-2 pt-2 border-t border-outline-variant">
+<div class="p-2 bg-surface-container-lowest rounded-lg border border-outline-variant text-primary mt-0.5">
+<span class="material-symbols-outlined text-xl" data-icon="person">person</span>
+</div>
+<div>
+<span class="text-label-sm font-label-sm text-secondary uppercase tracking-wider block font-semibold">Interview Board Lead</span>
+<p class="text-body-md font-body-md text-primary font-bold mt-0.5">Dr. Hala Mostafa</p>
+<p class="text-body-sm font-body-sm text-secondary">Medical Director &amp; Head of Clinical Affairs · ClinicFlow Network</p>
+</div>
+</div>
+</div>
+<!-- Credential Verification Callout Note -->
+<div class="flex items-start gap-3 bg-[#FFFBEB] border-l-4 border-[#D97706] p-4 rounded-r-lg mb-6 text-on-surface">
+<span class="material-symbols-outlined text-[#D97706] text-xl mt-0.5" data-icon="info">info</span>
+<div class="text-body-sm font-body-sm">
+<strong class="font-semibold text-[#92400E]">Notice for Medical Syndicate Verification:</strong>
+<p class="text-[#78350F] mt-0.5">Please bring your original Egyptian Medical Syndicate card and national ID card for credential verification on-site prior to clinical round deliberation.</p>
+</div>
+</div>
+<!-- Actions Row -->
+<div class="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-outline-variant">
+<div class="flex items-center gap-3">
+<button class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-primary-container bg-surface-container-lowest text-primary-container hover:bg-surface-container font-label-lg text-label-lg transition-colors" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="event_available">event_available</span>
+                Add to Google / Outlook Calendar
+              </button>
+</div>
+<a class="inline-flex items-center gap-1.5 text-primary-container hover:underline text-label-lg font-label-lg font-semibold" href="https://maps.google.com" target="_blank">
+<span class="material-symbols-outlined text-lg" data-icon="directions">directions</span>
+              Get directions to branch
+            </a>
+</div>
+</section>
+<!-- Application History & Communication Timeline Card -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="history">history</span>
+<h2 class="text-headline-md font-headline-md text-primary font-bold">Activity &amp; Communication History</h2>
+</div>
+<span class="text-body-sm font-body-sm text-secondary">3 Events recorded</span>
+</div>
+<div class="relative pl-6 space-y-8 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-outline-variant">
+<!-- Timeline Item 1 -->
+<div class="relative group">
+<!-- Pin Dot -->
+<div class="absolute -left-6 top-1 w-4 h-4 rounded-full bg-surface-container-lowest border-2 border-primary-container flex items-center justify-center">
+<div class="w-1.5 h-1.5 rounded-full bg-primary-container"></div>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between">
+<h3 class="text-label-lg font-label-lg text-primary font-bold">Interview Invitation Sent</h3>
+<time class="text-body-sm font-body-sm text-secondary font-medium">22 Oct 2025, 02:15 PM</time>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant mt-1">
+                Official calendar invite and preparation guidelines transmitted to <span class="font-medium text-on-surface">k.nabil@example.com</span> with scheduling details, campus pass, and branch contact.
+              </p>
+<div class="mt-2 inline-flex items-center gap-1.5 text-body-sm font-body-sm text-[#015C9A] bg-[#EFF6FF] px-2.5 py-1 rounded border border-[#BFDBFE]">
+<span class="material-symbols-outlined text-base" data-icon="mark_email_read">mark_email_read</span>
+                Dispatch Status: Delivered &amp; Opened
+              </div>
+</div>
+<!-- Timeline Item 2 -->
+<div class="relative group">
+<!-- Pin Dot -->
+<div class="absolute -left-6 top-1 w-4 h-4 rounded-full bg-surface-container-lowest border-2 border-secondary flex items-center justify-center">
+<div class="w-1.5 h-1.5 rounded-full bg-secondary"></div>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between">
+<h3 class="text-label-lg font-label-lg text-primary font-bold">Clinical Credentials Screened</h3>
+<time class="text-body-sm font-body-sm text-secondary font-medium">21 Oct 2025, 11:30 AM</time>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant mt-1">
+                Curriculum Vitae and Egyptian Medical Syndicate registration verified by the senior medical recruitment committee. Application fast-tracked to Executive Interview.
+              </p>
+<span class="inline-block mt-1 text-label-sm font-label-sm text-[#059669] font-medium">Passed: Internal Medicine Committee Clearance</span>
+</div>
+<!-- Timeline Item 3 -->
+<div class="relative group">
+<!-- Pin Dot -->
+<div class="absolute -left-6 top-1 w-4 h-4 rounded-full bg-surface-container-lowest border-2 border-secondary flex items-center justify-center">
+<div class="w-1.5 h-1.5 rounded-full bg-secondary"></div>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between">
+<h3 class="text-label-lg font-label-lg text-primary font-bold">Application Submitted</h3>
+<time class="text-body-sm font-body-sm text-secondary font-medium">20 Oct 2025, 04:45 PM</time>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant mt-1">
+                Initial application <span class="font-semibold text-on-surface">#APP-2025-0842</span> registered in portal with attached portfolio, Syndicate license, and board certificates.
+              </p>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Details & Actions (4 Cols) -->
+<div class="lg:col-span-4 space-y-6">
+<!-- Submitted Application Snapshot Card -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6">
+<div class="flex items-center justify-between border-b border-outline-variant pb-4 mb-4">
+<h2 class="text-headline-sm font-headline-sm text-primary font-bold">Application Snapshot</h2>
+<span class="text-label-sm font-label-sm text-secondary">Verified Record</span>
+</div>
+<div class="space-y-4 text-body-sm font-body-sm">
+<div>
+<span class="text-label-sm font-label-sm text-secondary block font-semibold">Applicant Name</span>
+<p class="text-body-md font-body-md font-bold text-primary mt-0.5">Dr. Karim Nabil</p>
+</div>
+<div>
+<span class="text-label-sm font-label-sm text-secondary block font-semibold">Specialty &amp; Subspecialty</span>
+<p class="text-body-md font-body-md font-medium text-on-surface mt-0.5">Internal Medicine &amp; Endocrinology</p>
+</div>
+<div>
+<span class="text-label-sm font-label-sm text-secondary block font-semibold">Experience Level</span>
+<p class="text-body-md font-body-md font-medium text-on-surface mt-0.5">12 Years (Senior Consultant)</p>
+</div>
+<div>
+<span class="text-label-sm font-label-sm text-secondary block font-semibold">Contact Details</span>
+<div class="mt-1 space-y-1">
+<p class="text-body-sm font-body-sm text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="call">call</span>
+                  +20 10 1234 5678
+                </p>
+<p class="text-body-sm font-body-sm text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="mail">mail</span>
+                  k.nabil@example.com
+                </p>
+</div>
+</div>
+<div class="pt-3 border-t border-outline-variant">
+<span class="text-label-sm font-label-sm text-secondary block font-semibold mb-2">Submitted Documents</span>
+<!-- Document 1 -->
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-background border border-outline-variant mb-2">
+<div class="flex items-center gap-2 truncate pr-2">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="description">description</span>
+<div class="truncate">
+<p class="text-label-sm font-label-sm text-primary font-bold truncate">Dr_Karim_Nabil_CV.pdf</p>
+<p class="text-[11px] text-secondary">2.4 MB · Uploaded 20 Oct</p>
+</div>
+</div>
+<a class="text-primary hover:text-primary-container text-label-md font-label-md font-semibold px-2 py-1 rounded hover:bg-surface-container transition-colors" href="#">
+                  View
+                </a>
+</div>
+<!-- Document 2 -->
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-background border border-outline-variant">
+<div class="flex items-center gap-2 truncate pr-2">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="badge">badge</span>
+<div class="truncate">
+<p class="text-label-sm font-label-sm text-primary font-bold truncate">Syndicate_ID.pdf</p>
+<p class="text-[11px] text-secondary">1.1 MB · Verified</p>
+</div>
+</div>
+<a class="text-primary hover:text-primary-container text-label-md font-label-md font-semibold px-2 py-1 rounded hover:bg-surface-container transition-colors" href="#">
+                  View
+                </a>
+</div>
+</div>
+</div>
+</section>
+<!-- Application Options & Assistance Card -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6">
+<h2 class="text-headline-sm font-headline-sm text-primary font-bold mb-3">Application Assistance</h2>
+<div class="space-y-4">
+<div class="p-3.5 bg-background rounded-lg border border-outline-variant">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-[#015C9A] text-lg mt-0.5" data-icon="support_agent">support_agent</span>
+<div>
+<h4 class="text-label-md font-label-md font-semibold text-primary">Need to reschedule?</h4>
+<p class="text-body-sm font-body-sm text-secondary mt-1">
+                    Please contact clinical recruitment at least 24 hours prior via:
+                  </p>
+<a class="text-primary hover:underline font-semibold text-body-sm font-body-sm block mt-1" href="mailto:careers@clinicflow.eg">
+                    careers@clinicflow.eg
+                  </a>
+</div>
+</div>
+</div>
+<!-- Danger / Withdrawal Option -->
+<div class="pt-2 text-center">
+<button class="text-secondary hover:text-error transition-colors text-label-md font-label-md underline inline-flex items-center gap-1" onclick="confirmWithdrawal()" type="button">
+<span class="material-symbols-outlined text-sm" data-icon="cancel">cancel</span>
+                Withdraw application
+              </button>
+<p class="text-[11px] text-secondary mt-1">Withdrawing terminates scheduled review and releases your interview timeslot.</p>
+</div>
+</div>
+</section>
+<!-- Hospital Network Quick Stats Pill -->
+<div class="bg-surface-container-low rounded-xl p-4 border border-outline-variant flex items-center justify-between text-secondary">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="verified_user">verified_user</span>
+<span class="text-label-sm font-label-sm">MOH License No. 48291/2021</span>
+</div>
+<span class="text-label-sm font-label-sm font-semibold text-primary">Nasr City Hub</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Desktop Footer (Shared Component: Footer) -->
+<footer class="mt-auto w-full bg-surface-container-low dark:bg-inverse-surface border-t border-outline-variant dark:border-outline">
+<div class="max-w-7xl mx-auto px-8 py-12 w-full">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+<!-- Brand & Hotline Col -->
+<div class="md:col-span-1">
+<div class="flex items-center gap-2 mb-3">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-lg" data-icon="local_hospital">local_hospital</span>
+</div>
+<span class="text-headline-md font-headline-md font-bold text-primary dark:text-inverse-primary">ClinicFlow</span>
+</div>
+<p class="text-body-sm font-body-sm text-secondary mb-4">Authoritative clinical care and digital medical network in Greater Cairo.</p>
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-lowest border border-outline-variant">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="call">call</span>
+<span class="text-label-md font-label-md text-primary font-bold">Hotline 16789</span>
+</div>
+</div>
+<!-- Links Col 1: Branches -->
+<div>
+<h4 class="text-label-md font-label-md font-bold text-primary mb-3">Network Branches</h4>
+<ul class="space-y-2 text-body-sm font-body-sm">
+<li><a class="text-secondary dark:text-secondary-fixed-dim hover:text-tertiary-container dark:hover:text-tertiary-fixed transition-colors duration-150" href="#">Nasr City Branch</a></li>
+<li><a class="text-secondary dark:text-secondary-fixed-dim hover:text-tertiary-container dark:hover:text-tertiary-fixed transition-colors duration-150" href="#">Maadi Medical Center</a></li>
+<li><a class="text-secondary dark:text-secondary-fixed-dim hover:text-tertiary-container dark:hover:text-tertiary-fixed transition-colors duration-150" href="#">Sheikh Zayed Clinic</a></li>
+</ul>
+</div>
+<!-- Links Col 2: Tariffs & Coverage -->
+<div>
+<h4 class="text-label-md font-label-md font-bold text-primary mb-3">Tariffs &amp; Transparency</h4>
+<ul class="space-y-2 text-body-sm font-body-sm">
+<li><a class="text-secondary dark:text-secondary-fixed-dim hover:text-tertiary-container dark:hover:text-tertiary-fixed transition-colors duration-150" href="#">Outpatient Tariffs (EGP)</a></li>
+<li><a class="text-secondary dark:text-secondary-fixed-dim hover:text-tertiary-container dark:hover:text-tertiary-fixed transition-colors duration-150" href="#">Insurance &amp; Copays</a></li>
+<li><a class="text-secondary dark:text-secondary-fixed-dim hover:text-tertiary-container dark:hover:text-tertiary-fixed transition-colors duration-150" href="#">Ministry of Health Licensing</a></li>
+</ul>
+</div>
+<!-- Links Col 3: Legal -->
+<div>
+<h4 class="text-label-md font-label-md font-bold text-primary mb-3">Governance</h4>
+<ul class="space-y-2 text-body-sm font-body-sm">
+<li><a class="text-secondary dark:text-secondary-fixed-dim hover:text-tertiary-container dark:hover:text-tertiary-fixed transition-colors duration-150" href="#">Privacy Policy</a></li>
+<li><a class="text-secondary dark:text-secondary-fixed-dim hover:text-tertiary-container dark:hover:text-tertiary-fixed transition-colors duration-150" href="#">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<!-- Copyright Bottom Bar -->
+<div class="pt-8 border-t border-outline-variant dark:border-outline flex flex-col md:flex-row justify-between items-center text-body-sm font-body-sm text-secondary">
+<p>© 2025 ClinicFlow Healthcare Network S.A.E. All rights reserved. Hotline 16789.</p>
+<p class="mt-2 md:mt-0 text-[11px] text-secondary">Standard Medical Staff Recruitment Guidelines Rev 4.2</p>
+</div>
+</div>
+</footer>
+<!-- Light micro-interaction logic -->
+<script>
+    function confirmWithdrawal() {
+      const confirmed = window.confirm("Are you sure you want to withdraw application #APP-2025-0842? This action cannot be undone and your scheduled interview with Dr. Hala Mostafa will be canceled.");
+      if (confirmed) {
+        alert("Your withdrawal request has been received by Clinical HR.");
+      }
+    }
+  </script>
+</body></html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow - Reset your password</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary": "#4e1700",
+            "outline": "#73777f",
+            "secondary-fixed": "#d2e4ff",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "primary-fixed": "#d1e4ff",
+            "primary-fixed-dim": "#a8c9f3",
+            "surface-variant": "#e1e2e6",
+            "secondary-container": "#cee1fd",
+            "on-tertiary": "#ffffff",
+            "surface-container-high": "#e7e8ec",
+            "error": "#ba1a1a",
+            "on-surface": "#191c1f",
+            "on-primary-fixed": "#001d36",
+            "tertiary-fixed": "#ffdbce",
+            "surface-dim": "#d8dade",
+            "surface-container": "#eceef2",
+            "secondary": "#4e6077",
+            "on-secondary-fixed-variant": "#36485f",
+            "on-surface-variant": "#43474e",
+            "background": "#f8f9fd",
+            "primary": "#002b4c",
+            "on-primary": "#ffffff",
+            "on-error-container": "#93000a",
+            "outline-variant": "#c3c6cf",
+            "on-secondary-container": "#52647c",
+            "on-primary-fixed-variant": "#27496c",
+            "tertiary-fixed-dim": "#ffb599",
+            "on-primary-container": "#8dadd6",
+            "inverse-surface": "#2e3134",
+            "inverse-on-surface": "#eff1f5",
+            "tertiary-container": "#722600",
+            "surface": "#f8f9fd",
+            "inverse-primary": "#a8c9f3",
+            "on-error": "#ffffff",
+            "on-background": "#191c1f",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-tertiary-container": "#ff8b5b",
+            "surface-container-highest": "#e1e2e6",
+            "on-secondary-fixed": "#081c31",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f2f3f7",
+            "error-container": "#ffdad6",
+            "surface-tint": "#406185",
+            "surface-bright": "#f8f9fd",
+            "primary-container": "#1e4164",
+            "on-tertiary-fixed": "#370e00",
+            "on-secondary": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "1.5rem",
+            "space-xl": "2.5rem",
+            "space-sm": "0.5rem",
+            "space-2xl": "4rem",
+            "margin-mobile": "1rem",
+            "space-lg": "1.5rem",
+            "margin": "3rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem",
+            "margin-tablet": "2rem",
+            "gutter-mobile": "1rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "display-lg-mobile": ["Plus Jakarta Sans"],
+            "eyebrow": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "title-md": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"]
+          },
+          "fontSize": {
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "eyebrow": ["11px", { "lineHeight": "14px", "letterSpacing": "0.08em", "fontWeight": "700" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body-md text-on-surface antialiased min-h-screen flex justify-center items-start selection:bg-secondary-container selection:text-primary">
+<!-- Mobile Viewport Canvas Container (Max-W-MD ~390px typical Egyptian Mobile Frame) -->
+<div class="w-full max-w-[390px] min-h-screen flex flex-col bg-surface relative pb-8">
+<!-- TopAppBar (Mapped from Shared Components JSON: docked full-width top-0 h-14, border-b border-outline-variant) -->
+<header class="sticky top-0 z-40 bg-surface-container-lowest border-b border-outline-variant h-14 flex items-center justify-between px-4 transition-colors duration-150">
+<!-- Leading Back Button Touch Target (min 44px) -->
+<button aria-label="Back to login" class="w-11 h-11 -ml-1 flex items-center justify-center rounded-lg text-primary hover:bg-surface-container-low active:scale-95 transition-all duration-150" type="button">
+<span class="material-symbols-outlined text-primary text-[24px]" data-icon="arrow_back">arrow_back</span>
+</button>
+<!-- Brand Identity / Header Wordmark Anchor -->
+<div class="flex items-center gap-1.5">
+<div class="w-6 h-6 rounded bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-[16px]" data-icon="health_and_safety">health_and_safety</span>
+</div>
+<span class="font-headline-sm text-headline-sm font-bold text-primary tracking-tight">ClinicFlow</span>
+</div>
+<!-- Trailing Action: Bilingual Switcher -->
+<div class="flex items-center">
+<button class="min-h-[44px] px-2 flex items-center text-xs font-label-md text-secondary hover:text-primary active:scale-95 transition-transform duration-150" type="button">
+<span class="text-primary font-semibold">EN</span>
+<span class="mx-1 text-outline-variant">|</span>
+<span class="font-medium">عربي</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas (Step 1 Linear Task Flow) -->
+<main class="flex-1 px-4 pt-6">
+<!-- Breadcrumb & Linear Progress Header -->
+<div class="flex items-center gap-2 mb-2.5">
+<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-eyebrow font-bold uppercase tracking-wider text-on-tertiary-container bg-tertiary-fixed/60 border border-on-tertiary-container/20">
+          STEP 1
+        </span>
+<span class="font-eyebrow text-[11px] tracking-wider uppercase text-secondary font-bold">
+          PASSWORD RECOVERY
+        </span>
+</div>
+<!-- Heading & Explanatory Subtext -->
+<div class="mb-5">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight font-bold">
+          Reset your password
+        </h1>
+<p class="font-body-sm text-body-sm text-secondary mt-1 leading-snug">
+          Choose how you would like to receive your security verification code.
+        </p>
+</div>
+<!-- Main Structured Clinical Card -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-5">
+<form class="flex flex-col gap-4" id="recovery-form" onsubmit="event.preventDefault();">
+<!-- Method Selector Group -->
+<fieldset class="space-y-3">
+<legend class="sr-only">Choose recovery method</legend>
+<!-- Option 1: SMS (Active / Selected State) -->
+<label class="relative flex items-center justify-between p-3.5 rounded-xl border-2 border-primary-container bg-surface-container-low/70 cursor-pointer transition-all duration-150" id="label-sms">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest border border-outline-variant flex items-center justify-center text-primary-container shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="sms">sms</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-primary font-semibold leading-tight">Text me a code (SMS)</span>
+<span class="font-body-sm text-body-sm text-secondary mt-0.5">+20 10•• ••• 5678</span>
+</div>
+</div>
+<!-- Radio Indicator (Checked) -->
+<div class="flex items-center justify-center shrink-0 ml-2">
+<input checked="" class="sr-only" name="recovery_method" onchange="toggleRadioState('sms')" type="radio" value="sms"/>
+<div class="w-5 h-5 rounded-full border-2 border-primary-container flex items-center justify-center bg-white">
+<div class="w-2.5 h-2.5 rounded-full bg-primary-container"></div>
+</div>
+</div>
+</label>
+<!-- Option 2: Email (Unselected State) -->
+<label class="relative flex items-center justify-between p-3.5 rounded-xl border border-outline-variant bg-surface-container-lowest cursor-pointer hover:border-secondary transition-all duration-150" id="label-email">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low border border-outline-variant/60 flex items-center justify-center text-secondary shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="mail">mail</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface font-medium leading-tight">Email me a link</span>
+<span class="font-body-sm text-body-sm text-secondary mt-0.5">m•••@gmail.com</span>
+</div>
+</div>
+<!-- Radio Indicator (Empty) -->
+<div class="flex items-center justify-center shrink-0 ml-2">
+<input class="sr-only" name="recovery_method" onchange="toggleRadioState('email')" type="radio" value="email"/>
+<div class="w-5 h-5 rounded-full border border-outline-variant bg-white flex items-center justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-transparent"></div>
+</div>
+</div>
+</label>
+</fieldset>
+<!-- Input Field: Phone or Email Confirmation -->
+<div class="pt-1">
+<label class="block font-label-md text-label-md text-primary font-semibold mb-1.5" for="recovery-identifier">
+              Phone or email
+            </label>
+<div class="relative">
+<input class="w-full h-12 min-h-[44px] px-3.5 bg-surface-container-lowest border border-outline-variant rounded-[10px] text-body-md text-on-surface font-body-md focus:outline-none focus:border-surface-tint focus:ring-2 focus:ring-surface-tint transition-all" id="recovery-identifier" name="identifier" placeholder="Enter registered mobile or email" type="text" value="+20 101 234 5678"/>
+<div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-secondary">
+<span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span>
+</div>
+</div>
+</div>
+<!-- Trust & Privacy Disclaimer -->
+<div class="flex items-start gap-2 pt-1 text-secondary">
+<span class="material-symbols-outlined text-[16px] text-secondary shrink-0 mt-0.5" data-icon="verified_user">verified_user</span>
+<p class="font-body-sm text-body-sm text-secondary leading-snug">
+              We'll never tell anyone whether an account exists.
+            </p>
+</div>
+<!-- Primary Call to Action Button -->
+<button class="w-full h-12 min-h-[44px] mt-2 bg-primary-container text-on-primary font-label-lg text-label-lg rounded-[10px] flex items-center justify-center gap-2 hover:bg-[#16324E] active:scale-[0.98] transition-all duration-150" type="submit">
+<span>Send code</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</form>
+</section>
+<!-- Verification Channel Meta Info Box -->
+<div class="mt-4 px-3 py-2.5 rounded-xl bg-surface-container-low border border-outline-variant/50 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="speed">speed</span>
+<span class="font-body-sm text-body-sm text-secondary">Typical OTP delivery</span>
+</div>
+<span class="font-label-md text-label-md text-primary font-semibold">&lt; 15 seconds</span>
+</div>
+<!-- Navigation & Help Footer -->
+<div class="mt-8 text-center pb-6">
+<p class="font-body-sm text-body-sm text-secondary">
+          Remember your password? 
+          <a class="font-label-lg text-label-lg text-primary-container font-semibold hover:underline inline-flex items-center gap-0.5 ml-1" href="#">
+            Sign in
+          </a>
+</p>
+<!-- Secondary Support Inquiry Link -->
+<div class="mt-4 pt-4 border-t border-outline-variant/40 flex items-center justify-center gap-1.5 text-secondary">
+<span class="material-symbols-outlined text-[15px]" data-icon="help_outline">help_outline</span>
+<a class="font-body-sm text-body-sm text-secondary hover:text-primary transition-colors" href="#">
+            Contact ClinicFlow Patient Support
+          </a>
+</div>
+</div>
+</main>
+</div>
+<!-- Interactive State Handler for Option Cards -->
+<script>
+    function toggleRadioState(selected) {
+      const smsCard = document.getElementById('label-sms');
+      const emailCard = document.getElementById('label-email');
+      const identifierInput = document.getElementById('recovery-identifier');
+
+      if (selected === 'sms') {
+        // SMS Active
+        smsCard.className = "relative flex items-center justify-between p-3.5 rounded-xl border-2 border-primary-container bg-surface-container-low/70 cursor-pointer transition-all duration-150";
+        smsCard.querySelector('.rounded-full.border-2, .rounded-full.border').className = "w-5 h-5 rounded-full border-2 border-primary-container flex items-center justify-center bg-white";
+        smsCard.querySelector('.rounded-full.bg-primary-container, .rounded-full.bg-transparent').className = "w-2.5 h-2.5 rounded-full bg-primary-container";
+
+        // Email Inactive
+        emailCard.className = "relative flex items-center justify-between p-3.5 rounded-xl border border-outline-variant bg-surface-container-lowest cursor-pointer hover:border-secondary transition-all duration-150";
+        emailCard.querySelector('.rounded-full.border-2, .rounded-full.border').className = "w-5 h-5 rounded-full border border-outline-variant bg-white flex items-center justify-center";
+        emailCard.querySelector('.rounded-full.bg-primary-container, .rounded-full.bg-transparent').className = "w-2.5 h-2.5 rounded-full bg-transparent";
+
+        identifierInput.value = "+20 101 234 5678";
+      } else {
+        // Email Active
+        emailCard.className = "relative flex items-center justify-between p-3.5 rounded-xl border-2 border-primary-container bg-surface-container-low/70 cursor-pointer transition-all duration-150";
+        emailCard.querySelector('.rounded-full.border-2, .rounded-full.border').className = "w-5 h-5 rounded-full border-2 border-primary-container flex items-center justify-center bg-white";
+        emailCard.querySelector('.rounded-full.bg-primary-container, .rounded-full.bg-transparent').className = "w-2.5 h-2.5 rounded-full bg-primary-container";
+
+        // SMS Inactive
+        smsCard.className = "relative flex items-center justify-between p-3.5 rounded-xl border border-outline-variant bg-surface-container-lowest cursor-pointer hover:border-secondary transition-all duration-150";
+        smsCard.querySelector('.rounded-full.border-2, .rounded-full.border').className = "w-5 h-5 rounded-full border border-outline-variant bg-white flex items-center justify-center";
+        smsCard.querySelector('.rounded-full.bg-primary-container, .rounded-full.bg-transparent').className = "w-2.5 h-2.5 rounded-full bg-transparent";
+
+        identifierInput.value = "m.khalil@gmail.com";
+      }
+    }
+  </script>
+</body></html>

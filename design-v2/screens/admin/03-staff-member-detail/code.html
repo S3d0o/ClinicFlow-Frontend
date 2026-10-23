@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow Admin - Staff Member Detail (Sara Ibrahim)</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Forms & Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Verbatim Tailwind Configuration -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-fixed-dim": "#a8c9f3",
+            "surface-tint": "#406185",
+            "on-error-container": "#93000a",
+            "primary-container": "#1e4164",
+            "on-primary-fixed": "#001d36",
+            "inverse-surface": "#27313e",
+            "outline-variant": "#c3c6cf",
+            "on-tertiary-fixed": "#370e00",
+            "on-primary-fixed-variant": "#27496c",
+            "on-surface": "#121c28",
+            "on-secondary-container": "#52647c",
+            "on-primary": "#ffffff",
+            "on-secondary-fixed-variant": "#36485f",
+            "surface": "#f8f9ff",
+            "surface-dim": "#d1dbeb",
+            "tertiary-container": "#722600",
+            "on-primary-container": "#8dadd6",
+            "inverse-on-surface": "#eaf1ff",
+            "surface-container-highest": "#d9e3f4",
+            "on-tertiary-container": "#ff8b5b",
+            "on-error": "#ffffff",
+            "surface-variant": "#d9e3f4",
+            "error": "#ba1a1a",
+            "background": "#f8f9ff",
+            "on-secondary": "#ffffff",
+            "outline": "#73777f",
+            "on-tertiary": "#ffffff",
+            "surface-container": "#e5efff",
+            "secondary-fixed": "#d2e4ff",
+            "inverse-primary": "#a8c9f3",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-secondary-fixed": "#081c31",
+            "tertiary-fixed-dim": "#ffb599",
+            "surface-container-lowest": "#ffffff",
+            "tertiary-fixed": "#ffdbce",
+            "surface-container-low": "#eef4ff",
+            "secondary-container": "#cee1fd",
+            "on-surface-variant": "#43474e",
+            "primary-fixed": "#d1e4ff",
+            "tertiary": "#4e1700",
+            "error-container": "#ffdad6",
+            "surface-bright": "#f8f9ff",
+            "surface-container-high": "#dfe9fa",
+            "primary": "#002b4c",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "secondary": "#4e6077",
+            "on-background": "#121c28"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter-sm": "0.75rem",
+            "margin-tablet": "1.5rem",
+            "gutter": "1rem",
+            "space-xl": "1.5rem",
+            "margin": "1rem",
+            "margin-desktop": "2rem",
+            "space-md": "0.75rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1rem"
+          },
+          "fontFamily": {
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "body-sm": ["Inter"],
+            "label-lg": ["Inter"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body class="h-full bg-surface text-on-surface antialiased overflow-x-hidden font-body-md text-body-md">
+<!-- ========================================================================= -->
+<!-- SIDE NAVIGATION (Shared Component: SideNavBar)                            -->
+<!-- ========================================================================= -->
+<aside class="fixed top-0 left-0 h-screen w-64 flex flex-col justify-between bg-surface-container-lowest border-r border-outline-variant z-30">
+<!-- Brand / Header -->
+<div class="p-4 border-b border-outline-variant">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary-container text-on-primary flex items-center justify-center font-headline-md text-headline-md font-bold">
+          CF
+        </div>
+<div>
+<div class="font-headline-md text-headline-md font-bold text-primary tracking-tight">ClinicFlow</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Egypt Network Admin</div>
+</div>
+</div>
+</div>
+<!-- Navigation List (8 Tabs from JSON, 'Staff' is ACTIVE) -->
+<nav class="flex-1 overflow-y-auto p-4 space-y-1">
+<!-- 1. Overview -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+<!-- 2. Staff (Active per Semantic Mapping) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container text-primary font-semibold active:scale-[0.99] transition-transform duration-100" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="badge">badge</span>
+<span class="font-label-md text-label-md">Staff</span>
+</a>
+<!-- 3. Roles & permissions -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="admin_panel_settings">admin_panel_settings</span>
+<span class="font-label-md text-label-md">Roles &amp; permissions</span>
+</a>
+<!-- 4. Branches -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="apartment">apartment</span>
+<span class="font-label-md text-label-md">Branches</span>
+</a>
+<!-- 5. Specialties -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="medical_services">medical_services</span>
+<span class="font-label-md text-label-md">Specialties</span>
+</a>
+<!-- 6. Settings -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<!-- 7. Integrations -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="hub">hub</span>
+<span class="font-label-md text-label-md">Integrations</span>
+</a>
+<!-- 8. Audit log -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="history">history</span>
+<span class="font-label-md text-label-md">Audit log</span>
+</a>
+</nav>
+<!-- Footer: Karim Adel Admin with Violet Badge -->
+<div class="p-4 border-t border-outline-variant bg-surface-container-lowest">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-9 h-9 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-label-md text-label-md font-semibold shrink-0">
+            KA
+          </div>
+<div class="min-w-0">
+<div class="font-label-md text-label-md font-semibold text-primary truncate">Karim Adel</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant truncate">Egypt HQ Superuser</div>
+</div>
+</div>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-surface-container-high text-primary border border-outline-variant">
+          Admin
+        </span>
+</div>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- TOP NAVIGATION BAR (Shared Component: TopNavBar)                          -->
+<!-- ========================================================================= -->
+<header class="fixed top-0 left-64 right-0 h-16 bg-surface-container-lowest border-b border-outline-variant z-20 flex justify-between items-center px-6">
+<!-- Left: Search Bar -->
+<div class="flex items-center gap-4 w-96">
+<div class="relative w-full">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]" data-icon="search">search</span>
+</div>
+<input class="block w-full pl-10 pr-4 py-2 border border-outline-variant rounded-lg bg-surface-container-lowest text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container font-body-md text-body-md" placeholder="Search staff, syndicates, license IDs..." type="text"/>
+</div>
+</div>
+<!-- Right: Language Switch, Live Node Status & Actions -->
+<div class="flex items-center gap-5">
+<!-- Network / Node Status Badge -->
+<div class="flex items-center gap-2 px-2.5 py-1 rounded-full bg-surface-container-low border border-outline-variant text-on-surface-variant font-label-md text-label-md">
+<span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+<span>Egypt Cluster (Cairo North DC-01)</span>
+</div>
+<!-- Language Switch (JSON Exact String: EN/عربي) -->
+<button class="font-label-md text-label-md font-semibold text-primary hover:text-primary-container px-2 py-1 rounded transition-colors">
+        EN/عربي
+      </button>
+<!-- Trailing Action Icons (notifications, circle) -->
+<div class="flex items-center gap-1 border-l border-outline-variant pl-4">
+<button class="relative p-2 text-on-surface-variant hover:text-primary hover:bg-surface-container-low rounded-lg transition-colors" title="Notifications">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-tertiary-container"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary hover:bg-surface-container-low rounded-lg transition-colors" title="Active Operations">
+<span class="material-symbols-outlined" data-icon="circle">circle</span>
+</button>
+<!-- Current User Avatar Indicator -->
+<div class="ml-2 w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-label-sm text-label-sm font-semibold" title="Karim Adel Avatar">
+          KA
+        </div>
+</div>
+</div>
+</header>
+<!-- ========================================================================= -->
+<!-- MAIN VIEWPORT CANVAS                                                      -->
+<!-- ========================================================================= -->
+<main class="ml-64 pt-16 min-h-screen p-8 max-w-[1240px]">
+<!-- 1. Breadcrumbs -->
+<nav class="flex items-center gap-2 mb-4 text-on-surface-variant font-body-sm text-body-sm">
+<a class="hover:text-primary transition-colors" href="#">Staff Directory</a>
+<span class="material-symbols-outlined text-[16px]" data-icon="chevron_right">chevron_right</span>
+<span class="font-semibold text-primary">Sara Ibrahim</span>
+<span class="px-2 py-0.5 rounded bg-surface-container font-mono text-[11px] text-on-surface-variant font-medium">STF-00284</span>
+</nav>
+<!-- 2. Staff Header Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 mb-6 shadow-sm">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+<!-- Left: Identity & Contact -->
+<div class="flex items-start gap-4">
+<div class="w-20 h-20 rounded-xl bg-primary-container text-on-primary flex items-center justify-center font-headline-lg text-headline-lg font-bold shrink-0 shadow-sm border border-outline-variant/30">
+            SI
+          </div>
+<div>
+<div class="flex items-center gap-3">
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary">Sara Ibrahim</h1>
+<!-- Active Account Chip (Green dot + light tint) -->
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 font-label-md text-label-md font-semibold">
+<span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                Active Account
+              </span>
+<!-- Role Badge -->
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-surface-container text-primary font-label-md text-label-md font-medium border border-outline-variant">
+                Nurse
+              </span>
+</div>
+<p class="text-on-surface-variant font-headline-sm text-headline-sm mt-0.5">Senior Triage Nurse</p>
+<div class="flex flex-wrap items-center gap-x-5 gap-y-1.5 mt-3 text-on-surface-variant font-body-sm text-body-sm">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-outline" data-icon="mail">mail</span>
+                sara.ibrahim@clinicflow.eg
+              </span>
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-outline" data-icon="call">call</span>
+                +20 10 9876 5432
+              </span>
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-outline" data-icon="apartment">apartment</span>
+                Nasr City Branch (Primary)
+              </span>
+</div>
+</div>
+</div>
+<!-- Right: Action Buttons -->
+<div class="flex items-center gap-3 shrink-0 self-start lg:self-center">
+<!-- Reset MFA Button -->
+<button class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-primary-container text-primary-container font-label-lg text-label-lg font-semibold hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.99]" onclick="alert('MFA reset requested. User Sara Ibrahim will be prompted to re-enroll a TOTP token upon next login.')">
+<span class="material-symbols-outlined text-[18px]" data-icon="security">security</span>
+            Reset MFA
+          </button>
+<!-- Deactivate Staff Button -->
+<button class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-red-300 text-error bg-red-50/50 hover:bg-red-50 hover:border-red-400 font-label-lg text-label-lg font-semibold transition-colors duration-150 active:scale-[0.99]" id="toggleDeactivateModal">
+<span class="material-symbols-outlined text-[18px]" data-icon="person_off">person_off</span>
+            Deactivate Staff
+          </button>
+</div>
+</div>
+<!-- Sub-Metadata Row: Badges & Syndication Details -->
+<div class="mt-5 pt-4 border-t border-outline-variant flex flex-wrap items-center justify-between gap-4 font-body-sm text-body-sm">
+<div class="flex flex-wrap items-center gap-3">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-surface text-primary border border-outline-variant font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px] text-emerald-700" data-icon="verified_user">verified_user</span>
+            MFA Enrolled (TOTP Authenticator App)
+          </span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-surface text-on-surface-variant border border-outline-variant font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="assignment_ind">assignment_ind</span>
+            Egyptian Syndicate Lic #NUR-29401 (Verified MoHP Egypt)
+          </span>
+</div>
+<span class="text-on-surface-variant font-body-sm text-body-sm">
+          Staff profile created: <strong class="text-primary font-medium">14 Jan 2024</strong>
+</span>
+</div>
+</div>
+<!-- 3. Deactivate Confirmation Dialog (Contextual Modal / Panel) -->
+<div class="mb-6 bg-red-50/30 border border-red-200 rounded-xl p-5 relative overflow-hidden transition-all duration-200" id="deactivateDialog">
+<div class="flex items-start gap-3.5">
+<div class="p-2 rounded-lg bg-red-100 text-error shrink-0">
+<span class="material-symbols-outlined text-[24px]" data-icon="warning">warning</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-md text-headline-md font-bold text-primary">
+              Deactivate Staff Member: Sara Ibrahim
+            </h2>
+<button class="text-on-surface-variant hover:text-primary" id="closeDeactivateBanner">
+<span class="material-symbols-outlined text-[20px]" data-icon="close">close</span>
+</button>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">
+            Deactivating will revoke active session tokens, disable scheduling assignments, and lock EHR credentials.
+          </p>
+<!-- Radio Options -->
+<div class="mt-4 space-y-3 bg-surface-container-lowest border border-outline-variant rounded-lg p-4">
+<label class="flex items-start gap-3 cursor-pointer">
+<input checked="" class="mt-1 text-primary-container focus:ring-primary-container" name="deactivate_mode" type="radio" value="immediate"/>
+<div>
+<span class="font-label-lg text-label-lg font-semibold text-primary">Deactivate immediately</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Terminates all active sessions now and unassigns on-duty badges immediately.</p>
+</div>
+</label>
+<label class="flex items-start gap-3 cursor-pointer pt-2 border-t border-outline-variant">
+<input class="mt-1 text-primary-container focus:ring-primary-container" name="deactivate_mode" type="radio" value="scheduled"/>
+<div class="w-full">
+<span class="font-label-lg text-label-lg font-semibold text-primary">Schedule future deactivation date</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-2">Automate role revocation following scheduled shift completions.</p>
+<!-- Date Selector Input -->
+<div class="flex items-center gap-3">
+<input class="border border-outline-variant rounded-md px-3 py-1.5 font-body-sm text-body-sm text-on-surface bg-surface-container-lowest focus:ring-1 focus:ring-primary-container" type="date" value="2025-10-31"/>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Selected: End of month / Last shift date (31 Oct 2025)</span>
+</div>
+</div>
+</label>
+</div>
+<!-- Reassignment Notice -->
+<div class="mt-3.5 flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm bg-surface-container-high/60 px-3 py-2 rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-[18px] text-tertiary-container" data-icon="info">info</span>
+<span><strong>Reassignment notice:</strong> 0 active triage patients; Nurse Station shifts after Oct 31 will require coverage.</span>
+</div>
+<!-- Action Buttons -->
+<div class="mt-4 flex items-center justify-end gap-3">
+<button class="px-4 py-2 rounded-lg border border-outline-variant font-label-md text-label-md font-semibold text-on-surface-variant hover:bg-surface-container-low transition-colors" id="cancelDeactivation">
+              Cancel
+            </button>
+<button class="px-4 py-2 rounded-lg bg-error text-on-error font-label-md text-label-md font-semibold hover:bg-red-700 transition-colors shadow-sm" onclick="alert('Staff deactivation workflow initialized.');">
+              Confirm Deactivation
+            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- 4. Main Tab Navigation -->
+<div class="border-b border-outline-variant mb-6">
+<nav class="flex items-center gap-8 -mb-px">
+<!-- Tab 1: Active (Roles & branches) -->
+<button class="flex items-center gap-2 pb-3 border-b-2 border-primary text-primary font-headline-sm text-headline-sm font-semibold">
+<span class="material-symbols-outlined text-[20px]" data-icon="shield_person">shield_person</span>
+          Roles &amp; branches
+        </button>
+<!-- Tab 2: Doctor profile (Disabled / N/A for Nurse) -->
+<div class="relative group">
+<button class="flex items-center gap-2 pb-3 border-b-2 border-transparent text-outline font-headline-sm text-headline-sm cursor-not-allowed opacity-60" disabled="">
+<span class="material-symbols-outlined text-[20px]" data-icon="stethoscope">stethoscope</span>
+            Doctor profile
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-surface-container font-medium text-outline">N/A</span>
+</button>
+<!-- Tooltip -->
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:flex items-center px-2.5 py-1 rounded bg-inverse-surface text-inverse-on-surface font-body-sm text-body-sm whitespace-nowrap shadow-md z-10">
+            Applicable for Physician roles only
+          </div>
+</div>
+<!-- Tab 3: Sessions & security -->
+<button class="flex items-center gap-2 pb-3 border-b-2 border-transparent text-on-surface-variant hover:text-primary font-headline-sm text-headline-sm font-medium transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="lock_clock">lock_clock</span>
+          Sessions &amp; security
+        </button>
+</nav>
+</div>
+<!-- 5. Tab Content: Asymmetric Bento / Multi-column Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- LEFT COLUMN: Roles & Branch Permissions (7 Cols) -->
+<section class="lg:col-span-7 space-y-6">
+<!-- Assigned Roles Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm">
+<div class="flex items-center justify-between pb-3 border-b border-outline-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[22px]" data-icon="badge">badge</span>
+<h3 class="font-headline-md text-headline-md font-bold text-primary">Assigned Roles</h3>
+</div>
+<span class="text-on-surface-variant font-body-sm text-body-sm">2 active role tags</span>
+</div>
+<div class="mt-4 space-y-3">
+<!-- Primary Role -->
+<div class="p-3.5 rounded-lg border border-outline-variant bg-surface-container-low/50">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="font-label-lg text-label-lg font-bold text-primary">Nurse</span>
+<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-primary-container text-on-primary">Primary</span>
+</div>
+<span class="text-on-surface-variant font-body-sm text-body-sm">Inherits ClinicFlow Base Matrix</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">
+                Scope: Vitals intake, triage queue prioritization, allergy verification, emergency paging, and standard vital sign monitoring telemetry.
+              </p>
+</div>
+<!-- Secondary Role -->
+<div class="p-3.5 rounded-lg border border-outline-variant bg-surface-container-lowest">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="font-label-lg text-label-lg font-bold text-primary">Triage Lead</span>
+<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-surface-container-high text-primary border border-outline-variant">Secondary</span>
+</div>
+<span class="text-on-surface-variant font-body-sm text-body-sm">Nasr City Station Only</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">
+                Scope: Re-orders urgent incoming ER queue cases, escalates acute respiratory distress incidents, supervises junior float attendants.
+              </p>
+</div>
+</div>
+</div>
+<!-- Branch Access Scope Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm">
+<div class="flex items-center justify-between pb-3 border-b border-outline-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[22px]" data-icon="domain">domain</span>
+<h3 class="font-headline-md text-headline-md font-bold text-primary">Branch Access Scope</h3>
+</div>
+<button class="font-label-md text-label-md font-semibold text-primary hover:underline">
+              Edit Locations
+            </button>
+</div>
+<div class="mt-4 space-y-3">
+<!-- Branch 1 -->
+<div class="p-3.5 rounded-lg border border-outline-variant flex items-start justify-between bg-surface-container-lowest">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-label-lg text-label-lg font-bold text-primary">Nasr City Branch</span>
+<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">Primary Station</span>
+</div>
+<div class="text-on-surface-variant font-body-sm text-body-sm mt-1">
+                  Abbas El-Akkad Complex, Wing 3A · Cairo Governorate
+                </div>
+<div class="flex items-center gap-2 mt-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-xs font-medium text-primary">Morning Shift</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-xs font-medium text-primary">Evening Shift</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-xs font-medium text-primary">On-call Escalations</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-emerald-700 text-[20px]" data-icon="check_circle">check_circle</span>
+</div>
+<!-- Branch 2 -->
+<div class="p-3.5 rounded-lg border border-outline-variant flex items-start justify-between bg-surface-container-lowest">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-label-lg text-label-lg font-bold text-primary">Maadi Branch</span>
+<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-surface-container text-on-surface-variant border border-outline-variant">Float Assignment</span>
+</div>
+<div class="text-on-surface-variant font-body-sm text-body-sm mt-1">
+                  Degla Square Medical Suites · Cairo Governorate
+                </div>
+<div class="flex items-center gap-2 mt-2">
+<span class="px-2 py-0.5 rounded bg-surface-container text-xs font-medium text-primary">Float Nurse Access</span>
+<span class="px-2 py-0.5 rounded bg-surface text-xs font-medium text-on-surface-variant">Weekend Overflow</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline text-[20px]" data-icon="sync_alt">sync_alt</span>
+</div>
+</div>
+</div>
+<!-- Permission Override Policy Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="font-headline-md text-headline-md font-bold text-primary">Permission Override Policy</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Standard Nurse role matrix applied. No custom privilege escalations or administrative bypasses enabled.
+              </p>
+</div>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200 shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+              Strict Role Lock
+            </span>
+</div>
+</div>
+</section>
+<!-- RIGHT COLUMN: Sessions & Security Audit (5 Cols) -->
+<section class="lg:col-span-5 space-y-6">
+<!-- Active Sessions List Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm">
+<div class="flex items-center justify-between pb-3 border-b border-outline-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[22px]" data-icon="devices">devices</span>
+<h3 class="font-headline-md text-headline-md font-bold text-primary">Active Sessions</h3>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container font-mono text-[11px] text-primary font-semibold">2 Active</span>
+</div>
+<div class="mt-4 space-y-3.5">
+<!-- Session 1: Current Station -->
+<div class="p-3.5 rounded-lg border border-outline-variant bg-surface-container-low/30">
+<div class="flex items-start justify-between">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-primary text-[20px] mt-0.5" data-icon="desktop_mac">desktop_mac</span>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-label-lg text-label-lg font-semibold text-primary">Chrome 118 on macOS</span>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800">This Device</span>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                      IP: 197.38.12.44 · Nasr City Station A
+                    </div>
+</div>
+</div>
+</div>
+<div class="mt-2.5 flex items-center justify-between pt-2 border-t border-outline-variant/50 text-body-sm">
+<div class="flex items-center gap-1.5 text-emerald-700 font-medium">
+<span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+                  Last active: Just now
+                </div>
+<span class="text-outline text-xs">Workstation IP Fixed</span>
+</div>
+</div>
+<!-- Session 2: Mobile Device -->
+<div class="p-3.5 rounded-lg border border-outline-variant bg-surface-container-lowest">
+<div class="flex items-start justify-between">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-primary text-[20px] mt-0.5" data-icon="smartphone">smartphone</span>
+<div>
+<div class="font-label-lg text-label-lg font-semibold text-primary">ClinicFlow Staff App v4.2</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                      iPhone 15 Pro · Cellular Vodafone Egypt
+                    </div>
+<div class="font-mono text-[11px] text-on-surface-variant mt-0.5">
+                      IP: 156.204.11.2
+                    </div>
+</div>
+</div>
+<!-- Revoke Action -->
+<button class="px-2.5 py-1 rounded border border-outline-variant text-error hover:bg-red-50 hover:border-red-300 font-label-md text-label-md font-medium transition-colors" onclick="alert('Mobile session STF-APP-884 revoked successfully.');">
+                  Revoke
+                </button>
+</div>
+<div class="mt-2.5 pt-2 border-t border-outline-variant/50 text-on-surface-variant text-body-sm flex items-center justify-between">
+<span>Last active: 2 hours ago</span>
+<span class="text-xs text-outline">Push Tokens Enabled</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Security Credentials & Audit Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm">
+<div class="flex items-center justify-between pb-3 border-b border-outline-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[22px]" data-icon="shield">shield</span>
+<h3 class="font-headline-md text-headline-md font-bold text-primary">Security Credentials</h3>
+</div>
+<span class="text-emerald-700 font-label-sm text-label-sm font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="check">check</span>
+              Compliant
+            </span>
+</div>
+<div class="mt-4 space-y-3 font-body-sm text-body-sm">
+<div class="flex items-center justify-between py-1.5 border-b border-outline-variant/50">
+<span class="text-on-surface-variant">Password last changed</span>
+<span class="font-medium text-primary">45 days ago (Valid for 45 more days)</span>
+</div>
+<div class="flex items-center justify-between py-1.5 border-b border-outline-variant/50">
+<span class="text-on-surface-variant">MFA Token Protocol</span>
+<span class="font-medium text-primary">Google Authenticator (TOTP 30s)</span>
+</div>
+<div class="flex items-center justify-between py-1.5 border-b border-outline-variant/50">
+<span class="text-on-surface-variant">Enrolled On</span>
+<span class="font-medium text-primary">12 Sep 2025 by Karim Adel</span>
+</div>
+</div>
+<!-- Recent Security Events Section -->
+<div class="mt-4 pt-2">
+<h4 class="font-label-md text-label-md font-semibold text-primary mb-2.5">Recent Security Events</h4>
+<div class="space-y-2">
+<div class="p-2.5 rounded bg-surface border border-outline-variant flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] text-emerald-600 mt-0.5" data-icon="login">login</span>
+<div class="text-xs">
+<div class="font-medium text-primary">Successful sign-in (2FA verified)</div>
+<div class="text-on-surface-variant">Today 07:45 AM · Nasr City Station A</div>
+</div>
+</div>
+<div class="p-2.5 rounded bg-surface border border-outline-variant flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary mt-0.5" data-icon="vpn_key">vpn_key</span>
+<div class="text-xs">
+<div class="font-medium text-primary">MFA verified from new IP</div>
+<div class="text-on-surface-variant">18 Oct 2025 · Cellular Vodafone Egypt</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Interactive Modal Script -->
+<script>
+    const deactivateDialog = document.getElementById('deactivateDialog');
+    const toggleBtn = document.getElementById('toggleDeactivateModal');
+    const closeBtn = document.getElementById('closeDeactivateBanner');
+    const cancelBtn = document.getElementById('cancelDeactivation');
+
+    // Toggle dialog visibility
+    toggleBtn.addEventListener('click', () => {
+      deactivateDialog.classList.remove('hidden');
+      deactivateDialog.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    closeBtn.addEventListener('click', () => {
+      deactivateDialog.classList.add('hidden');
+    });
+
+    cancelBtn.addEventListener('click', () => {
+      deactivateDialog.classList.add('hidden');
+    });
+  </script>
+</body></html>

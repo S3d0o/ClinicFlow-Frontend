@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow Egypt - Reception Workspace</title>
+<!-- Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed": "#ffdbce",
+            "surface-dim": "#c9dbf7",
+            "primary": "#002b4c",
+            "primary-fixed": "#d1e4ff",
+            "on-error-container": "#93000a",
+            "tertiary-fixed-dim": "#ffb599",
+            "error-container": "#ffdad6",
+            "on-tertiary-container": "#ff8b5b",
+            "tertiary-container": "#722600",
+            "surface-container-high": "#dbe9ff",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "on-secondary-fixed-variant": "#00497c",
+            "secondary-container": "#7cbafe",
+            "secondary-fixed": "#d1e4ff",
+            "on-tertiary": "#ffffff",
+            "on-background": "#081c31",
+            "surface-bright": "#f8f9ff",
+            "secondary-fixed-dim": "#9ecaff",
+            "on-primary-fixed": "#001d36",
+            "on-primary-container": "#8dadd6",
+            "surface-container-highest": "#d2e4ff",
+            "inverse-primary": "#a8c9f3",
+            "surface": "#f8f9ff",
+            "surface-tint": "#406185",
+            "tertiary": "#4e1700",
+            "outline": "#73777f",
+            "outline-variant": "#c3c6cf",
+            "surface-container-low": "#eff4ff",
+            "on-primary": "#ffffff",
+            "error": "#ba1a1a",
+            "on-surface-variant": "#43474e",
+            "on-surface": "#081c31",
+            "on-secondary-fixed": "#001d36",
+            "on-tertiary-fixed": "#370e00",
+            "inverse-on-surface": "#eaf1ff",
+            "surface-container": "#e5eeff",
+            "inverse-surface": "#1f3247",
+            "primary-fixed-dim": "#a8c9f3",
+            "background": "#f8f9ff",
+            "on-secondary": "#ffffff",
+            "secondary": "#1061a0",
+            "on-primary-fixed-variant": "#27496c",
+            "on-secondary-container": "#004a7d",
+            "surface-variant": "#d2e4ff",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "primary-container": "#1e4164"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-lg": "1rem",
+            "space-sm": "0.5rem",
+            "gutter-desktop": "1.5rem",
+            "margin-desktop": "2rem",
+            "space-md": "0.75rem",
+            "space-xl": "1.5rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem",
+            "margin": "1rem"
+          },
+          "fontFamily": {
+            "display-lg": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "tabular-data": ["Inter"],
+            "label-sm": ["Inter"]
+          },
+          "fontSize": {
+            "display-lg": ["2rem", { "lineHeight": "2.5rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-md": ["1.25rem", { "lineHeight": "1.75rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-md": ["0.875rem", { "lineHeight": "1.25rem", "fontWeight": "400" }],
+            "label-md": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.025em", "fontWeight": "600" }],
+            "headline-sm": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "600" }],
+            "body-lg": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "400" }],
+            "body-sm": ["0.75rem", { "lineHeight": "1rem", "fontWeight": "400" }],
+            "headline-lg": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "tabular-data": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0", "fontWeight": "500" }],
+            "label-sm": ["0.6875rem", { "lineHeight": "0.875rem", "letterSpacing": "0.05em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="h-full bg-[#F7F9FD] text-on-surface antialiased overflow-x-hidden">
+<!-- ========================================================================= -->
+<!-- STAFF SHELL: SIDEBAR NAVIGATION                                           -->
+<!-- ========================================================================= -->
+<aside class="fixed top-0 left-0 h-screen w-64 z-40 bg-surface-container-lowest border-r border-[#D3DBE6] flex flex-col justify-between">
+<!-- Top Brand & Branch Switcher -->
+<div>
+<div class="px-5 pt-5 pb-4 border-b border-[#D3DBE6]">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-xl bg-primary-container flex items-center justify-center text-surface-container-lowest">
+<span class="material-symbols-outlined text-[20px]" data-icon="local_hospital">local_hospital</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-[#13263B] tracking-tight leading-none">ClinicFlow Egypt</h1>
+<button class="flex items-center gap-1 mt-1 text-label-sm font-label-sm text-secondary hover:text-primary transition-colors focus:outline-none">
+<span>Nasr City ▾</span>
+</button>
+</div>
+</div>
+<!-- Quick Check-in CTA Button -->
+<button class="w-full mt-4 flex items-center justify-center gap-2 py-2 px-3 bg-surface-container text-primary-container font-label-md text-label-md rounded-xl hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="qr_code_scanner">qr_code_scanner</span>
+<span>Quick Check-in</span>
+</button>
+</div>
+<!-- Navigation Links -->
+<nav class="p-3 space-y-1">
+<!-- Tab 1: Today (ACTIVE: #E8EEF6 bg, #1E4164 text, 3px #1E4164 bar) -->
+<a class="flex items-center gap-3 px-3 py-2 bg-[#E8EEF6] text-primary-container font-semibold rounded-xl border-l-[3px] border-primary-container" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-md text-label-md">Today</span>
+</a>
+<!-- Tab 2: Queue -->
+<a class="flex items-center justify-between px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-xl transition-colors" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px]" data-icon="format_list_numbered">format_list_numbered</span>
+<span class="font-label-md text-label-md">Queue</span>
+</div>
+<span class="font-tabular-data text-label-sm px-1.5 py-0.5 rounded bg-surface-container text-primary-container font-semibold">12</span>
+</a>
+<!-- Tab 3: Patients -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="group">group</span>
+<span class="font-label-md text-label-md">Patients</span>
+</a>
+<!-- Tab 4: Book -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="add_box">add_box</span>
+<span class="font-label-md text-label-md">Book</span>
+</a>
+<!-- Tab 5: Payments -->
+<a class="flex items-center justify-between px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-xl transition-colors" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px]" data-icon="payments">payments</span>
+<span class="font-label-md text-label-md">Payments</span>
+</div>
+<span class="w-2 h-2 rounded-full bg-[#FF5E00]"></span>
+</a>
+<!-- Tab 6: Cash session -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="point_of_sale">point_of_sale</span>
+<span class="font-label-md text-label-md">Cash session</span>
+</a>
+</nav>
+</div>
+<!-- Footer Staff Profile -->
+<div class="p-3 border-t border-[#D3DBE6]">
+<div class="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-2.5">
+<div class="relative">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[22px]" data-icon="account_circle">account_circle</span>
+</div>
+<!-- Online status green dot -->
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-[#10B981] border-2 border-white rounded-full"></span>
+</div>
+<div>
+<p class="font-label-md text-label-md font-semibold text-on-surface leading-tight">Mona Samir</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Receptionist</p>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface p-1">
+<span class="material-symbols-outlined text-[18px]" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- MAIN WORKSPACE WRAPPER (Offset by sidebar width 260px / 64 tailwind)     -->
+<!-- ========================================================================= -->
+<div class="pl-64 flex flex-col min-h-screen">
+<!-- TOP APP BAR -->
+<header class="h-14 bg-surface-container-lowest border-b border-[#D3DBE6] px-6 flex items-center justify-between sticky top-0 z-30">
+<div class="flex items-center gap-6">
+<h2 class="font-headline-md text-headline-md text-[#13263B]">
+          Today · Tuesday, 24 Oct 2025
+        </h2>
+<!-- Search input with shortcut badge -->
+<div class="relative w-80">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[18px]" data-icon="search">search</span>
+</div>
+<input class="w-full pl-9 pr-8 py-1.5 bg-[#FFFFFF] border border-[#D3DBE6] rounded-xl font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container" placeholder="Search by name, phone or MRN" type="text"/>
+<div class="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none">
+<kbd class="px-1.5 py-0.5 font-tabular-data text-[10px] text-outline font-semibold bg-[#F7F9FD] border border-[#D3DBE6] rounded">/</kbd>
+</div>
+</div>
+</div>
+<!-- Trailing Tools & Notifications -->
+<div class="flex items-center gap-3">
+<!-- Language Switcher -->
+<button class="px-2.5 py-1 text-label-md font-label-md text-on-surface-variant hover:text-on-surface border border-[#D3DBE6] rounded-xl hover:bg-surface-container-low transition-colors">
+          EN | عربي
+        </button>
+<!-- Notification Bell with Egyptian Solar Orange Badge -->
+<div class="relative">
+<button class="w-9 h-9 flex items-center justify-center rounded-xl border border-[#D3DBE6] hover:bg-surface-container-low text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span>
+</button>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#FF5E00]"></span>
+</div>
+<div class="h-6 w-px bg-[#D3DBE6]"></div>
+<!-- Emergency Admit Quick Action -->
+<button class="flex items-center gap-1.5 px-3 py-1.5 bg-error-container text-on-error-container hover:bg-[#ffcdc7] font-label-md text-label-md rounded-xl transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="e911_emergency">e911_emergency</span>
+<span>Emergency Admit</span>
+</button>
+</div>
+</header>
+<!-- WORKSPACE CANVAS -->
+<main class="flex-1 p-6 space-y-5">
+<!-- Top Action Bar & Clinic Filters -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<!-- Left: Action Buttons -->
+<div class="flex items-center gap-3">
+<button class="h-[38px] px-4 bg-primary-container hover:bg-[#163350] text-surface-container-lowest font-label-md text-label-md rounded-xl flex items-center gap-2 shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-[#015C9A]">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+<span>+ New booking</span>
+</button>
+<button class="h-[38px] px-4 bg-surface-container-lowest border border-[#D3DBE6] hover:border-primary-container hover:bg-[#F7F9FD] text-[#13263B] font-label-md text-label-md rounded-xl flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="directions_walk">directions_walk</span>
+<span>Walk-in arrival</span>
+</button>
+</div>
+<!-- Right: Clinic Specialties Filter Tabs -->
+<div class="flex items-center p-1 bg-surface-container rounded-xl border border-[#D3DBE6]">
+<button class="px-3 py-1 text-label-md font-label-md bg-surface-container-lowest text-[#13263B] rounded shadow-xs font-semibold">
+            All Clinics
+          </button>
+<button class="px-3 py-1 text-label-md font-label-md text-on-surface-variant hover:text-[#13263B] transition-colors">
+            Internal Medicine
+          </button>
+<button class="px-3 py-1 text-label-md font-label-md text-on-surface-variant hover:text-[#13263B] transition-colors">
+            Cardiology
+          </button>
+<button class="px-3 py-1 text-label-md font-label-md text-on-surface-variant hover:text-[#13263B] transition-colors">
+            Pediatrics
+          </button>
+</div>
+</div>
+<!-- COUNTERS ROW: 4 STAT CARDS -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Card 1: Booked -->
+<div class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-4 flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-md text-label-md">Booked Today</span>
+<span class="material-symbols-outlined text-[20px] text-primary" data-icon="event_note">event_note</span>
+</div>
+<div class="mt-3 flex items-baseline justify-between">
+<span class="font-display-lg text-display-lg text-[#13263B] font-tabular-data leading-none">46</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-0.5">
+<span>+4 vs yesterday</span>
+</span>
+</div>
+<div class="mt-3 w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary-container h-full rounded-full" style="width: 78%"></div>
+</div>
+</div>
+<!-- Card 2: Checked In -->
+<div class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-4 flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-md text-label-md">Checked In</span>
+<span class="material-symbols-outlined text-[20px] text-[#F59E0B]" data-icon="how_to_reg">how_to_reg</span>
+</div>
+<div class="mt-3 flex items-baseline justify-between">
+<span class="font-display-lg text-display-lg text-[#13263B] font-tabular-data leading-none">12</span>
+<span class="font-label-sm text-label-sm text-secondary font-medium">26% of schedule</span>
+</div>
+<div class="mt-3 w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-[#F59E0B] h-full rounded-full" style="width: 26%"></div>
+</div>
+</div>
+<!-- Card 3: Waiting in Lounge -->
+<div class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-4 flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-md text-label-md">In Waiting Lounge</span>
+<span class="material-symbols-outlined text-[20px] text-secondary" data-icon="chair">chair</span>
+</div>
+<div class="mt-3 flex items-baseline justify-between">
+<span class="font-display-lg text-display-lg text-[#13263B] font-tabular-data leading-none">5</span>
+<span class="font-label-sm text-label-sm text-outline font-medium">Avg wait: 14 mins</span>
+</div>
+<div class="mt-3 w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 42%"></div>
+</div>
+</div>
+<!-- Card 4: No-show -->
+<div class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-4 flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-md text-label-md">No-show / Rescheduled</span>
+<span class="material-symbols-outlined text-[20px] text-error" data-icon="person_cancel">person_cancel</span>
+</div>
+<div class="mt-3 flex items-baseline justify-between">
+<span class="font-display-lg text-display-lg text-[#13263B] font-tabular-data leading-none">1</span>
+<span class="font-label-sm text-label-sm text-error font-medium">2.1% rate</span>
+</div>
+<div class="mt-3 w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-error h-full rounded-full" style="width: 2.1%"></div>
+</div>
+</div>
+</section>
+<!-- 'NEEDS ACTION' URGENT ALERT STRIP -->
+<section class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-3.5 shadow-xs">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+<!-- Badge Header -->
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-[#FF5E00] flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-[16px]" data-icon="priority_high">priority_high</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-[#13263B] font-bold">Needs action (6)</span>
+<span class="text-label-sm font-label-sm text-outline-variant">|</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Prioritize front desk resolutions</span>
+</div>
+<!-- Items Row -->
+<div class="flex flex-wrap items-center gap-2 sm:gap-3 text-body-sm font-body-sm">
+<!-- Group 1: Late Arrivals -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#FEF2F2] border border-[#FECACA] text-[#991B1B]">
+<span class="material-symbols-outlined text-[16px] text-error" data-icon="schedule">schedule</span>
+<span class="font-medium">2 late:</span>
+<span class="font-tabular-data font-semibold">Tamer Zaki</span> <span class="text-xs opacity-75">(15m)</span>,
+              <span class="font-tabular-data font-semibold">Mariam Nader</span> <span class="text-xs opacity-75">(25m)</span>
+</div>
+<!-- Group 2: Not confirmed -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-surface-container border border-[#D3DBE6] text-primary">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="mark_email_unread">mark_email_unread</span>
+<span class="font-medium">3 unconfirmed:</span>
+<span class="text-xs">Hassan Ali, Nour El-Din, Salma</span>
+<button class="ml-1 px-1.5 py-0.5 rounded bg-primary-container text-white text-[11px] font-semibold hover:opacity-90 transition-opacity">
+                SMS All
+              </button>
+</div>
+<!-- Group 3: Unpaid balance -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#FFFBEB] border border-[#FDE68A] text-[#92400E]">
+<span class="material-symbols-outlined text-[16px] text-[#F59E0B]" data-icon="receipt_long">receipt_long</span>
+<span class="font-medium">Unpaid balance:</span>
+<span class="font-tabular-data font-bold">EGP 250</span>
+<span class="text-xs">(Kamal Fouad)</span>
+<button class="ml-1 text-[11px] underline font-semibold hover:text-[#78350F]">Collect</button>
+</div>
+</div>
+</div>
+</section>
+<!-- DAY CALENDAR SCHEDULE: MULTI-COLUMN VIEW -->
+<section class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl overflow-hidden shadow-xs">
+<!-- Header Controls of Calendar Grid -->
+<div class="px-5 py-3 border-b border-[#D3DBE6] flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#F7F9FD]">
+<div class="flex items-center gap-3">
+<h3 class="font-headline-sm text-headline-sm text-[#13263B] font-bold">Doctor Schedules &amp; Room Dispatch</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">3 Active Clinics</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="flex items-center bg-white border border-[#D3DBE6] rounded-xl p-0.5 text-on-surface-variant text-label-sm font-label-sm">
+<button class="p-1 hover:text-on-surface"><span class="material-symbols-outlined text-[16px]" data-icon="chevron_left">chevron_left</span></button>
+<span class="px-2 font-tabular-data">09:00 AM - 01:00 PM</span>
+<button class="p-1 hover:text-on-surface"><span class="material-symbols-outlined text-[16px]" data-icon="chevron_right">chevron_right</span></button>
+</div>
+<button class="p-1.5 text-on-surface-variant hover:text-on-surface rounded-xl border border-[#D3DBE6] bg-white">
+<span class="material-symbols-outlined text-[18px]" data-icon="tune">tune</span>
+</button>
+</div>
+</div>
+<!-- 3 Doctors Grid Columns -->
+<div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#D3DBE6]">
+<!-- ========================================== -->
+<!-- COLUMN 1: Dr. Ahmed Fathy (Cardiology)    -->
+<!-- ========================================== -->
+<div class="flex flex-col bg-white">
+<!-- Column Header -->
+<div class="p-3.5 border-b border-[#D3DBE6] bg-white sticky top-14 z-20">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center font-headline-sm font-bold text-primary">
+                    AF
+                  </div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-[#13263B] font-semibold leading-tight">Dr. Ahmed Fathy</h4>
+<p class="font-label-sm text-label-sm text-secondary font-medium">Cardiology · Clinic 101</p>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#E0F2FE] text-[#0284C7] flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#0284C7]"></span>
+                  Active (3/6)
+                </span>
+</div>
+</div>
+<!-- Appointment Slot Cards List -->
+<div class="p-3 space-y-2.5 flex-1 bg-[#F7F9FD]/50">
+<!-- Slot 1: 09:00 AM - In progress -->
+<div class="bg-white border-2 border-[#1E4164] rounded-xl p-3 shadow-xs transition-all">
+<div class="flex items-center justify-between">
+<span class="font-tabular-data text-body-sm font-bold text-primary">09:00 - 09:30 AM</span>
+<!-- Status chip: In progress -->
+<span class="px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-[#E0F2FE] text-[#0284C7] flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#0284C7]"></span>
+                    In progress
+                  </span>
+</div>
+<div class="mt-2 flex items-start justify-between">
+<div>
+<p class="font-body-md text-body-md font-semibold text-[#13263B]">Hazem Mostafa</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant font-tabular-data">MRN-88410 · ECG Check</p>
+</div>
+<span class="text-label-sm font-label-sm px-1.5 py-0.5 bg-surface-container rounded font-medium text-primary-container">T-01</span>
+</div>
+<div class="mt-2.5 pt-2 border-t border-[#D3DBE6] flex items-center justify-between text-label-sm font-label-sm text-outline">
+<span>Room 101 · Consultation</span>
+<span class="font-tabular-data text-on-surface">Started 09:05</span>
+</div>
+</div>
+<!-- Slot 2: 09:30 AM - Checked In (Waiting) -->
+<div class="bg-white border border-[#D3DBE6] rounded-xl p-3 hover:border-primary-container transition-all">
+<div class="flex items-center justify-between">
+<span class="font-tabular-data text-body-sm font-bold text-on-surface">09:30 - 10:00 AM</span>
+<!-- Status chip: Checked in -->
+<span class="px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-[#FEF3C7] text-[#92400E] flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#F59E0B]"></span>
+                    Checked in
+                  </span>
+</div>
+<div class="mt-2 flex items-start justify-between">
+<div>
+<p class="font-body-md text-body-md font-semibold text-[#13263B]">Nadia Soliman</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant font-tabular-data">MRN-92014 · Follow-up</p>
+</div>
+<span class="text-label-sm font-label-sm px-1.5 py-0.5 bg-surface-container rounded font-medium text-primary-container">T-02</span>
+</div>
+<div class="mt-2.5 pt-2 border-t border-[#D3DBE6] flex items-center justify-between">
+<span class="text-label-sm font-label-sm text-outline">Waiting in lounge (8m)</span>
+<button class="px-2 py-0.5 bg-primary-container text-white text-label-sm font-label-sm rounded hover:opacity-90">Call in</button>
+</div>
+</div>
+<!-- Slot 3: 10:00 AM - Confirmed -->
+<div class="bg-white border border-[#D3DBE6] rounded-xl p-3 hover:border-primary-container transition-all">
+<div class="flex items-center justify-between">
+<span class="font-tabular-data text-body-sm font-bold text-on-surface">10:00 - 10:30 AM</span>
+<!-- Status chip: Confirmed -->
+<span class="px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-[#ECFDF5] text-[#059669] flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
+                    Confirmed
+                  </span>
+</div>
+<div class="mt-2 flex items-start justify-between">
+<div>
+<p class="font-body-md text-body-md font-semibold text-[#13263B]">Sameh Mahmoud</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant font-tabular-data">MRN-77341 · New Patient</p>
+</div>
+<span class="text-label-sm font-label-sm px-1.5 py-0.5 bg-surface-container rounded font-medium text-primary-container">T-03</span>
+</div>
+<div class="mt-2.5 pt-2 border-t border-[#D3DBE6] flex items-center justify-between text-label-sm font-label-sm">
+<span class="text-outline">Insurance: MetLife (Approved)</span>
+<button class="text-secondary hover:underline font-semibold">Fast Check-in</button>
+</div>
+</div>
+<!-- Slot 4: 10:30 AM - Confirmed -->
+<div class="bg-white border border-[#D3DBE6] rounded-xl p-3 hover:border-primary-container transition-all">
+<div class="flex items-center justify-between">
+<span class="font-tabular-data text-body-sm font-bold text-on-surface">10:30 - 11:00 AM</span>
+<span class="px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-[#ECFDF5] text-[#059669] flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
+                    Confirmed
+                  </span>
+</div>
+<div class="mt-2 flex items-start justify-between">
+<div>
+<p class="font-body-md text-body-md font-semibold text-[#13263B]">Gamal Ezzat</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant font-tabular-data">MRN-44219 · Echo Doppler</p>
+</div>
+<span class="text-label-sm font-label-sm px-1.5 py-0.5 bg-surface-container rounded font-medium text-primary-container">T-04</span>
+</div>
+</div>
+</div>
+</div>
+<!-- ========================================== -->
+<!-- COLUMN 2: Dr. Laila Hassan (Pediatrics)   -->
+<!-- ========================================== -->
+<div class="flex flex-col bg-white">
+<!-- Column Header -->
+<div class="p-3.5 border-b border-[#D3DBE6] bg-white sticky top-14 z-20">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-full bg-secondary-container/40 flex items-center justify-center font-headline-sm font-bold text-secondary">
+                    LH
+                  </div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-[#13263B] font-semibold leading-tight">Dr. Laila Hassan</h4>
+<p class="font-label-sm text-label-sm text-secondary font-medium">Pediatrics · Clinic 104</p>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#ECFDF5] text-[#059669] flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
+                  On Schedule (4/5)
+                </span>
+</div>
+</div>
+<!-- Appointment Slot Cards List -->
+<div class="p-3 space-y-2.5 flex-1 bg-[#F7F9FD]/50">
+<!-- Slot 1: 09:15 AM - In progress -->
+<div class="bg-white border-2 border-[#1E4164] rounded-xl p-3 shadow-xs">
+<div class="flex items-center justify-between">
+<span class="font-tabular-data text-body-sm font-bold text-primary">09:15 - 09:45 AM</span>
+<span class="px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-[#E0F2FE] text-[#0284C7] flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#0284C7]"></span>
+                    In progress
+                  </span>
+</div>
+<div class="mt-2 flex items-start justify-between">
+<div>
+<p class="font-body-md text-body-md font-semibold text-[#13263B]">Youssef Omar (4 yrs)</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant font-tabular-data">Parent: Omar Farouk · Vaccination</p>
+</div>
+<span class="text-label-sm font-label-sm px-1.5 py-0.5 bg-surface-container rounded font-medium text-primary-container">T-07</span>
+</div>
+<div class="mt-2.5 pt-2 border-t border-[#D3DBE6] flex items-center justify-between text-label-sm font-label-sm text-outline">
+<span>Vaccine dose: MMR booster</span>
+<span class="font-tabular-data text-on-surface">Started 09:18</span>
+</div>
+</div>
+<!-- Slot 2: 09:45 AM - Checked in -->
+<div class="bg-white border border-[#D3DBE6] rounded-xl p-3 hover:border-primary-container transition-all">
+<div class="flex items-center justify-between">
+<span class="font-tabular-data text-body-sm font-bold text-on-surface">09:45 - 10:15 AM</span>
+<span class="px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-[#FEF3C7] text-[#92400E] flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#F59E0B]"></span>
+                    Checked in
+                  </span>
+</div>
+<div class="mt-2 flex items-start justify-between">
+<div>
+<p class="font-body-md text-body-md font-semibold text-[#13263B]">Farida Karim (8 mos)</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant font-tabular-data">Parent: Dina Nabil · Growth Eval</p>
+</div>
+<span class="text-label-sm font-label-sm px-1.5 py-0.5 bg-surface-container rounded font-medium text-primary-container">T-08</span>
+</div>
+<div class="mt-2.5 pt-2 border-t border-[#D3DBE6] flex items-center justify-between">
+<span class="text-label-sm font-label-sm text-outline">Waiting in lounge (4m)</span>
+<button class="px-2 py-0.5 bg-primary-container text-white text-label-sm font-label-sm rounded hover:opacity-90">Call in</button>
+</div>
+</div>
+<!-- Slot 3: 10:15 AM - Late Flag -->
+<div class="bg-white border border-[#FECACA] rounded-xl p-3 hover:border-error transition-all">
+<div class="flex items-center justify-between">
+<span class="font-tabular-data text-body-sm font-bold text-error">10:15 - 10:45 AM</span>
+<span class="px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-[#FEE2E2] text-[#EF4444] flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#EF4444]"></span>
+                    Late (15m)
+                  </span>
+</div>
+<div class="mt-2 flex items-start justify-between">
+<div>
+<p class="font-body-md text-body-md font-semibold text-[#13263B]">Tamer Zaki (6 yrs)</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant font-tabular-data">Parent: Hany Zaki · Acute fever</p>
+</div>
+<span class="text-label-sm font-label-sm px-1.5 py-0.5 bg-surface-container rounded font-medium text-primary-container">T-09</span>
+</div>
+<div class="mt-2.5 pt-2 border-t border-[#D3DBE6] flex items-center justify-between text-label-sm font-label-sm">
+<span class="text-outline">Sent WhatsApp reminder</span>
+<button class="text-primary hover:underline font-semibold">Call Parent</button>
+</div>
+</div>
+<!-- Slot 4: 10:45 AM - Confirmed -->
+<div class="bg-white border border-[#D3DBE6] rounded-xl p-3 hover:border-primary-container transition-all">
+<div class="flex items-center justify-between">
+<span class="font-tabular-data text-body-sm font-bold text-on-surface">10:45 - 11:15 AM</span>
+<span class="px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-[#ECFDF5] text-[#059669] flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
+                    Confirmed
+                  </span>
+</div>
+<div class="mt-2 flex items-start justify-between">
+<div>
+<p class="font-body-md text-body-md font-semibold text-[#13263B]">Zeina Tarek (2 yrs)</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant font-tabular-data">Parent: Reem Sabry · Routine Check</p>
+</div>
+<span class="text-label-sm font-label-sm px-1.5 py-0.5 bg-surface-container rounded font-medium text-primary-container">T-10</span>
+</div>
+</div>
+</div>
+</div>
+<!-- ========================================== -->
+<!-- COLUMN 3: Dr. Karim Nabil (Internal Med)  -->
+<!-- ========================================== -->
+<div class="flex flex-col bg-white">
+<!-- Column Header -->
+<div class="p-3.5 border-b border-[#D3DBE6] bg-white sticky top-14 z-20">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center font-headline-sm font-bold text-primary">
+                    KN
+                  </div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-[#13263B] font-semibold leading-tight">Dr. Karim Nabil</h4>
+<p class="font-label-sm text-label-sm text-secondary font-medium">Internal Med · Clinic 108</p>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#FEF3C7] text-[#92400E] flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#F59E0B]"></span>
+                  Busy (5/7)
+                </span>
+</div>
+</div>
+<!-- Appointment Slot Cards List -->
+<div class="p-3 space-y-2.5 flex-1 bg-[#F7F9FD]/50">
+<!-- Slot 1: 09:00 AM - Completed -->
+<div class="bg-white border border-[#D3DBE6] opacity-80 rounded-xl p-3">
+<div class="flex items-center justify-between">
+<span class="font-tabular-data text-body-sm font-bold text-on-surface-variant line-through">09:00 - 09:30 AM</span>
+<span class="px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-[#ECFDF5] text-[#059669] flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+                    Completed
+                  </span>
+</div>
+<div class="mt-2 flex items-start justify-between">
+<div>
+<p class="font-body-md text-body-md font-semibold text-on-surface-variant">Alyaa Mansour</p>
+<p class="font-body-sm text-body-sm text-outline font-tabular-data">MRN-55102 · Lab review</p>
+</div>
+<span class="text-label-sm font-label-sm px-1.5 py-0.5 bg-surface-container rounded font-medium text-outline">T-11</span>
+</div>
+<div class="mt-2 pt-2 border-t border-[#D3DBE6] text-label-sm font-label-sm text-outline flex justify-between">
+<span>Prescription issued</span>
+<span>Copay collected</span>
+</div>
+</div>
+<!-- Slot 2: 09:30 AM - In progress (Walk-in) -->
+<div class="bg-white border-2 border-[#1E4164] rounded-xl p-3 shadow-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="font-tabular-data text-body-sm font-bold text-primary">09:30 - 10:00 AM</span>
+<span class="px-1.5 py-0.5 text-[10px] bg-surface-container text-primary font-bold rounded">WALK-IN</span>
+</div>
+<span class="px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-[#E0F2FE] text-[#0284C7] flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#0284C7]"></span>
+                    In progress
+                  </span>
+</div>
+<div class="mt-2 flex items-start justify-between">
+<div>
+<p class="font-body-md text-body-md font-semibold text-[#13263B]">Mariam Nader</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant font-tabular-data">MRN-61882 · Abdominal Pain</p>
+</div>
+<span class="text-label-sm font-label-sm px-1.5 py-0.5 bg-surface-container rounded font-medium text-primary-container">T-12</span>
+</div>
+<div class="mt-2.5 pt-2 border-t border-[#D3DBE6] flex items-center justify-between text-label-sm font-label-sm text-outline">
+<span>Room 108 · Urgent check</span>
+<span class="font-tabular-data text-on-surface">Started 09:34</span>
+</div>
+</div>
+<!-- Slot 3: 10:00 AM - Unpaid Balance Alert -->
+<div class="bg-white border border-[#D3DBE6] rounded-xl p-3 hover:border-primary-container transition-all">
+<div class="flex items-center justify-between">
+<span class="font-tabular-data text-body-sm font-bold text-on-surface">10:00 - 10:30 AM</span>
+<span class="px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-[#FEF3C7] text-[#92400E] flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#F59E0B]"></span>
+                    Checked in
+                  </span>
+</div>
+<div class="mt-2 flex items-start justify-between">
+<div>
+<p class="font-body-md text-body-md font-semibold text-[#13263B]">Kamal Fouad</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant font-tabular-data">MRN-19283 · Chronic Diabetes</p>
+</div>
+<span class="text-label-sm font-label-sm px-1.5 py-0.5 bg-surface-container rounded font-medium text-primary-container">T-13</span>
+</div>
+<div class="mt-2.5 pt-2 border-t border-[#D3DBE6] flex items-center justify-between text-label-sm font-label-sm">
+<span class="text-[#FF5E00] font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="warning">warning</span>
+                    EGP 250 Copay Due
+                  </span>
+<button class="px-2 py-0.5 bg-surface-container text-primary font-semibold rounded hover:bg-surface-container-high">
+                    Collect now
+                  </button>
+</div>
+</div>
+<!-- Slot 4: 10:30 AM - Walk-in Reserved Slot -->
+<div class="border-2 border-dashed border-[#D3DBE6] bg-white/60 rounded-xl p-3 text-center flex flex-col items-center justify-center py-5">
+<span class="material-symbols-outlined text-outline text-[22px]" data-icon="add_circle">add_circle</span>
+<p class="font-label-md text-label-md text-on-surface-variant font-semibold mt-1">10:30 AM Reserved Walk-in Slot</p>
+<p class="font-body-sm text-body-sm text-outline">Open for walk-in front desk assignment</p>
+<button class="mt-2 px-3 py-1 bg-surface-container text-primary text-label-sm font-label-sm font-semibold rounded-xl hover:bg-surface-container-high transition-colors">
+                  Assign Patient
+                </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow Egypt - Visit Checkout &amp; Invoice</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed": "#ffdbce",
+            "surface-dim": "#c9dbf7",
+            "primary": "#002b4c",
+            "primary-fixed": "#d1e4ff",
+            "on-error-container": "#93000a",
+            "tertiary-fixed-dim": "#ffb599",
+            "error-container": "#ffdad6",
+            "on-tertiary-container": "#ff8b5b",
+            "tertiary-container": "#722600",
+            "surface-container-high": "#dbe9ff",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "on-secondary-fixed-variant": "#00497c",
+            "secondary-container": "#7cbafe",
+            "secondary-fixed": "#d1e4ff",
+            "on-tertiary": "#ffffff",
+            "on-background": "#081c31",
+            "surface-bright": "#f8f9ff",
+            "secondary-fixed-dim": "#9ecaff",
+            "on-primary-fixed": "#001d36",
+            "on-primary-container": "#8dadd6",
+            "surface-container-highest": "#d2e4ff",
+            "inverse-primary": "#a8c9f3",
+            "surface": "#f8f9ff",
+            "surface-tint": "#406185",
+            "tertiary": "#4e1700",
+            "outline": "#73777f",
+            "outline-variant": "#c3c6cf",
+            "surface-container-low": "#eff4ff",
+            "on-primary": "#ffffff",
+            "error": "#ba1a1a",
+            "on-surface-variant": "#43474e",
+            "on-surface": "#081c31",
+            "on-secondary-fixed": "#001d36",
+            "on-tertiary-fixed": "#370e00",
+            "inverse-on-surface": "#eaf1ff",
+            "surface-container": "#e5eeff",
+            "inverse-surface": "#1f3247",
+            "primary-fixed-dim": "#a8c9f3",
+            "background": "#f8f9ff",
+            "on-secondary": "#ffffff",
+            "secondary": "#1061a0",
+            "on-primary-fixed-variant": "#27496c",
+            "on-secondary-container": "#004a7d",
+            "surface-variant": "#d2e4ff",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "primary-container": "#1e4164"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-lg": "1rem",
+            "space-sm": "0.5rem",
+            "gutter-desktop": "1.5rem",
+            "margin-desktop": "2rem",
+            "space-md": "0.75rem",
+            "space-xl": "1.5rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem",
+            "margin": "1rem"
+          },
+          "fontFamily": {
+            "display-lg": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "tabular-data": ["Inter"],
+            "label-sm": ["Inter"]
+          },
+          "fontSize": {
+            "display-lg": ["2rem", { "lineHeight": "2.5rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-md": ["1.25rem", { "lineHeight": "1.75rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-md": ["0.875rem", { "lineHeight": "1.25rem", "fontWeight": "400" }],
+            "label-md": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.025em", "fontWeight": "600" }],
+            "headline-sm": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "600" }],
+            "body-lg": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "400" }],
+            "body-sm": ["0.75rem", { "lineHeight": "1rem", "fontWeight": "400" }],
+            "headline-lg": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "tabular-data": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0", "fontWeight": "500" }],
+            "label-sm": ["0.6875rem", { "lineHeight": "0.875rem", "letterSpacing": "0.05em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="h-full bg-[#F7F9FD] text-on-surface font-body-md antialiased overflow-x-hidden selection:bg-primary selection:text-on-primary">
+<!-- ================= SIDEBAR (From Shared Components JSON) ================= -->
+<aside class="fixed top-0 left-0 h-screen w-64 z-40 bg-surface-container-lowest border-r border-[#D3DBE6]">
+<div class="flex flex-col justify-between h-full p-4">
+<!-- Top Brand Section -->
+<div>
+<div class="flex items-center gap-3 px-2 py-3 border-b border-[#D3DBE6]">
+<div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="local_hospital">local_hospital</span>
+</div>
+<div class="flex flex-col overflow-hidden">
+<span class="font-headline-sm text-headline-sm font-bold text-primary tracking-tight truncate">ClinicFlow Egypt</span>
+<span class="font-label-sm text-label-sm text-secondary font-medium flex items-center gap-0.5">
+              Nasr City ▾
+            </span>
+</div>
+</div>
+<!-- Quick CTA -->
+<div class="mt-4 px-1">
+<button class="w-full flex items-center justify-center gap-2 py-2 px-3 bg-surface-container-low hover:bg-surface-container text-primary font-label-md text-label-md rounded-xl border border-[#D3DBE6] transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="add_circle">add_circle</span>
+<span>Quick Check-in</span>
+</button>
+</div>
+<!-- Navigation Links -->
+<nav aria-label="Main Navigation" class="mt-5 space-y-1">
+<!-- Today -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-md text-label-md">Today</span>
+</a>
+<!-- Queue -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="format_list_numbered">format_list_numbered</span>
+<span class="font-label-md text-label-md">Queue</span>
+</a>
+<!-- Patients -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="group">group</span>
+<span class="font-label-md text-label-md">Patients</span>
+</a>
+<!-- Book -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="add_box">add_box</span>
+<span class="font-label-md text-label-md">Book</span>
+</a>
+<!-- Payments: ACTIVE ITEM (Matches 'Payments' from JSON & prompt requirements) -->
+<a class="flex items-center gap-3 px-3 py-2 bg-surface-container text-primary font-semibold rounded-lg border-l-4 border-primary-container" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="payments">payments</span>
+<span class="font-label-md text-label-md">Payments</span>
+</a>
+<!-- Cash session -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="point_of_sale">point_of_sale</span>
+<span class="font-label-md text-label-md">Cash session</span>
+</a>
+</nav>
+</div>
+<!-- Footer User Profile -->
+<div class="pt-3 border-t border-[#D3DBE6]">
+<div class="flex items-center gap-3 px-2 py-2 rounded-xl bg-[#F7F9FD] border border-[#D3DBE6]">
+<div class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-headline-sm text-headline-sm font-bold">
+            MS
+          </div>
+<div class="flex flex-col truncate">
+<span class="font-label-md text-label-md font-semibold text-primary truncate">Mona Samir</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Receptionist · Desk 2</span>
+</div>
+<span class="material-symbols-outlined text-[18px] text-outline ml-auto" data-icon="account_circle">account_circle</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- ================= TOP APP BAR (From Shared Components JSON) ================= -->
+<header class="fixed top-0 left-64 right-0 h-14 bg-surface-container-lowest border-b border-[#D3DBE6] z-30 flex items-center justify-between px-6">
+<!-- Left: Global Context & Active File Identifier -->
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm font-bold text-primary">Visit Checkout &amp; Invoice #INV-2025-8842</span>
+<span class="px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-[#ECFDF5] text-[#059669] border border-[#A7F3D0] flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
+          Verified Consultation
+        </span>
+</div>
+<!-- Quick Search input -->
+<div class="relative w-72 hidden xl:block">
+<span class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[18px]" data-icon="search">search</span>
+</span>
+<input class="w-full pl-8 pr-3 py-1.5 text-body-sm font-body-sm bg-[#FFFFFF] border border-[#D3DBE6] rounded-xl focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" placeholder="Search patient, phone, or MRN (Ctrl+K)..." type="text"/>
+</div>
+</div>
+<!-- Right: Language Toggle, Notifications, Emergency CTA -->
+<div class="flex items-center gap-3">
+<button class="px-2.5 py-1 text-label-md font-label-md text-on-surface-variant hover:text-primary rounded-lg border border-[#D3DBE6] bg-surface-container-lowest hover:bg-[#F7F9FD] transition-colors">
+        EN | عربي
+      </button>
+<button aria-label="Notifications" class="relative p-2 text-on-surface-variant hover:text-primary hover:bg-[#F7F9FD] rounded-lg border border-[#D3DBE6] transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span>
+<!-- Tertiary Solar Orange badge exclusively used for alerts -->
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#FF5E00]"></span>
+</button>
+<div class="h-6 w-px bg-[#D3DBE6]"></div>
+<button class="flex items-center gap-1.5 px-3 py-1.5 bg-[#FEE2E2] text-error hover:bg-[#FCD8D8] border border-[#FCA5A5] rounded-xl font-label-md text-label-md transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="emergency">emergency</span>
+<span>Emergency Admit</span>
+</button>
+</div>
+</header>
+<!-- ================= MAIN WORKSPACE CANVAS ================= -->
+<main class="ml-64 pt-14 min-h-screen p-6 xl:p-8 bg-[#F7F9FD]">
+<!-- Breadcrumb / Workflow Status Header Bar -->
+<div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-on-surface-variant">
+<span>Reception Workspace</span>
+<span>/</span>
+<span>Payments &amp; Billing</span>
+<span>/</span>
+<span class="text-primary font-semibold">Active Checkout #INV-2025-8842</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-body-sm font-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline" data-icon="schedule">schedule</span>
+          Session time elapsed: <strong class="text-primary font-tabular-data text-tabular-data">03:42 min</strong>
+</span>
+<button class="text-primary text-label-sm font-label-sm hover:underline flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="print">print</span>
+          Reprint Last Receipt
+        </button>
+</div>
+</div>
+<!-- Dual Column Responsive Grid (60% / 40% widescreen workstation) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<!-- ================= LEFT COLUMN: Patient & Visit Invoice Breakdown (7 cols = ~58%) ================= -->
+<div class="lg:col-span-7 space-y-6">
+<!-- Patient Header Card -->
+<div class="bg-[#FFFFFF] border border-[#D3DBE6] rounded-xl p-5 shadow-none transition-shadow hover:shadow-[0px_2px_4px_rgba(19,38,59,0.04)]">
+<div class="flex items-start justify-between">
+<div class="flex items-start gap-4">
+<!-- Avatar or Patient Icon Badge -->
+<div class="w-12 h-12 rounded-xl bg-surface-container text-primary flex items-center justify-center font-headline-md text-headline-md font-bold">
+                HM
+              </div>
+<div>
+<div class="flex items-center gap-2">
+<h1 class="font-headline-md text-headline-md text-primary font-bold">Hazem Mostafa</h1>
+<span class="px-2 py-0.5 bg-[#EFF4FF] text-secondary border border-secondary-fixed text-label-sm font-label-sm rounded-full">
+                    MRN CF-002148
+                  </span>
+</div>
+<div class="mt-1 flex flex-wrap items-center gap-y-1 gap-x-4 text-body-sm font-body-sm text-on-surface-variant">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline" data-icon="badge">badge</span>
+                    National ID: 28804150103291
+                  </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline" data-icon="phone">phone</span>
+                    +20 10 2489 3102
+                  </span>
+</div>
+</div>
+</div>
+<!-- Discharge Status Pill -->
+<div class="text-right">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-label-sm font-label-sm bg-[#E0F2FE] text-[#0284C7] border border-[#BAE6FD]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#0284C7]"></span>
+                Ready for Discharge
+              </span>
+<p class="mt-1 text-label-sm font-label-sm text-on-surface-variant">Ticket: #A-24 (11:20 AM)</p>
+</div>
+</div>
+<!-- Physician & Consultation Meta bar -->
+<div class="mt-4 pt-4 border-t border-[#D3DBE6] grid grid-cols-1 sm:grid-cols-3 gap-3 bg-[#F7F9FD] p-3 rounded-xl border">
+<div>
+<span class="block text-label-sm font-label-sm text-outline">Attending Doctor</span>
+<span class="font-headline-sm text-headline-sm text-primary font-semibold flex items-center gap-1">
+                Dr. Ahmed Fathy
+              </span>
+</div>
+<div>
+<span class="block text-label-sm font-label-sm text-outline">Clinical Specialty</span>
+<span class="font-body-md text-body-md text-[#015C9A] font-medium">Cardiology (OPD)</span>
+</div>
+<div>
+<span class="block text-label-sm font-label-sm text-outline">Consultation Room</span>
+<span class="font-body-md text-body-md text-primary font-medium">Room 101 · Wing B</span>
+</div>
+</div>
+</div>
+<!-- Itemized Invoice Table Card -->
+<div class="bg-[#FFFFFF] border border-[#D3DBE6] rounded-xl overflow-hidden shadow-none">
+<div class="px-5 py-4 border-b border-[#D3DBE6] flex items-center justify-between bg-[#FFFFFF]">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary font-bold">Itemized Billable Services</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Verified procedures submitted by clinical attending station</p>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant font-tabular-data">Currency: Egyptian Pound (EGP)</span>
+</div>
+<!-- Table Header -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-[#F7F9FD] border-b border-[#D3DBE6]">
+<th class="py-2.5 px-5 font-label-sm text-label-sm text-on-surface tracking-wider uppercase font-semibold">Service Description</th>
+<th class="py-2.5 px-4 font-label-sm text-label-sm text-on-surface tracking-wider uppercase font-semibold text-center">Category</th>
+<th class="py-2.5 px-4 font-label-sm text-label-sm text-on-surface tracking-wider uppercase font-semibold text-right">Qty</th>
+<th class="py-2.5 px-5 font-label-sm text-label-sm text-on-surface tracking-wider uppercase font-semibold text-right">Unit Price</th>
+<th class="py-2.5 px-5 font-label-sm text-label-sm text-on-surface tracking-wider uppercase font-semibold text-right">Total Price</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#D3DBE6]">
+<!-- Row 1: Consultation -->
+<tr class="hover:bg-[#F8FAFC] transition-colors">
+<td class="py-3 px-5">
+<div class="font-headline-sm text-headline-sm text-primary">Cardiology Consultation (New)</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Comprehensive specialized examination &amp; triage</div>
+</td>
+<td class="py-3 px-4 text-center">
+<span class="px-2 py-0.5 text-label-sm font-label-sm bg-surface-container rounded text-primary">Clinical OPD</span>
+</td>
+<td class="py-3 px-4 text-right font-tabular-data text-tabular-data text-primary">1</td>
+<td class="py-3 px-5 text-right font-tabular-data text-tabular-data text-on-surface-variant">450.00</td>
+<td class="py-3 px-5 text-right font-tabular-data text-tabular-data text-primary font-semibold">EGP 450.00</td>
+</tr>
+<!-- Row 2: ECG -->
+<tr class="hover:bg-[#F8FAFC] transition-colors">
+<td class="py-3 px-5">
+<div class="font-headline-sm text-headline-sm text-primary">ECG Standard 12-Lead Diagnostic</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">In-clinic automated rhythm read &amp; physician review</div>
+</td>
+<td class="py-3 px-4 text-center">
+<span class="px-2 py-0.5 text-label-sm font-label-sm bg-surface-container rounded text-primary">Diagnostics</span>
+</td>
+<td class="py-3 px-4 text-right font-tabular-data text-tabular-data text-primary">1</td>
+<td class="py-3 px-5 text-right font-tabular-data text-tabular-data text-on-surface-variant">150.00</td>
+<td class="py-3 px-5 text-right font-tabular-data text-tabular-data text-primary font-semibold">EGP 150.00</td>
+</tr>
+<!-- Row 3: Discharge Processing -->
+<tr class="hover:bg-[#F8FAFC] transition-colors">
+<td class="py-3 px-5">
+<div class="font-headline-sm text-headline-sm text-primary">Prescription Discharge Processing</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">E-prescription routing &amp; pharmacy synchronization</div>
+</td>
+<td class="py-3 px-4 text-center">
+<span class="px-2 py-0.5 text-label-sm font-label-sm bg-[#EFF4FF] rounded text-secondary">Service</span>
+</td>
+<td class="py-3 px-4 text-right font-tabular-data text-tabular-data text-primary">1</td>
+<td class="py-3 px-5 text-right font-tabular-data text-tabular-data text-on-surface-variant">0.00</td>
+<td class="py-3 px-5 text-right font-tabular-data text-tabular-data text-on-surface-variant font-medium">EGP 0.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Financial Accounting Computation Block -->
+<div class="bg-[#F7F9FD] border-t border-[#D3DBE6] p-5 space-y-2.5">
+<!-- Gross Subtotal -->
+<div class="flex items-center justify-between text-body-md font-body-md">
+<span class="text-on-surface-variant">Gross Clinical Total:</span>
+<span class="font-tabular-data text-tabular-data font-semibold text-primary">EGP 600.00</span>
+</div>
+<!-- Deductions: Booking Deposit -->
+<div class="flex items-center justify-between text-body-md font-body-md">
+<span class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="check_circle">check_circle</span>
+                Pre-paid Booking Deposit <span class="text-label-sm font-label-sm text-outline">(Receipt #RC-9910)</span>:
+              </span>
+<span class="font-tabular-data text-tabular-data font-semibold text-primary-container">- EGP 100.00</span>
+</div>
+<!-- Deductions: Insurance Copay -->
+<div class="flex items-center justify-between text-body-md font-body-md">
+<span class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="health_and_safety">health_and_safety</span>
+                Insurance Copay <span class="text-label-sm font-label-sm text-outline">(80% Covered by Allianz Egypt)</span>:
+              </span>
+<span class="font-tabular-data text-tabular-data font-semibold text-primary-container">- EGP 150.00</span>
+</div>
+<!-- Insurer Meta tag -->
+<div class="p-2.5 bg-[#FFFFFF] rounded-xl border border-[#D3DBE6] flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="verified_user">verified_user</span>
+<span class="text-label-sm font-label-sm text-primary font-medium">Allianz Healthcare Egypt · Policy #ALLZ-994022-EG</span>
+</div>
+<span class="text-label-sm font-label-sm text-[#059669] font-medium">Claim Approved (Pre-auth #AP-88)</span>
+</div>
+<div class="h-px bg-[#D3DBE6] my-2"></div>
+<!-- Highlighted TOTAL AMOUNT DUE -->
+<div class="flex items-center justify-between pt-1">
+<div>
+<span class="font-headline-sm text-headline-sm font-bold text-primary block">TOTAL AMOUNT DUE</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Net copay payable by patient at desk</span>
+</div>
+<div class="text-right">
+<div class="font-headline-lg text-[28px] font-bold text-[#13263B] font-tabular-data tracking-tight leading-none">
+                  EGP 350.00
+                </div>
+<span class="text-label-sm font-label-sm text-outline mt-1 block">Includes clinic VAT &amp; stamp fees</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Audit & Receipt Meta Footer Note -->
+<div class="flex items-center justify-between text-label-sm font-label-sm text-outline px-1">
+<span>Fiscal Device Tax ID: 394-019-332 (ETA Compliant)</span>
+<span>Cashier: Mona Samir (Terminal #POS-02)</span>
+</div>
+</div>
+<!-- ================= RIGHT COLUMN: Payment Collection & Discharge Workflow (5 cols = ~42%) ================= -->
+<div class="lg:col-span-5 space-y-6">
+<!-- Payment Mode Selector -->
+<div class="bg-[#FFFFFF] border border-[#D3DBE6] rounded-xl p-5 shadow-none">
+<div class="flex items-center justify-between mb-3">
+<h2 class="font-headline-sm text-headline-sm text-primary font-bold">Payment Method Selection</h2>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Step 1 of 2</span>
+</div>
+<div class="grid grid-cols-1 gap-2.5">
+<!-- [Cash] (Selected, with active navy #1E4164 outline & tick) -->
+<button class="w-full text-left p-3.5 rounded-xl border-2 border-primary-container bg-[#F7F9FD] flex items-center justify-between transition-all" type="button">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-primary-container text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]" data-icon="payments">payments</span>
+</div>
+<div>
+<div class="font-headline-sm text-headline-sm font-bold text-primary">Cash Payment</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant">Front desk register drawer</div>
+</div>
+</div>
+<div class="w-6 h-6 rounded-full bg-primary-container text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]" data-icon="check">check</span>
+</div>
+</button>
+<!-- [Card / POS Terminal (Geidea / Banque Misr)] -->
+<button class="w-full text-left p-3.5 rounded-xl border border-[#D3DBE6] bg-[#FFFFFF] hover:border-primary-container hover:bg-[#F8FAFC] flex items-center justify-between transition-all" type="button">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-surface-container text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]" data-icon="credit_card">credit_card</span>
+</div>
+<div>
+<div class="font-headline-sm text-headline-sm font-semibold text-primary">Card / POS Terminal</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant">Geidea &amp; Banque Misr Terminals</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline text-[20px]" data-icon="chevron_right">chevron_right</span>
+</button>
+<!-- [Digital Wallet (Vodafone Cash / InstaPay QR)] -->
+<button class="w-full text-left p-3.5 rounded-xl border border-[#D3DBE6] bg-[#FFFFFF] hover:border-primary-container hover:bg-[#F8FAFC] flex items-center justify-between transition-all" type="button">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-surface-container text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]" data-icon="qr_code_scanner">qr_code_scanner</span>
+</div>
+<div>
+<div class="font-headline-sm text-headline-sm font-semibold text-primary">Digital Wallet / QR</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant">Vodafone Cash / InstaPay QR</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline text-[20px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Cash Collection Calculator Card -->
+<div class="bg-[#FFFFFF] border border-[#D3DBE6] rounded-xl p-5 shadow-none space-y-4">
+<div class="flex items-center justify-between border-b border-[#D3DBE6] pb-3">
+<h2 class="font-headline-sm text-headline-sm text-primary font-bold">Cash Collection Calculator</h2>
+<span class="text-label-sm font-label-sm text-outline font-tabular-data">Auto-balancing</span>
+</div>
+<!-- Fixed Amount Due display -->
+<div class="flex items-center justify-between p-3 rounded-xl bg-[#F7F9FD] border border-[#D3DBE6]">
+<span class="text-body-md font-body-md text-on-surface-variant">Amount Due:</span>
+<span class="font-headline-sm text-headline-sm font-bold text-primary font-tabular-data">EGP 350.00</span>
+</div>
+<!-- Amount Received Input & Quick Fill Pills -->
+<div>
+<label class="block text-label-sm font-label-sm text-primary font-semibold mb-1.5" for="cash-received-input">
+              Amount Received from Patient
+            </label>
+<div class="relative">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-on-surface-variant font-bold text-body-md">
+                EGP
+              </span>
+<input class="w-full pl-14 pr-4 py-2.5 font-headline-sm text-headline-sm font-bold text-primary font-tabular-data bg-[#FFFFFF] border-2 border-primary-container rounded-xl focus:outline-none focus:ring-2 focus:ring-[#015C9A] transition-all" id="cash-received-input" type="text" value="400.00"/>
+<span class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-label-sm font-label-sm text-outline">
+                Cash Tendered
+              </span>
+</div>
+<!-- Quick fill buttons: [350], [400], [500] -->
+<div class="mt-2.5 flex items-center gap-2">
+<span class="text-label-sm font-label-sm text-outline">Quick fill:</span>
+<button class="px-3 py-1 bg-surface-container-low hover:bg-surface-container text-primary font-tabular-data text-label-md font-label-md rounded-lg border border-[#D3DBE6] transition-colors" type="button">
+                EGP 350
+              </button>
+<button class="px-3 py-1 bg-primary text-on-primary font-tabular-data text-label-md font-label-md rounded-lg border border-primary transition-colors" type="button">
+                EGP 400
+              </button>
+<button class="px-3 py-1 bg-surface-container-low hover:bg-surface-container text-primary font-tabular-data text-label-md font-label-md rounded-lg border border-[#D3DBE6] transition-colors" type="button">
+                EGP 500
+              </button>
+</div>
+</div>
+<!-- Change to Return Container (prominently displayed in emerald green tint) -->
+<div class="p-4 rounded-xl bg-[#ECFDF5] border border-[#A7F3D0] flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-[#10B981] text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]" data-icon="currency_exchange">currency_exchange</span>
+</div>
+<div>
+<span class="block text-label-sm font-label-sm uppercase font-semibold text-[#065F46] tracking-wider">Change to Return</span>
+<span class="font-headline-lg text-headline-lg font-bold text-[#065F46] font-tabular-data">
+                  EGP 50.00
+                </span>
+</div>
+</div>
+<div class="text-right">
+<span class="px-2.5 py-1 rounded-full text-label-sm font-label-sm bg-[#D1FAE5] text-[#065F46] font-medium border border-[#6EE7B7]">
+                Exact Change Ready
+              </span>
+</div>
+</div>
+</div>
+<!-- Doctor Discharge Notes & Suggested Follow-up Card -->
+<div class="bg-[#FFFFFF] border border-[#D3DBE6] rounded-xl p-5 shadow-none space-y-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]" data-icon="clinical_notes">clinical_notes</span>
+<h3 class="font-headline-sm text-headline-sm text-primary font-bold">Doctor Discharge Notes &amp; Follow-up</h3>
+</div>
+<div class="p-3 bg-[#EFF4FF] border border-secondary-fixed rounded-xl">
+<p class="font-body-sm text-body-sm text-primary leading-relaxed">
+<strong>Dr. Ahmed Fathy</strong> requested follow-up in 14 days (suggested date: <strong>Tuesday, 07 November 2025</strong>). Patient ordered to monitor resting blood pressure twice daily.
+            </p>
+</div>
+<!-- Follow-up booking shortcut button -->
+<button class="w-full py-2.5 px-4 bg-[#FFFFFF] hover:bg-[#F7F9FD] text-primary border border-primary-container rounded-xl font-label-md text-label-md font-semibold flex items-center justify-center gap-2 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="event_available">event_available</span>
+<span>+ Book Follow-up Slot (7 Nov)</span>
+</button>
+</div>
+<!-- Action Bar Card: Discharge & Print Receipt -->
+<div class="bg-[#FFFFFF] border border-[#D3DBE6] rounded-xl p-4 shadow-none space-y-2.5">
+<button class="w-full py-3 px-4 bg-primary-container hover:bg-primary text-on-primary font-headline-sm text-headline-sm font-bold rounded-xl shadow-sm flex items-center justify-center gap-2 transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="print">print</span>
+<span>Print Receipt &amp; Complete Discharge (Enter)</span>
+</button>
+<button class="w-full py-2.5 px-4 bg-[#FFFFFF] hover:bg-[#F7F9FD] text-primary border border-[#D3DBE6] hover:border-primary-container rounded-xl font-label-md text-label-md transition-colors flex items-center justify-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px] text-outline" data-icon="forward_to_inbox">forward_to_inbox</span>
+<span>Email / SMS Invoice</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

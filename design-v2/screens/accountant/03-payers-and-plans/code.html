@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow Accountant Workspace - Payers &amp; Plans</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-dim": "#d1dbeb",
+            "tertiary-container": "#722600",
+            "surface": "#f8f9ff",
+            "secondary": "#4e6077",
+            "inverse-on-surface": "#eaf1ff",
+            "on-secondary": "#ffffff",
+            "tertiary-fixed": "#ffdbce",
+            "on-tertiary-container": "#ff8b5b",
+            "on-error-container": "#93000a",
+            "surface-variant": "#d9e3f4",
+            "error": "#ba1a1a",
+            "surface-container-lowest": "#ffffff",
+            "surface-tint": "#406185",
+            "on-secondary-container": "#52647c",
+            "surface-container-highest": "#d9e3f4",
+            "surface-bright": "#f8f9ff",
+            "on-tertiary": "#ffffff",
+            "on-error": "#ffffff",
+            "outline": "#73777f",
+            "inverse-surface": "#27313e",
+            "outline-variant": "#c3c6cf",
+            "primary-container": "#1e4164",
+            "secondary-container": "#cee1fd",
+            "on-tertiary-fixed": "#370e00",
+            "on-surface-variant": "#43474e",
+            "background": "#f8f9ff",
+            "primary-fixed-dim": "#a8c9f3",
+            "surface-container-high": "#dfe9fa",
+            "secondary-fixed-dim": "#b5c8e3",
+            "tertiary": "#4e1700",
+            "on-secondary-fixed": "#081c31",
+            "error-container": "#ffdad6",
+            "tertiary-fixed-dim": "#ffb599",
+            "primary-fixed": "#d1e4ff",
+            "on-secondary-fixed-variant": "#36485f",
+            "surface-container-low": "#eef4ff",
+            "primary": "#002b4c",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "surface-container": "#e5efff",
+            "on-surface": "#121c28",
+            "on-primary": "#ffffff",
+            "on-background": "#121c28",
+            "secondary-fixed": "#d2e4ff",
+            "inverse-primary": "#a8c9f3",
+            "on-primary-fixed-variant": "#27496c",
+            "on-primary-container": "#8dadd6",
+            "on-primary-fixed": "#001d36"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin-desktop": "2rem",
+            "space-xl": "1.5rem",
+            "margin-tablet": "1.5rem",
+            "gutter-sm": "0.75rem",
+            "gutter": "1rem",
+            "space-md": "0.75rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "margin": "1rem",
+            "space-lg": "1rem"
+          },
+          "fontFamily": {
+            "body-sm": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "label-lg": ["Inter"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-xl": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+</head>
+<body class="h-full bg-surface text-on-surface font-body-md antialiased overflow-x-hidden selection:bg-secondary-container selection:text-primary">
+<!-- Desktop Fixed SideNavBar (JSON Blueprint Anchor) -->
+<aside class="fixed top-0 left-0 h-full w-[260px] flex flex-col justify-between p-4 bg-surface-container-lowest border-r border-outline-variant z-40">
+<div class="flex flex-col gap-6">
+<!-- ClinicFlow Brand Header -->
+<div class="flex flex-col px-2 pt-1">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[20px]" data-icon="local_hospital">local_hospital</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight leading-none">ClinicFlow Egypt</h1>
+<p class="font-label-sm text-label-sm text-secondary mt-1 flex items-center gap-1 cursor-pointer hover:text-primary transition-colors">
+<span>All branches ▾</span>
+</p>
+</div>
+</div>
+</div>
+<!-- Quick Action CTA -->
+<div class="px-1">
+<button class="w-full h-10 px-3 bg-surface-container-low text-primary border border-outline-variant rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 hover:bg-surface-container transition-colors cursor-pointer select-none active:scale-[0.99]" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="add_circle">add_circle</span>
+<span>New Transaction</span>
+</button>
+</div>
+<!-- Navigation Tabs (Exact JSON Match: Payers & plans ACTIVE) -->
+<nav class="flex flex-col gap-1 px-1">
+<!-- Overview -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-low transition-colors cursor-pointer select-none" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+<!-- Invoices -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-low transition-colors cursor-pointer select-none" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-md text-label-md">Invoices</span>
+</a>
+<!-- Cash sessions -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-low transition-colors cursor-pointer select-none" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="point_of_sale">point_of_sale</span>
+<span class="font-label-md text-label-md">Cash sessions</span>
+</a>
+<!-- Payers & plans (ACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container-low text-primary font-semibold border-l-4 border-primary cursor-pointer select-none" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="assured_workload">assured_workload</span>
+<span class="font-label-md text-label-md">Payers &amp; plans</span>
+</a>
+<!-- Claims -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-low transition-colors cursor-pointer select-none" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="assignment_turned_in">assignment_turned_in</span>
+<span class="font-label-md text-label-md">Claims</span>
+</a>
+<!-- Reports -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-low transition-colors cursor-pointer select-none" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="bar_chart">bar_chart</span>
+<span class="font-label-md text-label-md">Reports</span>
+</a>
+</nav>
+</div>
+<!-- Sidebar Bottom User Profile Card -->
+<div class="pt-4 border-t border-outline-variant">
+<div class="flex items-center gap-3 p-2 rounded-lg bg-surface-bright border border-outline-variant/60">
+<span class="material-symbols-outlined text-[28px] text-primary-container" data-icon="account_circle">account_circle</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-semibold truncate">Youssef Kamal · Accountant</span>
+<span class="font-label-sm text-label-sm text-secondary truncate">Maadi Flagship Clinic</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Desktop TopNavBar (JSON Blueprint Anchor) -->
+<header class="fixed top-0 right-0 left-[260px] h-16 px-6 flex items-center justify-between bg-surface-container-lowest border-b border-outline-variant z-30">
+<div class="flex items-center gap-6 flex-1 max-w-2xl">
+<!-- Title -->
+<h2 class="font-headline-sm text-headline-sm text-primary font-bold tracking-tight whitespace-nowrap">Insurance Payers &amp; Coverage Rules</h2>
+<!-- Search Input -->
+<div class="relative w-full max-w-md">
+<span class="absolute inset-y-0 left-3 flex items-center pointer-events-none text-secondary">
+<span class="material-symbols-outlined text-[18px]" data-icon="search">search</span>
+</span>
+<input class="w-full h-10 pl-9 pr-4 rounded-lg bg-surface-bright border border-outline-variant font-body-sm text-body-sm text-on-surface placeholder:text-secondary focus:outline-none focus:border-surface-tint focus:ring-1 focus:ring-surface-tint transition-all" placeholder="Search insurer, TPA, network tier, or service code..." type="text"/>
+</div>
+</div>
+<!-- Right Controls: Language, Notifications with tiny accent orange pip, Add Button -->
+<div class="flex items-center gap-4">
+<button class="font-label-md text-label-md text-secondary hover:text-primary transition-colors cursor-pointer px-2 py-1" type="button">
+        EN | عربي
+      </button>
+<!-- Notification Bell with Accent Orange Dot -->
+<div class="relative p-2 text-secondary hover:text-primary cursor-pointer transition-colors rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined text-[22px]" data-icon="notifications">notifications</span>
+<!-- Accent Orange Tiny Pip (8px) -->
+<span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-on-tertiary-container ring-2 ring-surface-container-lowest"></span>
+</div>
+<!-- Add New Payer / Plan CTA -->
+<button class="h-10 px-4 bg-primary-container text-on-primary font-label-md text-label-md rounded-lg flex items-center gap-2 hover:bg-primary transition-colors cursor-pointer select-none active:scale-95 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+<span>Add New Payer / Plan</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas (1440px target, left offset 260px, top offset 64px) -->
+<main class="ml-[260px] pt-16 min-h-screen bg-surface p-6">
+<div class="max-w-[1180px] mx-auto">
+<!-- Two-column Master-Detail Layout (Left ~35%, Right ~65%) -->
+<div class="grid grid-cols-12 gap-6 items-start">
+<!-- ========================================== -->
+<!-- LEFT COLUMN: Registered Payers & TPAs List -->
+<!-- ========================================== -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-4">
+<!-- Master Header Panel -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-4 flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm font-bold text-primary">Registered Payers</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm">8</span>
+</div>
+<button class="text-secondary hover:text-primary transition-colors p-1" title="Filter list" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="tune">tune</span>
+</button>
+</div>
+<div class="relative">
+<span class="absolute inset-y-0 left-2.5 flex items-center pointer-events-none text-secondary">
+<span class="material-symbols-outlined text-[16px]" data-icon="filter_list">filter_list</span>
+</span>
+<input class="w-full h-8 pl-8 pr-3 rounded bg-surface border border-outline-variant font-body-sm text-body-sm placeholder:text-secondary focus:outline-none focus:border-surface-tint" placeholder="Filter by name or tier..." type="text"/>
+</div>
+</div>
+<!-- Payer Cards Stack -->
+<div class="flex flex-col gap-3">
+<!-- Card 1: SELECTED (Allianz Healthcare Egypt) -->
+<div class="relative bg-surface-container-low rounded-xl border-2 border-primary-container p-4 cursor-pointer transition-all shadow-sm">
+<!-- Active Indicator Bar -->
+<div class="absolute left-0 top-3 bottom-3 w-1.5 bg-primary-container rounded-r"></div>
+<div class="flex items-start justify-between gap-2 pl-1">
+<div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-primary leading-snug">Allianz Healthcare Egypt</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-secondary-container text-primary font-semibold">Direct Insurer (Private)</span>
+</div>
+</div>
+<span class="flex items-center text-primary-container">
+<span class="material-symbols-outlined text-[20px]" data-icon="check_circle">check_circle</span>
+</span>
+</div>
+<div class="mt-3.5 space-y-1.5 text-body-sm font-body-sm pl-1">
+<div class="flex items-center justify-between text-secondary">
+<span>Claim Format:</span>
+<span class="font-medium text-on-surface">Electronic XML / ETA e-Invoice</span>
+</div>
+<div class="flex items-center justify-between text-secondary">
+<span>Submission Deadline:</span>
+<span class="font-medium text-on-surface">30 days post-month end</span>
+</div>
+<div class="flex items-center justify-between text-secondary">
+<span>Active Plans:</span>
+<span class="font-medium text-on-surface">3 (Gold, Silver, Prime)</span>
+</div>
+</div>
+<!-- Metrics Footer -->
+<div class="mt-4 pt-3 border-t border-outline-variant/60 flex items-center justify-between pl-1">
+<div>
+<span class="font-label-sm text-label-sm text-secondary block">Outstanding Claims</span>
+<span class="font-label-lg text-label-lg font-bold text-primary tabular-nums">EGP 54,200 <span class="font-body-sm text-secondary font-normal">(12 claims)</span></span>
+</div>
+<div class="text-right">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-surface-container-lowest border border-outline-variant text-label-sm font-label-sm text-secondary font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-surface-tint"></span>
+                    Thru Dec 2026
+                  </span>
+</div>
+</div>
+</div>
+<!-- Card 2: Bupa Egypt Insurance -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-4 hover:border-surface-tint hover:bg-surface-bright cursor-pointer transition-all">
+<div class="flex items-start justify-between gap-2">
+<div>
+<h3 class="font-headline-sm text-headline-sm font-semibold text-on-surface leading-snug">Bupa Egypt Insurance</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container text-secondary font-medium">Direct Insurer (International)</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="mt-3.5 space-y-1.5 text-body-sm font-body-sm">
+<div class="flex items-center justify-between text-secondary">
+<span>Claim Format:</span>
+<span class="font-medium text-on-surface">Bupa Online Portal API</span>
+</div>
+<div class="flex items-center justify-between text-secondary">
+<span>Submission Deadline:</span>
+<span class="font-medium text-on-surface">15 days</span>
+</div>
+<div class="flex items-center justify-between text-secondary">
+<span>Active Plans:</span>
+<span class="font-medium text-on-surface">2 (Global Elite, Classic Care)</span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-outline-variant/50 flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-secondary block">Outstanding Claims</span>
+<span class="font-label-lg text-label-lg font-bold text-on-surface tabular-nums">EGP 38,100</span>
+</div>
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-surface border border-outline-variant text-label-sm font-label-sm text-secondary font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                  Active Contract
+                </span>
+</div>
+</div>
+<!-- Card 3: MetLife Egypt (NextCare TPA) -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-4 hover:border-surface-tint hover:bg-surface-bright cursor-pointer transition-all">
+<div class="flex items-start justify-between gap-2">
+<div>
+<h3 class="font-headline-sm text-headline-sm font-semibold text-on-surface leading-snug">MetLife Egypt (NextCare TPA)</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container text-secondary font-medium">TPA Managed</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="mt-3.5 space-y-1.5 text-body-sm font-body-sm">
+<div class="flex items-center justify-between text-secondary">
+<span>Claim Format:</span>
+<span class="font-medium text-on-surface">NextCare MedNet Batch Portal</span>
+</div>
+<div class="flex items-center justify-between text-secondary">
+<span>Submission Deadline:</span>
+<span class="font-medium text-on-surface">21 days</span>
+</div>
+<div class="flex items-center justify-between text-secondary">
+<span>Active Plans:</span>
+<span class="font-medium text-on-surface">4 (Diamond, Platinum, Gold, Exec)</span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-outline-variant/50 flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-secondary block">Outstanding Claims</span>
+<span class="font-label-lg text-label-lg font-bold text-on-surface tabular-nums">EGP 28,400</span>
+</div>
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-surface border border-outline-variant text-label-sm font-label-sm text-secondary font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                  Active Contract
+                </span>
+</div>
+</div>
+<!-- Card 4: AXA OneHealth Egypt -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-4 hover:border-surface-tint hover:bg-surface-bright cursor-pointer transition-all">
+<div class="flex items-start justify-between gap-2">
+<div>
+<h3 class="font-headline-sm text-headline-sm font-semibold text-on-surface leading-snug">AXA OneHealth Egypt</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container text-secondary font-medium">HMO / Managed Network</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="mt-3.5 space-y-1.5 text-body-sm font-body-sm">
+<div class="flex items-center justify-between text-secondary">
+<span>Claim Format:</span>
+<span class="font-medium text-on-surface">AXA Digital Hub</span>
+</div>
+<div class="flex items-center justify-between text-secondary">
+<span>Submission Deadline:</span>
+<span class="font-medium text-on-surface">30 days</span>
+</div>
+<div class="flex items-center justify-between text-secondary">
+<span>Active Plans:</span>
+<span class="font-medium text-on-surface">2 (CarePlus, Family Basic)</span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-outline-variant/50 flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-secondary block">Outstanding Claims</span>
+<span class="font-label-lg text-label-lg font-bold text-on-surface tabular-nums">EGP 21,300</span>
+</div>
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-surface border border-outline-variant text-label-sm font-label-sm text-secondary font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                  Active Contract
+                </span>
+</div>
+</div>
+</div>
+</div>
+<!-- ============================================================ -->
+<!-- RIGHT COLUMN: Selected Plan Configuration & Fee Rules Matrix -->
+<!-- ============================================================ -->
+<div class="col-span-12 lg:col-span-8 flex flex-col gap-5">
+<!-- Plan Configuration Header Container -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-5 shadow-sm">
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-4 pb-4 border-b border-outline-variant">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-semibold">Insurer Entity: Allianz Healthcare Egypt</span>
+<span class="w-1 h-1 rounded-full bg-outline"></span>
+<span class="font-label-sm text-label-sm text-primary-container font-semibold">Tier 1 Primary</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg font-bold text-primary">Allianz Gold Comprehensive (Tier 1)</h2>
+<div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-body-sm font-body-sm text-secondary">
+<span>Network Code: <strong class="text-on-surface font-semibold">ALLZ-NET-01</strong></span>
+<span>•</span>
+<span>Contract Validity: <strong class="text-on-surface font-semibold">01 Jan 2025 – 31 Dec 2026</strong></span>
+<span>•</span>
+<span>Currency: <strong class="text-on-surface font-semibold">EGP</strong></span>
+</div>
+</div>
+<div class="flex items-center gap-2 self-start">
+<button class="h-9 px-3 bg-surface border border-outline-variant hover:bg-surface-container-low text-primary rounded-lg font-label-md text-label-md flex items-center gap-1.5 transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]" data-icon="description">description</span>
+<span>View Contract</span>
+</button>
+<button class="h-9 px-3 bg-surface-container-low border border-outline-variant hover:bg-surface-container text-primary rounded-lg font-label-md text-label-md flex items-center gap-1.5 transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]" data-icon="edit">edit</span>
+<span>Edit Plan</span>
+</button>
+</div>
+</div>
+<!-- Plan Selector Tabs -->
+<div class="flex items-center gap-2 mt-4 overflow-x-auto pb-1">
+<span class="font-label-sm text-label-sm text-secondary font-medium mr-2">Available Plans:</span>
+<!-- Tab 1: Gold Comprehensive (Active) -->
+<button class="px-3.5 py-1.5 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md font-semibold flex items-center gap-2 transition-all shadow-sm" type="button">
+<span>Gold Comprehensive</span>
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span>
+</button>
+<!-- Tab 2: Silver Standard -->
+<button class="px-3.5 py-1.5 rounded-lg bg-surface border border-outline-variant text-secondary hover:text-on-surface hover:bg-surface-bright font-label-md text-label-md transition-all" type="button">
+<span>Silver Standard</span>
+</button>
+<!-- Tab 3: Corporate Prime -->
+<button class="px-3.5 py-1.5 rounded-lg bg-surface border border-outline-variant text-secondary hover:text-on-surface hover:bg-surface-bright font-label-md text-label-md transition-all" type="button">
+<span>Corporate Prime</span>
+</button>
+</div>
+<!-- Contract Summary Metric Badges -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4 pt-4 border-t border-outline-variant/60">
+<div class="bg-surface p-3 rounded-lg border border-outline-variant">
+<span class="font-label-sm text-label-sm text-secondary block">Overall Annual Cap</span>
+<span class="font-headline-sm text-headline-sm font-bold text-primary tabular-nums mt-0.5 block">EGP 150,000 <span class="font-body-sm text-secondary font-normal">/ member</span></span>
+</div>
+<div class="bg-surface p-3 rounded-lg border border-outline-variant">
+<span class="font-label-sm text-label-sm text-secondary block">Patient General Deductible</span>
+<span class="font-headline-sm text-headline-sm font-bold text-primary tabular-nums mt-0.5 block">EGP 0.00 <span class="font-body-sm text-secondary font-normal">(Direct zero)</span></span>
+</div>
+<div class="bg-surface p-3 rounded-lg border border-outline-variant">
+<span class="font-label-sm text-label-sm text-secondary block">TPA / Administration</span>
+<span class="font-headline-sm text-headline-sm font-bold text-primary mt-0.5 block">Direct Carrier <span class="font-body-sm text-secondary font-normal">(No middle TPA)</span></span>
+</div>
+</div>
+</div>
+<!-- Coverage Rules & Co-pay Matrix Card -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-sm">
+<div class="p-4 border-b border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-surface-bright">
+<div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-primary">Coverage Rules &amp; Co-pay Matrix</h3>
+<p class="font-body-sm text-body-sm text-secondary mt-0.5">Automated claim validation and front-desk co-pay calculation logic</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-secondary bg-surface-container px-2.5 py-1 rounded-full font-medium">6 Clinical Categories Configured</span>
+</div>
+</div>
+<!-- High-Density Fee Matrix Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant font-label-md text-label-md text-secondary">
+<th class="py-3 px-4">Service / Category</th>
+<th class="py-3 px-3">Covered?</th>
+<th class="py-3 px-3">Co-pay</th>
+<th class="py-3 px-3 text-right">Per-Visit Cap</th>
+<th class="py-3 px-3 text-right">Annual Limit</th>
+<th class="py-3 px-3">Pre-auth Req.?</th>
+<th class="py-3 px-4">Validation Note</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/60 font-body-sm text-body-sm text-on-surface">
+<!-- Row 1: General Outpatient Consultation -->
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="py-3 px-4 font-semibold text-primary">
+                      General Outpatient Consultation
+                    </td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-surface-container text-primary font-medium">Yes</span>
+</td>
+<td class="py-3 px-3 font-semibold text-on-surface">
+                      15% <span class="font-normal text-secondary">patient share</span>
+</td>
+<td class="py-3 px-3 text-right tabular-nums font-medium text-on-surface">
+                      EGP 500.00
+                    </td>
+<td class="py-3 px-3 text-right tabular-nums text-secondary">
+                      Unlimited
+                    </td>
+<td class="py-3 px-3">
+<span class="font-label-sm text-label-sm text-secondary">No</span>
+</td>
+<td class="py-3 px-4 text-secondary">
+                      Walk-in allowed
+                    </td>
+</tr>
+<!-- Row 2: Specialist / Consultant Consultation -->
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="py-3 px-4 font-semibold text-primary">
+                      Specialist / Consultant Consultation
+                    </td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-surface-container text-primary font-medium">Yes</span>
+</td>
+<td class="py-3 px-3 font-semibold text-on-surface">
+                      20% <span class="font-normal text-secondary">patient share</span>
+</td>
+<td class="py-3 px-3 text-right tabular-nums font-medium text-on-surface">
+                      EGP 700.00
+                    </td>
+<td class="py-3 px-3 text-right tabular-nums text-secondary">
+                      Unlimited
+                    </td>
+<td class="py-3 px-3">
+<span class="font-label-sm text-label-sm text-secondary">No</span>
+</td>
+<td class="py-3 px-4 text-secondary">
+                      Valid referral from GP not required
+                    </td>
+</tr>
+<!-- Row 3: Diagnostic ECG & Basic Radiology -->
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="py-3 px-4 font-semibold text-primary">
+                      Diagnostic ECG &amp; Basic Radiology
+                    </td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-surface-container text-primary font-medium">Yes</span>
+</td>
+<td class="py-3 px-3 font-semibold text-on-surface">
+                      10% <span class="font-normal text-secondary">patient share</span>
+</td>
+<td class="py-3 px-3 text-right tabular-nums font-medium text-on-surface">
+                      EGP 400.00
+                    </td>
+<td class="py-3 px-3 text-right tabular-nums font-medium text-on-surface">
+                      EGP 15,000
+                    </td>
+<td class="py-3 px-3">
+<span class="font-label-sm text-label-sm text-secondary">No</span>
+</td>
+<td class="py-3 px-4 text-secondary">
+                      In-clinic immediate delivery
+                    </td>
+</tr>
+<!-- Row 4: Advanced Ultrasound / Echocardiography -->
+<tr class="hover:bg-surface-bright transition-colors bg-surface/50">
+<td class="py-3 px-4 font-semibold text-primary">
+                      Advanced Ultrasound / Echocardiography
+                    </td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-surface-container text-primary font-medium">Yes</span>
+</td>
+<td class="py-3 px-3 font-semibold text-on-surface">
+                      15% <span class="font-normal text-secondary">patient share</span>
+</td>
+<td class="py-3 px-3 text-right tabular-nums font-medium text-on-surface">
+                      EGP 1,200.00
+                    </td>
+<td class="py-3 px-3 text-right tabular-nums font-medium text-on-surface">
+                      EGP 25,000
+                    </td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-tertiary-container font-semibold px-2 py-0.5 rounded bg-tertiary-fixed">
+                        YES (&gt; EGP 800)
+                      </span>
+</td>
+<td class="py-3 px-4 text-secondary font-medium">
+                      Must obtain authorization code before billing
+                    </td>
+</tr>
+<!-- Row 5: In-clinic Minor Surgical Procedures -->
+<tr class="hover:bg-surface-bright transition-colors bg-surface/50">
+<td class="py-3 px-4 font-semibold text-primary">
+                      In-clinic Minor Surgical Procedures
+                    </td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-surface-container text-primary font-medium">Yes</span>
+</td>
+<td class="py-3 px-3 font-semibold text-on-surface">
+                      20% <span class="font-normal text-secondary">patient share</span>
+</td>
+<td class="py-3 px-3 text-right tabular-nums font-medium text-on-surface">
+                      EGP 3,000.00
+                    </td>
+<td class="py-3 px-3 text-right tabular-nums font-medium text-on-surface">
+                      EGP 40,000
+                    </td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-on-error-container font-semibold px-2 py-0.5 rounded bg-error-container">
+                        YES (Always)
+                      </span>
+</td>
+<td class="py-3 px-4 text-secondary font-medium">
+                      Requires formal medical indication &amp; Syndicate ID
+                    </td>
+</tr>
+<!-- Row 6: Non-formulary Medications / Supplements -->
+<tr class="hover:bg-surface-bright transition-colors bg-surface-dim/20">
+<td class="py-3 px-4 font-semibold text-secondary">
+                      Non-formulary Medications / Supplements
+                    </td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-surface-dim text-secondary font-medium">No (Excluded)</span>
+</td>
+<td class="py-3 px-3 font-semibold text-error">
+                      100% Patient
+                    </td>
+<td class="py-3 px-3 text-right text-secondary">
+                      -
+                    </td>
+<td class="py-3 px-3 text-right text-secondary">
+                      -
+                    </td>
+<td class="py-3 px-3 text-secondary font-label-sm text-label-sm">
+                      N/A
+                    </td>
+<td class="py-3 px-4 text-secondary">
+                      Excluded under general outpatient policy
+                    </td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Matrix Rule Footer Helper -->
+<div class="p-3 bg-surface-container-low border-t border-outline-variant flex items-center justify-between text-label-sm font-label-sm text-secondary">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-surface-tint" data-icon="info">info</span>
+<span>All copays apply automatically at Front Desk Cash Sessions during billing generation.</span>
+</div>
+<span class="text-secondary font-medium">Egyptian Tax Authority e-Receipt v2.1 compliant</span>
+</div>
+</div>
+<!-- Bottom Info & Policy Revision Audit Box -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="history">history</span>
+</div>
+<div>
+<p class="font-label-md text-label-md font-semibold text-on-surface">
+                  Contract Terms Revision #4.2 applied on 15 Jan 2025 by Youssef Kamal (Accountant)
+                </p>
+<p class="font-body-sm text-body-sm text-secondary mt-0.5">
+                  Synchronized with Allianz Provider Portal API &amp; Ministry of Health Unified Registry.
+                </p>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-2.5">
+<button class="h-9 px-3.5 bg-surface border border-outline-variant hover:bg-surface-bright text-primary font-label-md text-label-md rounded-lg flex items-center gap-2 transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]" data-icon="edit_note">edit_note</span>
+<span>Edit Plan Rules</span>
+</button>
+<button class="h-9 px-3.5 bg-surface border border-outline-variant hover:bg-surface-bright text-primary font-label-md text-label-md rounded-lg flex items-center gap-2 transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]" data-icon="table_view">table_view</span>
+<span>Export Fee Schedule Matrix (Excel)</span>
+</button>
+<button class="h-9 px-3.5 bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md rounded-lg flex items-center gap-2 transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]" data-icon="upload_file">upload_file</span>
+<span>Upload Contract PDF</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

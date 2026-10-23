@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Join as a doctor — Application Form | ClinicFlow</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN with Forms & Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config verbatim -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-tint": "#406185",
+            "on-primary-container": "#8dadd6",
+            "surface-container-lowest": "#ffffff",
+            "secondary": "#4e6077",
+            "outline": "#73777f",
+            "on-primary-fixed": "#001d36",
+            "tertiary": "#4e1700",
+            "surface-dim": "#d1dbeb",
+            "on-surface-variant": "#43474e",
+            "primary-fixed": "#d1e4ff",
+            "inverse-surface": "#27313e",
+            "on-primary-fixed-variant": "#27496c",
+            "inverse-primary": "#a8c9f3",
+            "tertiary-fixed": "#ffdbce",
+            "surface-container-high": "#dfe9fa",
+            "inverse-on-surface": "#eaf1ff",
+            "error": "#ba1a1a",
+            "surface-container": "#e5efff",
+            "on-secondary-fixed": "#081c31",
+            "secondary-fixed": "#d2e4ff",
+            "outline-variant": "#c3c6cf",
+            "tertiary-container": "#722600",
+            "surface-variant": "#d9e3f4",
+            "on-surface": "#121c28",
+            "on-background": "#121c28",
+            "tertiary-fixed-dim": "#ffb599",
+            "primary-container": "#1e4164",
+            "background": "#f8f9ff",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-tertiary-fixed": "#370e00",
+            "on-secondary-fixed-variant": "#36485f",
+            "surface-container-highest": "#d9e3f4",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "on-secondary-container": "#52647c",
+            "on-error": "#ffffff",
+            "on-primary": "#ffffff",
+            "on-error-container": "#93000a",
+            "surface": "#f8f9ff",
+            "primary-fixed-dim": "#a8c9f3",
+            "on-tertiary": "#ffffff",
+            "surface-bright": "#f8f9ff",
+            "on-secondary": "#ffffff",
+            "secondary-container": "#cee1fd",
+            "surface-container-low": "#eef4ff",
+            "on-tertiary-container": "#ff8b5b",
+            "error-container": "#ffdad6",
+            "primary": "#002b4c"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1rem",
+            "margin-tablet": "1.5rem",
+            "space-md": "0.75rem",
+            "margin": "1rem",
+            "gutter": "1rem",
+            "gutter-sm": "0.75rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-xl": "1.5rem",
+            "margin-desktop": "2rem"
+          },
+          "fontFamily": {
+            "headline-md": [
+              "Plus Jakarta Sans"
+            ],
+            "body-lg": [
+              "Inter"
+            ],
+            "body-md": [
+              "Inter"
+            ],
+            "label-sm": [
+              "Inter"
+            ],
+            "headline-xl": [
+              "Plus Jakarta Sans"
+            ],
+            "body-sm": [
+              "Inter"
+            ],
+            "label-lg": [
+              "Inter"
+            ],
+            "headline-lg": [
+              "Plus Jakarta Sans"
+            ],
+            "headline-lg-mobile": [
+              "Plus Jakarta Sans"
+            ],
+            "label-md": [
+              "Inter"
+            ],
+            "headline-sm": [
+              "Plus Jakarta Sans"
+            ],
+            "headline-xl-mobile": [
+              "Plus Jakarta Sans"
+            ]
+          },
+          "fontSize": {
+            "headline-md": [
+              "18px",
+              {
+                "lineHeight": "26px",
+                "fontWeight": "600"
+              }
+            ],
+            "body-lg": [
+              "16px",
+              {
+                "lineHeight": "24px",
+                "fontWeight": "400"
+              }
+            ],
+            "body-md": [
+              "14px",
+              {
+                "lineHeight": "20px",
+                "fontWeight": "400"
+              }
+            ],
+            "label-sm": [
+              "11px",
+              {
+                "lineHeight": "14px",
+                "letterSpacing": "0.02em",
+                "fontWeight": "500"
+              }
+            ],
+            "headline-xl": [
+              "32px",
+              {
+                "lineHeight": "40px",
+                "letterSpacing": "-0.02em",
+                "fontWeight": "700"
+              }
+            ],
+            "body-sm": [
+              "12px",
+              {
+                "lineHeight": "16px",
+                "fontWeight": "400"
+              }
+            ],
+            "label-lg": [
+              "14px",
+              {
+                "lineHeight": "20px",
+                "fontWeight": "600"
+              }
+            ],
+            "headline-lg": [
+              "24px",
+              {
+                "lineHeight": "32px",
+                "letterSpacing": "-0.01em",
+                "fontWeight": "700"
+              }
+            ],
+            "headline-lg-mobile": [
+              "20px",
+              {
+                "lineHeight": "28px",
+                "letterSpacing": "-0.01em",
+                "fontWeight": "600"
+              }
+            ],
+            "label-md": [
+              "12px",
+              {
+                "lineHeight": "16px",
+                "fontWeight": "600"
+              }
+            ],
+            "headline-sm": [
+              "16px",
+              {
+                "lineHeight": "24px",
+                "fontWeight": "600"
+              }
+            ],
+            "headline-xl-mobile": [
+              "26px",
+              {
+                "lineHeight": "34px",
+                "letterSpacing": "-0.015em",
+                "fontWeight": "700"
+              }
+            ]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col font-body-md">
+<!-- Desktop Header (Shared Component: TopNavBar) -->
+<header class="bg-surface-container-lowest dark:bg-inverse-surface border-b border-outline-variant dark:border-outline w-full sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-8 w-full flex justify-between items-center h-16">
+<!-- Brand & Navigation Cluster -->
+<div class="flex items-center gap-10">
+<a class="text-headline-md font-headline-md font-bold text-primary dark:text-inverse-primary tracking-tight flex items-center gap-2 transition-all duration-200 active:scale-98" href="#">
+<span class="w-8 h-8 rounded-lg bg-primary-container text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-body-lg" data-icon="local_hospital">local_hospital</span>
+</span>
+          ClinicFlow
+        </a>
+<nav class="hidden md:flex items-center gap-8 text-label-lg font-label-lg">
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed hover:text-primary dark:hover:text-primary-fixed transition-colors duration-150" href="#">
+            Find a doctor
+          </a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed hover:text-primary dark:hover:text-primary-fixed transition-colors duration-150" href="#">
+            Branches
+          </a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed hover:text-primary dark:hover:text-primary-fixed transition-colors duration-150" href="#">
+            Services &amp; prices
+          </a>
+<!-- Active Nav Link: Join as a doctor -->
+<a class="text-primary dark:text-inverse-primary font-semibold border-b-2 border-primary dark:border-inverse-primary pb-1" href="#">
+            Join as a doctor
+          </a>
+</nav>
+</div>
+<!-- Trailing Action Group -->
+<div class="flex items-center gap-4">
+<button class="p-2 text-secondary hover:text-primary transition-colors flex items-center justify-center rounded-lg hover:bg-surface-container-low" title="Language selection" type="button">
+<span class="material-symbols-outlined" data-icon="language">language</span>
+</button>
+<a class="text-label-lg font-label-lg text-primary hover:text-primary-container px-3 py-2 transition-colors" href="#">
+          Sign in
+        </a>
+<a class="bg-primary-container text-on-primary text-label-lg font-label-lg px-4 py-2 rounded-lg hover:bg-primary transition-all duration-150 shadow-sm active:scale-98" href="#">
+          Create account
+        </a>
+</div>
+</div>
+</header>
+<!-- Main Canvas Container -->
+<main class="flex-1 w-full max-w-7xl mx-auto px-8 py-10">
+<!-- Page Header Section -->
+<div class="max-w-4xl mb-8">
+<div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-surface-container text-primary text-label-sm font-label-sm tracking-wide mb-3">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+        PHYSICIAN NETWORK EXPANSION
+      </div>
+<h1 class="text-headline-xl font-headline-xl text-primary tracking-tight mb-2">
+        Apply to join our clinic network
+      </h1>
+<p class="text-body-lg font-body-lg text-secondary max-w-3xl">
+        Practice outpatient medicine in world-class clinics with dedicated medical assistants, automated scheduling, and zero administrative hassles across Cairo.
+      </p>
+</div>
+<!-- Multi-Step Progress Indicator Bar -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-5 mb-8 shadow-xs">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 relative">
+<!-- Step 1: Completed -->
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-high text-primary flex items-center justify-center shrink-0 border border-outline-variant">
+<span class="material-symbols-outlined text-body-md" data-icon="check">check</span>
+</div>
+<div class="min-w-0">
+<p class="text-label-sm font-label-sm text-secondary">Step 1</p>
+<p class="text-label-md font-label-md text-on-surface truncate">Account</p>
+<p class="text-body-sm font-body-sm text-secondary truncate">Phone &amp; email verified</p>
+</div>
+</div>
+<!-- Step 2: Completed -->
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-high text-primary flex items-center justify-center shrink-0 border border-outline-variant">
+<span class="material-symbols-outlined text-body-md" data-icon="check">check</span>
+</div>
+<div class="min-w-0">
+<p class="text-label-sm font-label-sm text-secondary">Step 2</p>
+<p class="text-label-md font-label-md text-on-surface truncate">Your practice</p>
+<p class="text-body-sm font-body-sm text-secondary truncate">Specialty &amp; license</p>
+</div>
+</div>
+<!-- Step 3: Active Step -->
+<div class="flex items-center gap-3 relative">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center shrink-0 font-headline-sm text-label-md font-label-md shadow-sm ring-4 ring-secondary-container">
+            3
+          </div>
+<div class="min-w-0">
+<p class="text-label-sm font-label-sm text-on-tertiary-container font-semibold">Active Step</p>
+<p class="text-label-md font-label-md text-primary font-bold truncate">Documents</p>
+<p class="text-body-sm font-body-sm text-on-surface truncate">CV &amp; credentials</p>
+</div>
+</div>
+<!-- Step 4: Upcoming / Inactive -->
+<div class="flex items-center gap-3 opacity-60">
+<div class="w-8 h-8 rounded-full bg-surface-container-low text-secondary flex items-center justify-center shrink-0 border border-outline-variant text-label-md font-label-md">
+            4
+          </div>
+<div class="min-w-0">
+<p class="text-label-sm font-label-sm text-secondary">Step 4</p>
+<p class="text-label-md font-label-md text-secondary truncate">Review &amp; submit</p>
+<p class="text-body-sm font-body-sm text-secondary truncate">Final verification</p>
+</div>
+</div>
+</div>
+<!-- Linear visual track -->
+<div class="w-full bg-surface-container-high h-1.5 rounded-full mt-4 overflow-hidden">
+<div class="bg-primary-container h-full rounded-full transition-all duration-300" style="width: 75%;"></div>
+</div>
+</div>
+<!-- Two-column Layout: Main Application Form & Right Helper Sidebar -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Left Main Form Canvas (Step 3: Documents) -->
+<section class="lg:col-span-8 bg-surface-container-lowest rounded-xl border border-outline-variant p-8 shadow-xs">
+<!-- Section Header -->
+<div class="border-b border-outline-variant pb-6 mb-6">
+<div class="flex items-center justify-between">
+<h2 class="text-headline-lg font-headline-lg text-primary">
+              3. Upload Professional Credentials
+            </h2>
+<span class="text-label-sm font-label-sm px-2.5 py-1 rounded bg-surface-container-low text-secondary">
+              ID: CF-DR-2025-912
+            </span>
+</div>
+<p class="text-body-md font-body-md text-secondary mt-1">
+            Please provide your updated medical curriculum vitae and optional statement of clinical practice.
+          </p>
+</div>
+<form class="space-y-8" onsubmit="event.preventDefault();">
+<!-- Field 1: Curriculum Vitae (CV) [Required] -->
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<label class="text-label-lg font-label-lg text-on-surface flex items-center gap-1.5">
+                Curriculum Vitae (CV) <span class="text-error">*</span>
+</label>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-label-sm font-label-sm bg-error-container text-error font-medium">
+                Required
+              </span>
+</div>
+<!-- Pre-uploaded File Chip (Active State) -->
+<div class="p-3.5 bg-surface-container-low rounded-lg border border-outline-variant flex items-center justify-between">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest border border-outline-variant flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+</div>
+<div class="min-w-0">
+<p class="text-label-md font-label-md text-primary font-medium truncate">
+                    Dr_Karim_Nabil_CV_2025.pdf
+                  </p>
+<p class="text-body-sm font-body-sm text-secondary flex items-center gap-1.5">
+<span>2.4 MB</span>
+<span>•</span>
+<span class="text-primary font-medium flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container inline-block"></span>
+                      Ready to upload
+                    </span>
+</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-1.5 text-secondary hover:text-primary rounded hover:bg-surface-container-high transition-colors" title="Preview file" type="button">
+<span class="material-symbols-outlined text-body-lg" data-icon="visibility">visibility</span>
+</button>
+<button class="p-1.5 text-secondary hover:text-error rounded hover:bg-error-container transition-colors" title="Remove file" type="button">
+<span class="material-symbols-outlined text-body-lg" data-icon="close">close</span>
+</button>
+</div>
+</div>
+<!-- Drag and drop zone -->
+<div class="border-2 border-dashed border-outline-variant rounded-xl p-6 text-center hover:border-primary-container hover:bg-surface-container-low transition-colors duration-150 cursor-pointer">
+<div class="w-12 h-12 mx-auto rounded-full bg-surface-container flex items-center justify-center text-primary mb-3">
+<span class="material-symbols-outlined text-headline-md" data-icon="cloud_upload">cloud_upload</span>
+</div>
+<p class="text-label-lg font-label-lg text-primary">
+                Drag and drop your CV here, or <span class="underline text-primary-container font-semibold">browse files</span>
+</p>
+<p class="text-body-sm font-body-sm text-secondary mt-1">
+                PDF or DOCX up to 5 MB
+              </p>
+</div>
+</div>
+<!-- Field 2: Medical Syndicate Card & Board Certifications [Optional] -->
+<div class="space-y-3 pt-2">
+<div class="flex items-center justify-between">
+<label class="text-label-lg font-label-lg text-on-surface">
+                Medical Syndicate Card &amp; Board Certifications
+              </label>
+<span class="text-label-sm font-label-sm text-secondary">
+                Optional
+              </span>
+</div>
+<div class="border border-outline-variant rounded-lg p-4 bg-surface-container-lowest flex items-center justify-between hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded bg-surface-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="badge">badge</span>
+</div>
+<div>
+<p class="text-label-md font-label-md text-on-surface">
+                    Upload Syndicate ID or Egyptian Medical Board certificate
+                  </p>
+<p class="text-body-sm font-body-sm text-secondary">
+                    PDF/JPG up to 5 MB
+                  </p>
+</div>
+</div>
+<button class="px-3.5 py-1.5 rounded border border-primary-container text-primary-container text-label-md font-label-md hover:bg-surface-container transition-colors" type="button">
+                Select file
+              </button>
+</div>
+</div>
+<!-- Field 3: Cover Letter / Practice Overview [Optional] -->
+<div class="space-y-3 pt-2">
+<div class="flex items-center justify-between">
+<label class="text-label-lg font-label-lg text-on-surface">
+                Cover Letter / Practice Overview
+              </label>
+<span class="text-label-sm font-label-sm text-secondary">
+                Optional
+              </span>
+</div>
+<!-- Option Tabs -->
+<div class="flex items-center gap-1 p-1 bg-surface-container-low rounded-lg w-fit border border-outline-variant">
+<button class="px-3 py-1 rounded text-label-md font-label-md text-secondary hover:text-primary transition-colors" type="button">
+                Upload file
+              </button>
+<button class="px-3 py-1 rounded bg-surface-container-lowest text-primary font-semibold shadow-xs border border-outline-variant" type="button">
+                Write text (Selected)
+              </button>
+</div>
+<!-- Rich Textarea -->
+<div class="relative">
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-3 text-body-md font-body-md text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container" placeholder="Briefly describe your outpatient clinical focus, preferred consultation durations, or procedural equipment requirements..." rows="5">Dr. Karim Nabil has dedicated over 8 years to cardiology practice in tertiary centers with special attention to ambulatory preventative diagnostics and outpatient hypertension clinics. Seeking dedicated consultation sessions in Cairo East branches.</textarea>
+<div class="flex justify-between items-center px-1 pt-1.5">
+<span class="text-body-sm font-body-sm text-secondary">Includes consultation room setup notes</span>
+<span class="text-body-sm font-body-sm text-secondary font-mono">240 / 1000</span>
+</div>
+</div>
+</div>
+<!-- Navigation Footer within Main Form Card -->
+<div class="pt-6 border-t border-outline-variant flex flex-col sm:flex-row items-center justify-between gap-4">
+<button class="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-outline-variant text-primary font-semibold text-label-lg font-label-lg hover:bg-surface-container-low transition-colors flex items-center justify-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-body-lg" data-icon="arrow_back">arrow_back</span>
+              Back to Step 2
+            </button>
+<div class="flex items-center gap-4 w-full sm:w-auto justify-end">
+<span class="text-body-sm font-body-sm text-secondary flex items-center gap-1.5">
+<span class="material-symbols-outlined text-label-md text-secondary" data-icon="cloud_done">cloud_done</span>
+                Draft saved 2 mins ago
+              </span>
+<button class="w-full sm:w-auto bg-primary-container text-on-primary text-label-lg font-label-lg px-6 py-2.5 rounded-lg hover:bg-primary transition-all duration-150 shadow-sm flex items-center justify-center gap-2 active:scale-98" type="button">
+<span>Save &amp; Continue to Review</span>
+<span class="material-symbols-outlined text-body-lg" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</form>
+</section>
+<!-- Right Column: Sidebar Helper Card (~340px) -->
+<aside class="lg:col-span-4 space-y-6">
+<!-- Value Proposition Card -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-6 shadow-xs">
+<div class="flex items-center gap-2 mb-4 pb-3 border-b border-outline-variant">
+<span class="w-8 h-8 rounded-lg bg-surface-container text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-body-lg" data-icon="verified">verified</span>
+</span>
+<h3 class="text-headline-sm font-headline-sm text-primary">
+              Why practice with ClinicFlow?
+            </h3>
+</div>
+<ul class="space-y-4">
+<li class="flex items-start gap-3">
+<span class="w-5 h-5 rounded-full bg-surface-container-high text-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-label-sm" data-icon="check">check</span>
+</span>
+<div>
+<p class="text-label-md font-label-md text-on-surface">Zero administrative burden</p>
+<p class="text-body-sm font-body-sm text-secondary">
+                  Reception, billing, and queue dispatch managed by dedicated clinic staff.
+                </p>
+</div>
+</li>
+<li class="flex items-start gap-3">
+<span class="w-5 h-5 rounded-full bg-surface-container-high text-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-label-sm" data-icon="check">check</span>
+</span>
+<div>
+<p class="text-label-md font-label-md text-on-surface">Transparent monthly statements</p>
+<p class="text-body-sm font-body-sm text-secondary">
+                  Automated performance accounting with prompt, guaranteed EGP remittances.
+                </p>
+</div>
+</li>
+<li class="flex items-start gap-3">
+<span class="w-5 h-5 rounded-full bg-surface-container-high text-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-label-sm" data-icon="check">check</span>
+</span>
+<div>
+<p class="text-label-md font-label-md text-on-surface">Modern facilities</p>
+<p class="text-body-sm font-body-sm text-secondary">
+                  Fully equipped consultation suites across Nasr City, Maadi, and Sheikh Zayed.
+                </p>
+</div>
+</li>
+<li class="flex items-start gap-3">
+<span class="w-5 h-5 rounded-full bg-surface-container-high text-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-label-sm" data-icon="check">check</span>
+</span>
+<div>
+<p class="text-label-md font-label-md text-on-surface">Flexible shift scheduling</p>
+<p class="text-body-sm font-body-sm text-secondary">
+                  Easily harmonizes with your academic faculty or primary hospital obligations.
+                </p>
+</div>
+</li>
+</ul>
+<!-- Support Contact box -->
+<div class="mt-6 pt-5 border-t border-outline-variant bg-surface-container-low p-4 rounded-lg">
+<p class="text-label-md font-label-md text-primary font-medium flex items-center gap-1.5">
+<span class="material-symbols-outlined text-body-md" data-icon="contact_support">contact_support</span>
+              Have questions before applying?
+            </p>
+<p class="text-body-sm font-body-sm text-secondary mt-1">
+              Email <a class="text-primary-container font-semibold hover:underline" href="mailto:medical.careers@clinicflow.eg">medical.careers@clinicflow.eg</a> or call hotline <span class="text-on-tertiary-container font-bold">16789</span>.
+            </p>
+</div>
+</div>
+<!-- Clinic Environment Snapshot Card with detailed prompt -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-4 shadow-xs overflow-hidden">
+<div class="relative h-44 rounded-lg overflow-hidden mb-3">
+<img class="w-full h-full object-cover" data-alt="A pristine, state-of-the-art outpatient consultation room in a modern Cairo medical clinic with warm natural sunlight pouring through clean glass windows. The space features deep navy executive chairs, high-end sterile examination apparatus, and neutral architectural surfaces with minimalist finishes. The aesthetic embodies a clinical light-mode ambiance with serene composure and institutional trust." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNBZFFeQ3m2hYE0oMfoDxRc-w5n8ke82AtUDKOv4kXihhhWf3xOyvGoZUdW7AhIaTryTghyy1FCB_L5udp9Ryyeu1EFJ2Rde_hD08hYqouyssbkZ1ipnYFs7bZ0zOOTg_IdrZVI0OcgsdW7nScpawB3lpbPlpYFGBBJB3hHc5fvlZYUxfXbKaE2-IY0MySY9pVg6jbDxW9zvN-x19Y5QLcwzlFzIP92Iv57f59yHbSSeneSbPK6qbqVlde5rBH-5LpOxYj8VeNECTK"/>
+<div class="absolute bottom-2 left-2 bg-inverse-surface/80 backdrop-blur-xs text-on-primary px-2 py-1 rounded text-label-sm font-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-label-sm text-on-tertiary-container" data-icon="location_on">location_on</span>
+              Maadi Medical Center · Suite 402
+            </div>
+</div>
+<p class="text-body-sm font-body-sm text-secondary">
+            Equipped with digitized EMR workstations, vital monitor hubs, and dedicated triage rooms.
+          </p>
+</div>
+</aside>
+</div>
+</main>
+<!-- Desktop Footer (Shared Component: Footer) -->
+<footer class="bg-surface-container-low dark:bg-inverse-surface border-t border-outline-variant dark:border-outline mt-16 w-full">
+<div class="max-w-7xl mx-auto px-8 py-12 w-full">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+<!-- Column 1: Brand & Registry -->
+<div class="space-y-3">
+<div class="text-headline-md font-headline-md font-bold text-primary dark:text-inverse-primary flex items-center gap-2">
+<span class="w-7 h-7 rounded bg-primary text-on-primary flex items-center justify-center text-body-sm">
+<span class="material-symbols-outlined" data-icon="local_hospital">local_hospital</span>
+</span>
+            ClinicFlow
+          </div>
+<p class="text-body-sm font-body-sm text-secondary dark:text-secondary-fixed-dim">
+            Authorized private outpatient polyclinics and diagnostic network serving Greater Cairo.
+          </p>
+<div class="inline-flex items-center gap-1 text-label-sm font-label-sm text-secondary">
+<span class="material-symbols-outlined text-body-sm text-primary" data-icon="verified_user">verified_user</span>
+            Ministry of Health Licensing No. 4921/2023
+          </div>
+</div>
+<!-- Column 2: Branches -->
+<div>
+<h4 class="text-headline-sm font-headline-sm text-primary dark:text-inverse-primary mb-3">
+            Branches
+          </h4>
+<ul class="space-y-2 text-body-sm font-body-sm">
+<li>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-tertiary-container dark:hover:text-tertiary-fixed transition-colors duration-150" href="#">
+                Nasr City Branch
+              </a>
+</li>
+<li>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-tertiary-container dark:hover:text-tertiary-fixed transition-colors duration-150" href="#">
+                Maadi Medical Center
+              </a>
+</li>
+<li>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-tertiary-container dark:hover:text-tertiary-fixed transition-colors duration-150" href="#">
+                Sheikh Zayed Clinic
+              </a>
+</li>
+</ul>
+</div>
+<!-- Column 3: Tariffs & Coverage -->
+<div>
+<h4 class="text-headline-sm font-headline-sm text-primary dark:text-inverse-primary mb-3">
+            Services &amp; Coverage
+          </h4>
+<ul class="space-y-2 text-body-sm font-body-sm">
+<li>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-tertiary-container dark:hover:text-tertiary-fixed transition-colors duration-150" href="#">
+                Outpatient Tariffs (EGP)
+              </a>
+</li>
+<li>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-tertiary-container dark:hover:text-tertiary-fixed transition-colors duration-150" href="#">
+                Insurance &amp; Copays
+              </a>
+</li>
+<li>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-tertiary-container dark:hover:text-tertiary-fixed transition-colors duration-150" href="#">
+                Ministry of Health Licensing
+              </a>
+</li>
+</ul>
+</div>
+<!-- Column 4: Compliance & Legal -->
+<div>
+<h4 class="text-headline-sm font-headline-sm text-primary dark:text-inverse-primary mb-3">
+            Legal &amp; Privacy
+          </h4>
+<ul class="space-y-2 text-body-sm font-body-sm">
+<li>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-tertiary-container dark:hover:text-tertiary-fixed transition-colors duration-150" href="#">
+                Privacy Policy
+              </a>
+</li>
+<li>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-tertiary-container dark:hover:text-tertiary-fixed transition-colors duration-150" href="#">
+                Terms of Service
+              </a>
+</li>
+<li class="pt-2">
+<span class="text-label-sm font-label-sm text-primary font-semibold block">Hotline Inquiries</span>
+<span class="text-headline-sm font-headline-sm text-on-tertiary-container font-bold">16789</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Bottom Sub-bar -->
+<div class="pt-6 border-t border-outline-variant dark:border-outline flex flex-col md:flex-row justify-between items-center text-body-sm font-body-sm text-secondary dark:text-secondary-fixed-dim gap-4">
+<p>© 2025 ClinicFlow Healthcare Network S.A.E. All rights reserved. Hotline 16789.</p>
+<div class="flex items-center gap-4 text-label-sm font-label-sm">
+<span>Cairo, Egypt</span>
+<span>•</span>
+<span>Encrypted 256-bit Healthcare Protocol</span>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow - Profile &amp; Settings</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed-variant": "#27496c",
+            "tertiary-fixed": "#ffdbce",
+            "on-secondary-container": "#52647c",
+            "outline-variant": "#c3c6cf",
+            "surface-container": "#e5efff",
+            "primary-container": "#1e4164",
+            "error": "#ba1a1a",
+            "surface-container-low": "#eef4ff",
+            "on-surface": "#121c28",
+            "tertiary-fixed-dim": "#ffb599",
+            "surface-tint": "#406185",
+            "on-error-container": "#93000a",
+            "surface-dim": "#d1dbeb",
+            "surface": "#f8f9ff",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "secondary-fixed": "#d2e4ff",
+            "on-secondary": "#ffffff",
+            "on-background": "#121c28",
+            "tertiary-container": "#722600",
+            "on-secondary-fixed-variant": "#36485f",
+            "on-primary-fixed": "#001d36",
+            "primary-fixed-dim": "#a8c9f3",
+            "secondary-container": "#cee1fd",
+            "inverse-on-surface": "#eaf1ff",
+            "background": "#f8f9ff",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "on-primary": "#ffffff",
+            "inverse-primary": "#a8c9f3",
+            "on-tertiary-fixed": "#370e00",
+            "primary": "#002b4c",
+            "surface-variant": "#d9e3f4",
+            "on-tertiary-container": "#ff8b5b",
+            "inverse-surface": "#27313e",
+            "tertiary": "#4e1700",
+            "secondary": "#4e6077",
+            "surface-bright": "#f8f9ff",
+            "on-primary-container": "#8dadd6",
+            "on-surface-variant": "#43474e",
+            "on-secondary-fixed": "#081c31",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-tertiary": "#ffffff",
+            "error-container": "#ffdad6",
+            "surface-container-high": "#dfe9fa",
+            "primary-fixed": "#d1e4ff",
+            "outline": "#73777f",
+            "surface-container-highest": "#d9e3f4",
+            // Precision clinical tokens matching specs
+            "brand-canvas": "#F7F9FD",
+            "brand-primary": "#1E4164",
+            "brand-navy-deep": "#13263B",
+            "brand-accent-orange": "#FF5E00",
+            "brand-border": "#D3DBE6",
+            "brand-info": "#015C9A"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1rem",
+            "space-xl": "1.5rem",
+            "space-lg": "1rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem",
+            "space-md": "0.75rem",
+            "margin-tablet": "1.5rem",
+            "gutter-sm": "0.75rem",
+            "margin-desktop": "2rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "label-lg": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "label-md": ["Inter"],
+            "body-sm": ["Inter"]
+          },
+          "fontSize": {
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface antialiased flex justify-center min-h-screen">
+<!-- Mobile Device Simulation Frame (390px max-width viewport) -->
+<div class="w-full max-w-[390px] bg-[#F7F9FD] min-h-screen flex flex-col relative pb-24 shadow-sm border-x border-[#D3DBE6]">
+<!-- SHARED COMPONENT: TopAppBar (Screen: Profile & Settings) -->
+<header class="bg-surface-container-lowest sticky top-0 z-40 w-full px-4 h-14 flex items-center justify-between border-b border-surface-dim">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[22px]">local_hospital</span>
+<h1 class="text-headline-md font-headline-md font-bold text-primary tracking-tight">ClinicFlow</h1>
+</div>
+<!-- Right Controls: Language pill & Notification Bell with accent pip -->
+<div class="flex items-center gap-3">
+<div class="bg-[#EEF4FF] rounded-full px-2.5 py-1 flex items-center text-[11px] font-label-md font-semibold text-primary">
+<span class="text-primary font-bold">EN</span>
+<span class="text-secondary mx-1">|</span>
+<span class="text-secondary hover:text-primary transition-colors cursor-pointer">عربي</span>
+</div>
+<button aria-label="Notifications" class="relative p-1.5 text-secondary hover:text-primary active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[24px]">notifications</span>
+<!-- Orange accent pip -->
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#FF5E00] ring-2 ring-white"></span>
+</button>
+</div>
+</header>
+<!-- Sub-Header / Page Title Context -->
+<div class="px-margin pt-4 pb-2">
+<div class="flex items-center justify-between">
+<h2 class="text-headline-lg-mobile font-headline-lg-mobile text-[#13263B] font-bold">Profile &amp; Settings</h2>
+<span class="text-label-sm font-label-sm text-secondary bg-surface-container-high px-2 py-0.5 rounded">ID: 288051</span>
+</div>
+</div>
+<!-- MAIN SCROLLABLE CONTENT CANVAS -->
+<main class="flex-1 px-margin space-y-space-md pt-1">
+<!-- USER HEADER CARD -->
+<section class="bg-[#FFFFFF] border border-[#D3DBE6] rounded-xl p-space-lg shadow-none">
+<div class="flex items-start gap-3.5">
+<!-- Patient Initials Avatar -->
+<div class="w-14 h-14 rounded-full bg-[#E8EEF6] border border-[#D3DBE6] flex items-center justify-center shrink-0">
+<span class="text-headline-md font-headline-md text-primary-container font-bold tracking-tight">MA</span>
+</div>
+<!-- Patient Identity Details -->
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<h3 class="text-headline-md font-headline-md font-bold text-[#13263B] truncate">Mohamed Adel</h3>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#ECFDF5] text-[#059669]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669] mr-1"></span>Active Patient
+              </span>
+</div>
+<p class="text-body-sm font-body-sm text-secondary mt-1 flex items-center gap-1 font-mono">
+<span class="material-symbols-outlined text-[15px] text-secondary">badge</span>
+<span class="font-medium text-[#212427]">28805140103456</span>
+</p>
+<p class="text-[11px] text-secondary">Egyptian National ID</p>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-[#D3DBE6] flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-secondary text-[12px]">Registered patient since</span>
+<span class="font-semibold text-[#13263B] text-[12px]">November 2024</span>
+</div>
+</section>
+<!-- SECTION 1: CONTACT DETAILS -->
+<section class="bg-[#FFFFFF] border border-[#D3DBE6] rounded-xl p-space-lg">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-[18px] text-primary-container">contact_phone</span>
+<h4 class="text-headline-sm font-headline-sm text-[#13263B] font-bold">Contact details</h4>
+</div>
+<!-- Phone Row -->
+<div class="pb-3 border-b border-[#D3DBE6]">
+<div class="flex items-center justify-between">
+<span class="text-label-sm font-label-sm text-secondary">Mobile Number</span>
+<!-- Verified Status Chip -->
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#F1F5F9] border border-[#D3DBE6] text-[11px] font-semibold text-primary-container">
+<span class="material-symbols-outlined text-[13px] text-primary-container" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+              Verified
+            </span>
+</div>
+<div class="mt-1 flex items-baseline justify-between">
+<span class="text-body-lg font-body-lg font-semibold text-[#13263B] tracking-wide">+20 101 234 5678</span>
+<button class="text-label-md font-label-md font-semibold text-primary-container hover:underline min-h-[44px] inline-flex items-center active:scale-95 transition-all" type="button">
+              Change number
+            </button>
+</div>
+<p class="text-[11px] font-body-sm text-secondary flex items-center gap-1 -mt-1">
+<span class="material-symbols-outlined text-[12px] text-secondary">info</span>
+            Requires OTP code verification
+          </p>
+</div>
+<!-- Email Row -->
+<div class="pt-3">
+<div class="flex items-center justify-between">
+<span class="text-label-sm font-label-sm text-secondary">Email Address</span>
+<!-- Accent indicator for unverified / missing -->
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#FFF5EE] border border-[#FFDBCE] text-[11px] font-semibold text-[#FF5E00]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#FF5E00]"></span>
+              Unlinked
+            </span>
+</div>
+<div class="mt-1.5 flex items-center justify-between">
+<span class="text-body-md font-body-md text-secondary italic">No email added</span>
+<button class="bg-[#FFFFFF] border border-primary-container text-primary-container hover:bg-[#F7F9FD] active:scale-95 px-3 py-2 rounded-lg text-label-md font-label-md font-semibold min-h-[44px] flex items-center gap-1 transition-all" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+              Add email
+            </button>
+</div>
+</div>
+</section>
+<!-- SECTION 2: COMMUNICATION PREFERENCES -->
+<section class="bg-[#FFFFFF] border border-[#D3DBE6] rounded-xl p-space-lg">
+<div class="flex items-center gap-2 mb-1.5">
+<span class="material-symbols-outlined text-[18px] text-primary-container">tune</span>
+<h4 class="text-headline-sm font-headline-sm text-[#13263B] font-bold">Communication preferences</h4>
+</div>
+<p class="text-body-sm font-body-sm text-secondary mb-3">How should we contact you?</p>
+<!-- Segmented Control -->
+<div class="grid grid-cols-3 gap-1.5 p-1 bg-[#EEF4FF] rounded-lg border border-[#D3DBE6]">
+<!-- Option: SMS (Selected) -->
+<button aria-pressed="true" class="min-h-[44px] rounded-md bg-[#1E4164] text-white flex items-center justify-center gap-1 text-label-md font-label-md font-semibold shadow-sm transition-all" type="button">
+<span class="material-symbols-outlined text-[16px]">sms</span>
+            SMS
+          </button>
+<!-- Option: Email (Disabled) -->
+<button class="min-h-[44px] rounded-md bg-transparent text-[#A0AEC0] flex items-center justify-center gap-1 text-label-md font-label-md font-medium cursor-not-allowed opacity-60" disabled="" type="button">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+            Email
+          </button>
+<!-- Option: Both (Disabled) -->
+<button class="min-h-[44px] rounded-md bg-transparent text-[#A0AEC0] flex items-center justify-center gap-1 text-label-md font-label-md font-medium cursor-not-allowed opacity-60" disabled="" type="button">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+            Both
+          </button>
+</div>
+<!-- Hint message with Info styling -->
+<div class="mt-2.5 flex items-start gap-1.5 p-2 bg-[#F7F9FD] rounded-lg border border-[#D3DBE6]">
+<span class="material-symbols-outlined text-[#015C9A] text-[16px] shrink-0 mt-0.5">info</span>
+<p class="text-body-sm font-body-sm text-secondary text-[11px] leading-tight">
+            Email delivery is disabled until an email address is added and verified.
+          </p>
+</div>
+</section>
+<!-- SECTION 3: APP LANGUAGE -->
+<section class="bg-[#FFFFFF] border border-[#D3DBE6] rounded-xl p-space-lg">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-[18px] text-primary-container">translate</span>
+<h4 class="text-headline-sm font-headline-sm text-[#13263B] font-bold">App language</h4>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<!-- Arabic Option -->
+<button class="min-h-[48px] px-3 py-2.5 rounded-lg border border-[#D3DBE6] bg-white text-[#212427] hover:bg-[#F7F9FD] flex items-center justify-between text-body-md font-body-md font-semibold active:scale-95 transition-all" type="button">
+<span class="font-bold">العربية</span>
+<div class="w-4 h-4 rounded-full border border-[#C6D0DE] flex items-center justify-center"></div>
+</button>
+<!-- English Option (Selected) -->
+<button class="min-h-[48px] px-3 py-2.5 rounded-lg border-2 border-primary-container bg-[#EEF4FF] text-[#13263B] flex items-center justify-between text-body-md font-body-md font-semibold transition-all" type="button">
+<span class="font-bold">English</span>
+<div class="w-4 h-4 rounded-full bg-primary-container flex items-center justify-center">
+<span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+</div>
+</button>
+</div>
+</section>
+<!-- SECTION 4: MEDICAL INFO -->
+<section class="bg-[#FFFFFF] border border-[#D3DBE6] rounded-xl p-space-lg">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary-container">medical_information</span>
+<h4 class="text-headline-sm font-headline-sm text-[#13263B] font-bold">Medical info</h4>
+</div>
+<span class="text-[11px] font-label-md text-secondary bg-surface-container-high px-1.5 py-0.5 rounded">Confidential</span>
+</div>
+<!-- Grid Metadata Layout -->
+<div class="space-y-2.5 bg-[#F7F9FD] p-3 rounded-lg border border-[#D3DBE6]">
+<div class="flex items-center justify-between border-b border-[#E2E8F0] pb-2">
+<span class="text-body-sm font-body-sm text-secondary">Blood type</span>
+<span class="text-body-md font-body-md font-bold text-[#13263B]">O Positive (O+)</span>
+</div>
+<div class="flex flex-col border-b border-[#E2E8F0] pb-2">
+<span class="text-body-sm font-body-sm text-secondary mb-1">Known allergies</span>
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded-md bg-[#FFF5EE] text-[#FF5E00] border border-[#FFDBCE] text-[11px] font-semibold">
+                Penicillin (Severe)
+              </span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-md bg-white text-secondary border border-[#D3DBE6] text-[11px]">
+                Dust mites
+              </span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-secondary">Chronic conditions</span>
+<span class="text-body-md font-body-md font-medium text-[#13263B]">Mild Hypertension</span>
+</div>
+</div>
+<div class="mt-3 text-right">
+<a class="inline-flex items-center gap-1 text-label-md font-label-md font-semibold text-primary-container hover:underline min-h-[44px]" href="#medical-background">
+            Update medical background
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+</section>
+<!-- SECTION 5: ACCOUNT ACTIONS -->
+<section class="space-y-2 pt-1 pb-4">
+<!-- Change password row -->
+<a class="w-full bg-[#FFFFFF] border border-[#D3DBE6] rounded-xl px-4 py-3 flex items-center justify-between min-h-[48px] hover:bg-[#F7F9FD] active:scale-98 transition-all" href="#change-password">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px] text-primary-container">lock_reset</span>
+<span class="text-label-lg font-label-lg font-semibold text-[#13263B]">Change password</span>
+</div>
+<span class="material-symbols-outlined text-[20px] text-secondary">chevron_right</span>
+</a>
+<!-- Sign out button -->
+<button class="w-full bg-[#FFFFFF] border border-[#D3DBE6] rounded-xl px-4 py-3 flex items-center justify-center gap-2 min-h-[48px] text-primary-container font-headline-sm hover:bg-[#FEF2F2] hover:text-[#DC2626] hover:border-[#DC2626] active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+<span class="font-bold">Sign out</span>
+</button>
+<p class="text-center text-[11px] text-secondary pt-2">
+          ClinicFlow Egyptian Patient Portal • v2.4.1
+        </p>
+</section>
+</main>
+<!-- SHARED COMPONENT: BottomNavBar (Active: Profile) -->
+<!-- Executing JSON style keys verbatim: docked full-width bottom-0, fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin pb-safe h-16 max-w-full -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin h-16 max-w-full bg-surface-container-lowest border-t border-surface-dim shadow-none">
+<!-- 1. Home (Inactive) -->
+<a class="flex flex-col items-center justify-center text-secondary min-h-[48px] py-1 hover:text-primary active:scale-95 transition-all duration-150" href="#home">
+<span class="material-symbols-outlined text-[22px]">home</span>
+<span class="text-label-sm font-label-sm mt-0.5">Home</span>
+</a>
+<!-- 2. Book (Inactive) -->
+<a class="flex flex-col items-center justify-center text-secondary min-h-[48px] py-1 hover:text-primary active:scale-95 transition-all duration-150" href="#book">
+<span class="material-symbols-outlined text-[22px]">calendar_add_on</span>
+<span class="text-label-sm font-label-sm mt-0.5">Book</span>
+</a>
+<!-- 3. Appointments (Inactive) -->
+<a class="flex flex-col items-center justify-center text-secondary min-h-[48px] py-1 hover:text-primary active:scale-95 transition-all duration-150" href="#appointments">
+<span class="material-symbols-outlined text-[22px]">calendar_month</span>
+<span class="text-label-sm font-label-sm mt-0.5">Appointments</span>
+</a>
+<!-- 4. Records (Inactive) -->
+<a class="flex flex-col items-center justify-center text-secondary min-h-[48px] py-1 hover:text-primary active:scale-95 transition-all duration-150" href="#records">
+<span class="material-symbols-outlined text-[22px]">description</span>
+<span class="text-label-sm font-label-sm mt-0.5">Records</span>
+</a>
+<!-- 5. Profile (ACTIVE MATCH FOR THIS SCREEN) -->
+<!-- JSON style_active_navigation applied: flex flex-col items-center justify-center text-primary-container font-semibold min-h-[48px] py-1 -->
+<a aria-current="page" class="flex flex-col items-center justify-center text-primary-container font-semibold min-h-[48px] py-1 active:scale-95 transition-all duration-150" href="#profile">
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="text-label-sm font-label-sm mt-0.5">Profile</span>
+</a>
+</nav>
+</div>
+</body></html>

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow Egypt - Claims Workspace &amp; Batch Processing</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-dim": "#d1dbeb",
+            "tertiary-container": "#722600",
+            "surface": "#f8f9ff",
+            "secondary": "#4e6077",
+            "inverse-on-surface": "#eaf1ff",
+            "on-secondary": "#ffffff",
+            "tertiary-fixed": "#ffdbce",
+            "on-tertiary-container": "#ff8b5b",
+            "on-error-container": "#93000a",
+            "surface-variant": "#d9e3f4",
+            "error": "#ba1a1a",
+            "surface-container-lowest": "#ffffff",
+            "surface-tint": "#406185",
+            "on-secondary-container": "#52647c",
+            "surface-container-highest": "#d9e3f4",
+            "surface-bright": "#f8f9ff",
+            "on-tertiary": "#ffffff",
+            "on-error": "#ffffff",
+            "outline": "#73777f",
+            "inverse-surface": "#27313e",
+            "outline-variant": "#c3c6cf",
+            "primary-container": "#1e4164",
+            "secondary-container": "#cee1fd",
+            "on-tertiary-fixed": "#370e00",
+            "on-surface-variant": "#43474e",
+            "background": "#f8f9ff",
+            "primary-fixed-dim": "#a8c9f3",
+            "surface-container-high": "#dfe9fa",
+            "secondary-fixed-dim": "#b5c8e3",
+            "tertiary": "#4e1700",
+            "on-secondary-fixed": "#081c31",
+            "error-container": "#ffdad6",
+            "tertiary-fixed-dim": "#ffb599",
+            "primary-fixed": "#d1e4ff",
+            "on-secondary-fixed-variant": "#36485f",
+            "surface-container-low": "#eef4ff",
+            "primary": "#002b4c",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "surface-container": "#e5efff",
+            "on-surface": "#121c28",
+            "on-primary": "#ffffff",
+            "on-background": "#121c28",
+            "secondary-fixed": "#d2e4ff",
+            "inverse-primary": "#a8c9f3",
+            "on-primary-fixed-variant": "#27496c",
+            "on-primary-container": "#8dadd6",
+            "on-primary-fixed": "#001d36"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin-desktop": "2rem",
+            "space-xl": "1.5rem",
+            "margin-tablet": "1.5rem",
+            "gutter-sm": "0.75rem",
+            "gutter": "1rem",
+            "space-md": "0.75rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "margin": "1rem",
+            "space-lg": "1rem"
+          },
+          "fontFamily": {
+            "body-sm": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "label-lg": ["Inter"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-xl": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    body {
+      background-color: #F7F9FD;
+      color: #121c28;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#F7F9FD] text-on-surface antialiased flex font-body-md text-body-md">
+<!-- Desktop Fixed Side Navigation -->
+<aside class="fixed top-0 left-0 h-screen w-[260px] z-40 flex flex-col justify-between p-4 bg-surface-container-lowest border-r border-outline-variant">
+<div class="flex flex-col gap-6">
+<!-- ClinicFlow Brand Header -->
+<div class="flex items-center gap-3 px-2 pt-1">
+<div class="w-9 h-9 rounded-lg bg-primary-container flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[20px]" data-icon="medical_services">medical_services</span>
+</div>
+<div class="flex flex-col">
+<span class="text-headline-md font-headline-md font-bold text-primary tracking-tight">ClinicFlow Egypt</span>
+<button class="flex items-center gap-1 text-label-sm font-label-sm text-secondary hover:text-primary transition-colors text-left">
+<span>All branches ▾</span>
+</button>
+</div>
+</div>
+<!-- Action Button -->
+<button class="w-full flex items-center justify-center gap-2 bg-primary-container text-on-primary rounded-lg py-2.5 px-3 font-label-md text-label-md hover:bg-primary transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+<span>New Transaction</span>
+</button>
+<!-- Navigation Tabs -->
+<nav class="flex flex-col gap-1">
+<!-- Overview -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="text-label-md font-label-md">Overview</span>
+</a>
+<!-- Invoices -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="receipt_long">receipt_long</span>
+<span class="text-label-md font-label-md">Invoices</span>
+</a>
+<!-- Cash sessions -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="point_of_sale">point_of_sale</span>
+<span class="text-label-md font-label-md">Cash sessions</span>
+</a>
+<!-- Payers & plans -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="assured_workload">assured_workload</span>
+<span class="text-label-md font-label-md">Payers &amp; plans</span>
+</a>
+<!-- Claims (ACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container-low text-primary font-semibold border-l-4 border-primary" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="assignment_turned_in">assignment_turned_in</span>
+<span class="text-label-md font-label-md">Claims</span>
+</a>
+<!-- Reports -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="bar_chart">bar_chart</span>
+<span class="text-label-md font-label-md">Reports</span>
+</a>
+</nav>
+</div>
+<!-- Bottom User Profile Card -->
+<div class="pt-4 border-t border-outline-variant flex items-center gap-3 px-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]" data-icon="account_circle">account_circle</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="text-label-md font-label-md text-on-surface truncate">Youssef Kamal</span>
+<span class="text-body-sm font-body-sm text-secondary truncate">Accountant</span>
+</div>
+</div>
+</aside>
+<!-- Top App Bar -->
+<header class="fixed top-0 right-0 left-[260px] h-16 px-8 flex items-center justify-between bg-surface-container-lowest border-b border-outline-variant z-30">
+<div class="flex items-center gap-6 w-full max-w-2xl">
+<h1 class="text-headline-md font-headline-md font-bold text-on-surface whitespace-nowrap">Insurance Claims Workspace &amp; Remittance</h1>
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-[18px] text-secondary" data-icon="search">search</span>
+<input class="w-full h-9 pl-9 pr-4 rounded-lg bg-surface border border-outline-variant text-body-sm font-body-sm text-on-surface placeholder-secondary focus:outline-none focus:border-[#015C9A] focus:ring-1 focus:ring-[#015C9A]" placeholder="Search claim batch ID, patient MRN, approval code, or service code..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-label-sm font-label-sm text-secondary hover:text-on-surface font-semibold px-2 py-1">
+        EN | عربي
+      </button>
+<!-- Notification Bell with Orange Dot -->
+<button class="relative p-2 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[22px]" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#FF5E00]"></span>
+</button>
+<!-- Batch Export Dropdown -->
+<div class="relative">
+<button class="flex items-center gap-1.5 px-3 py-2 border border-outline-variant rounded-lg text-label-md font-label-md text-primary bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
+<span>Export Batch</span>
+<span class="text-secondary text-xs">▾</span>
+</button>
+</div>
+<!-- New Batch Button -->
+<button class="flex items-center gap-1.5 bg-primary-container text-on-primary rounded-lg px-3.5 py-2 text-label-md font-label-md hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="add_circle">add_circle</span>
+<span>New Batch</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[260px] pt-20 px-8 pb-12 w-[calc(100%-260px)] min-h-screen">
+<div class="max-w-[1360px] mx-auto flex flex-col gap-5">
+<!-- Section 1: Batch Header & Lifecycle Status Tracker -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm">
+<div class="flex items-center justify-between pb-4 border-b border-outline-variant">
+<div class="flex items-center gap-4">
+<div class="p-2.5 rounded-lg bg-surface-container text-primary">
+<span class="material-symbols-outlined text-[24px]" data-icon="inventory_2">inventory_2</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="text-headline-md font-headline-md font-bold text-on-surface">BATCH-2025-10-ALZ</span>
+<span class="px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-secondary-container text-on-secondary-fixed-variant">Allianz Egypt - October 2025 Cycle 2</span>
+</div>
+<p class="text-body-sm font-body-sm text-secondary mt-0.5">Target Payer: <span class="font-semibold text-on-surface">Allianz Healthcare Egypt</span> · Period: <span class="font-semibold text-on-surface">01 Oct 2025 – 24 Oct 2025</span></p>
+</div>
+</div>
+<div class="flex items-center gap-6 text-right">
+<div>
+<span class="text-label-sm font-label-sm text-secondary block">Total Claims</span>
+<span class="text-headline-sm font-headline-sm font-bold text-on-surface">14 claims</span>
+</div>
+<div class="h-8 w-px bg-outline-variant"></div>
+<div>
+<span class="text-label-sm font-label-sm text-secondary block">Total Claim Value</span>
+<span class="text-headline-sm font-headline-sm font-bold text-primary">EGP 48,250.00</span>
+</div>
+</div>
+</div>
+<!-- Horizontal Stepper -->
+<div class="pt-5">
+<div class="grid grid-cols-4 gap-4 relative">
+<!-- Step 1: Draft (Completed) -->
+<div class="flex flex-col gap-1.5 relative">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-[#1E4164] text-white flex items-center justify-center text-[12px] font-bold">
+<span class="material-symbols-outlined text-[14px]" data-icon="check">check</span>
+</div>
+<span class="text-label-md font-label-md font-bold text-on-surface">1. Draft</span>
+</div>
+<p class="text-body-sm font-body-sm text-secondary pl-8">14 lines staged</p>
+<div class="h-1 bg-[#1E4164] rounded-full mt-2"></div>
+</div>
+<!-- Step 2: Validation & Review (ACTIVE STEP) -->
+<div class="flex flex-col gap-1.5 relative">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full border-2 border-[#1E4164] bg-white text-[#1E4164] flex items-center justify-center text-[12px] font-bold">
+                    2
+                  </div>
+<span class="text-label-md font-label-md font-bold text-[#1E4164]">2. Validation &amp; Review</span>
+</div>
+<span class="px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-[#FFFBEB] text-[#D97706] font-semibold border border-[#FDE68A]">2 Warnings</span>
+</div>
+<p class="text-body-sm font-body-sm text-[#D97706] pl-8 font-medium">Blocking flags detected</p>
+<div class="h-1 bg-[#015C9A] rounded-full mt-2"></div>
+</div>
+<!-- Step 3: Submitted to Payer (Pending) -->
+<div class="flex flex-col gap-1.5 opacity-60">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-variant text-secondary flex items-center justify-center text-[12px] font-bold">
+                  3
+                </div>
+<span class="text-label-md font-label-md font-bold text-secondary">3. Submitted to Payer</span>
+</div>
+<p class="text-body-sm font-body-sm text-secondary pl-8">Pending submission</p>
+<div class="h-1 bg-surface-variant rounded-full mt-2"></div>
+</div>
+<!-- Step 4: Adjudication & Remittance (Pending) -->
+<div class="flex flex-col gap-1.5 opacity-60">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-variant text-secondary flex items-center justify-center text-[12px] font-bold">
+                  4
+                </div>
+<span class="text-label-md font-label-md font-bold text-secondary">4. Adjudication &amp; Remittance</span>
+</div>
+<p class="text-body-sm font-body-sm text-secondary pl-8">Paid / Partial / Rejected</p>
+<div class="h-1 bg-surface-variant rounded-full mt-2"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 2: Batch Action & Validation Summary Bar -->
+<div class="bg-[#FFFBEB] border border-[#FCD34D] rounded-xl p-4 flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-[#FEF3C7] text-[#D97706] flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="warning">warning</span>
+</div>
+<div>
+<h4 class="text-label-lg font-label-lg text-[#92400E]">Action Required Prior to XML Export</h4>
+<p class="text-body-sm font-body-sm text-[#B45309]">2 lines have blocking validation warnings. Resolve these before final XML batch submission to Allianz portal.</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-3.5 py-2 bg-white border border-[#D3DBE6] rounded-lg text-label-md font-label-md text-primary hover:bg-[#F7F9FD] transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="refresh">refresh</span>
+<span>Validate All Lines</span>
+</button>
+<button class="px-4 py-2 bg-primary-container text-white opacity-40 cursor-not-allowed rounded-lg text-label-md font-label-md flex items-center gap-1.5 shadow-sm" disabled="" title="Resolve all validation warnings first">
+<span class="material-symbols-outlined text-[16px]" data-icon="send">send</span>
+<span>Submit Batch to Allianz Portal</span>
+</button>
+<div class="relative">
+<button class="px-3 py-2 bg-white border border-[#D3DBE6] rounded-lg text-label-md font-label-md text-secondary hover:text-on-surface flex items-center gap-1">
+<span>Export</span>
+<span class="text-xs">▾</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Section 3: Claims Batch Lines Table -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant text-label-sm font-label-sm text-secondary">
+<th class="py-3 px-4 w-10 text-center">
+<input checked="" class="rounded border-outline-variant text-primary focus:ring-0" type="checkbox"/>
+</th>
+<th class="py-3 px-3 w-14">Line #</th>
+<th class="py-3 px-4">Patient &amp; MRN</th>
+<th class="py-3 px-3">Visit Date</th>
+<th class="py-3 px-4">Service Code &amp; Name</th>
+<th class="py-3 px-3">ICD-10 Dx</th>
+<th class="py-3 px-3">Pre-auth Code</th>
+<th class="py-3 px-4 text-right">Claimed (EGP)</th>
+<th class="py-3 px-4">Adjudicated Status / Validation Note</th>
+<th class="py-3 px-4 text-center">Remittance Entry &amp; Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant text-body-sm font-body-sm">
+<!-- Row 1: Valid / Clean -->
+<tr class="hover:bg-surface transition-colors">
+<td class="py-3.5 px-4 text-center">
+<input checked="" class="rounded border-outline-variant text-primary focus:ring-0" type="checkbox"/>
+</td>
+<td class="py-3.5 px-3 font-semibold text-secondary">01</td>
+<td class="py-3.5 px-4">
+<span class="font-semibold text-on-surface block">Hazem Mostafa</span>
+<span class="text-secondary text-[11px]">MRN: CF-002148</span>
+</td>
+<td class="py-3.5 px-3 whitespace-nowrap text-secondary">24 Oct 2025</td>
+<td class="py-3.5 px-4">
+<span class="font-medium text-on-surface">99214</span>
+<span class="text-secondary text-[11px] block">Cardiology Specialist Visit</span>
+</td>
+<td class="py-3.5 px-3">
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-mono text-[11px] font-semibold">I10</span>
+</td>
+<td class="py-3.5 px-3">
+<span class="font-mono text-secondary text-[12px]">AUTH-88201-ALZ</span>
+</td>
+<td class="py-3.5 px-4 text-right font-semibold text-on-surface">
+                  360.00
+                </td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#ECFDF5] text-[#059669]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+                    Valid / Ready to Submit
+                  </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="text-secondary text-[12px] italic">Staged</span>
+</td>
+</tr>
+<!-- Row 2: BLOCKING WARNING - Missing Pre-auth -->
+<tr class="bg-[#FFFDF7] hover:bg-[#FFFBEB] transition-colors border-l-4 border-l-[#DC2626]">
+<td class="py-3.5 px-4 text-center">
+<input checked="" class="rounded border-outline-variant text-primary focus:ring-0" type="checkbox"/>
+</td>
+<td class="py-3.5 px-3 font-semibold text-secondary">02</td>
+<td class="py-3.5 px-4">
+<span class="font-semibold text-on-surface block">Mariam Nader</span>
+<span class="text-secondary text-[11px]">MRN: CF-003892</span>
+</td>
+<td class="py-3.5 px-3 whitespace-nowrap text-secondary">22 Oct 2025</td>
+<td class="py-3.5 px-4">
+<span class="font-medium text-on-surface">93306</span>
+<span class="text-secondary text-[11px] block">Comprehensive Echocardiogram</span>
+</td>
+<td class="py-3.5 px-3">
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-mono text-[11px] font-semibold">I25.1</span>
+</td>
+<td class="py-3.5 px-3">
+<div class="relative">
+<input class="w-32 h-7 px-2 border border-[#DC2626] rounded text-[11px] font-mono bg-white focus:outline-none focus:ring-1 focus:ring-[#DC2626] text-on-surface" placeholder="AUTH-..." type="text"/>
+</div>
+</td>
+<td class="py-3.5 px-4 text-right font-semibold text-on-surface">
+                  1,020.00
+                </td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#FEF2F2] text-[#DC2626]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#DC2626]"></span>
+                    Missing Pre-auth (&gt;EGP 800 threshold)
+                  </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<button class="px-2.5 py-1 bg-white border border-[#DC2626] text-[#DC2626] hover:bg-[#FEF2F2] rounded text-label-sm font-label-sm transition-colors shadow-sm">
+                    Input Auth Code
+                  </button>
+</td>
+</tr>
+<!-- Row 3: BLOCKING WARNING - Missing Diagnosis Code -->
+<tr class="bg-[#FFFDF7] hover:bg-[#FFFBEB] transition-colors border-l-4 border-l-[#D97706]">
+<td class="py-3.5 px-4 text-center">
+<input checked="" class="rounded border-outline-variant text-primary focus:ring-0" type="checkbox"/>
+</td>
+<td class="py-3.5 px-3 font-semibold text-secondary">03</td>
+<td class="py-3.5 px-4">
+<span class="font-semibold text-on-surface block">Youssef Amr</span>
+<span class="text-secondary text-[11px]">MRN: CF-003891</span>
+</td>
+<td class="py-3.5 px-3 whitespace-nowrap text-secondary">23 Oct 2025</td>
+<td class="py-3.5 px-4">
+<span class="font-medium text-on-surface">93000</span>
+<span class="text-secondary text-[11px] block">12-Lead Resting ECG</span>
+</td>
+<td class="py-3.5 px-3">
+<select class="h-7 py-0 px-2 text-[11px] border border-[#D97706] rounded bg-[#FFFBEB] text-[#B45309] font-medium focus:outline-none focus:ring-1 focus:ring-[#D97706]">
+<option value="">Select ICD-10...</option>
+<option value="R00.0">R00.0 Tachycardia</option>
+<option value="R07.9">R07.9 Chest Pain</option>
+<option value="I10">I10 Hypertension</option>
+</select>
+</td>
+<td class="py-3.5 px-3">
+<span class="text-secondary text-[11px]">N/A (&lt; limit)</span>
+</td>
+<td class="py-3.5 px-4 text-right font-semibold text-on-surface">
+                  135.00
+                </td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#FFFBEB] text-[#D97706]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#D97706]"></span>
+                    Missing Diagnosis
+                  </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<button class="px-2.5 py-1 bg-white border border-[#D97706] text-[#B45309] hover:bg-[#FFFBEB] rounded text-label-sm font-label-sm transition-colors shadow-sm">
+                    Assign ICD-10
+                  </button>
+</td>
+</tr>
+<!-- Row 4: Valid / Clean -->
+<tr class="hover:bg-surface transition-colors">
+<td class="py-3.5 px-4 text-center">
+<input checked="" class="rounded border-outline-variant text-primary focus:ring-0" type="checkbox"/>
+</td>
+<td class="py-3.5 px-3 font-semibold text-secondary">04</td>
+<td class="py-3.5 px-4">
+<span class="font-semibold text-on-surface block">Salma Nabil</span>
+<span class="text-secondary text-[11px]">MRN: CF-005120</span>
+</td>
+<td class="py-3.5 px-3 whitespace-nowrap text-secondary">20 Oct 2025</td>
+<td class="py-3.5 px-4">
+<span class="font-medium text-on-surface">99203</span>
+<span class="text-secondary text-[11px] block">Internal Medicine Consult</span>
+</td>
+<td class="py-3.5 px-3">
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-mono text-[11px] font-semibold">E11.9</span>
+</td>
+<td class="py-3.5 px-3">
+<span class="font-mono text-secondary text-[12px]">AUTH-87914-ALZ</span>
+</td>
+<td class="py-3.5 px-4 text-right font-semibold text-on-surface">
+                  400.00
+                </td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#ECFDF5] text-[#059669]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+                    Valid / Ready to Submit
+                  </span>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="text-secondary text-[12px] italic">Staged</span>
+</td>
+</tr>
+<!-- Row 5: Prior Remittance - PARTIALLY APPROVED -->
+<tr class="hover:bg-surface transition-colors bg-[#F8FAFC]">
+<td class="py-3.5 px-4 text-center">
+<input class="rounded border-outline-variant text-primary focus:ring-0" type="checkbox"/>
+</td>
+<td class="py-3.5 px-3 font-semibold text-secondary">05</td>
+<td class="py-3.5 px-4">
+<span class="font-semibold text-on-surface block">Tarek Mansour</span>
+<span class="text-secondary text-[11px]">MRN: CF-008124</span>
+</td>
+<td class="py-3.5 px-3 whitespace-nowrap text-secondary">14 Oct 2025</td>
+<td class="py-3.5 px-4">
+<span class="font-medium text-on-surface">99213</span>
+<span class="text-secondary text-[11px] block">Follow-up Consult</span>
+</td>
+<td class="py-3.5 px-3">
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-mono text-[11px] font-semibold">R07.9</span>
+</td>
+<td class="py-3.5 px-3">
+<span class="font-mono text-secondary text-[12px]">AUTH-86102-ALZ</span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<span class="font-semibold text-on-surface block">450.00</span>
+<span class="text-[#015C9A] text-[11px] block">Appr: 350.00</span>
+</td>
+<td class="py-3.5 px-4">
+<div>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#EFF6FF] text-[#015C9A]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#015C9A]"></span>
+                      Partially Approved
+                    </span>
+<span class="text-[11px] text-[#DC2626] block mt-0.5">Deduction: EGP 100 non-covered lab</span>
+</div>
+</td>
+<td class="py-3.5 px-4 text-center">
+<span class="px-2 py-1 rounded bg-[#F1F5F9] text-primary font-semibold text-[11px]">EGP 350.00 Received</span>
+</td>
+</tr>
+<!-- Row 6: Prior Remittance - REJECTED line with action triggers -->
+<tr class="hover:bg-surface transition-colors bg-[#FEF2F2]/30">
+<td class="py-3.5 px-4 text-center">
+<input class="rounded border-outline-variant text-primary focus:ring-0" type="checkbox"/>
+</td>
+<td class="py-3.5 px-3 font-semibold text-secondary">06</td>
+<td class="py-3.5 px-4">
+<span class="font-semibold text-on-surface block">Farida Karim</span>
+<span class="text-secondary text-[11px]">MRN: CF-009102</span>
+</td>
+<td class="py-3.5 px-3 whitespace-nowrap text-secondary">12 Oct 2025</td>
+<td class="py-3.5 px-4">
+<span class="font-medium text-on-surface">99204</span>
+<span class="text-secondary text-[11px] block">Pediatric Consultation</span>
+</td>
+<td class="py-3.5 px-3">
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-mono text-[11px] font-semibold">J02.9</span>
+</td>
+<td class="py-3.5 px-3">
+<span class="font-mono text-secondary text-[12px]">AUTH-85412-ALZ</span>
+</td>
+<td class="py-3.5 px-4 text-right font-semibold text-on-surface">
+                  450.00
+                </td>
+<td class="py-3.5 px-4">
+<div>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#FEF2F2] text-[#DC2626]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#DC2626]"></span>
+                      Rejected by Payer
+                    </span>
+<span class="text-[11px] text-secondary block mt-0.5">Reason: Expired Member Policy</span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center justify-center gap-1.5 flex-wrap">
+<button class="px-2 py-1 bg-white border border-[#D3DBE6] hover:border-primary text-primary rounded text-[11px] font-medium transition-colors">
+                      Appeal
+                    </button>
+<button class="px-2 py-1 bg-white border border-[#D3DBE6] hover:border-[#DC2626] text-[#DC2626] rounded text-[11px] font-medium transition-colors">
+                      Write off
+                    </button>
+<button class="px-2 py-1 bg-[#1E4164] text-white hover:bg-[#13263B] rounded text-[11px] font-medium transition-colors">
+                      Bill Patient
+                    </button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Section 4: Bottom Remittance Summary Card & Quick Entry Trigger -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-6 w-full md:w-auto">
+<div class="border-r border-outline-variant pr-4">
+<span class="text-label-sm font-label-sm text-secondary block">Batch Claimed</span>
+<span class="text-headline-sm font-headline-sm font-bold text-on-surface">EGP 48,250.00</span>
+</div>
+<div class="border-r border-outline-variant pr-4">
+<span class="text-label-sm font-label-sm text-secondary block">Approved to Date</span>
+<span class="text-headline-sm font-headline-sm font-bold text-[#059669]">EGP 35,400.00</span>
+</div>
+<div class="border-r border-outline-variant pr-4">
+<span class="text-label-sm font-label-sm text-secondary block">Deductions / Rejected</span>
+<span class="text-headline-sm font-headline-sm font-bold text-[#DC2626]">EGP 2,650.00</span>
+</div>
+<div>
+<span class="text-label-sm font-label-sm text-secondary block">Pending Adjudication</span>
+<span class="text-headline-sm font-headline-sm font-bold text-[#015C9A]">EGP 10,200.00</span>
+</div>
+</div>
+<div class="flex items-center gap-3 w-full md:w-auto justify-end">
+<button class="w-full md:w-auto px-4 py-2.5 bg-surface-container-low hover:bg-surface-container text-primary font-semibold text-label-md font-label-md rounded-lg border border-outline-variant flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="account_balance">account_balance</span>
+<span>Apply Payer Remittance Advice (835/EFT Bank Transfer #BM-2025-88192)</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

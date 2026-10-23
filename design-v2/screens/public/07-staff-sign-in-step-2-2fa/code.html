@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow - Staff Sign-in: Two-Factor Authentication</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-tint": "#406185",
+            "on-primary-container": "#8dadd6",
+            "surface-container-lowest": "#ffffff",
+            "secondary": "#4e6077",
+            "outline": "#73777f",
+            "on-primary-fixed": "#001d36",
+            "tertiary": "#4e1700",
+            "surface-dim": "#d1dbeb",
+            "on-surface-variant": "#43474e",
+            "primary-fixed": "#d1e4ff",
+            "inverse-surface": "#27313e",
+            "on-primary-fixed-variant": "#27496c",
+            "inverse-primary": "#a8c9f3",
+            "tertiary-fixed": "#ffdbce",
+            "surface-container-high": "#dfe9fa",
+            "inverse-on-surface": "#eaf1ff",
+            "error": "#ba1a1a",
+            "surface-container": "#e5efff",
+            "on-secondary-fixed": "#081c31",
+            "secondary-fixed": "#d2e4ff",
+            "outline-variant": "#c3c6cf",
+            "tertiary-container": "#722600",
+            "surface-variant": "#d9e3f4",
+            "on-surface": "#121c28",
+            "on-background": "#121c28",
+            "tertiary-fixed-dim": "#ffb599",
+            "primary-container": "#1e4164",
+            "background": "#f8f9ff",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-tertiary-fixed": "#370e00",
+            "on-secondary-fixed-variant": "#36485f",
+            "surface-container-highest": "#d9e3f4",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "on-secondary-container": "#52647c",
+            "on-error": "#ffffff",
+            "on-primary": "#ffffff",
+            "on-error-container": "#93000a",
+            "surface": "#f8f9ff",
+            "primary-fixed-dim": "#a8c9f3",
+            "on-tertiary": "#ffffff",
+            "surface-bright": "#f8f9ff",
+            "on-secondary": "#ffffff",
+            "secondary-container": "#cee1fd",
+            "surface-container-low": "#eef4ff",
+            "on-tertiary-container": "#ff8b5b",
+            "error-container": "#ffdad6",
+            "primary": "#002b4c"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1rem",
+            "margin-tablet": "1.5rem",
+            "space-md": "0.75rem",
+            "margin": "1rem",
+            "gutter": "1rem",
+            "gutter-sm": "0.75rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-xl": "1.5rem",
+            "margin-desktop": "2rem"
+          },
+          "fontFamily": {
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "label-lg": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-md": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .caret-blink {
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body class="bg-[#F7F9FD] text-[#212427] font-body-md text-body-md min-h-screen flex flex-col justify-between antialiased selection:bg-[#1E4164] selection:text-white">
+<!-- Desktop Minimal Header -->
+<header class="w-full bg-[#FFFFFF] border-b border-[#D3DBE6]">
+<div class="max-w-7xl mx-auto px-8 h-16 flex items-center justify-between">
+<!-- ClinicFlow Brand Anchor -->
+<div class="flex items-center gap-3">
+<a class="flex items-center gap-2 group" href="#">
+<div class="w-8 h-8 rounded-lg bg-[#1E4164] flex items-center justify-center text-white shadow-sm transition-transform group-hover:scale-105">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">local_hospital</span>
+</div>
+<span class="font-headline-md text-headline-md font-bold text-[#13263B] tracking-tight">ClinicFlow</span>
+</a>
+<span class="h-4 w-[1px] bg-[#D3DBE6] mx-1"></span>
+<span class="font-label-sm text-label-sm bg-[#EFF6FF] text-[#015C9A] px-2 py-0.5 rounded font-semibold tracking-wide border border-[#C6D0DE]">Staff Portal</span>
+</div>
+<!-- Trailing Minimal Controls -->
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-1.5 text-secondary hover:text-[#1E4164] font-label-md text-label-md cursor-pointer transition-colors duration-150">
+<span class="material-symbols-outlined text-[18px]">language</span>
+<span class="font-medium">EN</span>
+<span class="text-[#D3DBE6]">|</span>
+<span class="font-medium text-[#5B6573] hover:text-[#1E4164]">عربي</span>
+</div>
+<a class="inline-flex items-center gap-1.5 font-label-md text-label-md text-[#5B6573] hover:text-[#1E4164] transition-colors duration-150" href="#">
+<span>Return to homepage</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</header>
+<!-- Centered Verification Canvas -->
+<main class="flex-grow flex items-center justify-center px-4 py-10">
+<div class="w-full max-w-[460px] bg-[#FFFFFF] border border-[#D3DBE6] rounded-xl p-8 relative">
+<!-- Top Security Badge -->
+<div class="flex justify-center mb-6">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EFF6FF] border border-[#C6D0DE] text-[#015C9A]">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">shield</span>
+<span class="font-label-md text-label-md tracking-wide">Staff Security Verification</span>
+</div>
+</div>
+<!-- Heading & Explanatory Metadata -->
+<div class="text-center mb-6">
+<h1 class="font-headline-lg text-headline-lg font-bold text-[#13263B] tracking-tight mb-2">Two-step verification</h1>
+<p class="font-body-md text-body-md text-[#5B6573] leading-relaxed">
+          Enter the 6-digit code from your authenticator app (Google Authenticator, Microsoft Authenticator, or 1Password) to access your clinical workspace.
+        </p>
+</div>
+<!-- Identity Context Pill -->
+<div class="mb-8 p-2.5 rounded-lg bg-[#F7F9FD] border border-[#D3DBE6] flex items-center justify-between">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-7 h-7 rounded-full bg-[#1E4164] text-white flex items-center justify-center font-label-md text-label-md shrink-0">
+            MS
+          </div>
+<div class="truncate text-left">
+<span class="font-label-md text-label-md text-[#212427] font-semibold">mona.samir@clinicflow.eg</span>
+<span class="text-[#5B6573] font-body-sm text-body-sm"> · Receptionist</span>
+</div>
+</div>
+<a class="font-label-sm text-label-sm text-[#1E4164] hover:underline shrink-0 ml-2" href="#">Change</a>
+</div>
+<!-- Verification Form -->
+<form action="#" class="space-y-6" method="POST" onsubmit="event.preventDefault();">
+<!-- 6-Digit OTP Cluster -->
+<div>
+<label class="block font-label-md text-label-md text-[#212427] font-semibold mb-3 text-center">
+            Authentication code
+          </label>
+<div class="flex justify-between items-center gap-2" dir="ltr">
+<!-- Box 1 (Filled) -->
+<div class="w-12 h-14 bg-[#FFFFFF] border border-[#C6D0DE] rounded-lg flex items-center justify-center text-headline-lg font-headline-lg font-bold text-[#13263B]">
+              4
+            </div>
+<!-- Box 2 (Filled) -->
+<div class="w-12 h-14 bg-[#FFFFFF] border border-[#C6D0DE] rounded-lg flex items-center justify-center text-headline-lg font-headline-lg font-bold text-[#13263B]">
+              8
+            </div>
+<!-- Box 3 (Filled) -->
+<div class="w-12 h-14 bg-[#FFFFFF] border border-[#C6D0DE] rounded-lg flex items-center justify-center text-headline-lg font-headline-lg font-bold text-[#13263B]">
+              1
+            </div>
+<!-- Box 4 (Active Focus with Caret) -->
+<div class="w-12 h-14 bg-[#FFFFFF] border-2 border-[#1E4164] ring-2 ring-[#015C9A]/15 rounded-lg flex items-center justify-center text-headline-lg font-headline-lg text-[#1E4164]">
+<span class="inline-block w-[2px] h-6 bg-[#1E4164] caret-blink"></span>
+</div>
+<!-- Box 5 (Empty) -->
+<div class="w-12 h-14 bg-[#FFFFFF] border border-[#C6D0DE] rounded-lg flex items-center justify-center text-headline-lg font-headline-lg text-[#5B6573]">
+</div>
+<!-- Box 6 (Empty) -->
+<div class="w-12 h-14 bg-[#FFFFFF] border border-[#C6D0DE] rounded-lg flex items-center justify-center text-headline-lg font-headline-lg text-[#5B6573]">
+</div>
+</div>
+</div>
+<!-- Trust Device Checkbox -->
+<div class="pt-1">
+<div class="flex items-start gap-3">
+<div class="flex items-center h-5">
+<input class="w-4 h-4 text-[#1E4164] border-[#C6D0DE] rounded focus:ring-[#015C9A] focus:ring-offset-0 focus:ring-1" id="trust-device" name="trust-device" type="checkbox"/>
+</div>
+<div class="text-left">
+<label class="font-label-md text-label-md text-[#212427] font-semibold cursor-pointer select-none" for="trust-device">
+                Trust this device for 30 days
+              </label>
+<p class="font-body-sm text-body-sm text-[#5B6573] mt-0.5 leading-normal">
+                Do not check this on shared reception or clinic workstations.
+              </p>
+</div>
+</div>
+</div>
+<!-- Primary CTA Button -->
+<div>
+<button class="w-full h-12 bg-[#1E4164] hover:bg-[#13263B] text-white font-label-lg text-label-lg font-semibold rounded-lg transition-colors duration-150 flex items-center justify-center gap-2 active:scale-[0.99] shadow-sm" type="submit">
+<span>Verify and sign in</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+<!-- Alternative Actions & Helpdesk -->
+<div class="pt-2 text-center space-y-3">
+<div>
+<a class="font-label-md text-label-md text-[#1E4164] hover:underline font-semibold inline-flex items-center gap-1.5" href="#">
+<span class="material-symbols-outlined text-[16px]">key</span>
+<span>Use a backup code instead</span>
+</a>
+</div>
+<div>
+<a class="font-body-sm text-body-sm text-[#5B6573] hover:text-[#1E4164] transition-colors" href="#">
+              Lost your device or authenticator? <span class="text-[#1E4164] font-medium underline">Contact IT Helpdesk (ext. 104)</span>
+</a>
+</div>
+</div>
+</form>
+<!-- Security Notice Card Anchor -->
+<div class="mt-8 pt-5 border-t border-[#D3DBE6] flex items-center justify-center gap-2 text-[#5B6573]">
+<span class="material-symbols-outlined text-[15px] text-[#015C9A]">lock</span>
+<span class="font-body-sm text-body-sm">Protected by 256-bit encryption · ClinicFlow Healthcare Gateway</span>
+</div>
+</div>
+</main>
+<!-- Desktop Minimal Footer -->
+<footer class="w-full bg-[#FFFFFF] border-t border-[#D3DBE6] py-5">
+<div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row items-center justify-between gap-4 font-body-sm text-body-sm text-[#5B6573]">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-[#059669]"></span>
+<span>Gateway Node: Cairo East (Alpha-1) · Systems Operational</span>
+</div>
+<div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+<span>© 2025 ClinicFlow Egypt. All rights reserved.</span>
+<span class="text-[#D3DBE6]">·</span>
+<span class="text-[#212427] font-semibold">Hotline: 16789</span>
+<span class="text-[#D3DBE6]">·</span>
+<a class="hover:text-[#1E4164] transition-colors" href="#">Privacy Policy</a>
+<span class="text-[#D3DBE6]">·</span>
+<a class="hover:text-[#1E4164] transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+</body></html>

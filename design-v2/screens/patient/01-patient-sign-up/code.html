@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>ClinicFlow - Create Account</title>
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with form plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "secondary-fixed": "#d2e4ff",
+            "on-surface-variant": "#43474e",
+            "on-secondary-fixed": "#081c31",
+            "on-background": "#191c1f",
+            "surface-container": "#eceef2",
+            "primary-container": "#1e4164",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-high": "#e7e8ec",
+            "error": "#ba1a1a",
+            "tertiary": "#4e1700",
+            "surface-tint": "#406185",
+            "inverse-on-surface": "#eff1f5",
+            "on-secondary": "#ffffff",
+            "surface-bright": "#f8f9fd",
+            "on-primary-container": "#8dadd6",
+            "on-tertiary": "#ffffff",
+            "on-surface": "#191c1f",
+            "outline-variant": "#c3c6cf",
+            "surface": "#f8f9fd",
+            "on-error": "#ffffff",
+            "surface-container-highest": "#e1e2e6",
+            "on-tertiary-container": "#ff8b5b",
+            "on-secondary-fixed-variant": "#36485f",
+            "on-primary-fixed-variant": "#27496c",
+            "on-tertiary-fixed": "#370e00",
+            "tertiary-fixed": "#ffdbce",
+            "primary": "#002b4c",
+            "error-container": "#ffdad6",
+            "secondary-container": "#cee1fd",
+            "secondary": "#4e6077",
+            "primary-fixed": "#d1e4ff",
+            "tertiary-container": "#722600",
+            "primary-fixed-dim": "#a8c9f3",
+            "on-secondary-container": "#52647c",
+            "outline": "#73777f",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-primary-fixed": "#001d36",
+            "inverse-primary": "#a8c9f3",
+            "on-error-container": "#93000a",
+            "tertiary-fixed-dim": "#ffb599",
+            "surface-variant": "#e1e2e6",
+            "surface-dim": "#d8dade",
+            "on-primary": "#ffffff",
+            "surface-container-low": "#f2f3f7",
+            "inverse-surface": "#2e3134",
+            "background": "#f8f9fd",
+            "cf-navy-deep": "#13263B",
+            "cf-navy": "#1E4164",
+            "cf-accent": "#FF5E00",
+            "cf-border": "#D3DBE6",
+            "cf-input-border": "#C6D0DE",
+            "cf-muted": "#5B6573",
+            "cf-text": "#212427",
+            "cf-focus": "#015C9A"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          spacing: {
+            "space-sm": "0.5rem",
+            "gutter": "1.5rem",
+            "margin-mobile": "1rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem",
+            "space-2xl": "4rem",
+            "margin-tablet": "2rem",
+            "space-lg": "1.5rem",
+            "margin": "3rem",
+            "gutter-mobile": "1rem",
+            "space-xl": "2.5rem"
+          },
+          fontFamily: {
+            "display-lg-mobile": ["Plus Jakarta Sans", "sans-serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "body-lg": ["Inter", "sans-serif"],
+            "eyebrow": ["Plus Jakarta Sans", "sans-serif"],
+            "body-sm": ["Inter", "sans-serif"],
+            "headline-sm": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-lg-mobile": ["Plus Jakarta Sans", "sans-serif"],
+            "title-md": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+            "label-md": ["Plus Jakarta Sans", "sans-serif"],
+            "display-lg": ["Plus Jakarta Sans", "sans-serif"],
+            "label-lg": ["Plus Jakarta Sans", "sans-serif"]
+          },
+          fontSize: {
+            "display-lg-mobile": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "700" }],
+            "body-md": ["15px", { lineHeight: "22px", fontWeight: "400" }],
+            "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+            "eyebrow": ["11px", { lineHeight: "14px", letterSpacing: "0.08em", fontWeight: "700" }],
+            "body-sm": ["13px", { lineHeight: "18px", fontWeight: "400" }],
+            "headline-sm": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+            "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.015em", fontWeight: "700" }],
+            "headline-lg-mobile": ["26px", { lineHeight: "34px", letterSpacing: "-0.01em", fontWeight: "700" }],
+            "title-md": ["16px", { lineHeight: "24px", fontWeight: "600" }],
+            "headline-md": ["24px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "600" }],
+            "display-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "label-lg": ["14px", { lineHeight: "20px", letterSpacing: "0.01em", fontWeight: "600" }]
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-[#F7F9FD] text-[#212427] antialiased selection:bg-secondary-fixed selection:text-cf-navy min-h-screen flex flex-col items-center">
+<!-- Mobile Viewport Container (~390px) -->
+<div class="w-full max-w-[412px] min-h-screen flex flex-col bg-[#F7F9FD] relative pb-10">
+<!-- Top Navigation Anchor (Shared Component: TopAppBar with Task Back) -->
+<header class="sticky top-0 left-0 w-full z-50 flex items-center justify-between px-4 h-14 bg-white border-b border-[#D3DBE6]">
+<!-- Left: Back Action with 44px min touch target -->
+<a aria-label="Go back" class="w-11 h-11 -ml-1 flex items-center justify-center rounded-lg text-[#13263B] hover:bg-[#F2F3F7] active:opacity-80 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</a>
+<!-- Center: ClinicFlow Brand Anchor -->
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-md bg-[#13263B] flex items-center justify-center text-white shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add_box</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-[#13263B] font-bold tracking-tight">ClinicFlow</span>
+</div>
+<!-- Right: Dual-Language Action Pill -->
+<div class="flex items-center justify-end min-w-[44px]">
+<button class="px-2.5 py-1 text-[13px] font-semibold text-[#1E4164] hover:bg-[#F2F3F7] rounded-md transition-colors flex items-center gap-1" type="button">
+<span class="opacity-70 text-[11px] font-normal">EN</span>
+<span class="opacity-30">|</span>
+<span class="font-medium">عربي</span>
+</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 px-4 pt-4">
+<!-- Step Indicator & Progress -->
+<section class="mb-5">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-[#FF5E00]"></span>
+<span class="font-eyebrow text-eyebrow text-[#13263B] uppercase tracking-wider font-bold">Step 1 of 2</span>
+<span class="text-[#5B6573] text-[13px]">·</span>
+<span class="text-[13px] font-medium text-[#212427]">Your details</span>
+</div>
+<span class="text-[12px] font-normal text-[#5B6573]">Next: Verify</span>
+</div>
+<!-- 2-Step Hairline Progress Track -->
+<div class="w-full grid grid-cols-2 gap-1.5 h-1.5 rounded-full overflow-hidden bg-transparent">
+<div class="bg-[#1E4164] h-full rounded-full"></div>
+<div class="bg-[#D3DBE6] h-full rounded-full"></div>
+</div>
+</section>
+<!-- Screen Title & Value Proposition -->
+<div class="mb-6">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-[#13263B] font-bold tracking-tight">Create your account</h1>
+<p class="font-body-md text-body-md text-[#5B6573] mt-1">Book visits, get reminders, and see your prescriptions and receipts.</p>
+</div>
+<!-- Structured Patient Card Container -->
+<div class="bg-white rounded-[16px] border border-[#D3DBE6] p-5 shadow-[0_2px_8px_rgba(19,38,59,0.03)] space-y-4">
+<!-- First Name & Last Name (2-Col Grid) -->
+<div class="grid grid-cols-2 gap-3">
+<div class="flex flex-col gap-1.5">
+<label class="font-label-lg text-label-lg text-[#13263B] font-semibold" for="first_name">First name</label>
+<input class="h-12 w-full px-3.5 bg-white border border-[#C6D0DE] rounded-[10px] text-[#212427] placeholder-[#5B6573] font-body-md text-[15px] focus:outline-none focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/30 transition-all" id="first_name" name="first_name" placeholder="e.g. Omar" type="text"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-lg text-label-lg text-[#13263B] font-semibold" for="last_name">Last name</label>
+<input class="h-12 w-full px-3.5 bg-white border border-[#C6D0DE] rounded-[10px] text-[#212427] placeholder-[#5B6573] font-body-md text-[15px] focus:outline-none focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/30 transition-all" id="last_name" name="last_name" placeholder="e.g. Hassan" type="text"/>
+</div>
+</div>
+<!-- Mobile Number with Egyptian Prefix Chip -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-lg text-label-lg text-[#13263B] font-semibold" for="mobile_phone">Mobile number</label>
+<div class="flex items-center rounded-[10px] border border-[#C6D0DE] bg-white overflow-hidden focus-within:border-[#015C9A] focus-within:ring-2 focus-within:ring-[#015C9A]/30 transition-all">
+<!-- Egypt Dial Prefix Chip -->
+<div class="h-12 px-3 bg-[#F0F4F8] flex items-center gap-1.5 border-r border-[#C6D0DE] select-none text-[#13263B] font-medium text-[14px]">
+<span class="text-base leading-none">🇪🇬</span>
+<span>+20</span>
+</div>
+<input class="h-12 flex-1 px-3.5 bg-transparent border-0 text-[#212427] placeholder-[#5B6573] font-body-md text-[15px] focus:ring-0 focus:outline-none" id="mobile_phone" name="phone" placeholder="010 1234 5678" type="tel"/>
+</div>
+<!-- Helper note with SMS info icon -->
+<div class="flex items-center gap-1.5 mt-0.5 text-[#5B6573]">
+<span class="material-symbols-outlined text-[16px] text-[#4E6077]">sms</span>
+<span class="font-body-sm text-body-sm text-[#5B6573]">We'll text you a 6-digit verification code</span>
+</div>
+</div>
+<!-- Password Field with Live Micro-validation -->
+<div class="flex flex-col gap-1.5 pt-1">
+<label class="font-label-lg text-label-lg text-[#13263B] font-semibold" for="patient_password">Password</label>
+<div class="relative flex items-center">
+<input class="h-12 w-full pl-3.5 pr-12 bg-white border border-[#C6D0DE] rounded-[10px] text-[#212427] font-body-md text-[15px] focus:outline-none focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/30 transition-all" id="patient_password" type="password" value="ClinicSafe2025"/>
+<button aria-label="Toggle password visibility" class="absolute right-0 top-0 h-12 w-12 flex items-center justify-center text-[#5B6573] hover:text-[#13263B] transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+<!-- Live Rule Criteria Checklist -->
+<div class="mt-2 p-3 bg-[#F8F9FD] rounded-[8px] border border-[#D3DBE6] space-y-1.5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#1E4164] text-[16px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-[12px] font-medium text-[#13263B]">8+ characters</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#1E4164] text-[16px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-[12px] font-medium text-[#13263B]">Upper case &amp; lower case letters</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#1E4164] text-[16px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-[12px] font-medium text-[#13263B]">At least 1 number</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#73777F] text-[16px]">radio_button_unchecked</span>
+<span class="text-[12px] text-[#5B6573]">At least 1 symbol (@, #, $, etc.)</span>
+</div>
+</div>
+</div>
+<!-- Email Field (Optional) -->
+<div class="flex flex-col gap-1.5 pt-1">
+<label class="font-label-lg text-label-lg text-[#13263B] font-semibold flex items-center justify-between" for="optional_email">
+<span>Email (optional)</span>
+</label>
+<input class="h-12 w-full px-3.5 bg-white border border-[#C6D0DE] rounded-[10px] text-[#212427] placeholder-[#5B6573] font-body-md text-[15px] focus:outline-none focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/30 transition-all" id="optional_email" placeholder="name@example.com" type="email"/>
+<span class="font-body-sm text-body-sm text-[#5B6573]">Optional — add it to also get reminders by email</span>
+</div>
+<!-- Preferred Communication Language Pill Selector -->
+<div class="flex flex-col gap-2 pt-1">
+<label class="font-label-lg text-label-lg text-[#13263B] font-semibold">Preferred language for SMS &amp; reminders</label>
+<div class="grid grid-cols-2 gap-3" role="radiogroup">
+<!-- Selected Pill: Arabic -->
+<button aria-checked="true" class="h-11 px-3 rounded-[10px] border-2 border-[#1E4164] bg-[#E8EEF6] text-[#1E4164] font-semibold text-[14px] flex items-center justify-center gap-2 shadow-sm transition-all" role="radio" type="button">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">check</span>
+<span>العربية</span>
+</button>
+<!-- Unselected Pill: English -->
+<button aria-checked="false" class="h-11 px-3 rounded-[10px] border border-[#C6D0DE] bg-white text-[#5B6573] hover:text-[#13263B] hover:border-[#1E4164] font-medium text-[14px] flex items-center justify-center gap-2 transition-all" role="radio" type="button">
+<span>English</span>
+</button>
+</div>
+</div>
+<!-- Legal Terms Checkbox -->
+<div class="pt-2">
+<label class="flex items-start gap-3 cursor-pointer select-none">
+<div class="relative flex items-center pt-0.5">
+<input checked="" class="w-5 h-5 rounded-[4px] border-1.5 border-[#C6D0DE] text-[#1E4164] focus:ring-2 focus:ring-[#015C9A]/30 focus:ring-offset-0 cursor-pointer accent-[#1E4164]" type="checkbox"/>
+</div>
+<span class="font-body-sm text-body-sm text-[#5B6573] leading-tight">
+              I agree to the <a class="text-[#1E4164] underline font-medium hover:text-[#13263B]" href="#">Terms</a> and the <a class="text-[#1E4164] underline font-medium hover:text-[#13263B]" href="#">Privacy notice</a>
+</span>
+</label>
+</div>
+</div>
+<!-- Action Cluster -->
+<div class="mt-5 space-y-4">
+<!-- Primary Action Button (Navy #1E4164, 48px height) -->
+<button class="w-full h-12 bg-[#1E4164] hover:bg-[#16324E] active:scale-[0.99] active:bg-[#13263B] text-white rounded-[10px] font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 transition-all duration-150 shadow-sm" type="button">
+<span>Continue</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+<!-- Secondary Account Link -->
+<div class="text-center pt-1">
+<p class="font-body-md text-body-md text-[#5B6573]">
+            Already have an account? 
+            <a class="text-[#1E4164] font-semibold hover:underline ml-1" href="#">Sign in</a>
+</p>
+</div>
+<!-- Hairline Divider -->
+<div class="relative py-2">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-[#D3DBE6]"></div>
+</div>
+</div>
+<!-- Doctor Onboarding Banner / Row -->
+<a class="flex items-center justify-between p-3.5 bg-white border border-[#D3DBE6] rounded-[12px] hover:border-[#1E4164] transition-all group active:bg-[#F8F9FD]" href="#">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-[#F0F4F8] text-[#1E4164] flex items-center justify-center group-hover:bg-[#E8EEF6] transition-colors">
+<span class="material-symbols-outlined text-[20px]">stethoscope</span>
+</div>
+<div class="flex flex-col text-left">
+<span class="font-label-lg text-label-lg text-[#13263B] font-semibold leading-tight">Are you a doctor?</span>
+<span class="text-[12px] text-[#5B6573]">Apply to join ClinicFlow network</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-[20px] text-[#4E6077] group-hover:translate-x-0.5 transition-transform">chevron_right</span>
+</a>
+</div>
+</main>
+<!-- Simple Accessibility Footer Guarantee -->
+<footer class="mt-8 px-4 text-center">
+<div class="flex items-center justify-center gap-4 text-[12px] text-[#5B6573]">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-[#1E4164]">lock</span>
+          256-bit Encrypted
+        </span>
+<span>•</span>
+<span>Egyptian Health Data Guard</span>
+</div>
+</footer>
+</div>
+</body></html>

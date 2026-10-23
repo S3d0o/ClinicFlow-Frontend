@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Invoices &amp; Receipts - ClinicFlow</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Typography Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Forms & Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed-variant": "#27496c",
+            "tertiary-fixed": "#ffdbce",
+            "on-secondary-container": "#52647c",
+            "outline-variant": "#c3c6cf",
+            "surface-container": "#e5efff",
+            "primary-container": "#1e4164",
+            "error": "#ba1a1a",
+            "surface-container-low": "#eef4ff",
+            "on-surface": "#121c28",
+            "tertiary-fixed-dim": "#ffb599",
+            "surface-tint": "#406185",
+            "on-error-container": "#93000a",
+            "surface-dim": "#d1dbeb",
+            "surface": "#f8f9ff",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "secondary-fixed": "#d2e4ff",
+            "on-secondary": "#ffffff",
+            "on-background": "#121c28",
+            "tertiary-container": "#722600",
+            "on-secondary-fixed-variant": "#36485f",
+            "on-primary-fixed": "#001d36",
+            "primary-fixed-dim": "#a8c9f3",
+            "secondary-container": "#cee1fd",
+            "inverse-on-surface": "#eaf1ff",
+            "background": "#f8f9ff",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "on-primary": "#ffffff",
+            "inverse-primary": "#a8c9f3",
+            "on-tertiary-fixed": "#370e00",
+            "primary": "#002b4c",
+            "surface-variant": "#d9e3f4",
+            "on-tertiary-container": "#ff8b5b",
+            "inverse-surface": "#27313e",
+            "tertiary": "#4e1700",
+            "secondary": "#4e6077",
+            "surface-bright": "#f8f9ff",
+            "on-primary-container": "#8dadd6",
+            "on-surface-variant": "#43474e",
+            "on-secondary-fixed": "#081c31",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-tertiary": "#ffffff",
+            "error-container": "#ffdad6",
+            "surface-container-high": "#dfe9fa",
+            "primary-fixed": "#d1e4ff",
+            "outline": "#73777f",
+            "surface-container-highest": "#d9e3f4"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1rem",
+            "space-xl": "1.5rem",
+            "space-lg": "1rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem",
+            "space-md": "0.75rem",
+            "margin-tablet": "1.5rem",
+            "gutter-sm": "0.75rem",
+            "margin-desktop": "2rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "label-lg": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "label-md": ["Inter"],
+            "body-sm": ["Inter"]
+          },
+          "fontSize": {
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-[#F7F9FD] text-[#212427] font-body-md antialiased min-h-screen flex flex-col justify-between selection:bg-secondary-container">
+<!-- Mobile Viewport Container: Fixed 390px centered frame -->
+<div class="w-full max-w-[390px] mx-auto min-h-screen bg-[#F7F9FD] flex flex-col relative pb-24 shadow-sm">
+<!-- TOP APP BAR (Shared Components JSON Anchor) -->
+<header class="bg-surface-container-lowest dark:bg-inverse-surface flex justify-between items-center w-full px-4 h-14 max-w-full sticky top-0 z-40 border-b border-[#D3DBE6]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#1E4164] text-[24px]">local_hospital</span>
+<span class="text-headline-md font-headline-md font-bold text-primary dark:text-inverse-primary tracking-tight">ClinicFlow</span>
+</div>
+<div class="flex items-center gap-3">
+<!-- Language Switcher -->
+<button aria-label="Toggle language" class="h-8 px-2.5 rounded-lg border border-[#D3DBE6] bg-surface-container-lowest text-[#1E4164] font-label-md text-label-md flex items-center justify-center hover:bg-surface-container-low transition-all duration-150" type="button">
+          EN | عربي
+        </button>
+<!-- Notification Bell with Accent Orange Dot -->
+<div class="relative flex items-center justify-center p-1.5 rounded-lg text-secondary hover:bg-surface-container-low transition-all duration-150 cursor-pointer">
+<span class="material-symbols-outlined text-[24px] text-primary">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#FF5E00] ring-2 ring-white"></span>
+</div>
+</div>
+</header>
+<!-- Sub-navigation Tabs (Records section deep-navigation) -->
+<nav class="bg-surface-container-lowest border-b border-[#D3DBE6] px-4 pt-1 flex items-center gap-6 overflow-x-auto no-scrollbar">
+<a class="pb-3 text-label-md font-label-md text-secondary whitespace-nowrap hover:text-primary transition-colors" href="#">
+        My Visits
+      </a>
+<a class="pb-3 text-label-md font-label-md text-[#1E4164] border-b-2 border-[#1E4164] whitespace-nowrap font-semibold" href="#">
+        Invoices &amp; Receipts
+      </a>
+<a class="pb-3 text-label-md font-label-md text-secondary whitespace-nowrap hover:text-primary transition-colors" href="#">
+        Documents &amp; Insurance
+      </a>
+</nav>
+<!-- MAIN CONTENT CANVAS -->
+<main class="flex-1 px-4 py-4 space-y-4">
+<!-- Patient Welcome & Section Header -->
+<section class="space-y-1">
+<div class="flex items-center justify-between">
+<span class="text-label-sm font-label-sm text-[#5B6573] tracking-wider uppercase font-medium">Patient: Mohamed Adel</span>
+<span class="text-label-sm font-label-sm text-[#015C9A] bg-[#EFF6FF] px-2 py-0.5 rounded font-medium">National ID: ···5921</span>
+</div>
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile text-[#13263B] tracking-tight">Invoices &amp; Receipts</h1>
+<p class="text-body-sm font-body-sm text-[#5B6573]">Official invoices, payment breakdowns, and tax receipts</p>
+</section>
+<!-- Segmented Control Tabs -->
+<div class="p-1 bg-[#EAEFF6] rounded-xl flex items-center" role="tablist">
+<button aria-selected="true" class="flex-1 py-2 text-center rounded-lg bg-[#1E4164] text-white font-label-md text-label-md font-semibold transition-all shadow-sm" id="tab-open" role="tab">
+          Open (1)
+        </button>
+<button aria-selected="false" class="flex-1 py-2 text-center rounded-lg text-secondary font-label-md text-label-md font-medium hover:text-primary transition-all" id="tab-paid" role="tab">
+          Paid (3)
+        </button>
+</div>
+<!-- ACTIVE OPEN INVOICE CARD -->
+<section class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-4 space-y-3.5 shadow-none relative">
+<!-- Accent indicator stripe on card side -->
+<div class="absolute left-0 top-3 bottom-3 w-1 bg-[#1E4164] rounded-r-full"></div>
+<!-- Header line -->
+<div class="flex items-start justify-between gap-2">
+<div>
+<div class="text-label-sm font-label-sm text-[#5B6573] tracking-tight">Invoice #NC-2026-000412</div>
+<div class="text-body-sm font-body-sm text-[#13263B] font-medium">Date: 24 Oct 2025</div>
+</div>
+<!-- Status Chip: Partially Paid -->
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FFFBEB] border border-[#FDE68A]">
+<span class="w-2 h-2 rounded-full bg-[#D97706]"></span>
+<span class="text-label-md font-label-md text-[#D97706] font-semibold">Partially paid</span>
+</div>
+</div>
+<!-- Clinic & Physician Meta -->
+<div class="py-2 px-3 rounded-lg bg-[#F7F9FD] border border-[#E5EDF6] text-body-sm font-body-sm space-y-1">
+<div class="flex items-center gap-1.5 text-[#13263B] font-medium">
+<span class="material-symbols-outlined text-[18px] text-[#1E4164]">apartment</span>
+<span>Nasr City Branch</span>
+</div>
+<div class="flex items-center gap-1.5 text-[#5B6573]">
+<span class="material-symbols-outlined text-[18px] text-secondary">stethoscope</span>
+<span>Attending: Dr. Ahmed Fathy</span>
+</div>
+</div>
+<!-- Itemized Lines Breakdown -->
+<div class="space-y-2 pt-1">
+<div class="flex justify-between items-center text-label-md font-label-md text-[#13263B]">
+<span class="font-semibold">Consultation &amp; Diagnostics</span>
+<span class="text-body-sm font-body-sm text-[#5B6573]">Total: EGP 600.00</span>
+</div>
+<div class="divide-y divide-[#F1F5F9] text-body-sm font-body-sm">
+<div class="py-1.5 flex justify-between items-center">
+<span class="text-[#212427]">Cardiology Consultation (Specialist)</span>
+<span class="text-[#13263B] font-medium">EGP 450.00</span>
+</div>
+<div class="py-1.5 flex justify-between items-center">
+<span class="text-[#212427]">Resting ECG 12-Lead Diagnostic</span>
+<span class="text-[#13263B] font-medium">EGP 150.00</span>
+</div>
+</div>
+</div>
+<!-- Deduction Calculation Summary Box -->
+<div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg p-3 space-y-1.5 text-body-sm font-body-sm">
+<div class="flex justify-between items-center text-[#5B6573]">
+<span>Pre-paid booking deposit</span>
+<span class="text-[#015C9A] font-medium">- EGP 100.00</span>
+</div>
+<div class="flex justify-between items-center text-[#5B6573]">
+<span class="flex items-center gap-1">
+              Insurance (Allianz Gold 50% copay)
+              <span class="material-symbols-outlined text-[14px] text-secondary">verified_user</span>
+</span>
+<span class="text-[#015C9A] font-medium">- EGP 150.00</span>
+</div>
+<div class="border-t border-[#D3DBE6] pt-2 mt-1 flex justify-between items-baseline">
+<div>
+<div class="text-label-md font-label-md text-[#13263B] font-semibold">Patient balance due</div>
+<div class="text-[11px] text-[#5B6573]">Payment required within 48 hours</div>
+</div>
+<div class="text-headline-md font-headline-md font-bold text-[#13263B] tracking-tight">
+              EGP 350.00
+            </div>
+</div>
+</div>
+<!-- Payment Actions & Gateway Badges -->
+<div class="space-y-2.5 pt-1">
+<button class="w-full h-12 bg-[#1E4164] hover:bg-[#13263B] text-white font-label-lg text-label-lg rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-sm" type="button">
+<span>Pay online with Paymob (card or wallet)</span>
+<span class="material-symbols-outlined text-[18px]">lock</span>
+</button>
+<!-- Accepted Egyptian Gateways Pill Bar -->
+<div class="flex items-center justify-center gap-3 text-label-sm font-label-sm text-[#5B6573] py-1">
+<span class="inline-flex items-center gap-1 font-medium bg-white px-2 py-0.5 border border-[#D3DBE6] rounded">
+<span class="w-1.5 h-1.5 rounded-full bg-[#FF5E00]"></span>Vodafone Cash
+            </span>
+<span class="inline-flex items-center gap-1 font-medium bg-white px-2 py-0.5 border border-[#D3DBE6] rounded">
+              InstaPay
+            </span>
+<span class="inline-flex items-center gap-1 font-medium bg-white px-2 py-0.5 border border-[#D3DBE6] rounded">
+              Visa / Meeza
+            </span>
+</div>
+<!-- Secondary Download Link -->
+<div class="text-center pt-0.5">
+<button class="inline-flex items-center gap-1.5 text-label-md font-label-md text-[#1E4164] hover:underline font-semibold h-10 px-3" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span>Download invoice PDF</span>
+</button>
+</div>
+</div>
+</section>
+<!-- SECTION: RECENTLY SETTLED (PAID INVOICES) -->
+<section class="space-y-3 pt-2">
+<div class="flex items-center justify-between">
+<h2 class="text-headline-sm font-headline-sm text-[#13263B]">Settled Receipts</h2>
+<span class="text-label-sm font-label-sm text-[#5B6573]">Tax Compliant (ETA)</span>
+</div>
+<!-- Paid Card 1 -->
+<article class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-4 space-y-3">
+<div class="flex items-start justify-between">
+<div>
+<div class="text-label-sm font-label-sm text-[#5B6573]">Invoice #MD-2025-008914</div>
+<div class="text-body-sm font-body-sm text-[#13263B]">12 Sep 2025 · Maadi Branch</div>
+</div>
+<!-- Status chip: Paid -->
+<div class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#EFF6FF] border border-[#BFDBFE]">
+<span class="material-symbols-outlined text-[14px] text-[#015C9A]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-label-md font-label-md text-[#015C9A] font-semibold">Paid</span>
+</div>
+</div>
+<div class="text-body-md font-body-md font-medium text-[#13263B]">
+            Routine Dental Cleaning &amp; Scaling
+          </div>
+<div class="flex items-center justify-between text-body-sm font-body-sm py-1 border-t border-[#F1F5F9]">
+<span class="text-[#5B6573]">Paid via: Card (CIB Visa) at Reception Desk</span>
+<span class="text-[#13263B] font-semibold">EGP 350.00</span>
+</div>
+<button class="w-full h-11 border border-[#1E4164] text-[#1E4164] hover:bg-[#F7F9FD] rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 transition-all active:scale-[0.98]" type="button">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+<span>Download receipt (PDF)</span>
+</button>
+</article>
+<!-- Paid Card 2 -->
+<article class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-4 space-y-3">
+<div class="flex items-start justify-between">
+<div>
+<div class="text-label-sm font-label-sm text-[#5B6573]">Invoice #SZ-2025-003410</div>
+<div class="text-body-sm font-body-sm text-[#13263B]">04 Jun 2025 · Sheikh Zayed Branch</div>
+</div>
+<!-- Status chip: Paid -->
+<div class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#EFF6FF] border border-[#BFDBFE]">
+<span class="material-symbols-outlined text-[14px] text-[#015C9A]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-label-md font-label-md text-[#015C9A] font-semibold">Paid</span>
+</div>
+</div>
+<div class="text-body-md font-body-md font-medium text-[#13263B]">
+            Dermatology Follow-up Visit
+          </div>
+<div class="flex items-center justify-between text-body-sm font-body-sm py-1 border-t border-[#F1F5F9]">
+<span class="text-[#5B6573]">Paid via: Paymob Mobile Wallet (Vodafone Cash)</span>
+<span class="text-[#13263B] font-semibold">EGP 400.00</span>
+</div>
+<button class="w-full h-11 border border-[#1E4164] text-[#1E4164] hover:bg-[#F7F9FD] rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 transition-all active:scale-[0.98]" type="button">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+<span>Download receipt (PDF)</span>
+</button>
+</article>
+</section>
+<!-- Institutional Assurance Note -->
+<footer class="p-3 text-center text-body-sm font-body-sm text-[#5B6573] border-t border-[#D3DBE6] mt-4">
+        All e-receipts comply with Egyptian Tax Authority (ETA) e-invoicing standards.
+      </footer>
+</main>
+<!-- BOTTOM NAVIGATION BAR (Shared Components JSON Anchor) -->
+<!-- Destination count: 5. Exact mapping: "Records" is ACTIVE for Invoices/Receipts -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin pb-safe h-16 max-w-full bg-surface-container-lowest dark:bg-inverse-surface border-t border-[#D3DBE6]">
+<!-- Home -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim min-h-[48px] py-1 hover:text-primary dark:hover:text-inverse-primary transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-[22px]">home</span>
+<span class="text-label-sm font-label-sm mt-0.5">Home</span>
+</a>
+<!-- Book -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim min-h-[48px] py-1 hover:text-primary dark:hover:text-inverse-primary transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-[22px]">calendar_add_on</span>
+<span class="text-label-sm font-label-sm mt-0.5">Book</span>
+</a>
+<!-- Appointments -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim min-h-[48px] py-1 hover:text-primary dark:hover:text-inverse-primary transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-[22px]">calendar_month</span>
+<span class="text-label-sm font-label-sm mt-0.5">Appointments</span>
+</a>
+<!-- Records (ACTIVE DESTINATION) -->
+<a class="flex flex-col items-center justify-center text-primary-container dark:text-inverse-primary font-semibold min-h-[48px] py-1 hover:text-primary dark:hover:text-inverse-primary transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">description</span>
+<span class="text-label-sm font-label-sm mt-0.5">Records</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim min-h-[48px] py-1 hover:text-primary dark:hover:text-inverse-primary transition-all duration-150" href="#">
+<span class="material-symbols-outlined text-[22px]">person</span>
+<span class="text-label-sm font-label-sm mt-0.5">Profile</span>
+</a>
+</nav>
+</div>
+<!-- Interactive Segmented Control Script -->
+<script>
+    const tabOpen = document.getElementById('tab-open');
+    const tabPaid = document.getElementById('tab-paid');
+
+    tabOpen.addEventListener('click', () => {
+      tabOpen.className = "flex-1 py-2 text-center rounded-lg bg-[#1E4164] text-white font-label-md text-label-md font-semibold transition-all shadow-sm";
+      tabOpen.setAttribute('aria-selected', 'true');
+      tabPaid.className = "flex-1 py-2 text-center rounded-lg text-secondary font-label-md text-label-md font-medium hover:text-primary transition-all";
+      tabPaid.setAttribute('aria-selected', 'false');
+    });
+
+    tabPaid.addEventListener('click', () => {
+      tabPaid.className = "flex-1 py-2 text-center rounded-lg bg-[#1E4164] text-white font-label-md text-label-md font-semibold transition-all shadow-sm";
+      tabPaid.setAttribute('aria-selected', 'true');
+      tabOpen.className = "flex-1 py-2 text-center rounded-lg text-secondary font-label-md text-label-md font-medium hover:text-primary transition-all";
+      tabOpen.setAttribute('aria-selected', 'false');
+    });
+  </script>
+</body></html>

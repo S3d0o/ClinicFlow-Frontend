@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow - Vitals & Triage Form</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Plus+Jakarta+Sans:wght@100..900&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "inverse-surface": "#27313e",
+            "on-surface-variant": "#43474e",
+            "on-tertiary-fixed": "#370e00",
+            "on-tertiary": "#ffffff",
+            "primary-container": "#1e4164",
+            "background": "#f8f9ff",
+            "surface-tint": "#406185",
+            "secondary-fixed": "#d2e4ff",
+            "on-error": "#ffffff",
+            "surface-dim": "#d1dbeb",
+            "secondary-container": "#cee1fd",
+            "on-surface": "#121c28",
+            "tertiary-fixed-dim": "#ffb599",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "on-background": "#121c28",
+            "inverse-primary": "#a8c9f3",
+            "primary-fixed-dim": "#a8c9f3",
+            "surface-container-low": "#eef4ff",
+            "outline": "#73777f",
+            "on-secondary": "#ffffff",
+            "error-container": "#ffdad6",
+            "surface-container": "#e5efff",
+            "surface-bright": "#f8f9ff",
+            "inverse-on-surface": "#eaf1ff",
+            "surface-container-lowest": "#ffffff",
+            "outline-variant": "#c3c6cf",
+            "on-primary-fixed-variant": "#27496c",
+            "on-secondary-container": "#52647c",
+            "on-primary-container": "#8dadd6",
+            "on-tertiary-container": "#ff8b5b",
+            "surface-container-highest": "#d9e3f4",
+            "secondary-fixed-dim": "#b5c8e3",
+            "primary": "#002b4c",
+            "tertiary": "#4e1700",
+            "on-secondary-fixed-variant": "#36485f",
+            "tertiary-container": "#722600",
+            "surface-variant": "#d9e3f4",
+            "on-secondary-fixed": "#081c31",
+            "on-primary": "#ffffff",
+            "secondary": "#4e6077",
+            "on-error-container": "#93000a",
+            "tertiary-fixed": "#ffdbce",
+            "on-primary-fixed": "#001d36",
+            "surface-container-high": "#dfe9fa",
+            "error": "#ba1a1a",
+            "primary-fixed": "#d1e4ff",
+            "surface": "#f8f9ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "margin-tablet": "1.5rem",
+            "space-xl": "1.5rem",
+            "gutter": "1rem",
+            "space-lg": "1rem",
+            "margin-desktop": "2rem",
+            "space-md": "0.75rem",
+            "margin": "1rem",
+            "gutter-sm": "0.75rem"
+          },
+          "fontFamily": {
+            "label-md": ["Inter"],
+            "body-sm": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "label-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+  </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface h-full flex overflow-hidden antialiased select-none">
+<!-- Left Collapsed 72px SideNavBar Rail -->
+<aside class="fixed left-0 top-0 bottom-0 w-[72px] flex flex-col items-center py-space-lg z-40 bg-surface-container-lowest border-r border-outline-variant justify-between">
+<div class="flex flex-col items-center w-full gap-space-xl">
+<!-- ClinicFlow Logo Icon -->
+<div class="flex flex-col items-center cursor-pointer">
+<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-sm">
+<span class="material-symbols-outlined text-[24px]">local_hospital</span>
+</div>
+<span class="font-headline-sm text-[11px] font-bold text-primary tracking-tight mt-1">CF</span>
+</div>
+<!-- Navigation tabs -->
+<nav aria-label="Main Navigation" class="flex flex-col items-center gap-space-md w-full px-2">
+<!-- Active: Queue (Mapped from JSON tab_labels) -->
+<a class="flex flex-col items-center justify-center w-12 h-12 rounded-lg bg-primary text-on-primary relative transition-all duration-150 active:scale-95 group" href="#" title="Queue">
+<span class="material-symbols-outlined text-[24px]">groups</span>
+<span class="sr-only">Queue</span>
+<span class="absolute right-1.5 top-1.5 w-2 h-2 rounded-full bg-[#FF5E00]"></span>
+</a>
+<!-- Inactive: Rooms -->
+<a class="flex flex-col items-center justify-center w-12 h-12 rounded-lg text-secondary hover:bg-surface-container-low hover:text-primary transition-all duration-150 active:scale-95 group" href="#" title="Rooms">
+<span class="material-symbols-outlined text-[24px]">meeting_room</span>
+<span class="sr-only">Rooms</span>
+</a>
+<!-- Inactive: Profile -->
+<a class="flex flex-col items-center justify-center w-12 h-12 rounded-lg text-secondary hover:bg-surface-container-low hover:text-primary transition-all duration-150 active:scale-95 group" href="#" title="Profile">
+<span class="material-symbols-outlined text-[24px]">account_circle</span>
+<span class="sr-only">Profile</span>
+</a>
+</nav>
+</div>
+<!-- Footer Action: Settings -->
+<div class="flex flex-col items-center w-full px-2">
+<a class="flex flex-col items-center justify-center w-12 h-12 rounded-lg text-secondary hover:bg-surface-container-low hover:text-primary transition-all duration-150 active:scale-95" href="#" title="Settings">
+<span class="material-symbols-outlined text-[24px]">settings</span>
+<span class="sr-only">Settings</span>
+</a>
+</div>
+</aside>
+<!-- Main Shell Wrapper (Offset by 72px) -->
+<div class="flex-1 ml-[72px] flex flex-col h-full bg-[#F7F9FD] min-w-0">
+<!-- Docked Top Bar (TopNavBar execution) -->
+<header class="h-16 bg-surface-container-lowest border-b border-outline-variant flex justify-between items-center px-space-xl flex-shrink-0 z-30 shadow-none">
+<div class="flex items-center gap-space-lg">
+<a class="inline-flex items-center gap-1.5 text-primary hover:text-primary-container font-label-lg text-label-lg transition-colors py-2 px-2.5 rounded-lg hover:bg-surface-container-low" href="#">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+<span>Back to Triage Queue</span>
+</a>
+<div class="h-5 w-px bg-outline-variant"></div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">location_on</span>
+<span class="font-label-lg text-label-lg text-primary font-bold">Nasr City Branch</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xl">
+<!-- Live Clock & Status -->
+<div class="flex items-center gap-2 text-secondary bg-surface-container-low px-3 py-1.5 rounded-lg border border-outline-variant/60">
+<span class="material-symbols-outlined text-[18px] text-[#015C9A]">schedule</span>
+<span class="font-mono text-label-md font-semibold text-on-surface">10:24 AM</span>
+<span class="text-xs text-secondary">· Station 1</span>
+</div>
+<!-- Language toggle -->
+<button class="font-label-md text-label-md text-secondary hover:text-primary px-2.5 py-1.5 rounded-lg border border-outline-variant hover:bg-surface-container-low transition-all">
+          EN | عربي
+        </button>
+<!-- Emergency Trailing Action -->
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#FEF2F2] border border-[#FECACA] text-[#991B1B] rounded-lg font-label-md text-label-md hover:bg-red-100 transition-colors">
+<span class="material-symbols-outlined text-[18px]">emergency</span>
+<span>Emergency</span>
+</button>
+<!-- User Profile Pill -->
+<div class="flex items-center gap-3 pl-2">
+<div class="relative">
+<div class="w-9 h-9 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-bold text-xs ring-2 ring-white">
+              SI
+            </div>
+<span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white"></span>
+</div>
+<div class="text-left hidden sm:block">
+<p class="font-label-md text-label-md text-[#13263B] leading-tight">Sara Ibrahim</p>
+<p class="font-body-sm text-[11px] text-secondary leading-tight">Nurse (Station 1)</p>
+</div>
+</div>
+</div>
+</header>
+<!-- Scrollable Workspace Stage -->
+<main class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 max-w-[1280px] w-full mx-auto pb-24">
+<!-- 1. Patient Banner Card -->
+<section class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-4 md:p-5 shadow-sm">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-[#D3DBE6]/70">
+<div class="flex flex-wrap items-center gap-3">
+<!-- Ticket Badge -->
+<div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#13263B] text-white">
+<span class="font-mono font-bold text-label-lg tracking-wide">Ticket A-14</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h1 class="font-headline-md text-headline-md font-bold text-[#13263B]">Mohamed Adel Hassan</h1>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#FFFBEB] text-[#D97706] border border-[#FDE68A]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#D97706] mr-1.5"></span>
+                  Checked in 10:12 AM (Waiting 12 min)
+                </span>
+</div>
+<p class="font-body-md text-secondary mt-0.5">
+                Age: <span class="text-on-surface font-medium">37 yrs</span> · Male · MRN: <span class="font-mono text-on-surface font-medium">CF-004512</span>
+</p>
+</div>
+</div>
+<!-- Doctor assignment badge -->
+<div class="flex items-center gap-3 bg-surface-container-low px-3.5 py-2 rounded-lg border border-outline-variant/60">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">stethoscope</span>
+</div>
+<div>
+<p class="font-label-sm text-[11px] text-secondary">Assigned Physician</p>
+<p class="font-label-md text-label-md text-primary font-bold">Dr. Ahmed Fathy · Cardiology (Room 101)</p>
+</div>
+</div>
+</div>
+<!-- Tags and Safety Row -->
+<div class="flex flex-wrap items-center gap-2.5 pt-3.5">
+<!-- Allergy Tag -->
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FEF2F2] border border-[#FECACA] text-[#991B1B] font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px] text-error">warning</span>
+<span>Severe Allergy: Penicillin</span>
+</div>
+<!-- Chronic Condition Tags -->
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container border border-outline-variant/80 text-secondary font-label-md text-label-md">
+<span class="material-symbols-outlined text-[15px] text-[#015C9A]">medical_information</span>
+<span>Hypertension (Stage 1)</span>
+</div>
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-low border border-outline-variant/60 text-secondary font-label-md text-label-md">
+<span class="material-symbols-outlined text-[15px]">smoke_free</span>
+<span>Non-smoker</span>
+</div>
+<div class="ml-auto flex items-center text-secondary font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] mr-1 text-[#015C9A]">history</span>
+            Last visit: 3 months ago (Nasr City)
+          </div>
+</div>
+</section>
+<!-- 2. Vitals Input Grid & Pain Scale Bento -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-4">
+<!-- Blood Pressure Card (Span 5) -->
+<div class="md:col-span-5 bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-4 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#015C9A] text-[20px]">cardiology</span>
+<h2 class="font-headline-sm text-headline-sm text-[#13263B]">Blood Pressure</h2>
+</div>
+<span class="text-xs text-secondary font-medium">Ref: < 120/80 mmHg</span>
+</div>
+<!-- Dual Inputs -->
+<div class="grid grid-cols-2 gap-3 mb-3">
+<div>
+<label class="block font-label-sm text-secondary mb-1" for="bp-systolic">Systolic</label>
+<div class="relative">
+<input class="w-full h-12 bg-white border border-[#C6D0DE] focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/20 rounded-lg pl-3 pr-14 font-mono text-lg font-bold text-on-surface tabular-nums" id="bp-systolic" type="number" value="142"/>
+<span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-secondary pointer-events-none">mmHg</span>
+</div>
+</div>
+<div>
+<label class="block font-label-sm text-secondary mb-1" for="bp-diastolic">Diastolic</label>
+<div class="relative">
+<input class="w-full h-12 bg-white border border-[#C6D0DE] focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/20 rounded-lg pl-3 pr-14 font-mono text-lg font-bold text-on-surface tabular-nums" id="bp-diastolic" type="number" value="92"/>
+<span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-secondary pointer-events-none">mmHg</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Amber Alert Badge -->
+<div class="flex items-center gap-2 px-3 py-2 bg-[#FFFBEB] border border-[#FDE68A] text-[#B45309] rounded-lg text-xs font-semibold">
+<span class="material-symbols-outlined text-[16px]">warning</span>
+<span>Elevated BP (Stage 1 Hypertension pattern)</span>
+</div>
+</div>
+<!-- Heart Rate & O2 Saturation (Span 4) -->
+<div class="md:col-span-4 grid grid-rows-2 gap-4">
+<!-- Heart Rate -->
+<div class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-3.5 shadow-sm flex items-center justify-between">
+<div>
+<div class="flex items-center gap-1.5 mb-1">
+<span class="material-symbols-outlined text-[#015C9A] text-[18px]">favorite</span>
+<span class="font-headline-sm text-sm text-[#13263B]">Heart Rate / Pulse</span>
+</div>
+<p class="font-body-sm text-[11px] text-secondary">Normal range: (60–100 bpm)</p>
+</div>
+<div class="w-28 relative">
+<input class="w-full h-12 bg-white border border-[#C6D0DE] focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/20 rounded-lg pl-3 pr-11 font-mono text-lg font-bold text-on-surface tabular-nums" type="number" value="84"/>
+<span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs font-semibold text-secondary pointer-events-none">bpm</span>
+</div>
+</div>
+<!-- SpO2 -->
+<div class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-3.5 shadow-sm flex items-center justify-between">
+<div>
+<div class="flex items-center gap-1.5 mb-1">
+<span class="material-symbols-outlined text-[#015C9A] text-[18px]">air</span>
+<span class="font-headline-sm text-sm text-[#13263B]">Oxygen Saturation</span>
+</div>
+<p class="font-body-sm text-[11px] text-secondary">Ref: (95–100%) SpO₂</p>
+</div>
+<div class="w-28 relative">
+<input class="w-full h-12 bg-white border border-[#C6D0DE] focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/20 rounded-lg pl-3 pr-8 font-mono text-lg font-bold text-on-surface tabular-nums" type="number" value="98"/>
+<span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs font-semibold text-secondary pointer-events-none">%</span>
+</div>
+</div>
+</div>
+<!-- Temp & Respiratory (Span 3) -->
+<div class="md:col-span-3 grid grid-rows-2 gap-4">
+<!-- Temp -->
+<div class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-3.5 shadow-sm flex items-center justify-between">
+<div>
+<span class="font-headline-sm text-sm text-[#13263B] block">Body Temp</span>
+<p class="font-body-sm text-[11px] text-secondary">(36.5–37.5 °C)</p>
+</div>
+<div class="w-24 relative">
+<input class="w-full h-12 bg-white border border-[#C6D0DE] focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/20 rounded-lg pl-2 pr-7 font-mono text-base font-bold text-on-surface tabular-nums" step="0.1" type="number" value="37.1"/>
+<span class="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-semibold text-secondary pointer-events-none">°C</span>
+</div>
+</div>
+<!-- Respiratory Rate -->
+<div class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-3.5 shadow-sm flex items-center justify-between">
+<div>
+<span class="font-headline-sm text-sm text-[#13263B] block">Resp. Rate</span>
+<p class="font-body-sm text-[11px] text-secondary">(12–20 bpm)</p>
+</div>
+<div class="w-24 relative">
+<input class="w-full h-12 bg-white border border-[#C6D0DE] focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/20 rounded-lg pl-2 pr-7 font-mono text-base font-bold text-on-surface tabular-nums" type="number" value="16"/>
+<span class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-semibold text-secondary pointer-events-none">/min</span>
+</div>
+</div>
+</div>
+<!-- Anthropometry & Calculated BMI (Span 4) -->
+<div class="md:col-span-4 bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-4 shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-2">
+<h2 class="font-headline-sm text-sm text-[#13263B] flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[#015C9A] text-[18px]">straighten</span>
+              Anthropometry
+            </h2>
+<span class="text-xs text-secondary font-medium">Auto-computed</span>
+</div>
+<div class="grid grid-cols-2 gap-3 mb-3">
+<div>
+<label class="block font-label-sm text-secondary mb-1" for="patient-weight">Weight</label>
+<div class="relative">
+<input class="w-full h-11 bg-white border border-[#C6D0DE] focus:border-[#015C9A] rounded-lg pl-2.5 pr-8 font-mono font-bold text-on-surface tabular-nums" id="patient-weight" step="0.5" type="number" value="86.5"/>
+<span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-secondary font-semibold">kg</span>
+</div>
+</div>
+<div>
+<label class="block font-label-sm text-secondary mb-1" for="patient-height">Height</label>
+<div class="relative">
+<input class="w-full h-11 bg-white border border-[#C6D0DE] focus:border-[#015C9A] rounded-lg pl-2.5 pr-8 font-mono font-bold text-on-surface tabular-nums" id="patient-height" type="number" value="178"/>
+<span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-secondary font-semibold">cm</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between p-2.5 bg-[#EFF6FF] border border-[#BFDBFE] rounded-lg">
+<span class="font-label-md text-xs text-[#015C9A]">Body Mass Index:</span>
+<span class="font-mono font-bold text-sm text-[#015C9A]">27.3 kg/m² · Overweight</span>
+</div>
+</div>
+<!-- Pain Score 0-10 Interactive Touch Bar (Span 8) -->
+<div class="md:col-span-8 bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-4 shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#FF5E00] text-[20px]">sentiment_neutral</span>
+<h2 class="font-headline-sm text-sm text-[#13263B]">Pain Severity (NRS 0–10 Scale)</h2>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+<span class="font-label-md text-xs font-semibold text-[#13263B]">Selected: Level 2 (Mild Pain)</span>
+</div>
+</div>
+<!-- Color Bar Progression -->
+<div class="w-full h-1.5 rounded-full bg-gradient-to-r from-emerald-400 via-amber-400 to-rose-600 mb-3 opacity-80"></div>
+<!-- Touch Rating Buttons (0 to 10) -->
+<div class="grid grid-cols-11 gap-1.5">
+<button class="h-12 rounded-lg border border-[#C6D0DE] bg-white text-secondary font-mono font-bold text-sm hover:border-[#1E4164] transition-all" type="button">0</button>
+<button class="h-12 rounded-lg border border-[#C6D0DE] bg-white text-secondary font-mono font-bold text-sm hover:border-[#1E4164] transition-all" type="button">1</button>
+<!-- Selected State (2) -->
+<button class="h-12 rounded-lg border-2 border-[#1E4164] bg-[#1E4164] text-white font-mono font-bold text-base shadow-sm ring-2 ring-primary-container/20" type="button">2</button>
+<button class="h-12 rounded-lg border border-[#C6D0DE] bg-white text-secondary font-mono font-bold text-sm hover:border-[#1E4164] transition-all" type="button">3</button>
+<button class="h-12 rounded-lg border border-[#C6D0DE] bg-white text-secondary font-mono font-bold text-sm hover:border-[#1E4164] transition-all" type="button">4</button>
+<button class="h-12 rounded-lg border border-[#C6D0DE] bg-white text-secondary font-mono font-bold text-sm hover:border-[#1E4164] transition-all" type="button">5</button>
+<button class="h-12 rounded-lg border border-[#C6D0DE] bg-white text-secondary font-mono font-bold text-sm hover:border-[#1E4164] transition-all" type="button">6</button>
+<button class="h-12 rounded-lg border border-[#C6D0DE] bg-white text-secondary font-mono font-bold text-sm hover:border-[#1E4164] transition-all" type="button">7</button>
+<button class="h-12 rounded-lg border border-[#C6D0DE] bg-white text-secondary font-mono font-bold text-sm hover:border-[#1E4164] transition-all" type="button">8</button>
+<button class="h-12 rounded-lg border border-[#C6D0DE] bg-white text-secondary font-mono font-bold text-sm hover:border-[#1E4164] transition-all" type="button">9</button>
+<button class="h-12 rounded-lg border border-[#C6D0DE] bg-white text-secondary font-mono font-bold text-sm hover:border-[#1E4164] transition-all" type="button">10</button>
+</div>
+<p class="font-body-sm text-[12px] text-secondary mt-2 flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#015C9A]"></span>
+            Patient notes: Substernal tightness on moderate exertion; resolves with rest.
+          </p>
+</div>
+</section>
+<!-- 3. Clinical Assessment & Handover Details -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-4">
+<!-- Chief Complaint (Span 7) -->
+<div class="md:col-span-7 bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-4 shadow-sm flex flex-col">
+<div class="flex items-center justify-between mb-2">
+<label class="font-headline-sm text-sm text-[#13263B] flex items-center gap-1.5 font-bold" for="complaint">
+<span class="material-symbols-outlined text-[#015C9A] text-[18px]">edit_note</span>
+              Chief Complaint & Subjective Notes
+            </label>
+<span class="text-xs text-secondary">Arabic / English accepted</span>
+</div>
+<textarea class="w-full p-3 bg-white border border-[#C6D0DE] focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/20 rounded-lg font-body-md text-on-surface text-sm leading-relaxed resize-none" id="complaint" rows="3">Patient reports recurrent mild substernal tightness on exertion since 3 days ago. No shortness of breath or dizziness today. Took regular morning antihypertensive.</textarea>
+<!-- Critical Safety Verification Checkbox (48px Touch target) -->
+<div class="mt-3.5 pt-3 border-t border-[#D3DBE6]/70">
+<label class="flex items-center gap-3 p-2.5 rounded-lg border border-emerald-300 bg-[#ECFDF5] cursor-pointer min-h-[48px] hover:bg-emerald-50 transition-colors">
+<input checked="" class="w-5 h-5 rounded text-[#1E4164] focus:ring-0 focus:ring-offset-0 border-[#C6D0DE]" type="checkbox"/>
+<div class="flex-1">
+<span class="font-label-md text-sm font-bold text-[#065F46] flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+                  Allergies confirmed verbally with patient (Mohamed Adel)
+                </span>
+<p class="text-[11px] text-[#047857]">Verified at 10:21 AM by Nurse Sara Ibrahim · Penicillin allergy reaffirmed</p>
+</div>
+</label>
+</div>
+</div>
+<!-- Outside Reports & ECG Dropzone (Span 5) -->
+<div class="md:col-span-5 bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-4 shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-2">
+<h2 class="font-headline-sm text-sm text-[#13263B] flex items-center gap-1.5 font-bold">
+<span class="material-symbols-outlined text-[#015C9A] text-[18px]">attachment</span>
+              Outside Diagnostics / ECG
+            </h2>
+<span class="text-xs text-[#015C9A] font-semibold cursor-pointer hover:underline">+ New scan</span>
+</div>
+<!-- File Attachment Card -->
+<div class="p-3 rounded-lg border border-[#D3DBE6] bg-surface-container-low flex items-center justify-between mb-3">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-10 h-10 rounded-lg bg-rose-100 border border-rose-200 text-rose-700 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+</div>
+<div class="truncate">
+<p class="font-label-md text-xs font-semibold text-[#13263B] truncate">Recent_ECG_CairoLab_Oct2025.pdf</p>
+<p class="text-[11px] text-secondary">1.8 MB · Uploaded by patient portal</p>
+</div>
+</div>
+<div class="flex items-center gap-1 pl-2">
+<button class="p-1.5 text-secondary hover:text-primary rounded-md hover:bg-surface-container transition-colors" title="View file">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="p-1.5 text-secondary hover:text-error rounded-md hover:bg-rose-50 transition-colors" title="Delete file">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+<!-- Quick Touch Dropzone -->
+<div class="border border-dashed border-[#C6D0DE] hover:border-[#015C9A] rounded-lg p-3 text-center cursor-pointer bg-white transition-colors">
+<span class="material-symbols-outlined text-[22px] text-secondary">cloud_upload</span>
+<p class="font-label-md text-xs text-primary font-medium mt-0.5">Attach Paper ECG or Lab Slip</p>
+<p class="text-[10px] text-secondary">Scan via Tablet Camera or Choose File</p>
+</div>
+</div>
+</section>
+</main>
+<!-- 4. Fixed / Sticky Action Footer Dock -->
+<footer class="h-16 bg-surface-container-lowest border-t border-[#D3DBE6] px-space-xl flex items-center justify-between flex-shrink-0 z-30 shadow-[0_-4px_16px_rgba(19,38,59,0.04)]">
+<!-- Autosave indicator and release action -->
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 text-xs text-secondary">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span>Draft auto-saved <span class="font-mono font-medium">10:23:45 AM</span></span>
+</div>
+<div class="h-4 w-px bg-outline-variant hidden sm:block"></div>
+<button class="text-xs font-semibold text-secondary hover:text-error py-1 px-2 rounded transition-colors hidden sm:inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">cancel</span>
+          Release Ticket
+        </button>
+</div>
+<!-- Action Button Group -->
+<div class="flex items-center gap-3">
+<!-- Secondary Button (48px height) -->
+<button class="h-12 px-5 bg-white border border-[#1E4164] text-[#1E4164] font-label-lg rounded-lg hover:bg-surface-container-low transition-all active:scale-[0.98] flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px]">save</span>
+<span>Save Draft</span>
+</button>
+<!-- Primary Navy CTA Button (48px height) -->
+<button class="h-12 px-6 bg-[#1E4164] hover:bg-[#16324E] text-white font-label-lg font-bold rounded-lg shadow-sm transition-all active:scale-[0.98] flex items-center gap-2 ring-1 ring-primary-container" type="button">
+<span>Send to Doctor (Room 101)</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</footer>
+</div>
+<script>
+    // Lightweight interactivity for touch NRS buttons
+    document.querySelectorAll('.grid-cols-11 button').forEach((btn) => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.grid-cols-11 button').forEach(b => {
+          b.className = 'h-12 rounded-lg border border-[#C6D0DE] bg-white text-secondary font-mono font-bold text-sm hover:border-[#1E4164] transition-all';
+        });
+        this.className = 'h-12 rounded-lg border-2 border-[#1E4164] bg-[#1E4164] text-white font-mono font-bold text-base shadow-sm ring-2 ring-primary-container/20';
+      });
+    });
+  </script>
+</body></html>

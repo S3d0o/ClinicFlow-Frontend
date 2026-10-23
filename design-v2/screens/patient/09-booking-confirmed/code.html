@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>ClinicFlow - Booking Confirmed</title>
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Forms and Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Verbatim Tailwind Config Injection -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-variant": "#d9e3f4",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#eef4ff",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "on-tertiary": "#ffffff",
+            "tertiary": "#4e1700",
+            "secondary-fixed": "#d2e4ff",
+            "on-surface-variant": "#43474e",
+            "on-secondary-fixed-variant": "#36485f",
+            "on-background": "#121c28",
+            "error": "#ba1a1a",
+            "on-surface": "#121c28",
+            "inverse-primary": "#a8c9f3",
+            "background": "#f8f9ff",
+            "surface-container-high": "#dfe9fa",
+            "on-error": "#ffffff",
+            "on-secondary-fixed": "#081c31",
+            "surface-dim": "#d1dbeb",
+            "on-primary-container": "#8dadd6",
+            "on-secondary-container": "#52647c",
+            "tertiary-fixed-dim": "#ffb599",
+            "on-primary-fixed-variant": "#27496c",
+            "outline-variant": "#c3c6cf",
+            "secondary-fixed-dim": "#b5c8e3",
+            "surface-container-highest": "#d9e3f4",
+            "secondary-container": "#cee1fd",
+            "on-secondary": "#ffffff",
+            "tertiary-fixed": "#ffdbce",
+            "inverse-surface": "#27313e",
+            "surface": "#f8f9ff",
+            "on-error-container": "#93000a",
+            "on-tertiary-fixed": "#370e00",
+            "primary": "#002b4c",
+            "on-primary-fixed": "#001d36",
+            "inverse-on-surface": "#eaf1ff",
+            "on-tertiary-container": "#ff8b5b",
+            "outline": "#73777f",
+            "primary-fixed": "#d1e4ff",
+            "surface-container": "#e5efff",
+            "surface-bright": "#f8f9ff",
+            "on-primary": "#ffffff",
+            "surface-tint": "#406185",
+            "primary-container": "#1e4164",
+            "tertiary-container": "#722600",
+            "secondary": "#4e6077",
+            "primary-fixed-dim": "#a8c9f3",
+            "error-container": "#ffdad6"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xl": "1.5rem",
+            "margin": "1rem",
+            "gutter-sm": "0.75rem",
+            "space-lg": "1rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "gutter": "1rem",
+            "space-md": "0.75rem",
+            "margin-tablet": "1.5rem",
+            "margin-desktop": "2rem"
+          },
+          "fontFamily": {
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "label-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "headline-xl": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    /* Custom Material Symbol sizing and alignment */
+    .material-symbols-outlined {
+      font-size: 20px;
+      font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .material-symbols-outlined.fill-icon {
+      font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-[#F7F9FD] text-on-surface antialiased min-h-screen flex flex-col justify-between selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TOP APP BAR (Transactional Screen: Simple Clean Bar with Close Action) -->
+<header class="w-full bg-surface-container-lowest sticky top-0 z-40 border-b border-[#D3DBE6]/80">
+<div class="flex justify-between items-center w-full px-4 h-16 max-w-md mx-auto">
+<!-- ClinicFlow Brand Identity -->
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-on-primary shadow-xs">
+<span class="material-symbols-outlined text-white" style="font-size: 20px;">local_hospital</span>
+</div>
+<span class="text-headline-md font-headline-md text-primary tracking-tight font-bold">ClinicFlow</span>
+</div>
+<!-- Close Action (Task Departure) -->
+<button aria-label="Close" class="w-10 h-10 rounded-full flex items-center justify-center text-secondary hover:bg-surface-container-low transition-colors duration-150 active:scale-95" type="button">
+<span class="material-symbols-outlined text-on-surface">close</span>
+</button>
+</div>
+</header>
+<!-- MAIN SCROLLABLE CONTENT CANVAS -->
+<main class="w-full max-w-md mx-auto px-4 pt-6 pb-28 flex flex-col gap-space-md">
+<!-- CONFIRMATION HERO SECTION -->
+<section class="flex flex-col items-center text-center pt-2 pb-2">
+<!-- Circular Badge with Navy Checkmark -->
+<div class="w-16 h-16 rounded-full bg-surface-container-low border-2 border-primary-container flex items-center justify-center mb-4 shadow-sm">
+<div class="w-11 h-11 rounded-full bg-primary-container flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-white" style="font-size: 28px; font-variation-settings: 'wght' 700;">check</span>
+</div>
+</div>
+<!-- Heading -->
+<h1 class="text-headline-xl-mobile font-headline-xl-mobile text-primary tracking-tight mb-2">
+        You're booked!
+      </h1>
+<!-- Booking Reference Pill Badge -->
+<div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-surface-container border border-outline-variant/60 mb-3">
+<span class="text-label-md font-label-md text-secondary">Reference:</span>
+<span class="text-label-md font-label-md text-primary font-bold tracking-wide">CF-24-08731</span>
+</div>
+<!-- Subtext with Confirmed Status Chip -->
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#ECFDF5] border border-[#A7F3D0]">
+<span class="w-2 h-2 rounded-full bg-[#059669]"></span>
+<span class="text-label-md font-label-md text-[#059669]">Confirmed by Nasr City Branch</span>
+</div>
+</section>
+<!-- BOOKING DETAILS CARD -->
+<section class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-4 shadow-xs">
+<div class="flex items-center justify-between border-b border-[#D3DBE6] pb-3 mb-3.5">
+<span class="text-label-md font-label-md text-secondary">Booking Details</span>
+<span class="text-label-sm font-label-sm text-primary font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-primary" style="font-size: 16px;">verified</span> In Clinic Visit
+        </span>
+</div>
+<!-- Doctor Meta Section -->
+<div class="flex items-start gap-3.5 pb-4 border-b border-[#D3DBE6]/60">
+<img class="w-12 h-12 rounded-xl object-cover border border-[#D3DBE6] shrink-0" data-alt="Professional studio portrait of an experienced Egyptian male doctor in a clean clinical setting with soft natural light, wearing a modern dark navy lab coat and medical stethoscope, reflecting institutional excellence, trust, and empathetic care with high legibility and deep navy tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgqJuQzn5L0bcCPy-g8VyhDgfG9GmVSc31N0D02VEU745eN_vEMv-7_fenvH7y1d36AVHt9yegg-YiMB3hVM6iwIDpvBNsC6Gox--Ma35XfIrhCSAaJSirsaDpiIcohnhRha1P5dUsgu4yfvzg0oP-ObIt7rv0a5DcJfI1r_zaq-Ts8kq3GsK2mOyx1pVRT5nJU-PysnH1ZNQO1Jerd3L3zEVhYPiOsYBVApOmhljXneg7fEmoEeS8SyDOP6Tp8TzYFKAPySzLYNLQ"/>
+<div class="flex flex-col">
+<h2 class="text-headline-sm font-headline-sm text-primary">Dr. Ahmed Fathy</h2>
+<p class="text-body-sm font-body-sm text-secondary">Consultant Cardiology</p>
+<div class="flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[#FF5E00] fill-icon" style="font-size: 15px;">star</span>
+<span class="text-label-sm font-label-sm text-on-surface font-semibold">4.9</span>
+<span class="text-label-sm font-label-sm text-secondary">(240+ reviews)</span>
+</div>
+</div>
+</div>
+<!-- Key Metadata Items -->
+<div class="pt-3.5 flex flex-col gap-3">
+<!-- Date & Time -->
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-primary-container shrink-0 mt-0.5">
+<span class="material-symbols-outlined">schedule</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-secondary">Date &amp; Time</span>
+<span class="text-body-md font-body-md text-on-surface font-semibold">Wednesday, October 24, 2025</span>
+<span class="text-body-sm font-body-sm text-secondary font-medium">10:30 AM (Cairo Local Time)</span>
+</div>
+</div>
+<!-- Location -->
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-primary-container shrink-0 mt-0.5">
+<span class="material-symbols-outlined">location_on</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-secondary">Location</span>
+<span class="text-body-md font-body-md text-on-surface font-semibold">Nasr City Branch</span>
+<span class="text-body-sm font-body-sm text-secondary">14 Abbas El Akkad St., 2nd Floor</span>
+</div>
+</div>
+<!-- Patient Name -->
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-primary-container shrink-0 mt-0.5">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-secondary">Patient</span>
+<span class="text-body-md font-body-md text-on-surface font-semibold">Mohamed Adel</span>
+</div>
+</div>
+<!-- Consultation Fee -->
+<div class="flex items-center justify-between pt-2 border-t border-[#D3DBE6]/60">
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-secondary">Consultation Fee</span>
+<span class="text-label-sm font-label-sm text-secondary">Payment mode: Pay at desk</span>
+</div>
+<div class="text-right">
+<span class="text-headline-md font-headline-md font-bold text-[#FF5E00]">EGP 450</span>
+</div>
+</div>
+</div>
+</section>
+<!-- ACTION BUTTONS (Calendar & Directions Grid, 44px min targets) -->
+<section class="flex flex-col gap-2">
+<!-- Add to Calendar (Outlined navy button) -->
+<button class="w-full h-11 min-h-[44px] rounded-lg bg-surface-container-lowest border border-primary-container text-primary-container flex items-center justify-center gap-2 text-label-lg font-label-lg hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.98]" type="button">
+<span class="material-symbols-outlined text-primary-container">calendar_month</span>
+<span>Add to calendar</span>
+</button>
+<!-- Row with Two Grid Action Buttons -->
+<div class="grid grid-cols-2 gap-2">
+<!-- Get Directions -->
+<button class="h-11 min-h-[44px] rounded-lg bg-surface-container-lowest border border-[#D3DBE6] text-primary flex items-center justify-center gap-1.5 text-label-md font-label-md hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.98]" type="button">
+<span class="material-symbols-outlined text-secondary" style="font-size: 18px;">map</span>
+<span>Get directions</span>
+</button>
+<!-- Call the Branch -->
+<button class="h-11 min-h-[44px] rounded-lg bg-surface-container-lowest border border-[#D3DBE6] text-primary flex items-center justify-center gap-1.5 text-label-md font-label-md hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.98]" type="button">
+<span class="material-symbols-outlined text-secondary" style="font-size: 18px;">call</span>
+<span>Call the branch</span>
+</button>
+</div>
+</section>
+<!-- OPTIONAL DEPOSIT CARD (Paymob Integration) -->
+<section class="bg-surface-container-low border border-primary-fixed rounded-xl p-4 flex flex-col gap-3">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-md bg-white border border-[#D3DBE6] flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined" style="font-size: 18px;">account_balance_wallet</span>
+</div>
+<h3 class="text-label-lg font-label-lg text-primary">Pay a deposit now with Paymob</h3>
+</div>
+<span class="text-label-sm font-label-sm text-secondary bg-surface-container-lowest border border-[#D3DBE6] px-2 py-0.5 rounded-full">Optional</span>
+</div>
+<p class="text-body-sm font-body-sm text-secondary leading-relaxed">
+        Secure via credit/debit card or mobile wallet (Vodafone Cash, InstaPay). Optional — your booking is already 100% confirmed.
+      </p>
+<!-- Deposit Payment Button -->
+<button class="w-full h-11 min-h-[44px] rounded-lg bg-surface-container-lowest border border-primary-container text-primary-container text-label-md font-label-md flex items-center justify-center gap-2 hover:bg-primary-container hover:text-white transition-all duration-150 active:scale-[0.98]" type="button">
+<span class="material-symbols-outlined" style="font-size: 18px;">payment</span>
+<span>Pay EGP 100 deposit now</span>
+</button>
+</section>
+<!-- REMINDER NOTICE BOX -->
+<section class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-3.5 flex items-start gap-3">
+<div class="w-8 h-8 rounded-lg bg-[#EFF6FF] border border-[#BFDBFE] flex items-center justify-center text-[#015C9A] shrink-0 mt-0.5">
+<span class="material-symbols-outlined" style="font-size: 18px;">notifications_active</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-md font-label-md text-primary">Visit Reminders</span>
+<p class="text-body-sm font-body-sm text-secondary mt-0.5 leading-normal">
+          SMS and email will be sent 24 hours and 2 hours before your visit.
+        </p>
+</div>
+</section>
+</main>
+<!-- FIXED BOTTOM DOCK (Primary Action Button for Linear Completion) -->
+<aside class="fixed bottom-0 left-0 w-full bg-surface-container-lowest/95 backdrop-blur-md border-t border-[#D3DBE6] px-4 pt-3 pb-safe z-50">
+<div class="max-w-md mx-auto mb-2">
+<button class="w-full h-12 rounded-lg bg-primary-container text-white text-label-lg font-label-lg flex items-center justify-center gap-2 shadow-sm hover:bg-primary transition-colors duration-150 active:scale-[0.98]" type="button">
+<span>View my appointments</span>
+<span class="material-symbols-outlined text-white" style="font-size: 18px;">arrow_forward</span>
+</button>
+</div>
+</aside>
+<script>
+    // Micro-interactions for accessible feedback
+    document.addEventListener('DOMContentLoaded', () => {
+      const interactiveButtons = document.querySelectorAll('button');
+      interactiveButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Subtle touch ripple or click response
+          if (navigator.vibrate) {
+            navigator.vibrate(10);
+          }
+        });
+      });
+    });
+  </script>
+</body></html>

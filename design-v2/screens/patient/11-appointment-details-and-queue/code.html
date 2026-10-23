@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow - Appointment Details &amp; Live Actions</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-variant": "#d9e3f4",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#eef4ff",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "on-tertiary": "#ffffff",
+            "tertiary": "#4e1700",
+            "secondary-fixed": "#d2e4ff",
+            "on-surface-variant": "#43474e",
+            "on-secondary-fixed-variant": "#36485f",
+            "on-background": "#121c28",
+            "error": "#ba1a1a",
+            "on-surface": "#121c28",
+            "inverse-primary": "#a8c9f3",
+            "background": "#f8f9ff",
+            "surface-container-high": "#dfe9fa",
+            "on-error": "#ffffff",
+            "on-secondary-fixed": "#081c31",
+            "surface-dim": "#d1dbeb",
+            "on-primary-container": "#8dadd6",
+            "on-secondary-container": "#52647c",
+            "tertiary-fixed-dim": "#ffb599",
+            "on-primary-fixed-variant": "#27496c",
+            "outline-variant": "#c3c6cf",
+            "secondary-fixed-dim": "#b5c8e3",
+            "surface-container-highest": "#d9e3f4",
+            "secondary-container": "#cee1fd",
+            "on-secondary": "#ffffff",
+            "tertiary-fixed": "#ffdbce",
+            "inverse-surface": "#27313e",
+            "surface": "#f8f9ff",
+            "on-error-container": "#93000a",
+            "on-tertiary-fixed": "#370e00",
+            "primary": "#002b4c",
+            "on-primary-fixed": "#001d36",
+            "inverse-on-surface": "#eaf1ff",
+            "on-tertiary-container": "#ff8b5b",
+            "outline": "#73777f",
+            "primary-fixed": "#d1e4ff",
+            "surface-container": "#e5efff",
+            "surface-bright": "#f8f9ff",
+            "on-primary": "#ffffff",
+            "surface-tint": "#406185",
+            "primary-container": "#1e4164",
+            "tertiary-container": "#722600",
+            "secondary": "#4e6077",
+            "primary-fixed-dim": "#a8c9f3",
+            "error-container": "#ffdad6"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xl": "1.5rem",
+            "margin": "1rem",
+            "gutter-sm": "0.75rem",
+            "space-lg": "1rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "gutter": "1rem",
+            "space-md": "0.75rem",
+            "margin-tablet": "1.5rem",
+            "margin-desktop": "2rem"
+          },
+          "fontFamily": {
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "label-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "headline-xl": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-[#F7F9FD] text-on-surface antialiased font-body-md min-h-screen pb-32">
+<!-- Mobile Top Bar (Task-focused context: Back arrow, Title, Actions) -->
+<header class="sticky top-0 z-40 bg-surface-container-lowest shadow-sm">
+<div class="flex items-center justify-between px-4 h-16 max-w-lg mx-auto">
+<button aria-label="Go back" class="w-10 h-10 rounded-full flex items-center justify-center text-primary hover:bg-surface-container-low transition-colors active:scale-95" type="button">
+<span class="material-symbols-outlined text-primary text-xl font-bold" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="text-headline-md font-headline-md text-primary font-bold tracking-tight">Appointment Details</h1>
+<div class="flex items-center gap-1">
+<button aria-label="Share ticket" class="w-9 h-9 rounded-full flex items-center justify-center text-secondary hover:bg-surface-container-low transition-colors active:scale-95" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="share">share</span>
+</button>
+<button aria-label="Support &amp; Help" class="w-9 h-9 rounded-full flex items-center justify-center text-secondary hover:bg-surface-container-low transition-colors active:scale-95" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="help_outline">help_outline</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Container -->
+<main class="max-w-lg mx-auto px-4 pt-4 space-y-3.5">
+<!-- HERO CARD: Live Queue & Ticket Status -->
+<section class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-4 shadow-[0_4px_16px_-2px_rgba(19,38,59,0.04)]">
+<div class="flex items-start justify-between gap-2 mb-3.5">
+<div>
+<span class="text-body-sm font-body-sm text-secondary">Queue Management</span>
+<div class="flex items-center gap-2 mt-1">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EFF6FF] border border-[#BFDBFE]">
+<span class="w-2 h-2 rounded-full bg-[#015C9A] animate-pulse"></span>
+<span class="text-label-md font-label-md text-[#015C9A] font-semibold">In progress</span>
+</span>
+<span class="text-label-sm font-label-sm text-secondary font-medium">Auto-refreshing</span>
+</div>
+</div>
+<!-- High-Contrast Ticket Badge -->
+<div class="flex flex-col items-center bg-primary-container px-3.5 py-2 rounded-xl text-center shadow-sm">
+<span class="text-label-sm font-label-sm text-on-primary-container tracking-wider uppercase">Patient Token</span>
+<span class="text-headline-md font-headline-md text-white font-extrabold tracking-tight">Ticket A-14</span>
+</div>
+</div>
+<!-- Live Waiting Status Banner -->
+<div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-lg mb-4 border border-[#D9E3F4]">
+<div class="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm flex-shrink-0 text-primary-container">
+<span class="material-symbols-outlined text-xl" data-icon="hourglass_top">hourglass_top</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-label-lg font-label-lg text-primary font-bold">You're 3rd in line</p>
+<p class="text-body-sm font-body-sm text-secondary">Estimated wait: <span class="font-semibold text-primary">18 mins</span></p>
+</div>
+<div class="text-right">
+<span class="inline-flex px-2 py-0.5 rounded text-label-sm font-label-sm font-semibold bg-[#EBF5FF] text-[#015C9A]">Zone B</span>
+</div>
+</div>
+<!-- Linear Clinical Step Progress Indicator -->
+<div class="pt-2 border-t border-[#EDF2F7]">
+<p class="text-label-sm font-label-sm text-secondary font-medium mb-3">Live Clinic Journey</p>
+<div class="relative flex items-center justify-between">
+<div class="absolute left-3 right-3 top-3 -translate-y-1/2 h-0.5 bg-[#D9E3F4] -z-0"></div>
+<!-- Step 1: Check-in (Done) -->
+<div class="relative z-10 flex flex-col items-center">
+<div class="w-6 h-6 rounded-full bg-[#059669] text-white flex items-center justify-center ring-4 ring-white shadow-sm">
+<span class="material-symbols-outlined text-sm font-bold" data-icon="check">check</span>
+</div>
+<span class="text-label-sm font-label-sm text-primary font-bold mt-1.5">Check-in</span>
+<span class="text-[10px] text-secondary">10:14 AM</span>
+</div>
+<!-- Step 2: Triage (Done) -->
+<div class="relative z-10 flex flex-col items-center">
+<div class="w-6 h-6 rounded-full bg-[#059669] text-white flex items-center justify-center ring-4 ring-white shadow-sm">
+<span class="material-symbols-outlined text-sm font-bold" data-icon="check">check</span>
+</div>
+<span class="text-label-sm font-label-sm text-primary font-bold mt-1.5">Triage</span>
+<span class="text-[10px] text-secondary">10:22 AM</span>
+</div>
+<!-- Step 3: Waiting (Active) -->
+<div class="relative z-10 flex flex-col items-center">
+<div class="w-6 h-6 rounded-full bg-primary-container text-white flex items-center justify-center ring-4 ring-blue-100 shadow-sm animate-pulse">
+<span class="w-2 h-2 rounded-full bg-white"></span>
+</div>
+<span class="text-label-sm font-label-sm text-primary-container font-extrabold mt-1.5">Waiting</span>
+<span class="text-[10px] text-[#015C9A] font-semibold">Active</span>
+</div>
+<!-- Step 4: Room 204 (Upcoming) -->
+<div class="relative z-10 flex flex-col items-center">
+<div class="w-6 h-6 rounded-full bg-white border-2 border-[#C6D0DE] text-secondary flex items-center justify-center ring-4 ring-white">
+<span class="material-symbols-outlined text-xs" data-icon="meeting_room">meeting_room</span>
+</div>
+<span class="text-label-sm font-label-sm text-secondary font-medium mt-1.5">Room 204</span>
+<span class="text-[10px] text-secondary">Dr. Ahmed</span>
+</div>
+</div>
+</div>
+</section>
+<!-- DOCTOR & VISIT INFORMATION CARD -->
+<section class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-4 shadow-sm">
+<div class="flex items-start gap-3.5">
+<div class="relative">
+<img class="w-14 h-14 rounded-xl object-cover border border-[#D3DBE6]" data-alt="A distinguished Egyptian male cardiologist in his late forties wearing modern white medical scrubs and a stethoscope in a bright, pristine hospital office. Soft institutional lighting illuminates his warm, professional, reassuring demeanor against modern glass and slate architectural elements." src="https://lh3.googleusercontent.com/aida-public/AB6AXuArEB054nIvXa7xpZWU5AD5Ok33LBGhsAq53v_VKELd8D6bdAKSDlzlSqQ5mKgJweJVfvrYed2KuC_ORtSB9dtWq3UawIRh0q9Llok3z0vcy-a8G42l7W8uVyuTZOa7c1aBstUausbcOiiRN4XRD81knoAEiXxd8PXFM3sEsQWezdswdiy-B1nEcIdy8sIyJY3VGShxKKvMttTsVc0aeYNfSMqn8hcVkDFrJISwGMHmXdlw8bVaYd5FSMFQTV_ae0jUH0wr6z32Dkcr"/>
+<span class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-[#ECFDF5] border border-[#059669] flex items-center justify-center text-[#059669]">
+<span class="material-symbols-outlined text-xs font-bold" data-icon="verified">verified</span>
+</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<h2 class="text-headline-sm font-headline-sm text-primary font-bold truncate">Dr. Ahmed Fathy</h2>
+<div class="flex items-center gap-1 text-label-md font-label-md text-primary bg-surface-container-low px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-xs text-[#FF5E00]" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span>4.9</span>
+</div>
+</div>
+<p class="text-body-sm font-body-sm text-secondary font-medium">Consultant Cardiology &amp; Angiology</p>
+<p class="text-label-sm font-label-sm text-secondary mt-0.5">Ain Shams Specialized Hospital · 18 yrs exp</p>
+</div>
+</div>
+<div class="mt-4 pt-3.5 border-t border-[#EDF2F7] grid grid-cols-2 gap-2 text-left">
+<div class="p-2.5 rounded-lg bg-surface-container-low">
+<span class="text-[11px] text-secondary block font-medium">Scheduled Time</span>
+<span class="text-label-md font-label-md text-primary font-bold flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-sm text-primary-container" data-icon="schedule">schedule</span>
+            10:30 AM (30 min)
+          </span>
+<span class="text-[11px] text-secondary">Wed, 24 Oct 2025</span>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-low">
+<span class="text-[11px] text-secondary block font-medium">Service Type</span>
+<span class="text-label-md font-label-md text-primary font-bold flex items-center gap-1 mt-0.5 truncate">
+<span class="material-symbols-outlined text-sm text-primary-container" data-icon="clinical_notes">clinical_notes</span>
+            Initial Consultation
+          </span>
+<span class="text-[11px] text-secondary">In-person visit</span>
+</div>
+</div>
+</section>
+<!-- BRANCH LOCATION & MAP SNIPPET CARD -->
+<section class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl overflow-hidden shadow-sm">
+<div class="p-4 pb-3">
+<div class="flex items-start justify-between">
+<div>
+<span class="text-label-sm font-label-sm text-secondary font-medium uppercase tracking-wider">Clinic Branch</span>
+<h3 class="text-headline-sm font-headline-sm text-primary font-bold mt-0.5">Nasr City Branch</h3>
+<p class="text-body-sm font-body-sm text-secondary mt-0.5">14 Abbas El Akkad St. · Floor 2, Clinic 204</p>
+</div>
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded bg-surface-container-low text-primary text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-sm" data-icon="local_parking">local_parking</span>
+            Valet available
+          </span>
+</div>
+</div>
+<!-- Realistic Map Preview Card -->
+<div class="relative h-36 w-full bg-[#E2E8F0] overflow-hidden" data-location="Nasr City, Cairo" style="">
+<div class="w-full h-full bg-cover bg-center" data-alt="A clean, minimalist vector-style city roadmap of Abbas El Akkad avenue in Nasr City Cairo Egypt rendered in a modern digital navigation palette of cool navy blues, serene slate whites, and subtle asphalt grays. The scene highlights modern clinic buildings and a distinct pin location." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCnlLaXKkb0bAZSD1cDI3sQYgBwQonZyPlQ-dRfDBRXZHATBZ1gtl5DswsI3NGpHa9IHKT4zVkrg94oP-GgupeApyddHIs9aEZkZAA39UVhAfKBmF-6LodBGJv3jq02XOs_SpnINP8mUMoGMP_Txz6IPbVvCcrgeS_Sz0Fy-AN-PpvPpvu1uuqg1iFFpuepxruCWj37BGndiuBkxiaTim1tJoyBiiDn6MexiQen6kZVlTkWb7Q05iqAgtJrNp-GHD_fNarT9-0kyafP')">
+<div class="absolute inset-0 bg-gradient-to-t from-primary/30 to-transparent"></div>
+<!-- Realistic Map Pin Marker -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+<div class="bg-primary text-white text-[11px] font-bold px-2 py-0.5 rounded shadow-md whitespace-nowrap mb-1">
+              ClinicFlow Nasr City
+            </div>
+<div class="w-8 h-8 rounded-full bg-[#FF5E00] text-white flex items-center justify-center shadow-lg ring-4 ring-white/80 animate-bounce">
+<span class="material-symbols-outlined text-lg" data-icon="location_on">location_on</span>
+</div>
+</div>
+<!-- Bottom Action bar over map -->
+<div class="absolute bottom-2 left-3 right-3 flex justify-end">
+<a class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-lowest text-primary text-label-md font-label-md font-bold shadow-md hover:bg-surface-container-low transition-colors active:scale-95 border border-[#D3DBE6]" href="#directions">
+<span class="material-symbols-outlined text-base text-[#015C9A]" data-icon="directions">directions</span>
+              Get driving directions
+            </a>
+</div>
+</div>
+</div>
+</section>
+<!-- PAYMENT & DEPOSIT BREAKDOWN -->
+<section class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-4 shadow-sm">
+<div class="flex items-center justify-between pb-3 border-b border-[#EDF2F7]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="receipt_long">receipt_long</span>
+<h3 class="text-headline-sm font-headline-sm text-primary font-bold">Billing &amp; Deposit</h3>
+</div>
+<span class="text-label-sm font-label-sm text-secondary">Paymob ID: #PMB-88391</span>
+</div>
+<div class="space-y-2.5 pt-3">
+<div class="flex items-center justify-between text-body-md font-body-md text-secondary">
+<span>Standard Consultation Fee</span>
+<span class="text-on-surface font-medium">EGP 450</span>
+</div>
+<div class="flex items-center justify-between text-body-md font-body-md">
+<div class="flex items-center gap-2">
+<span class="text-secondary">Online deposit paid via Paymob</span>
+<span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-[#ECFDF5] text-[#059669] text-label-sm font-label-sm font-bold border border-[#A7F3D0]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+              Paid
+            </span>
+</div>
+<span class="text-[#059669] font-bold">- EGP 100</span>
+</div>
+<!-- Highlighted Due Balance -->
+<div class="flex items-center justify-between pt-3 border-t border-dashed border-[#C6D0DE] bg-[#FFF8F3] -mx-4 px-4 py-2.5 mt-2">
+<div>
+<span class="text-label-md font-label-md text-primary font-bold block">Balance due at reception</span>
+<span class="text-[11px] text-secondary">Pay via Card or Cash on desk 2</span>
+</div>
+<div class="text-right">
+<span class="text-headline-lg-mobile font-headline-lg-mobile text-[#FF5E00] font-extrabold tracking-tight">EGP 350</span>
+</div>
+</div>
+</div>
+</section>
+<!-- INTERACTIVE RESCHEDULE FLOW CARD -->
+<section class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-4 shadow-sm">
+<div class="flex items-center gap-2 mb-2">
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg" data-icon="update">update</span>
+</div>
+<div>
+<h3 class="text-headline-sm font-headline-sm text-primary font-bold">Need to change your time?</h3>
+<p class="text-body-sm font-body-sm text-secondary">Effortless rescheduling up to 2 hours prior</p>
+</div>
+</div>
+<!-- Info Banner regarding deposit preservation -->
+<div class="my-3 p-3 rounded-lg bg-[#EFF6FF] border border-[#BFDBFE] flex items-start gap-2.5">
+<span class="material-symbols-outlined text-[#015C9A] text-lg flex-shrink-0 mt-0.5" data-icon="info">info</span>
+<p class="text-label-md font-label-md text-[#015C9A] leading-relaxed">
+          Your <span class="font-bold">EGP 100 deposit</span> automatically moves to your new appointment slot with no penalty.
+        </p>
+</div>
+<button class="w-full h-12 bg-white text-primary border border-primary hover:bg-[#F7F9FD] active:scale-[0.99] rounded-lg font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-lg text-primary" data-icon="calendar_month">calendar_month</span>
+        Pick new date &amp; time
+      </button>
+</section>
+<!-- CANCELLATION SECTION (Expandable Block) -->
+<section class="bg-surface-container-lowest border border-[#D3DBE6] rounded-xl p-4 shadow-sm" id="cancellation-section">
+<button class="w-full flex items-center justify-between text-left focus:outline-none" id="toggle-cancel-btn" onclick="toggleCancelOptions()" type="button">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-lg" data-icon="event_busy">event_busy</span>
+<span class="text-label-lg font-label-lg text-secondary font-bold">Cancel Appointment</span>
+</div>
+<span class="material-symbols-outlined text-secondary transition-transform duration-200" data-icon="expand_more" id="chevron-icon">expand_more</span>
+</button>
+<!-- Expandable content container -->
+<div class="hidden pt-3.5 mt-2 border-t border-[#EDF2F7]" id="cancel-content">
+<p class="text-body-sm font-body-sm text-secondary mb-3">Please specify the reason for cancellation:</p>
+<div class="space-y-2 mb-4">
+<label class="flex items-center justify-between p-2.5 rounded-lg border border-[#D3DBE6] cursor-pointer hover:bg-surface-container-low transition-colors">
+<span class="text-body-md font-body-md text-on-surface">Schedule conflict</span>
+<input class="w-4 h-4 text-primary focus:ring-primary border-[#C6D0DE]" name="cancel_reason" type="radio" value="conflict"/>
+</label>
+<label class="flex items-center justify-between p-2.5 rounded-lg border border-[#D3DBE6] cursor-pointer hover:bg-surface-container-low transition-colors">
+<span class="text-body-md font-body-md text-on-surface">Feeling better</span>
+<input class="w-4 h-4 text-primary focus:ring-primary border-[#C6D0DE]" name="cancel_reason" type="radio" value="better"/>
+</label>
+<label class="flex items-center justify-between p-2.5 rounded-lg border border-[#D3DBE6] cursor-pointer hover:bg-surface-container-low transition-colors">
+<span class="text-body-md font-body-md text-on-surface">Need another doctor</span>
+<input class="w-4 h-4 text-primary focus:ring-primary border-[#C6D0DE]" name="cancel_reason" type="radio" value="doctor"/>
+</label>
+<label class="flex items-center justify-between p-2.5 rounded-lg border border-[#D3DBE6] cursor-pointer hover:bg-surface-container-low transition-colors">
+<span class="text-body-md font-body-md text-on-surface">Other</span>
+<input class="w-4 h-4 text-primary focus:ring-primary border-[#C6D0DE]" name="cancel_reason" type="radio" value="other"/>
+</label>
+</div>
+<div class="p-2.5 rounded-lg bg-[#FEF2F2] border border-[#FECACA] mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-[#DC2626] text-base" data-icon="notification_important">notification_important</span>
+<span class="text-body-sm font-body-sm text-[#DC2626] font-medium">Free cancellation until 2 hours before (by 8:30 AM).</span>
+</div>
+<button class="w-full py-2.5 px-4 rounded-lg border border-[#DC2626] text-[#DC2626] hover:bg-[#FEF2F2] active:scale-[0.99] font-label-md text-label-md font-bold transition-all flex items-center justify-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-base" data-icon="close">close</span>
+          Cancel this appointment
+        </button>
+</div>
+</section>
+</main>
+<!-- STICKY BOTTOM ACTIONS DOCK -->
+<aside class="fixed bottom-0 left-0 right-0 z-50 bg-surface-container-lowest/95 backdrop-blur-md shadow-[0_-4px_20px_rgba(19,38,59,0.08)] py-3 px-4">
+<div class="max-w-lg mx-auto flex items-center gap-3">
+<a class="flex-1 h-12 bg-primary-container hover:bg-[#13263B] text-white active:scale-[0.98] rounded-xl font-label-lg text-label-lg font-bold flex items-center justify-center gap-2.5 shadow-md transition-all" href="tel:16789">
+<span class="material-symbols-outlined text-xl" data-icon="call">call</span>
+<span>Call reception desk (16789)</span>
+</a>
+<button aria-label="Quick directions action" class="w-12 h-12 rounded-xl bg-white border border-[#D3DBE6] text-primary hover:bg-surface-container-low flex items-center justify-center shadow-sm active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-2xl" data-icon="navigation">navigation</span>
+</button>
+</div>
+</aside>
+<!-- Simple Toggle Interaction Script -->
+<script>
+    function toggleCancelOptions() {
+      const content = document.getElementById('cancel-content');
+      const chevron = document.getElementById('chevron-icon');
+      if (content.classList.contains('hidden')) {
+        content.classList.remove('hidden');
+        chevron.style.transform = 'rotate(180deg)';
+      } else {
+        content.classList.add('hidden');
+        chevron.style.transform = 'rotate(0deg)';
+      }
+    }
+  </script>
+</body></html>

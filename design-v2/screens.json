@@ -1,0 +1,506 @@
+[
+  {
+    "area": "accountant",
+    "n": 1,
+    "name": "Financial Overview",
+    "dir": "screens/accountant/01-financial-overview",
+    "device": "DESKTOP",
+    "id": "a344da8dd5b34fb8baa5372b6416012a"
+  },
+  {
+    "area": "accountant",
+    "n": 2,
+    "name": "Invoices & Billing Ledger",
+    "dir": "screens/accountant/02-invoices-and-billing-ledger",
+    "device": "DESKTOP",
+    "id": "e396b3823aca40c9a196fe938d218e93"
+  },
+  {
+    "area": "accountant",
+    "n": 3,
+    "name": "Payers & Plans",
+    "dir": "screens/accountant/03-payers-and-plans",
+    "device": "DESKTOP",
+    "id": "134fce70221e49cfae41059e6b252359"
+  },
+  {
+    "area": "accountant",
+    "n": 4,
+    "name": "Claims Workspace",
+    "dir": "screens/accountant/04-claims-workspace",
+    "device": "DESKTOP",
+    "id": "a1d329e8ec5143448f53bfe7b71ef07c"
+  },
+  {
+    "area": "admin",
+    "n": 1,
+    "name": "Overview",
+    "dir": "screens/admin/01-overview",
+    "device": "DESKTOP",
+    "id": "4fd6515065e54603a0798b10082e3630"
+  },
+  {
+    "area": "admin",
+    "n": 2,
+    "name": "Staff",
+    "dir": "screens/admin/02-staff",
+    "device": "DESKTOP",
+    "id": "82cda1feac544abcab620e1f3b04fe53"
+  },
+  {
+    "area": "admin",
+    "n": 3,
+    "name": "Staff member detail",
+    "dir": "screens/admin/03-staff-member-detail",
+    "device": "DESKTOP",
+    "id": "419977c870844e78ad60c3038a470c2c"
+  },
+  {
+    "area": "admin",
+    "n": 4,
+    "name": "Roles & permissions",
+    "dir": "screens/admin/04-roles-and-permissions",
+    "device": "DESKTOP",
+    "id": "70f587dfdc0044c9ae53e35f4e0034e9"
+  },
+  {
+    "area": "admin",
+    "n": 5,
+    "name": "Branches",
+    "dir": "screens/admin/05-branches",
+    "device": "DESKTOP",
+    "id": "216303503acb4076b8769305300a2fb7"
+  },
+  {
+    "area": "admin",
+    "n": 6,
+    "name": "Settings",
+    "dir": "screens/admin/06-settings",
+    "device": "DESKTOP",
+    "id": "333d0e5b7a9a4c95a5aa461e7b60bc83"
+  },
+  {
+    "area": "admin",
+    "n": 7,
+    "name": "Integrations & Message Templates",
+    "dir": "screens/admin/07-integrations-and-message-templates",
+    "device": "DESKTOP",
+    "id": "5a60b232bf1c4b1e9345cf4d604fdbfe"
+  },
+  {
+    "area": "admin",
+    "n": 8,
+    "name": "Audit Log",
+    "dir": "screens/admin/08-audit-log",
+    "device": "DESKTOP",
+    "id": "373486c7b2a746fc87439c8d2227fa48"
+  },
+  {
+    "area": "admin",
+    "n": 9,
+    "name": "Specialties",
+    "dir": "screens/admin/09-specialties",
+    "device": "DESKTOP",
+    "id": "cca1fabee3de4909b6f5a41ea559ecbd"
+  },
+  {
+    "area": "doctor",
+    "n": 1,
+    "name": "Today",
+    "dir": "screens/doctor/01-today",
+    "device": "DESKTOP",
+    "id": "d59231af517642e385ecec9dbd8cfe86"
+  },
+  {
+    "area": "doctor",
+    "n": 2,
+    "name": "Encounter Workspace",
+    "dir": "screens/doctor/02-encounter-workspace",
+    "device": "DESKTOP",
+    "id": "b2237df527a947cbbdfa6f5b45b4a48f"
+  },
+  {
+    "area": "doctor",
+    "n": 3,
+    "name": "Patient History Timeline",
+    "dir": "screens/doctor/03-patient-history-timeline",
+    "device": "DESKTOP",
+    "id": "8e2aa03c18e646eca9547bbbdd0797e8"
+  },
+  {
+    "area": "doctor",
+    "n": 4,
+    "name": "My Schedule & Leave",
+    "dir": "screens/doctor/04-my-schedule-and-leave",
+    "device": "DESKTOP",
+    "id": "6fdfea3a54c1470d883d4e96c3c8cd71"
+  },
+  {
+    "area": "front-desk",
+    "n": 1,
+    "name": "Today",
+    "dir": "screens/front-desk/01-today",
+    "device": "DESKTOP",
+    "id": "3dec85274bc743af801c001b3253514c"
+  },
+  {
+    "area": "front-desk",
+    "n": 2,
+    "name": "Patient Search & Register",
+    "dir": "screens/front-desk/02-patient-search-and-register",
+    "device": "DESKTOP",
+    "id": "a46ac8c740f34af188c910754c87f2a8"
+  },
+  {
+    "area": "front-desk",
+    "n": 3,
+    "name": "Book / Walk-in",
+    "dir": "screens/front-desk/03-book-walk-in",
+    "device": "DESKTOP",
+    "id": "b5b1b90ced6e42edbfaec7cde22c2d4b"
+  },
+  {
+    "area": "front-desk",
+    "n": 4,
+    "name": "Check-in Panel",
+    "dir": "screens/front-desk/04-check-in-panel",
+    "device": "DESKTOP",
+    "id": "cd43c26b63504c3c8536a3e02a3eca01"
+  },
+  {
+    "area": "front-desk",
+    "n": 5,
+    "name": "Queue Board",
+    "dir": "screens/front-desk/05-queue-board",
+    "device": "DESKTOP",
+    "id": "d7402867d62e4787b719ffa444cf3ba3"
+  },
+  {
+    "area": "front-desk",
+    "n": 6,
+    "name": "Waiting-room TV display",
+    "dir": "screens/front-desk/06-waiting-room-tv-display",
+    "device": "DESKTOP",
+    "id": "4f691cdbbe77407db3d63fe54d000a0b"
+  },
+  {
+    "area": "front-desk",
+    "n": 7,
+    "name": "Checkout",
+    "dir": "screens/front-desk/07-checkout",
+    "device": "DESKTOP",
+    "id": "add704d2ce544eaebf644e3a91241b84"
+  },
+  {
+    "area": "front-desk",
+    "n": 8,
+    "name": "Cash session",
+    "dir": "screens/front-desk/08-cash-session",
+    "device": "DESKTOP",
+    "id": "7a7d04c7675b44d3977ef4cca98fb9ca"
+  },
+  {
+    "area": "manager",
+    "n": 1,
+    "name": "Dashboard",
+    "dir": "screens/manager/01-dashboard",
+    "device": "DESKTOP",
+    "id": "a41c34dcc81a4f83a69ad5a28d03777d"
+  },
+  {
+    "area": "manager",
+    "n": 2,
+    "name": "Services & Price List",
+    "dir": "screens/manager/02-services-and-price-list",
+    "device": "DESKTOP",
+    "id": "2cd96d01052a4129a770dbb9ac884521"
+  },
+  {
+    "area": "manager",
+    "n": 3,
+    "name": "Recruitment — Applications",
+    "dir": "screens/manager/03-recruitment-applications",
+    "device": "DESKTOP",
+    "id": "25f59c7054704b2aacfc59157916611b"
+  },
+  {
+    "area": "manager",
+    "n": 4,
+    "name": "Application Detail",
+    "dir": "screens/manager/04-application-detail",
+    "device": "DESKTOP",
+    "id": "1547b47a48034406945dbe590976596f"
+  },
+  {
+    "area": "manager",
+    "n": 5,
+    "name": "Doctor Schedules",
+    "dir": "screens/manager/05-doctor-schedules",
+    "device": "DESKTOP",
+    "id": "160afbda35484809bbe2a695949572df"
+  },
+  {
+    "area": "manager",
+    "n": 6,
+    "name": "Leave Requests & Reschedule Worklist",
+    "dir": "screens/manager/06-leave-requests-and-reschedule-worklist",
+    "device": "DESKTOP",
+    "id": "d4b3ae1d99da497b82df19a0a55a7b39"
+  },
+  {
+    "area": "manager",
+    "n": 7,
+    "name": "Approvals Inbox",
+    "dir": "screens/manager/07-approvals-inbox",
+    "device": "DESKTOP",
+    "id": "78542e5e82a44073bbfb5786088173af"
+  },
+  {
+    "area": "manager",
+    "n": 8,
+    "name": "Daily Close",
+    "dir": "screens/manager/08-daily-close",
+    "device": "DESKTOP",
+    "id": "05e02f916a944bbeb67d703467d6b695"
+  },
+  {
+    "area": "manager",
+    "n": 9,
+    "name": "Reports & Exports",
+    "dir": "screens/manager/09-reports-and-exports",
+    "device": "DESKTOP",
+    "id": "1471021d15904189aaf098f29f4ee18e"
+  },
+  {
+    "area": "nurse",
+    "n": 1,
+    "name": "Triage Queue",
+    "dir": "screens/nurse/01-triage-queue",
+    "device": "DESKTOP",
+    "id": "339f27faf8c149ce8cf10e58aad548ee"
+  },
+  {
+    "area": "nurse",
+    "n": 2,
+    "name": "Vitals & Triage Form",
+    "dir": "screens/nurse/02-vitals-and-triage-form",
+    "device": "DESKTOP",
+    "id": "884fa550702d4fc68e4bcd8ac0a70d6b"
+  },
+  {
+    "area": "patient",
+    "n": 1,
+    "name": "Patient Sign Up",
+    "dir": "screens/patient/01-patient-sign-up",
+    "device": "MOBILE",
+    "id": "35902a675e9b4ddea549e38c63a31b4b"
+  },
+  {
+    "area": "patient",
+    "n": 2,
+    "name": "Verify Your Phone",
+    "dir": "screens/patient/02-verify-your-phone",
+    "device": "MOBILE",
+    "id": "6594c9c5c8584d508a1f4592664f84bb"
+  },
+  {
+    "area": "patient",
+    "n": 3,
+    "name": "Reset Password Step 1",
+    "dir": "screens/patient/03-reset-password-step-1",
+    "device": "MOBILE",
+    "id": "53d836d04b254244bf0592e60d8b14b7"
+  },
+  {
+    "area": "patient",
+    "n": 4,
+    "name": "Set New Password",
+    "dir": "screens/patient/04-set-new-password",
+    "device": "MOBILE",
+    "id": "36af5a52eec149989a62164386e83dac"
+  },
+  {
+    "area": "patient",
+    "n": 5,
+    "name": "Too Many Attempts",
+    "dir": "screens/patient/05-too-many-attempts",
+    "device": "MOBILE",
+    "id": "cbad653377a249ae86c47b5e007d75e7"
+  },
+  {
+    "area": "patient",
+    "n": 6,
+    "name": "Patient Home & Live Queue",
+    "dir": "screens/patient/06-patient-home-and-live-queue",
+    "device": "MOBILE",
+    "id": "e49c363e4df6411595e403c157127dfa"
+  },
+  {
+    "area": "patient",
+    "n": 7,
+    "name": "Book Step 1: Select Doctor",
+    "dir": "screens/patient/07-book-step-1-select-doctor",
+    "device": "MOBILE",
+    "id": "8d89343be0de45b8a0afdcaafdf1747e"
+  },
+  {
+    "area": "patient",
+    "n": 8,
+    "name": "Book Step 2: Slot & Payment",
+    "dir": "screens/patient/08-book-step-2-slot-and-payment",
+    "device": "MOBILE",
+    "id": "c31889afb1b043a2a6d6ead8580cc421"
+  },
+  {
+    "area": "patient",
+    "n": 9,
+    "name": "Booking Confirmed",
+    "dir": "screens/patient/09-booking-confirmed",
+    "device": "MOBILE",
+    "id": "34c4a1d0638f46a09ba3c417beb2fb39"
+  },
+  {
+    "area": "patient",
+    "n": 10,
+    "name": "My Appointments",
+    "dir": "screens/patient/10-my-appointments",
+    "device": "MOBILE",
+    "id": "3e863b5b116849268f118c31a79dfe60"
+  },
+  {
+    "area": "patient",
+    "n": 11,
+    "name": "Appointment Details & Queue",
+    "dir": "screens/patient/11-appointment-details-and-queue",
+    "device": "MOBILE",
+    "id": "0103a773c3154b68ab8410d54e43ae62"
+  },
+  {
+    "area": "patient",
+    "n": 12,
+    "name": "SMS Visit Reminder Page",
+    "dir": "screens/patient/12-sms-visit-reminder-page",
+    "device": "MOBILE",
+    "id": "516f0855c8c4418c973f4a790242da31"
+  },
+  {
+    "area": "patient",
+    "n": 13,
+    "name": "Records: My Visits",
+    "dir": "screens/patient/13-records-my-visits",
+    "device": "MOBILE",
+    "id": "eea750bb767c4b37b713cb4a608ec049"
+  },
+  {
+    "area": "patient",
+    "n": 14,
+    "name": "Visit Summary",
+    "dir": "screens/patient/14-visit-summary",
+    "device": "MOBILE",
+    "id": "93966ec2d11d4cfda719a4448b8462ee"
+  },
+  {
+    "area": "patient",
+    "n": 15,
+    "name": "Invoices & Receipts",
+    "dir": "screens/patient/15-invoices-and-receipts",
+    "device": "MOBILE",
+    "id": "3ee96901c62542ca8c74785ba87ddf1e"
+  },
+  {
+    "area": "patient",
+    "n": 16,
+    "name": "Documents & Insurance",
+    "dir": "screens/patient/16-documents-and-insurance",
+    "device": "MOBILE",
+    "id": "6006e548a0674bc5b621944fb7ebaa90"
+  },
+  {
+    "area": "patient",
+    "n": 17,
+    "name": "Profile & Settings",
+    "dir": "screens/patient/17-profile-and-settings",
+    "device": "MOBILE",
+    "id": "0c1054c8b91a49fe9e94325a12829723"
+  },
+  {
+    "area": "patient",
+    "n": 18,
+    "name": "Notifications",
+    "dir": "screens/patient/18-notifications",
+    "device": "MOBILE",
+    "id": "c19016cb208c49a1b1226ee1c3a776ac"
+  },
+  {
+    "area": "public",
+    "n": 1,
+    "name": "Outpatient Clinic Network Landing Page",
+    "dir": "screens/public/01-outpatient-clinic-network-landing-page",
+    "device": "DESKTOP",
+    "id": "c84e7389036446d5ab2df41c5b39a61e"
+  },
+  {
+    "area": "public",
+    "n": 2,
+    "name": "Patient & Staff Sign In",
+    "dir": "screens/public/02-patient-and-staff-sign-in",
+    "device": "DESKTOP",
+    "id": "d4ba0291fe84405d8dbe90744eeb8d3c"
+  },
+  {
+    "area": "public",
+    "n": 3,
+    "name": "Find a Doctor",
+    "dir": "screens/public/03-find-a-doctor",
+    "device": "DESKTOP",
+    "id": "a0e7fc6e1d7540f2b0e954f910957fe3"
+  },
+  {
+    "area": "public",
+    "n": 4,
+    "name": "Doctor Profile & Booking",
+    "dir": "screens/public/04-doctor-profile-and-booking",
+    "device": "DESKTOP",
+    "id": "710cb05c0d4b4452a93e192cc93aa1a2"
+  },
+  {
+    "area": "public",
+    "n": 5,
+    "name": "Join as a Doctor Application",
+    "dir": "screens/public/05-join-as-a-doctor-application",
+    "device": "DESKTOP",
+    "id": "74d4e69ec7594f98bb259716b09e733e"
+  },
+  {
+    "area": "public",
+    "n": 6,
+    "name": "My Application Status",
+    "dir": "screens/public/06-my-application-status",
+    "device": "DESKTOP",
+    "id": "58ab7eae02e34e4c8b880f27acc5b7c8"
+  },
+  {
+    "area": "public",
+    "n": 7,
+    "name": "Staff Sign-in Step 2 (2FA)",
+    "dir": "screens/public/07-staff-sign-in-step-2-2fa",
+    "device": "DESKTOP",
+    "id": "22037608e7f643508ba48b4fefbbc780"
+  },
+  {
+    "area": "public",
+    "n": 8,
+    "name": "Staff Two-Step Sign-in Setup",
+    "dir": "screens/public/08-staff-two-step-sign-in-setup",
+    "device": "DESKTOP",
+    "id": "215f4a59c52f4d3fb230324e189fe4db"
+  },
+  {
+    "area": "public",
+    "n": 9,
+    "name": "Accept Staff Invitation",
+    "dir": "screens/public/09-accept-staff-invitation",
+    "device": "DESKTOP",
+    "id": "1814a7b5d1aa4a2c9c834f0700d8d6ec"
+  }
+]

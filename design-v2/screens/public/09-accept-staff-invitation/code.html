@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Accept Staff Invitation | ClinicFlow Cairo Outpatient Network</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Forms and Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Verbatim Tailwind Configuration -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-tint": "#406185",
+            "on-primary-container": "#8dadd6",
+            "surface-container-lowest": "#ffffff",
+            "secondary": "#4e6077",
+            "outline": "#73777f",
+            "on-primary-fixed": "#001d36",
+            "tertiary": "#4e1700",
+            "surface-dim": "#d1dbeb",
+            "on-surface-variant": "#43474e",
+            "primary-fixed": "#d1e4ff",
+            "inverse-surface": "#27313e",
+            "on-primary-fixed-variant": "#27496c",
+            "inverse-primary": "#a8c9f3",
+            "tertiary-fixed": "#ffdbce",
+            "surface-container-high": "#dfe9fa",
+            "inverse-on-surface": "#eaf1ff",
+            "error": "#ba1a1a",
+            "surface-container": "#e5efff",
+            "on-secondary-fixed": "#081c31",
+            "secondary-fixed": "#d2e4ff",
+            "outline-variant": "#c3c6cf",
+            "tertiary-container": "#722600",
+            "surface-variant": "#d9e3f4",
+            "on-surface": "#121c28",
+            "on-background": "#121c28",
+            "tertiary-fixed-dim": "#ffb599",
+            "primary-container": "#1e4164",
+            "background": "#f8f9ff",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-tertiary-fixed": "#370e00",
+            "on-secondary-fixed-variant": "#36485f",
+            "surface-container-highest": "#d9e3f4",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "on-secondary-container": "#52647c",
+            "on-error": "#ffffff",
+            "on-primary": "#ffffff",
+            "on-error-container": "#93000a",
+            "surface": "#f8f9ff",
+            "primary-fixed-dim": "#a8c9f3",
+            "on-tertiary": "#ffffff",
+            "surface-bright": "#f8f9ff",
+            "on-secondary": "#ffffff",
+            "secondary-container": "#cee1fd",
+            "surface-container-low": "#eef4ff",
+            "on-tertiary-container": "#ff8b5b",
+            "error-container": "#ffdad6",
+            "primary": "#002b4c"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1rem",
+            "margin-tablet": "1.5rem",
+            "space-md": "0.75rem",
+            "margin": "1rem",
+            "gutter": "1rem",
+            "gutter-sm": "0.75rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-xl": "1.5rem",
+            "margin-desktop": "2rem"
+          },
+          "fontFamily": {
+            "headline-md": [
+              "Plus Jakarta Sans"
+            ],
+            "body-lg": [
+              "Inter"
+            ],
+            "body-md": [
+              "Inter"
+            ],
+            "label-sm": [
+              "Inter"
+            ],
+            "headline-xl": [
+              "Plus Jakarta Sans"
+            ],
+            "body-sm": [
+              "Inter"
+            ],
+            "label-lg": [
+              "Inter"
+            ],
+            "headline-lg": [
+              "Plus Jakarta Sans"
+            ],
+            "headline-lg-mobile": [
+              "Plus Jakarta Sans"
+            ],
+            "label-md": [
+              "Inter"
+            ],
+            "headline-sm": [
+              "Plus Jakarta Sans"
+            ],
+            "headline-xl-mobile": [
+              "Plus Jakarta Sans"
+            ]
+          },
+          "fontSize": {
+            "headline-md": [
+              "18px",
+              {
+                "lineHeight": "26px",
+                "fontWeight": "600"
+              }
+            ],
+            "body-lg": [
+              "16px",
+              {
+                "lineHeight": "24px",
+                "fontWeight": "400"
+              }
+            ],
+            "body-md": [
+              "14px",
+              {
+                "lineHeight": "20px",
+                "fontWeight": "400"
+              }
+            ],
+            "label-sm": [
+              "11px",
+              {
+                "lineHeight": "14px",
+                "letterSpacing": "0.02em",
+                "fontWeight": "500"
+              }
+            ],
+            "headline-xl": [
+              "32px",
+              {
+                "lineHeight": "40px",
+                "letterSpacing": "-0.02em",
+                "fontWeight": "700"
+              }
+            ],
+            "body-sm": [
+              "12px",
+              {
+                "lineHeight": "16px",
+                "fontWeight": "400"
+              }
+            ],
+            "label-lg": [
+              "14px",
+              {
+                "lineHeight": "20px",
+                "fontWeight": "600"
+              }
+            ],
+            "headline-lg": [
+              "24px",
+              {
+                "lineHeight": "32px",
+                "letterSpacing": "-0.01em",
+                "fontWeight": "700"
+              }
+            ],
+            "headline-lg-mobile": [
+              "20px",
+              {
+                "lineHeight": "28px",
+                "letterSpacing": "-0.01em",
+                "fontWeight": "600"
+              }
+            ],
+            "label-md": [
+              "12px",
+              {
+                "lineHeight": "16px",
+                "fontWeight": "600"
+              }
+            ],
+            "headline-sm": [
+              "16px",
+              {
+                "lineHeight": "24px",
+                "fontWeight": "600"
+              }
+            ],
+            "headline-xl-mobile": [
+              "26px",
+              {
+                "lineHeight": "34px",
+                "letterSpacing": "-0.015em",
+                "fontWeight": "700"
+              }
+            ]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-[#F7F9FD] text-[#212427] min-h-full flex flex-col font-body-md text-body-md antialiased selection:bg-secondary-container selection:text-primary">
+<!-- Desktop Header -->
+<header class="bg-surface-container-lowest w-full border-b border-[#D3DBE6] sticky top-0 z-30">
+<div class="max-w-7xl mx-auto px-8 w-full flex justify-between items-center h-16">
+<!-- Logo + Sub-brand Anchor -->
+<div class="flex items-center space-x-3">
+<div class="flex items-center justify-center w-9 h-9 rounded-lg bg-primary-container text-white shadow-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="local_hospital">local_hospital</span>
+</div>
+<div class="flex flex-col">
+<span class="text-headline-md font-headline-md font-bold text-primary tracking-tight leading-none">ClinicFlow</span>
+<span class="font-label-sm text-label-sm text-[#5B6573] mt-0.5 tracking-normal">Cairo Outpatient Network</span>
+</div>
+</div>
+<!-- Secure Verification Badge & Language Selector -->
+<div class="flex items-center space-x-6">
+<div class="hidden sm:flex items-center space-x-2 text-[#5B6573] font-body-sm text-body-sm bg-surface-container-low px-3 py-1.5 rounded-full border border-[#D3DBE6]">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="verified_user">verified_user</span>
+<span class="font-medium text-primary">Ministry of Health Verified Onboarding</span>
+</div>
+<button aria-label="Toggle language" class="flex items-center space-x-1.5 text-secondary hover:text-primary transition-colors duration-150 font-label-md text-label-md px-2 py-1 rounded-md hover:bg-surface-container-low" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="language">language</span>
+<span class="font-semibold">EN</span>
+<span class="text-outline-variant">|</span>
+<span class="font-semibold text-secondary">عربي</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Stage -->
+<main class="flex-1 flex flex-col items-center justify-center px-4 py-12 md:py-16">
+<div class="w-full max-w-[540px]">
+<!-- Stepper / Context Pill -->
+<div class="flex items-center justify-between mb-4 px-1">
+<div class="inline-flex items-center space-x-2">
+<span class="inline-block w-2 h-2 rounded-full bg-[#059669]"></span>
+<span class="font-label-sm text-label-sm text-[#5B6573] uppercase tracking-wider font-semibold">Staff Identity Verification</span>
+</div>
+<span class="font-label-sm text-label-sm text-[#5B6573]">Step 1 of 2</span>
+</div>
+<!-- Centered Onboarding Card -->
+<div class="bg-surface-container-lowest rounded-xl border border-[#D3DBE6] p-6 sm:p-8">
+<!-- Clinic Invitation Banner -->
+<div class="pb-6 border-b border-[#D3DBE6]">
+<div class="flex items-start gap-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-xl bg-primary-container text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]" data-icon="domain">domain</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between gap-2 flex-wrap">
+<span class="font-label-sm text-label-sm font-semibold text-primary px-2.5 py-0.5 rounded-full bg-secondary-container">
+                  Staff Access Invitation
+                </span>
+<!-- Expiration notice chip with subtle warm orange accent -->
+<div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FFF4ED] border border-[#FFDBCE]">
+<span class="material-symbols-outlined text-[14px] text-[#FF5E00]" data-icon="schedule">schedule</span>
+<span class="font-label-md text-label-md font-semibold text-[#FF5E00]">Expires in 2 days</span>
+</div>
+</div>
+<h1 class="font-headline-lg font-headline-lg text-[#13263B] mt-2.5 text-[22px] leading-snug">
+                Nasr City branch invited you to join ClinicFlow as <span class="text-primary font-bold">Nurse</span>
+</h1>
+<div class="mt-2.5 flex items-center gap-1.5 text-[#5B6573] font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary flex-shrink-0" data-icon="medical_services">medical_services</span>
+<span>Department: <strong class="text-[#212427] font-medium">Outpatient Cardiology &amp; Triage</strong></span>
+</div>
+<div class="mt-1 flex items-center gap-1.5 text-[#5B6573] font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary flex-shrink-0" data-icon="badge">badge</span>
+<span>Inviting Lead: <strong class="text-[#212427] font-medium">Dr. Hala Mostafa</strong> (Chief of Nursing)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Account Setup Form -->
+<form class="mt-6 space-y-5" onsubmit="event.preventDefault();">
+<!-- Field 1: Full name (Prefilled & Verified) -->
+<div>
+<label class="block font-label-md text-label-md text-[#212427] mb-1.5 flex items-center justify-between">
+<span>Full legal name (National ID verified)</span>
+<span class="text-[#059669] font-medium inline-flex items-center gap-1 text-[11px]">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle">check_circle</span> Verified by HR
+              </span>
+</label>
+<div class="relative">
+<input class="w-full h-12 bg-[#F7F9FD] border border-[#D3DBE6] rounded-lg px-4 text-[#212427] font-body-md text-body-md font-medium cursor-not-allowed focus:ring-0 focus:outline-none" readonly="" type="text" value="Fatma Hassan Mahmoud"/>
+<div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-[20px] text-[#059669]" data-icon="verified">verified</span>
+</div>
+</div>
+</div>
+<!-- Field 2: Work Email (Prefilled) -->
+<div>
+<label class="block font-label-md text-label-md text-[#212427] mb-1.5 flex items-center justify-between">
+<span>Assigned staff work email</span>
+<span class="text-[#5B6573] font-normal text-body-sm">Institutional SSO Domain</span>
+</label>
+<div class="relative">
+<input class="w-full h-12 bg-[#F7F9FD] border border-[#D3DBE6] rounded-lg pl-10 pr-4 text-[#212427] font-body-md text-body-md font-medium cursor-not-allowed focus:ring-0 focus:outline-none" readonly="" type="email" value="f.hassan@clinicflow.eg"/>
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="mail">mail</span>
+</div>
+<div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-[18px] text-outline" data-icon="lock">lock</span>
+</div>
+</div>
+</div>
+<!-- Field 3: Create password -->
+<div>
+<label class="block font-label-md text-label-md text-[#212427] mb-1.5" for="new-password">
+              Create master password
+            </label>
+<div class="relative">
+<input class="w-full h-12 bg-surface-container-lowest border border-[#C6D0DE] focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/15 rounded-lg px-4 pr-11 text-[#212427] font-body-md text-body-md transition-colors" id="new-password" placeholder="Enter a secure password" type="text" value="NileCare2025"/>
+<button aria-label="Toggle password visibility" class="absolute inset-y-0 right-0 pr-3 flex items-center text-secondary hover:text-[#212427] focus:outline-none" id="toggle-password" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span>
+</button>
+</div>
+<!-- Live Interactive Password Checklist -->
+<div class="mt-2.5 p-3 rounded-lg bg-surface-container-low border border-[#D3DBE6]">
+<div class="font-label-sm text-label-sm font-semibold text-secondary mb-2 uppercase tracking-wide">
+                Security Requirements
+              </div>
+<div class="grid grid-cols-2 gap-2 text-body-sm font-body-sm">
+<!-- Requirement 1: Passed -->
+<div class="flex items-center gap-1.5 text-[#059669]">
+<span class="material-symbols-outlined text-[16px]" data-icon="check_circle">check_circle</span>
+<span class="font-medium">8+ characters</span>
+</div>
+<!-- Requirement 2: Passed -->
+<div class="flex items-center gap-1.5 text-[#059669]">
+<span class="material-symbols-outlined text-[16px]" data-icon="check_circle">check_circle</span>
+<span class="font-medium">Upper &amp; lower case</span>
+</div>
+<!-- Requirement 3: Passed -->
+<div class="flex items-center gap-1.5 text-[#059669]">
+<span class="material-symbols-outlined text-[16px]" data-icon="check_circle">check_circle</span>
+<span class="font-medium">At least 1 number</span>
+</div>
+<!-- Requirement 4: Pending / Circle -->
+<div class="flex items-center gap-1.5 text-[#5B6573]">
+<span class="material-symbols-outlined text-[16px] text-outline" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+<span>1 symbol (@, #, $, etc.)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Field 4: Confirm password -->
+<div>
+<label class="block font-label-md text-label-md text-[#212427] mb-1.5" for="confirm-password">
+              Confirm master password
+            </label>
+<div class="relative">
+<input class="w-full h-12 bg-surface-container-lowest border border-[#059669] focus:border-[#059669] focus:ring-2 focus:ring-[#059669]/15 rounded-lg px-4 pr-11 text-[#212427] font-body-md text-body-md transition-colors" id="confirm-password" placeholder="Re-enter password" type="password" value="NileCare2025"/>
+<div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-[20px] text-[#059669]" data-icon="check">check</span>
+</div>
+</div>
+<!-- Match indicator -->
+<div class="mt-1.5 flex items-center gap-1 text-[#059669] font-body-sm text-body-sm font-medium">
+<span class="material-symbols-outlined text-[15px]" data-icon="done_all">done_all</span>
+<span>Passwords match</span>
+</div>
+</div>
+<!-- Policy Checkbox -->
+<div class="pt-2">
+<label class="flex items-start gap-3 cursor-pointer group">
+<input checked="" class="mt-1 w-4 h-4 rounded text-primary-container border-[#C6D0DE] focus:ring-[#1E4164] focus:ring-offset-0 transition" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-[#5B6573] group-hover:text-[#212427] leading-relaxed">
+                I agree to <a class="text-primary font-semibold underline decoration-[#D3DBE6] hover:decoration-primary" href="#">ClinicFlow Staff Security Policies</a> and <a class="text-primary font-semibold underline decoration-[#D3DBE6] hover:decoration-primary" href="#">Patient Data Protection Guidelines</a> under Egyptian Data Protection Law No. 151.
+              </span>
+</label>
+</div>
+<!-- Primary CTA Button -->
+<div class="pt-2">
+<button class="w-full h-12 bg-primary-container hover:bg-[#13263B] text-white font-label-lg text-label-lg font-semibold rounded-lg shadow-sm transition-all duration-200 active:scale-[0.99] flex items-center justify-center gap-2 group" type="submit">
+<span>Join and continue to two-step setup</span>
+<span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</form>
+<!-- Help / Verification Footer inside card -->
+<div class="mt-6 pt-5 border-t border-[#D3DBE6] bg-[#F7F9FD] -mx-6 -mb-6 sm:-mx-8 sm:-mb-8 px-6 sm:px-8 py-4 rounded-b-xl">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[20px] text-secondary flex-shrink-0 mt-0.5" data-icon="contact_support">contact_support</span>
+<p class="font-body-sm text-body-sm text-[#5B6573] leading-normal">
+              Invited with the wrong email or role? Contact your branch clinical administrator or call IT desk at <strong class="text-[#212427] font-semibold text-primary">16789</strong>.
+            </p>
+</div>
+</div>
+</div>
+<!-- Trust Badges Under Card -->
+<div class="mt-6 flex flex-wrap items-center justify-center gap-6 text-center text-[#5B6573] font-body-sm text-body-sm">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="encrypted">encrypted</span>
+<span>End-to-End EHR Access</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="policy">policy</span>
+<span>HIPAA &amp; EGY-MOH Compliant</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="security">security</span>
+<span>Hardware MFA Required</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Desktop Footer (from Shared Components JSON specifications) -->
+<footer class="bg-surface-container-low border-t border-outline-variant mt-auto">
+<div class="max-w-7xl mx-auto px-8 py-12 w-full">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+<!-- Col 1: Brand & Contact -->
+<div class="md:col-span-1">
+<div class="flex items-center space-x-2 mb-3">
+<div class="w-7 h-7 rounded bg-primary-container text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]" data-icon="local_hospital">local_hospital</span>
+</div>
+<span class="text-headline-md font-headline-md font-bold text-primary">ClinicFlow</span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary mb-4 leading-relaxed">
+            Integrated outpatient medical centers providing specialized clinical pathways across Greater Cairo.
+          </p>
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container border border-[#D3DBE6] font-label-md text-label-md text-primary font-bold">
+<span class="material-symbols-outlined text-[18px] text-[#FF5E00]" data-icon="call">call</span>
+<span>Hotline 16789</span>
+</div>
+</div>
+<!-- Col 2: Cairo Outpatient Hubs -->
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary mb-3">Key Branches</h2>
+<ul class="space-y-2 font-body-sm text-body-sm text-secondary">
+<li><a class="hover:text-primary transition-colors duration-150" href="#">Nasr City Branch</a></li>
+<li><a class="hover:text-primary transition-colors duration-150" href="#">Maadi Medical Center</a></li>
+<li><a class="hover:text-primary transition-colors duration-150" href="#">Sheikh Zayed Clinic</a></li>
+</ul>
+</div>
+<!-- Col 3: Tariffs & Clinical Standards -->
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary mb-3">Governance &amp; Tariffs</h2>
+<ul class="space-y-2 font-body-sm text-body-sm text-secondary">
+<li><a class="hover:text-primary transition-colors duration-150" href="#">Outpatient Tariffs (EGP)</a></li>
+<li><a class="hover:text-primary transition-colors duration-150" href="#">Insurance &amp; Copays</a></li>
+<li><a class="hover:text-primary transition-colors duration-150" href="#">Ministry of Health Licensing</a></li>
+</ul>
+</div>
+<!-- Col 4: Legal & Privacy -->
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary mb-3">Compliance</h2>
+<ul class="space-y-2 font-body-sm text-body-sm text-secondary">
+<li><a class="hover:text-primary transition-colors duration-150" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-primary transition-colors duration-150" href="#">Terms of Service</a></li>
+<li><a class="hover:text-primary transition-colors duration-150" href="#">Staff Portal Security</a></li>
+</ul>
+</div>
+</div>
+<!-- Footer Bottom Bar -->
+<div class="pt-8 border-t border-outline-variant flex flex-col sm:flex-row justify-between items-center gap-4">
+<p class="font-body-sm text-body-sm text-secondary text-center sm:text-left">
+          © 2025 ClinicFlow Healthcare Network S.A.E. All rights reserved. Hotline 16789.
+        </p>
+<div class="flex items-center space-x-6 font-body-sm text-body-sm text-secondary">
+<span class="inline-flex items-center gap-1 text-[#059669]">
+<span class="w-2 h-2 rounded-full bg-[#059669]"></span>
+<span>Cairo Central Servers Operational</span>
+</span>
+<span class="text-outline-variant">·</span>
+<span>v4.12-staff</span>
+</div>
+</div>
+</div>
+</footer>
+<!-- Light client script for micro-interactions -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggleBtn = document.getElementById('toggle-password');
+      const passwordInput = document.getElementById('new-password');
+      
+      if (toggleBtn && passwordInput) {
+        toggleBtn.addEventListener('click', () => {
+          const isPassword = passwordInput.getAttribute('type') === 'password';
+          passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+          const iconSpan = toggleBtn.querySelector('span');
+          if (iconSpan) {
+            iconSpan.textContent = isPassword ? 'visibility_off' : 'visibility';
+          }
+        });
+      }
+    });
+  </script>
+</body></html>

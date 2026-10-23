@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow - System Administrator Workspace: Overview</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Forms and Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-low": "#eef4ff",
+            "error-container": "#ffdad6",
+            "surface-container-lowest": "#ffffff",
+            "tertiary-fixed": "#ffdbce",
+            "tertiary-fixed-dim": "#ffb599",
+            "surface-dim": "#d1dbeb",
+            "on-error-container": "#93000a",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "secondary-fixed-dim": "#b5c8e3",
+            "surface-container": "#e5efff",
+            "primary-container": "#1e4164",
+            "surface": "#f8f9ff",
+            "inverse-primary": "#a8c9f3",
+            "on-primary": "#ffffff",
+            "background": "#f8f9ff",
+            "surface-variant": "#d9e3f4",
+            "secondary-container": "#cee1fd",
+            "inverse-surface": "#27313e",
+            "primary-fixed": "#d1e4ff",
+            "error": "#ba1a1a",
+            "tertiary-container": "#722600",
+            "surface-container-high": "#dfe9fa",
+            "secondary": "#4e6077",
+            "inverse-on-surface": "#eaf1ff",
+            "surface-container-highest": "#d9e3f4",
+            "on-secondary-container": "#52647c",
+            "on-tertiary-container": "#ff8b5b",
+            "on-tertiary": "#ffffff",
+            "on-primary-fixed": "#001d36",
+            "on-secondary-fixed-variant": "#36485f",
+            "primary-fixed-dim": "#a8c9f3",
+            "on-secondary": "#ffffff",
+            "on-primary-fixed-variant": "#27496c",
+            "tertiary": "#4e1700",
+            "secondary-fixed": "#d2e4ff",
+            "primary": "#002b4c",
+            "on-tertiary-fixed": "#370e00",
+            "on-primary-container": "#8dadd6",
+            "surface-bright": "#f8f9ff",
+            "on-background": "#121c28",
+            "on-surface-variant": "#43474e",
+            "on-secondary-fixed": "#081c31",
+            "outline": "#73777f",
+            "surface-tint": "#406185",
+            "on-surface": "#121c28",
+            "on-error": "#ffffff",
+            "outline-variant": "#c3c6cf"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "space-md": "0.75rem",
+            "gutter-sm": "0.75rem",
+            "gutter": "1rem",
+            "space-sm": "0.5rem",
+            "space-xl": "1.5rem",
+            "margin-tablet": "1.5rem",
+            "margin": "1rem",
+            "space-lg": "1rem",
+            "margin-desktop": "2rem"
+          },
+          "fontFamily": {
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "label-md": ["Inter"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "label-lg": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface font-body-md text-body-md antialiased min-h-full flex">
+<!-- ================= SIDEBAR (Shared Component: SideNavBar) ================= -->
+<aside class="fixed top-0 left-0 h-full w-[260px] z-40 flex flex-col justify-between bg-surface-container-lowest border-r border-surface-variant select-none">
+<!-- Top Brand & Hierarchy -->
+<div>
+<div class="px-space-xl py-space-lg flex items-center gap-space-sm border-b border-surface-variant">
+<div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center text-on-primary shadow-sm">
+<span class="material-symbols-outlined text-[24px]">local_hospital</span>
+</div>
+<div>
+<div class="font-headline-sm text-headline-sm font-bold text-primary tracking-tight">ClinicFlow</div>
+<div class="font-body-sm text-body-sm text-secondary">Egypt Network Admin</div>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="p-space-sm space-y-1 mt-2">
+<!-- 1. Overview (ACTIVE ITEM based on Destination: Overview) -->
+<a class="flex items-center gap-space-sm px-space-md py-space-sm bg-surface-container-low text-primary border-l-4 border-primary font-semibold transition-all duration-150" href="#overview">
+<span class="material-symbols-outlined text-[20px] text-primary" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-lg text-label-lg">Overview</span>
+</a>
+<!-- 2. Staff -->
+<a class="flex items-center gap-space-sm px-space-md py-space-sm text-secondary hover:bg-surface-container-low hover:text-primary transition-colors duration-150" href="#staff">
+<span class="material-symbols-outlined text-[20px]">badge</span>
+<span class="font-label-lg text-label-lg">Staff</span>
+</a>
+<!-- 3. Roles & permissions -->
+<a class="flex items-center gap-space-sm px-space-md py-space-sm text-secondary hover:bg-surface-container-low hover:text-primary transition-colors duration-150" href="#roles">
+<span class="material-symbols-outlined text-[20px]">shield_person</span>
+<span class="font-label-lg text-label-lg">Roles &amp; permissions</span>
+</a>
+<!-- 4. Branches -->
+<a class="flex items-center gap-space-sm px-space-md py-space-sm text-secondary hover:bg-surface-container-low hover:text-primary transition-colors duration-150" href="#branches">
+<span class="material-symbols-outlined text-[20px]">apartment</span>
+<span class="font-label-lg text-label-lg">Branches</span>
+</a>
+<!-- 5. Specialties -->
+<a class="flex items-center gap-space-sm px-space-md py-space-sm text-secondary hover:bg-surface-container-low hover:text-primary transition-colors duration-150" href="#specialties">
+<span class="material-symbols-outlined text-[20px]">medical_services</span>
+<span class="font-label-lg text-label-lg">Specialties</span>
+</a>
+<!-- 6. Settings -->
+<a class="flex items-center gap-space-sm px-space-md py-space-sm text-secondary hover:bg-surface-container-low hover:text-primary transition-colors duration-150" href="#settings">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-label-lg text-label-lg">Settings</span>
+</a>
+<!-- 7. Integrations -->
+<a class="flex items-center gap-space-sm px-space-md py-space-sm text-secondary hover:bg-surface-container-low hover:text-primary transition-colors duration-150" href="#integrations">
+<span class="material-symbols-outlined text-[20px]">sync_alt</span>
+<span class="font-label-lg text-label-lg">Integrations</span>
+</a>
+<!-- 8. Audit log -->
+<a class="flex items-center gap-space-sm px-space-md py-space-sm text-secondary hover:bg-surface-container-low hover:text-primary transition-colors duration-150" href="#audit">
+<span class="material-symbols-outlined text-[20px]">history</span>
+<span class="font-label-lg text-label-lg">Audit log</span>
+</a>
+</nav>
+</div>
+<!-- Sidebar Bottom / User Card -->
+<div class="p-space-md border-t border-surface-variant bg-surface-container-lowest">
+<div class="flex items-center justify-between p-space-sm rounded-lg hover:bg-surface-container-low transition-colors duration-150">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-9 h-9 rounded-full bg-secondary-container flex items-center justify-center text-primary font-bold text-sm shrink-0">
+            KA
+          </div>
+<div class="truncate">
+<div class="font-label-md text-label-md text-on-surface font-semibold truncate">Karim Adel</div>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="inline-flex items-center px-1.5 py-0.2 rounded font-label-sm text-[10px] font-semibold bg-[#EDE9FE] text-[#6D28D9]">Admin</span>
+<span class="font-body-sm text-[11px] text-secondary">Console</span>
+</div>
+</div>
+</div>
+<button class="text-secondary hover:text-primary p-1 rounded transition-colors" title="Account settings">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- ================= MAIN WRAPPER ================= -->
+<div class="pl-[260px] flex-1 flex flex-col min-w-0">
+<!-- ================= TOP BAR (Shared Component: TopNavBar) ================= -->
+<header class="flex justify-between items-center w-full px-space-xl py-space-md bg-surface-container-lowest border-b border-surface-variant sticky top-0 z-30">
+<!-- Left: Viewport Anchor & Quick Search -->
+<div class="flex items-center gap-space-lg">
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">System Overview</h1>
+<div class="relative w-72">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-[18px]">search</span>
+<input class="w-full h-9 pl-9 pr-4 bg-background border border-surface-variant rounded-lg font-body-sm text-body-sm text-on-surface placeholder:text-secondary focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all" placeholder="Search staff, branches, audit logs..." type="text"/>
+</div>
+</div>
+<!-- Right: Secondary Tools & Locale -->
+<div class="flex items-center gap-space-md">
+<!-- Locale Switcher -->
+<button class="flex items-center gap-1.5 px-space-md py-1.5 rounded-lg border border-surface-variant text-secondary hover:text-primary hover:bg-surface-container-low font-label-md text-label-md transition-all duration-150">
+<span class="material-symbols-outlined text-[18px]">language</span>
+<span>EN / عربي</span>
+</button>
+<!-- Notification Bell with Orange Dot -->
+<button aria-label="Notifications" class="relative p-2 rounded-lg text-secondary hover:text-primary hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[22px]">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#FF5E00] ring-2 ring-surface-container-lowest"></span>
+</button>
+<div class="h-6 w-[1px] bg-surface-variant"></div>
+<!-- System Quick Status Indicator -->
+<div class="flex items-center gap-2 pl-1">
+<span class="w-2.5 h-2.5 rounded-full bg-[#059669] animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-secondary font-medium">Node: Cairo-North (EG-01)</span>
+</div>
+</div>
+</header>
+<!-- ================= MAIN CONTENT CANVAS ================= -->
+<main class="p-space-xl flex-1 max-w-[1400px] w-full mx-auto space-y-space-lg">
+<!-- BANNER: System Overview & Platform Health -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-space-lg flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="space-y-1">
+<div class="flex items-center gap-3">
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight">System Overview &amp; Platform Health</h2>
+<!-- Status Chip -->
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-label-md font-semibold bg-[#ECFDF5] text-[#059669]">
+<span class="w-2 h-2 rounded-full bg-[#059669]"></span>
+              All Systems Nominal
+            </span>
+</div>
+<p class="font-body-md text-body-md text-secondary">
+            Centralized administrative telemetry across 3 clinic locations in Cairo &amp; Giza governorates.
+          </p>
+</div>
+<!-- Clock & Cairo Reference -->
+<div class="flex items-center gap-space-md self-start md:self-auto bg-background px-4 py-2.5 rounded-lg border border-surface-variant">
+<span class="material-symbols-outlined text-secondary text-[20px]">schedule</span>
+<div>
+<div class="font-label-sm text-label-sm text-secondary">Egypt Standard Time (Africa/Cairo)</div>
+<div class="font-headline-sm text-headline-sm font-bold text-primary font-mono" id="cairo-clock">10:48:22 AM UTC+2</div>
+</div>
+</div>
+</div>
+<!-- 4 KPI METRIC CARDS GRID -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- KPI 1: Active Staff -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-space-lg hover:border-primary-container transition-colors duration-150">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-wider font-semibold">Active Staff</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container-low text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">badge</span>
+</div>
+</div>
+<div class="mt-2 flex items-baseline gap-2">
+<span class="font-headline-xl text-headline-xl font-bold text-on-surface">64</span>
+<span class="font-label-sm text-label-sm text-[#059669] font-medium flex items-center">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> 100% active
+            </span>
+</div>
+<div class="mt-3 pt-3 border-t border-surface-variant font-body-sm text-body-sm text-secondary">
+            3 branches · 18 doctors, 24 nurses, 14 receptionists, 8 admin/ops
+          </div>
+</div>
+<!-- KPI 2: Pending Invitations -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-space-lg hover:border-primary-container transition-colors duration-150">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-wider font-semibold">Pending Invitations</span>
+<div class="w-8 h-8 rounded-lg bg-[#FFFBEB] text-[#D97706] flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">mail</span>
+</div>
+</div>
+<div class="mt-2 flex items-baseline justify-between">
+<span class="font-headline-xl text-headline-xl font-bold text-on-surface">3</span>
+<a class="font-label-md text-label-md text-primary font-semibold hover:underline" href="#pending-invitations">Manage</a>
+</div>
+<div class="mt-3 pt-3 border-t border-surface-variant font-body-sm text-body-sm text-[#D97706] flex items-center gap-1.5 font-medium">
+<span class="material-symbols-outlined text-[16px]">priority_high</span>
+            2 expiring within 48h
+          </div>
+</div>
+<!-- KPI 3: Failed Logins -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-space-lg hover:border-primary-container transition-colors duration-150">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-wider font-semibold">Failed Logins (24h)</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container-low text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">gpp_bad</span>
+</div>
+</div>
+<div class="mt-2 flex items-baseline gap-2">
+<span class="font-headline-xl text-headline-xl font-bold text-on-surface">7</span>
+<span class="font-label-sm text-label-sm text-secondary font-medium">Normal threshold</span>
+</div>
+<div class="mt-3 pt-3 border-t border-surface-variant font-body-sm text-body-sm text-secondary">
+            4 rate-limited IPs (Brute force prevention triggered)
+          </div>
+</div>
+<!-- KPI 4: Integrations Healthy -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-space-lg hover:border-primary-container transition-colors duration-150">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-wider font-semibold">Integrations Healthy</span>
+<div class="w-8 h-8 rounded-lg bg-[#ECFDF5] text-[#059669] flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+</div>
+</div>
+<div class="mt-2 flex items-baseline gap-2">
+<span class="font-headline-xl text-headline-xl font-bold text-on-surface">3/3</span>
+<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-semibold bg-[#ECFDF5] text-[#059669]">100% OK</span>
+</div>
+<div class="mt-3 pt-3 border-t border-surface-variant font-body-sm text-body-sm text-secondary truncate">
+            SMS Gateway, SMTP, Paymob active
+          </div>
+</div>
+</div>
+<!-- TWO-COLUMN LOWER SECTION -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- LEFT COLUMN (7 Cols): Pending Staff Invitations & Integration Health -->
+<div class="lg:col-span-7 space-y-space-lg">
+<!-- Card 1: Pending Invitations -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-space-lg" id="pending-invitations">
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-2">
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Pending Invitations</h3>
+<span class="px-2 py-0.5 rounded-full text-label-sm font-semibold bg-surface-container text-primary">3</span>
+</div>
+<button class="px-3 py-1.5 bg-primary-container text-on-primary rounded-lg font-label-md text-label-md font-semibold hover:bg-primary transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">person_add</span>
+                Invite Staff
+              </button>
+</div>
+<!-- Invitations Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-surface-variant text-secondary font-label-sm text-label-sm">
+<th class="pb-2.5 font-semibold">Staff Email</th>
+<th class="pb-2.5 font-semibold">Assigned Role</th>
+<th class="pb-2.5 font-semibold">Branch</th>
+<th class="pb-2.5 font-semibold">Sent Date</th>
+<th class="pb-2.5 text-right font-semibold">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-variant text-body-sm">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 font-medium text-on-surface">
+                      dr.tarek@clinicflow.eg
+                    </td>
+<td class="py-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full font-label-sm text-[11px] font-semibold bg-[#EFF6FF] text-[#015C9A]">
+                        Doctor
+                      </span>
+</td>
+<td class="py-3 text-secondary font-medium">Nasr City</td>
+<td class="py-3 text-secondary">Oct 24, 2023</td>
+<td class="py-3 text-right whitespace-nowrap">
+<button class="text-primary font-semibold hover:underline mr-3">Resend</button>
+<button class="text-[#DC2626] font-semibold hover:underline">Revoke</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 font-medium text-on-surface">
+                      nurse.samah@clinicflow.eg
+                    </td>
+<td class="py-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full font-label-sm text-[11px] font-semibold bg-[#ECFDF5] text-[#059669]">
+                        Nurse
+                      </span>
+</td>
+<td class="py-3 text-secondary font-medium">Maadi</td>
+<td class="py-3 text-secondary">Oct 25, 2023</td>
+<td class="py-3 text-right whitespace-nowrap">
+<button class="text-primary font-semibold hover:underline mr-3">Resend</button>
+<button class="text-[#DC2626] font-semibold hover:underline">Revoke</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 font-medium text-on-surface">
+                      acc.nour@clinicflow.eg
+                    </td>
+<td class="py-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full font-label-sm text-[11px] font-semibold bg-[#FFFBEB] text-[#D97706]">
+                        Accountant
+                      </span>
+</td>
+<td class="py-3 text-secondary font-medium">Nasr City</td>
+<td class="py-3 text-secondary">Oct 25, 2023</td>
+<td class="py-3 text-right whitespace-nowrap">
+<button class="text-primary font-semibold hover:underline mr-3">Resend</button>
+<button class="text-[#DC2626] font-semibold hover:underline">Revoke</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Card 2: Integration Services Status -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-space-lg">
+<div class="flex items-center justify-between mb-space-md">
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Integration Services Status</h3>
+<a class="font-label-md text-label-md text-primary font-semibold hover:underline flex items-center gap-1" href="#integrations">
+                Configure
+                <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+</div>
+<div class="space-y-3">
+<!-- Integration 1: Vodafone SMS -->
+<div class="p-3.5 rounded-lg border border-surface-variant bg-surface-container-low/30 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest border border-surface-variant flex items-center justify-center text-[#DC2626] shrink-0 font-bold">
+<span class="material-symbols-outlined text-[20px]">sms</span>
+</div>
+<div>
+<div class="font-headline-sm text-body-md font-semibold text-on-surface flex items-center gap-2">
+                      Vodafone SMS Gateway (Egypt)
+                      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-[10px] font-semibold bg-[#ECFDF5] text-[#059669]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+                        Operational
+                      </span>
+</div>
+<div class="font-body-sm text-body-sm text-secondary mt-0.5">
+                      Latency: <span class="font-medium text-on-surface">142ms</span> · Balance: <span class="font-semibold text-primary">14,280 SMS</span>
+</div>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-sm text-label-sm text-[#059669] font-medium">99.98% Uptime</span>
+</div>
+</div>
+<!-- Integration 2: SendGrid SMTP -->
+<div class="p-3.5 rounded-lg border border-surface-variant bg-surface-container-low/30 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest border border-surface-variant flex items-center justify-center text-[#015C9A] shrink-0 font-bold">
+<span class="material-symbols-outlined text-[20px]">mark_email_read</span>
+</div>
+<div>
+<div class="font-headline-sm text-body-md font-semibold text-on-surface flex items-center gap-2">
+                      SendGrid SMTP Email
+                      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-[10px] font-semibold bg-[#ECFDF5] text-[#059669]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+                        Operational
+                      </span>
+</div>
+<div class="font-body-sm text-body-sm text-secondary mt-0.5">
+                      Delivery: <span class="font-medium text-on-surface">99.4%</span> · Dispatch Queue: <span class="font-medium text-on-surface">0</span>
+</div>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-sm text-label-sm text-[#059669] font-medium">100% Uptime</span>
+</div>
+</div>
+<!-- Integration 3: Paymob -->
+<div class="p-3.5 rounded-lg border border-surface-variant bg-surface-container-low/30 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest border border-surface-variant flex items-center justify-center text-primary shrink-0 font-bold">
+<span class="material-symbols-outlined text-[20px]">payments</span>
+</div>
+<div>
+<div class="font-headline-sm text-body-md font-semibold text-on-surface flex items-center gap-2">
+                      Paymob Payment Gateway
+                      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-label-sm text-[10px] font-semibold bg-[#ECFDF5] text-[#059669]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+                        Connected
+                      </span>
+</div>
+<div class="font-body-sm text-body-sm text-secondary mt-0.5">
+                      Webhook: <span class="font-medium text-[#059669]">Active</span> · Test Mode: <span class="font-semibold text-on-surface">Off (Live)</span>
+</div>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-sm text-label-sm text-primary font-medium">EGP Settlements</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN (5 Cols): Recent Security & Access Events (Audit Stream) -->
+<div class="lg:col-span-5">
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-space-lg flex flex-col h-full">
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">shield</span>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Recent Security Events</h3>
+</div>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono bg-surface-container text-secondary">
+                Audit Stream
+              </span>
+</div>
+<!-- Audit Events List -->
+<div class="space-y-3.5 flex-1">
+<!-- Event 1 -->
+<div class="p-3 rounded-lg border border-surface-variant hover:border-secondary transition-colors">
+<div class="flex items-start justify-between">
+<div class="space-y-0.5">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface">MFA Reset Triggered</span>
+<span class="inline-flex items-center px-1.5 py-0.2 rounded font-label-sm text-[10px] font-semibold bg-[#EFF6FF] text-[#015C9A]">
+                        Info
+                      </span>
+</div>
+<div class="font-body-sm text-[12px] text-secondary">
+                      Actor: <span class="font-mono text-on-surface">karim.adel</span>
+</div>
+</div>
+<span class="font-mono text-[11px] text-secondary">10:42 AM</span>
+</div>
+<div class="mt-2 pt-2 border-t border-surface-variant/70 flex items-center justify-between text-[11px] text-secondary">
+<span class="font-mono">197.38.12.44</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">location_on</span> Cairo, EG
+                  </span>
+</div>
+</div>
+<!-- Event 2 -->
+<div class="p-3 rounded-lg border border-surface-variant hover:border-secondary transition-colors bg-[#FEF2F2]/30">
+<div class="flex items-start justify-between">
+<div class="space-y-0.5">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface">IP Rate-limit Enforced</span>
+<span class="inline-flex items-center px-1.5 py-0.2 rounded font-label-sm text-[10px] font-semibold bg-[#FEF2F2] text-[#DC2626]">
+                        Warning
+                      </span>
+</div>
+<div class="font-body-sm text-[12px] text-secondary">
+                      Actor: <span class="font-mono text-on-surface">system-guard</span>
+</div>
+</div>
+<span class="font-mono text-[11px] text-secondary">10:15 AM</span>
+</div>
+<div class="mt-2 pt-2 border-t border-surface-variant/70 flex items-center justify-between text-[11px] text-secondary">
+<span class="font-mono text-[#DC2626] font-medium">156.204.11.2</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">location_on</span> Giza, EG
+                  </span>
+</div>
+</div>
+<!-- Event 3 -->
+<div class="p-3 rounded-lg border border-surface-variant hover:border-secondary transition-colors">
+<div class="flex items-start justify-between">
+<div class="space-y-0.5">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface">Role Permission Updated</span>
+<span class="inline-flex items-center px-1.5 py-0.2 rounded font-label-sm text-[10px] font-semibold bg-[#F1F5F9] text-[#64748B]">
+                        Neutral
+                      </span>
+</div>
+<div class="font-body-sm text-[12px] text-secondary">
+                      Actor: <span class="font-mono text-on-surface">mona.samir</span>
+</div>
+</div>
+<span class="font-mono text-[11px] text-secondary">09:30 AM</span>
+</div>
+<div class="mt-2 pt-2 border-t border-surface-variant/70 flex items-center justify-between text-[11px] text-secondary">
+<span class="font-mono">197.38.12.44</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">location_on</span> Cairo, EG
+                  </span>
+</div>
+</div>
+<!-- Event 4 -->
+<div class="p-3 rounded-lg border border-surface-variant hover:border-secondary transition-colors">
+<div class="flex items-start justify-between">
+<div class="space-y-0.5">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-body-sm font-semibold text-on-surface">Failed Admin Auth</span>
+<span class="inline-flex items-center px-1.5 py-0.2 rounded font-label-sm text-[10px] font-semibold bg-[#FEF2F2] text-[#DC2626]">
+                        Warning
+                      </span>
+</div>
+<div class="font-body-sm text-[12px] text-secondary">
+                      Actor: <span class="font-mono text-on-surface">unknown</span> (Password mismatch)
+                    </div>
+</div>
+<span class="font-mono text-[11px] text-secondary">08:12 AM</span>
+</div>
+<div class="mt-2 pt-2 border-t border-surface-variant/70 flex items-center justify-between text-[11px] text-secondary">
+<span class="font-mono">156.204.11.2</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">location_on</span> Giza, EG
+                  </span>
+</div>
+</div>
+</div>
+<!-- Footer Action -->
+<div class="mt-4 pt-4 border-t border-surface-variant">
+<a class="w-full flex items-center justify-center gap-2 py-2 text-primary font-semibold font-label-md text-label-md rounded-lg hover:bg-surface-container-low transition-colors" href="#audit">
+<span>View Full Audit Log</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Inline Script for Interactive Cairo Live Clock -->
+<script>
+    function updateCairoClock() {
+      const now = new Date();
+      // Africa/Cairo format
+      const options = {
+        timeZone: 'Africa/Cairo',
+        hour12: true,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      };
+      const formatter = new Intl.DateTimeFormat([], options);
+      const clockElement = document.getElementById('cairo-clock');
+      if (clockElement) {
+        clockElement.textContent = formatter.format(now) + ' UTC+2';
+      }
+    }
+    setInterval(updateCairoClock, 1000);
+    updateCairoClock();
+  </script>
+</body></html>

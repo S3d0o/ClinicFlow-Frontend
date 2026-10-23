@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClinicFlow Admin - 8. Audit Log</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-bright": "#f8f9ff",
+            "secondary": "#4e6077",
+            "outline": "#73777f",
+            "surface-tint": "#406185",
+            "secondary-container": "#cee1fd",
+            "surface-container-lowest": "#ffffff",
+            "surface-dim": "#d1dbeb",
+            "surface-container-high": "#dfe9fa",
+            "primary-fixed": "#d1e4ff",
+            "inverse-surface": "#27313e",
+            "on-surface": "#121c28",
+            "primary-fixed-dim": "#a8c9f3",
+            "on-primary-fixed": "#001d36",
+            "on-secondary-fixed": "#081c31",
+            "on-secondary": "#ffffff",
+            "surface-container-highest": "#d9e3f4",
+            "surface-container-low": "#eef4ff",
+            "inverse-primary": "#a8c9f3",
+            "error": "#ba1a1a",
+            "tertiary": "#4e1700",
+            "secondary-fixed-dim": "#b5c8e3",
+            "on-secondary-fixed-variant": "#36485f",
+            "on-primary-fixed-variant": "#27496c",
+            "surface-variant": "#d9e3f4",
+            "secondary-fixed": "#d2e4ff",
+            "on-tertiary-fixed-variant": "#7f2b00",
+            "tertiary-fixed-dim": "#ffb599",
+            "background": "#f8f9ff",
+            "on-tertiary-fixed": "#370e00",
+            "on-error": "#ffffff",
+            "outline-variant": "#c3c6cf",
+            "on-surface-variant": "#43474e",
+            "tertiary-container": "#722600",
+            "on-tertiary": "#ffffff",
+            "on-primary": "#ffffff",
+            "tertiary-fixed": "#ffdbce",
+            "error-container": "#ffdad6",
+            "primary": "#002b4c",
+            "on-error-container": "#93000a",
+            "on-primary-container": "#8dadd6",
+            "on-tertiary-container": "#ff8b5b",
+            "surface-container": "#e5efff",
+            "on-secondary-container": "#52647c",
+            "on-background": "#121c28",
+            "inverse-on-surface": "#eaf1ff",
+            "primary-container": "#1e4164",
+            "surface": "#f8f9ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-sm": "0.5rem",
+            "gutter-sm": "0.75rem",
+            "space-md": "0.75rem",
+            "margin-tablet": "1.5rem",
+            "margin": "1rem",
+            "space-xs": "0.25rem",
+            "space-lg": "1rem",
+            "space-xl": "1.5rem",
+            "gutter": "1rem",
+            "margin-desktop": "2rem"
+          },
+          "fontFamily": {
+            "body-sm": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-lg": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "mono": ["JetBrains Mono", "monospace"]
+          },
+          "fontSize": {
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="h-full bg-[#F7F9FD] text-on-surface font-body-md antialiased flex flex-col selection:bg-secondary-container selection:text-primary">
+<!-- DESKTOP FIXED SIDEBAR (Component: SideNavBar) -->
+<aside class="fixed top-0 left-0 h-screen w-[260px] z-40 border-r border-outline-variant/40 bg-surface-container-lowest flex flex-col justify-between p-4">
+<div class="flex flex-col gap-6">
+<!-- Network Emblem / Brand Header -->
+<div class="flex items-center gap-3 px-2 pt-2">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center text-white shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[24px]" data-icon="local_hospital">local_hospital</span>
+</div>
+<div class="overflow-hidden">
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight leading-tight truncate">ClinicFlow Egypt</h1>
+<p class="font-label-sm text-label-sm text-secondary truncate">Network Administration</p>
+</div>
+</div>
+<!-- Navigation Tabs -->
+<nav class="flex flex-col space-y-1">
+<!-- Overview -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+<!-- Staff -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="badge">badge</span>
+<span class="font-label-md text-label-md">Staff</span>
+</a>
+<!-- Roles & Permissions -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="shield_person">shield_person</span>
+<span class="font-label-md text-label-md">Roles &amp; Permissions</span>
+</a>
+<!-- Branches -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="apartment">apartment</span>
+<span class="font-label-md text-label-md">Branches</span>
+</a>
+<!-- Specialties -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="stethoscope">stethoscope</span>
+<span class="font-label-md text-label-md">Specialties</span>
+</a>
+<!-- Settings -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<!-- Integrations -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-normal hover:bg-surface-container hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="hub">hub</span>
+<span class="font-label-md text-label-md">Integrations</span>
+</a>
+<!-- Audit Log (ACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary-container text-on-primary-container font-semibold border-l-4 border-primary" href="#">
+<span class="material-symbols-outlined text-[20px] text-white" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-md text-label-md text-white">Audit Log</span>
+</a>
+</nav>
+</div>
+<!-- User Profile Footer in Sidebar -->
+<div class="border-t border-outline-variant/30 pt-3">
+<div class="flex items-center justify-between p-2 rounded-lg bg-surface-container/60 hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs shrink-0 ring-1 ring-primary/20">
+            KA
+          </div>
+<div class="min-w-0 flex-1">
+<p class="font-label-md text-label-md text-primary font-bold truncate">Karim Adel</p>
+<span class="inline-flex items-center px-1.5 py-0.2 text-[10px] font-semibold tracking-wide uppercase bg-purple-100 text-purple-800 rounded">
+              Admin
+            </span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="more_vert">more_vert</span>
+</div>
+</div>
+</aside>
+<!-- TOP APP BAR (Component: TopNavBar) -->
+<header class="sticky top-0 right-0 z-30 w-[calc(100%-260px)] ml-[260px] h-16 border-b border-outline-variant/40 bg-surface-container-lowest flex items-center justify-between px-8">
+<!-- Left: Global Search Input -->
+<div class="flex items-center w-full max-w-md">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]" data-icon="search">search</span>
+<input class="w-full h-10 pl-10 pr-4 bg-[#FFFFFF] border border-[#C6D0DE] rounded-lg text-body-sm font-body-sm placeholder-[#5B6573] focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/15 focus:outline-none transition-all" placeholder="Search audit logs by actor, IP, event, MRN..." type="text"/>
+</div>
+</div>
+<!-- Right Actions Cluster -->
+<div class="flex items-center gap-4">
+<!-- Language Switcher -->
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-secondary hover:bg-surface-container font-label-md text-label-md transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="language">language</span>
+<span>EN / عربي</span>
+</button>
+<!-- Network Operational Pill -->
+<div class="flex items-center gap-2 px-3 py-1 bg-emerald-50 border border-emerald-200 rounded-full">
+<span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+<span class="text-emerald-800 font-label-sm text-label-sm font-semibold">Network Operational</span>
+</div>
+<!-- Notifications Icon -->
+<button aria-label="Notifications" class="relative p-2 rounded-lg text-secondary hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[22px]" data-icon="notifications">notifications</span>
+<!-- Accent Orange Notification Pip -->
+<span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#FF5E00]"></span>
+</button>
+<div class="h-6 w-px bg-outline-variant/40"></div>
+<!-- Karim Adel Avatar Profile -->
+<div class="flex items-center gap-3 pl-1">
+<img class="w-9 h-9 rounded-full object-cover border border-[#D3DBE6]" data-alt="Close up professional portrait of Karim Adel, senior Egyptian clinical systems administrator, wearing clean formal business executive attire against an architecturally soft neutral medical office background with gentle balanced daylight." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZkft2CEF5eMwfAYy63em_KmvtG-MtSPVmifS22-VsdxsZyF7Z906bBDKE0D7GbDz9wzOIauO00jOygCfmgIIQvoi52ZB2U6NTncdKIEH0YYiwNjHFCVhq9-fqB2iKO6umaB93P16j49Tc6Om5tV1Ki10AnRInOfiDOKofo2m1eISJcvZg_eqlgR3of7C6sBJfLJZFjmudXlPY5M_i6ZnCUt7sj8D5i2QxaEi9K1YvBjV3ZIVAbntF5MULIekGG0POhsWIU6u3-wU5"/>
+<div class="hidden xl:block text-left">
+<p class="font-label-md text-label-md font-semibold text-primary leading-tight">Karim Adel</p>
+<p class="font-body-sm text-[11px] text-[#5B6573]">Lead System Admin</p>
+</div>
+</div>
+</div>
+</header>
+<!-- MAIN WORKSPACE CONTENT -->
+<main class="w-[calc(100%-260px)] ml-[260px] flex-1 p-8 space-y-6">
+<!-- Header Block & Top Actions -->
+<div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4 pb-2">
+<div>
+<!-- Breadcrumb -->
+<nav class="flex items-center gap-2 font-label-sm text-label-sm text-secondary mb-1">
+<span>ClinicFlow</span>
+<span class="text-outline-variant">/</span>
+<span>Governance &amp; Security</span>
+<span class="text-outline-variant">/</span>
+<span class="text-primary font-semibold">System Audit Log</span>
+</nav>
+<!-- Page Title & Subtitle -->
+<h2 class="font-headline-lg text-headline-lg text-[#13263B] font-bold tracking-tight">Security &amp; Administrative Audit Log</h2>
+<p class="font-body-md text-body-md text-[#5B6573] max-w-4xl mt-1">
+          Immutable cryptographic event trail tracking every configuration change, authentication event, permission edit, and patient profile access across all branches.
+        </p>
+</div>
+<!-- Action Group -->
+<div class="flex items-center gap-3 shrink-0 self-start xl:self-center">
+<!-- Live SHA Checksum Pill -->
+<div class="flex items-center gap-2 px-3 py-1.5 bg-[#FFFFFF] border border-[#D3DBE6] rounded-lg">
+<span class="w-2 h-2 rounded-full bg-[#015C9A] animate-ping"></span>
+<span class="font-mono text-[11px] font-medium text-secondary">Audit Stream Live · SHA-256 Verified</span>
+</div>
+<!-- Export CSV Button with permanent log tooltip indicator -->
+<div class="relative group">
+<button class="flex items-center gap-2 px-4 py-2.5 bg-[#1E4164] hover:bg-[#13263B] text-white rounded-lg font-label-md text-label-md transition-all active:scale-[0.99] shadow-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
+<span>Export CSV</span>
+</button>
+<div class="absolute right-0 top-full mt-1.5 hidden group-hover:flex items-center gap-1.5 w-64 p-2.5 bg-[#13263B] text-white text-[11px] font-body-sm rounded-lg shadow-lg z-20">
+<span class="material-symbols-outlined text-[16px] text-[#FF5E00]" data-icon="info">info</span>
+<span>Export activity is permanently logged to audit trail.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- FILTER BAR (Card Container) -->
+<section class="bg-[#FFFFFF] border border-[#D3DBE6] rounded-xl p-5 shadow-none space-y-4">
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3.5">
+<!-- Filter 1: User / Actor -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-[#5B6573] font-medium">Actor / User</label>
+<div class="relative">
+<select class="w-full h-10 pl-3 pr-8 bg-[#FFFFFF] border border-[#C6D0DE] rounded-lg text-body-sm font-body-sm text-[#212427] focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/15 focus:outline-none appearance-none">
+<option selected="">All Users</option>
+<option>Karim Adel (Admin)</option>
+<option>Dr. Hala Mostafa (Manager)</option>
+<option>Mona Samir (Receptionist)</option>
+<option>Youssef Kamal (Accountant)</option>
+<option>system-guard (Automated)</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[18px]" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- Filter 2: Target Entity -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-[#5B6573] font-medium">Target Entity</label>
+<div class="relative">
+<select class="w-full h-10 pl-3 pr-8 bg-[#FFFFFF] border border-[#C6D0DE] rounded-lg text-body-sm font-body-sm text-[#212427] focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/15 focus:outline-none appearance-none">
+<option selected="">All Entities</option>
+<option>Settings (SYS-SET)</option>
+<option>Staff (HR-STF)</option>
+<option>Invoice / Billing</option>
+<option>Schedule &amp; Queue</option>
+<option>Patient Record (EMR)</option>
+<option>Auth &amp; Security</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[18px]" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- Filter 3: Action Type -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-[#5B6573] font-medium">Action Type</label>
+<div class="relative">
+<select class="w-full h-10 pl-3 pr-8 bg-[#FFFFFF] border border-[#C6D0DE] rounded-lg text-body-sm font-body-sm text-[#212427] focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/15 focus:outline-none appearance-none">
+<option selected="">All Actions</option>
+<option>UPDATE</option>
+<option>CREATE</option>
+<option>DELETE</option>
+<option>LOGIN / AUTH</option>
+<option>EXPORT</option>
+<option>OVERRIDE</option>
+<option>MFA_RESET</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[18px]" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- Filter 4: Branch -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-[#5B6573] font-medium">Branch Location</label>
+<div class="relative">
+<select class="w-full h-10 pl-3 pr-8 bg-[#FFFFFF] border border-[#C6D0DE] rounded-lg text-body-sm font-body-sm text-[#212427] focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/15 focus:outline-none appearance-none">
+<option selected="">All Branches</option>
+<option>Nasr City</option>
+<option>Maadi</option>
+<option>Sheikh Zayed</option>
+<option>Central Admin</option>
+<option>Network Wide</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[18px]" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- Filter 5: Date Range -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-[#5B6573] font-medium">Date Range</label>
+<div class="relative">
+<div class="flex items-center w-full h-10 pl-3 pr-8 bg-[#FFFFFF] border border-[#C6D0DE] rounded-lg text-body-sm font-body-sm text-[#212427]">
+<span class="material-symbols-outlined text-outline text-[16px] mr-1.5" data-icon="calendar_today">calendar_today</span>
+<span class="truncate">24 Oct 2025 (7d)</span>
+</div>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[18px]" data-icon="date_range">date_range</span>
+</div>
+</div>
+<!-- Filter 6: Search IP / Reason -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-[#5B6573] font-medium">IP or Reason</label>
+<div class="relative">
+<input class="w-full h-10 pl-3 pr-3 bg-[#FFFFFF] border border-[#C6D0DE] rounded-lg text-body-sm font-body-sm text-[#212427] placeholder-[#5B6573] focus:border-[#015C9A] focus:ring-2 focus:ring-[#015C9A]/15 focus:outline-none" placeholder="Search IP or reason..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Action Row inside Filter -->
+<div class="flex items-center justify-between pt-2 border-t border-[#D3DBE6]/60">
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-[#5B6573]">Active Criteria:</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container text-primary font-mono text-[11px]">
+            Range: Today (24 Oct)
+            <button class="hover:text-error ml-1"><span class="material-symbols-outlined text-[12px]" data-icon="close">close</span></button>
+</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container text-primary font-mono text-[11px]">
+            Scope: Full Network
+            <button class="hover:text-error ml-1"><span class="material-symbols-outlined text-[12px]" data-icon="close">close</span></button>
+</span>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 bg-transparent text-[#1E4164] hover:bg-surface-container rounded-lg font-label-md text-label-md transition-colors">
+            Reset Filters
+          </button>
+<button class="flex items-center gap-2 px-5 py-2 bg-[#1E4164] hover:bg-[#13263B] text-white rounded-lg font-label-md text-label-md shadow-sm transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="filter_list">filter_list</span>
+<span>Apply Filters</span>
+</button>
+</div>
+</div>
+</section>
+<!-- AUDIT LOG TABLE (High-density structured table) -->
+<div class="bg-[#FFFFFF] border border-[#D3DBE6] rounded-xl overflow-hidden shadow-none">
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-[#D3DBE6] text-secondary font-label-md text-label-md">
+<th class="py-3 px-4 font-semibold w-[180px]">Timestamp</th>
+<th class="py-3 px-4 font-semibold w-[170px]">Actor / User</th>
+<th class="py-3 px-4 font-semibold w-[120px]">Action</th>
+<th class="py-3 px-4 font-semibold w-[220px]">Entity &amp; Identifier</th>
+<th class="py-3 px-4 font-semibold w-[130px]">Branch</th>
+<th class="py-3 px-4 font-semibold w-[180px]">IP Address</th>
+<th class="py-3 px-4 font-semibold">Reason / Context</th>
+<th class="py-3 px-4 font-semibold text-right w-[90px]">Details</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#D3DBE6]/70 font-body-sm text-body-sm text-[#212427]">
+<!-- ROW 1: EXPANDED ROW (Before / After Delta Diff) -->
+<tr class="bg-blue-50/20 hover:bg-blue-50/40 transition-colors border-l-4 border-[#015C9A]">
+<td class="py-3.5 px-4 font-mono text-[12px] tabular-nums font-medium text-[#13263B]">
+                24 Oct 2025, 10:48:12 AM
+              </td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-2">
+<span class="font-semibold text-primary">karim.adel</span>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase bg-purple-100 text-purple-800">
+                    Admin
+                  </span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-label-md text-[11px] bg-[#EFF6FF] text-[#015C9A] border border-[#015C9A]/20">
+<span class="w-1.5 h-1.5 rounded-full bg-[#015C9A]"></span>
+                  UPDATE
+                </span>
+</td>
+<td class="py-3.5 px-4">
+<div class="font-medium text-[#13263B] truncate">Settings: Appointments</div>
+<div class="font-mono text-[11px] text-[#5B6573]">SYS-SET-APPT</div>
+</td>
+<td class="py-3.5 px-4 text-[#5B6573]">
+                Central Admin
+              </td>
+<td class="py-3.5 px-4 font-mono text-[12px] text-[#5B6573]">
+                197.38.12.44 <span class="text-[11px] text-outline">(Cairo, EG)</span>
+</td>
+<td class="py-3.5 px-4 text-[#212427]">
+                Updated walk-in patient cap per doctor shift for winter clinic schedule.
+              </td>
+<td class="py-3.5 px-4 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-primary transition-colors" title="Collapse details">
+<span class="material-symbols-outlined text-[20px]" data-icon="keyboard_arrow_up">keyboard_arrow_up</span>
+</button>
+</td>
+</tr>
+<!-- ROW 1 EXPANDED DIFF CONTAINER -->
+<tr class="bg-surface-bright border-b border-[#D3DBE6]">
+<td class="p-0" colspan="8">
+<div class="p-5 pl-12 pr-8 bg-[#F8FAFC] border-y border-[#D3DBE6]/60">
+<div class="bg-[#FFFFFF] border border-[#D3DBE6] rounded-lg p-4 shadow-sm">
+<!-- Delta Header -->
+<div class="flex items-center justify-between pb-3 mb-3 border-b border-[#D3DBE6]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#015C9A] text-[20px]" data-icon="difference">difference</span>
+<h4 class="font-headline-sm text-headline-sm font-semibold text-[#13263B]">
+                          Configuration Delta — Object: <span class="font-mono text-[13px] text-primary bg-surface-container px-2 py-0.5 rounded">config.scheduling.walk_in_cap</span>
+</h4>
+</div>
+<div class="font-mono text-[11px] text-secondary flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px]" data-icon="verified_user">verified_user</span>
+                        Authorized by Karim Adel · Checksum: <span class="text-primary font-semibold">sha256:4a8f9c...02e</span>
+</div>
+</div>
+<!-- Side-by-Side Diff -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- BEFORE -->
+<div class="bg-[#FEF2F2] border border-[#DC2626]/20 rounded-lg p-3.5">
+<div class="flex items-center justify-between text-error font-label-md text-label-md mb-2 pb-1.5 border-b border-[#DC2626]/10">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="remove_circle">remove_circle</span>
+                            BEFORE (Previous Value)
+                          </span>
+<span class="font-mono text-[11px]">rev: 1.48.2</span>
+</div>
+<pre class="font-mono text-[12px] text-[#7F1D1D] leading-relaxed overflow-x-auto">
+{
+  "walk_in_cap_daily": <span class="bg-red-200 text-red-900 px-1 py-0.5 rounded font-bold">8</span>,
+  "notice_window_hours": <span class="bg-red-200 text-red-900 px-1 py-0.5 rounded font-bold">3</span>,
+  "enforce_strict_mfa": true
+}</pre>
+</div>
+<!-- AFTER -->
+<div class="bg-[#EFF6FF] border border-[#015C9A]/20 rounded-lg p-3.5">
+<div class="flex items-center justify-between text-[#015C9A] font-label-md text-label-md mb-2 pb-1.5 border-b border-[#015C9A]/10">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="add_circle">add_circle</span>
+                            AFTER (New Value)
+                          </span>
+<span class="font-mono text-[11px]">rev: 1.48.3 (active)</span>
+</div>
+<pre class="font-mono text-[12px] text-[#1E3A8A] leading-relaxed overflow-x-auto">
+{
+  "walk_in_cap_daily": <span class="bg-blue-200 text-blue-900 px-1 py-0.5 rounded font-bold">10</span>,
+  "notice_window_hours": <span class="bg-blue-200 text-blue-900 px-1 py-0.5 rounded font-bold">2</span>,
+  "enforce_strict_mfa": true
+}</pre>
+</div>
+</div>
+</div>
+</div>
+</td>
+</tr>
+<!-- ROW 2: MFA Reset -->
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="py-3.5 px-4 font-mono text-[12px] tabular-nums font-medium text-[#13263B]">
+                24 Oct 2025, 10:42:05 AM
+              </td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-2">
+<span class="font-medium text-primary">karim.adel</span>
+<span class="px-1.5 py-0.2 rounded text-[10px] font-bold uppercase bg-purple-100 text-purple-800">
+                    Admin
+                  </span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-label-md text-[11px] bg-[#FFFBEB] text-[#D97706] border border-[#D97706]/20">
+<span class="w-1.5 h-1.5 rounded-full bg-[#D97706]"></span>
+                  MFA_RESET
+                </span>
+</td>
+<td class="py-3.5 px-4">
+<div class="font-medium text-[#13263B] truncate">Staff Member</div>
+<div class="font-mono text-[11px] text-[#5B6573]">f.hassan@clinicflow.eg</div>
+</td>
+<td class="py-3.5 px-4 text-[#5B6573]">
+                Nasr City
+              </td>
+<td class="py-3.5 px-4 font-mono text-[12px] text-[#5B6573]">
+                197.38.12.44
+              </td>
+<td class="py-3.5 px-4 text-[#212427]">
+                Phone replacement reported by nurse Fatma Hassan.
+              </td>
+<td class="py-3.5 px-4 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-secondary transition-colors" title="View details">
+<span class="material-symbols-outlined text-[20px]" data-icon="keyboard_arrow_down">keyboard_arrow_down</span>
+</button>
+</td>
+</tr>
+<!-- ROW 3: Security Rate Limit -->
+<tr class="hover:bg-surface-container-low/40 transition-colors bg-red-50/10">
+<td class="py-3.5 px-4 font-mono text-[12px] tabular-nums font-medium text-[#13263B]">
+                24 Oct 2025, 10:15:22 AM
+              </td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-[#DC2626]" data-icon="smart_toy">smart_toy</span>
+<span class="font-mono font-medium text-error">system-guard</span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-label-md text-[11px] bg-[#FEF2F2] text-[#DC2626] border border-[#DC2626]/20">
+<span class="w-1.5 h-1.5 rounded-full bg-[#DC2626]"></span>
+                  RATE_LIMIT
+                </span>
+</td>
+<td class="py-3.5 px-4">
+<div class="font-medium text-error truncate">Auth: IP Block</div>
+<div class="font-mono text-[11px] text-[#DC2626]/80">AUTH-GUARD-EG01</div>
+</td>
+<td class="py-3.5 px-4 text-[#5B6573]">
+                Network Wide
+              </td>
+<td class="py-3.5 px-4 font-mono text-[12px] text-error font-medium">
+                156.204.11.2 <span class="text-[11px] text-outline font-normal">(Giza, EG)</span>
+</td>
+<td class="py-3.5 px-4 text-[#212427]">
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-[#FF5E00] mr-1"></span>
+                5 failed doctor portal password attempts within 3 minutes.
+              </td>
+<td class="py-3.5 px-4 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-secondary transition-colors" title="View details">
+<span class="material-symbols-outlined text-[20px]" data-icon="keyboard_arrow_down">keyboard_arrow_down</span>
+</button>
+</td>
+</tr>
+<!-- ROW 4: Override -->
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="py-3.5 px-4 font-mono text-[12px] tabular-nums font-medium text-[#13263B]">
+                24 Oct 2025, 09:30:18 AM
+              </td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-2">
+<span class="font-medium text-primary">mona.samir</span>
+<span class="px-1.5 py-0.2 rounded text-[10px] font-medium bg-slate-100 text-slate-700">
+                    Receptionist
+                  </span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-label-md text-[11px] bg-[#FFFBEB] text-[#D97706] border border-[#D97706]/20">
+<span class="w-1.5 h-1.5 rounded-full bg-[#D97706]"></span>
+                  OVERRIDE
+                </span>
+</td>
+<td class="py-3.5 px-4">
+<div class="font-medium text-[#13263B] truncate">Queue: Ticket W-03</div>
+<div class="font-mono text-[11px] text-[#5B6573]">QUE-NC-2025-1024</div>
+</td>
+<td class="py-3.5 px-4 text-[#5B6573]">
+                Nasr City
+              </td>
+<td class="py-3.5 px-4 font-mono text-[12px] text-[#5B6573]">
+                197.38.12.48
+              </td>
+<td class="py-3.5 px-4 text-[#212427]">
+                Urgent walk-in added to Dr. Karim Nabil room per manager verbal request.
+              </td>
+<td class="py-3.5 px-4 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-secondary transition-colors" title="View details">
+<span class="material-symbols-outlined text-[20px]" data-icon="keyboard_arrow_down">keyboard_arrow_down</span>
+</button>
+</td>
+</tr>
+<!-- ROW 5: Approve Void -->
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="py-3.5 px-4 font-mono text-[12px] tabular-nums font-medium text-[#13263B]">
+                24 Oct 2025, 08:55:40 AM
+              </td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-2">
+<span class="font-medium text-primary">dr.hala.mostafa</span>
+<span class="px-1.5 py-0.2 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800">
+                    Manager
+                  </span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-label-md text-[11px] bg-[#ECFDF5] text-[#059669] border border-[#059669]/20">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+                  APPROVE_VOID
+                </span>
+</td>
+<td class="py-3.5 px-4">
+<div class="font-medium text-[#13263B] truncate">Invoice: #NC-2026-000408</div>
+<div class="font-mono text-[11px] text-[#5B6573]">INV-VOID-REC</div>
+</td>
+<td class="py-3.5 px-4 text-[#5B6573]">
+                Nasr City
+              </td>
+<td class="py-3.5 px-4 font-mono text-[12px] text-[#5B6573]">
+                197.38.12.45
+              </td>
+<td class="py-3.5 px-4 text-[#212427]">
+                Clerical double-charge correction authorized in Approvals inbox.
+              </td>
+<td class="py-3.5 px-4 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-secondary transition-colors" title="View details">
+<span class="material-symbols-outlined text-[20px]" data-icon="keyboard_arrow_down">keyboard_arrow_down</span>
+</button>
+</td>
+</tr>
+<!-- ROW 6: Export -->
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="py-3.5 px-4 font-mono text-[12px] tabular-nums font-medium text-[#13263B]">
+                24 Oct 2025, 08:02:11 AM
+              </td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-2">
+<span class="font-medium text-primary">youssef.kamal</span>
+<span class="px-1.5 py-0.2 rounded text-[10px] font-medium bg-slate-100 text-slate-700">
+                    Accountant
+                  </span>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-label-md text-[11px] bg-slate-100 text-[#4E6077] border border-[#4E6077]/20">
+<span class="w-1.5 h-1.5 rounded-full bg-[#4E6077]"></span>
+                  EXPORT
+                </span>
+</td>
+<td class="py-3.5 px-4">
+<div class="font-medium text-[#13263B] truncate">Ledger: Cash Sessions</div>
+<div class="font-mono text-[11px] text-[#5B6573]">FIN-SESS-EXP</div>
+</td>
+<td class="py-3.5 px-4 text-[#5B6573]">
+                Central Admin
+              </td>
+<td class="py-3.5 px-4 font-mono text-[12px] text-[#5B6573]">
+                197.38.12.49
+              </td>
+<td class="py-3.5 px-4 text-[#212427]">
+                Daily accounting pre-close reconciliation spreadsheet export.
+              </td>
+<td class="py-3.5 px-4 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-secondary transition-colors" title="View details">
+<span class="material-symbols-outlined text-[20px]" data-icon="keyboard_arrow_down">keyboard_arrow_down</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- PAGINATION FOOTER -->
+<div class="flex flex-col sm:flex-row items-center justify-between px-6 py-4 border-t border-[#D3DBE6] bg-surface-container-low/30 gap-4">
+<div class="font-body-sm text-body-sm text-[#5B6573]">
+          Showing <span class="font-semibold text-primary">1</span> to <span class="font-semibold text-primary">6</span> of <span class="font-semibold text-primary">1,428</span> audit records
+        </div>
+<div class="flex items-center space-x-1.5">
+<!-- Previous Button -->
+<button class="px-3 py-1.5 rounded-lg border border-[#D3DBE6] bg-[#FFFFFF] text-secondary hover:bg-surface-container disabled:opacity-50 text-body-sm font-label-md transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="chevron_left">chevron_left</span>
+<span>Previous</span>
+</button>
+<!-- Numbered Pages -->
+<button class="w-8 h-8 rounded-lg bg-[#1E4164] text-white font-label-md text-label-md flex items-center justify-center">
+            1
+          </button>
+<button class="w-8 h-8 rounded-lg border border-[#D3DBE6] bg-[#FFFFFF] text-primary hover:bg-surface-container font-label-md text-label-md flex items-center justify-center transition-colors">
+            2
+          </button>
+<button class="w-8 h-8 rounded-lg border border-[#D3DBE6] bg-[#FFFFFF] text-primary hover:bg-surface-container font-label-md text-label-md flex items-center justify-center transition-colors">
+            3
+          </button>
+<span class="px-1 text-secondary text-body-sm font-bold">...</span>
+<button class="w-9 h-8 rounded-lg border border-[#D3DBE6] bg-[#FFFFFF] text-primary hover:bg-surface-container font-label-md text-label-md flex items-center justify-center transition-colors">
+            143
+          </button>
+<!-- Next Button -->
+<button class="px-3 py-1.5 rounded-lg border border-[#D3DBE6] bg-[#FFFFFF] text-primary hover:bg-surface-container text-body-sm font-label-md transition-colors flex items-center gap-1">
+<span>Next</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- SECURITY GUARANTEE BANNER -->
+<div class="p-4 rounded-xl bg-surface-container border border-[#D3DBE6] flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#1E4164] text-[24px]" data-icon="lock_clock">lock_clock</span>
+<div>
+<h5 class="font-headline-sm text-headline-sm text-[#13263B]">Tamper-Proof WORM Storage Active</h5>
+<p class="font-body-sm text-body-sm text-[#5B6573]">
+            Audit records are written sequentially to write-once-read-many Egyptian health data compliance cloud storage. Deletions and record mutations are cryptographically barred.
+          </p>
+</div>
+</div>
+<div class="hidden lg:flex items-center gap-2 font-mono text-[11px] text-[#5B6573]">
+<span>Current Hash:</span>
+<span class="px-2 py-1 rounded bg-[#FFFFFF] border border-[#D3DBE6] font-semibold text-primary">0x9d4b...c18a</span>
+</div>
+</div>
+</main>
+</body></html>
