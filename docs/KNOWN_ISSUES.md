@@ -133,5 +133,5 @@ V2 is built on the `v2` branch against the backend's `v2` branch (see `CLAUDE.md
 |---|---|---|
 | Point at the V2 API and database | Separate `ClinicFlowV2` database; same port under `dotnet run`, ports 5002/3001 under compose | Done: `v2` branch and docs set up |
 | URL fields must be `http`/`https` (contract 4.0.0-p0) | `profilePictureUrl` and `iconUrl` with another scheme return 400 with a field message | The message reaches the user through `getApiErrorMessage`. Optional: check the scheme in the form before sending, since `type="url"` accepts `javascript:` and `file:` |
-| Timestamps end in `Z` | Backend P0 PR 4 | Nothing to change: `parseUtc` already accepts both forms. Check the screens once PR 4 is merged |
+| Timestamps end in `Z` | Backend P0 PR 4, merged 2026-10-23 (contract 4.0.0-p0 changelog) | Nothing to change: `parseUtc` already accepts both forms. Still to do: check the screens that show times against the V2 backend |
 | New appointment statuses `CheckedIn`, `InProgress`, `Rescheduled` | Backend P0 PR 7 | To do: types, `StatusBadge`, filters and the actions each status allows |
