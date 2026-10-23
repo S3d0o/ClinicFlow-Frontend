@@ -2,6 +2,28 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## V1 and V2: two product lines
+
+This repo holds two separate products, like the backend (`docs/v2/adr/0007-v2-separate-product-line.md` in the backend repo):
+- **`main` is V1.** It's finished, talks to the backend's `master` (contract 3.x) and stays untouched. Change it only when the owner explicitly asks for a V1 fix, on a `fix/<name>` branch off `main`. `legacy-ui` (tag `v0-legacy-ui`) is the original UI: never delete or rewrite it.
+- **`v2` is V2.** It started from V1's code and talks to the backend's `v2` branch (contract 4.0.0, pre-releases `4.0.0-p<n>`). Every piece of work gets its own branch off `v2` (`feature/p<phase>-<kebab-case-name>`, or `fix/`, `docs/`, `test/`, `chore/`) and is merged back into `v2`. Never build directly on `v2`, `main` or another feature's branch. If the working tree has uncommitted changes when work starts, ask whether to commit, stash or carry them over.
+- Commit or push only when asked.
+
+**The V2 plan lives in the backend repo**, cloned next to this one at `../../ClinicFlow.Backend`. Its working tree may be on a feature branch, so read the merged docs with `git -C ../../ClinicFlow.Backend show v2:<path>`:
+- `docs/v2/09_MIGRATION_FROM_V1.md` §4: the frontend work for each phase. A phase is done only when its frontend track is.
+- `docs/v2/07_API_DESIGN.md`: the `/api/v2` endpoints and the V1 → V2 differences this app has to handle.
+- `docs/v2/10_ROADMAP.md`: phases P0–P7 and the decisions log.
+- `docs/v2/plans/P<n>.md`: the backend plan and status of the current phase (which PR changes what the API returns).
+
+**The contract on `v2`:**
+- The backend owns it. On `v2`, `docs/API_CONTRACT.md` is a verbatim copy of the backend's `v2` copy; on `main` it mirrors `master` (3.x). Never edit it here, and never copy a 4.x contract onto `main`.
+- After a backend contract bump on `v2`, copy it in on a `docs/` branch off `v2` and update the related docs (`KNOWN_ISSUES.md`, `FEATURES.md`, `ARCHITECTURE.md`) in the same change.
+- Until a phase adds `/api/v2` endpoints, V2 uses the inherited unversioned `/api/...` routes, which keep working on the backend's `v2` branch. The backend deletes each one once this app stops calling it (backend `docs/v2/09_MIGRATION_FROM_V1.md` §3). For screens whose `/api/v2` endpoints aren't built yet, mock them from the contract and the backend's `docs/openapi.json`.
+
+**Running V2 locally:**
+- `dotnet run` on the backend's `v2` branch serves `http://localhost:5143`, the same port as V1, so `.env.local` stays the same. Run only one backend at a time. V2 uses its own database (`ClinicFlowV2`) with the same demo logins.
+- Docker: the backend's compose stack (project `clinicflow-v2`) serves this app on port 3001 and the backend on 5002. Build the image from this repo's `v2` branch: `docker build -t clinicflow-frontend-v2 -f DockerFile .`
+
 ## Commands
 
 - `npm run dev` — Vite dev server on http://localhost:3000 (the backend's CORS default expects this port)
@@ -20,11 +42,11 @@ Human-facing docs live in `docs/`: `ARCHITECTURE.md`, `FEATURES.md`, `DEVELOPMEN
 
 ## Backend / API
 
-- The app talks to the ClinicFlow .NET backend (separate repo). `docs/API_CONTRACT.md` is the source of truth for endpoints, request/response shapes, enums, error codes and known quirks — read the relevant section before adding or changing an API call. It is a mirrored copy of `ClinicFlow.Backend/docs/API_CONTRACT.md`.
+- The app talks to the ClinicFlow .NET backend (separate repo). `docs/API_CONTRACT.md` is the source of truth for endpoints, request/response shapes, enums, error codes and known quirks — read the relevant section before adding or changing an API call. It is a mirrored copy of `ClinicFlow.Backend/docs/API_CONTRACT.md` (from the backend's `v2` branch on `v2`, from `master` on `main`).
 - Base URL comes from `VITE_API_URL` (`src/api/axios.ts`); the axios instance uses `${VITE_API_URL}/api`. `.env` and `.env.production` leave it empty, so requests are relative `/api/...`:
   - In Docker, `nginx.conf` proxies `/api` to `http://backend:8080`.
   - `vite.config.ts` has **no dev proxy**, so for local dev set `VITE_API_URL` (e.g. `https://localhost:7129` or `http://localhost:5143`) in `.env.local`.
-- Contract conventions that bite: enums are strings; `DateOnly` = `yyyy-MM-dd`; slot/schedule times are clinic wall-clock (don't timezone-convert); DB timestamps are UTC but may lack the `Z` suffix; list endpoints return bare arrays (notifications and pending doctors add an `X-Total-Count` header); every error body is ProblemDetails (401/403/404/500 have no code in `title`); business errors are ProblemDetails where `title` is the error code (e.g. `Doctor.NotFound`) — branch on the code (`getApiErrorCode`), not status. Validation errors (400) have PascalCase keys under `errors`.
+- Contract conventions that bite: enums are strings; `DateOnly` = `yyyy-MM-dd`; slot/schedule times are clinic wall-clock (don't timezone-convert); DB timestamps are UTC but may lack the `Z` suffix (V2 adds it in backend P0 PR 4; `parseUtc` handles both); list endpoints return bare arrays (notifications and pending doctors add an `X-Total-Count` header); every error body is ProblemDetails (401/403/404/500 have no code in `title`); business errors are ProblemDetails where `title` is the error code (e.g. `Doctor.NotFound`) — branch on the code (`getApiErrorCode`), not status. Validation errors (400) have PascalCase keys under `errors`.
 
 ## Architecture
 
