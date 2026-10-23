@@ -123,3 +123,15 @@ The backend moved to contract 3.1.x (see [API_CONTRACT.md §10](API_CONTRACT.md#
 
 Open questions for the maintainer:
 - Should doctors be able to cancel from the UI?
+
+## V2
+
+V2 is built on the `v2` branch against the backend's `v2` branch (see `CLAUDE.md`, "V1 and V2"). Its phases P0–P7 and the frontend work for each are planned in the backend repo: `docs/v2/09_MIGRATION_FROM_V1.md` §4 and `docs/v2/10_ROADMAP.md`. The table below tracks the frontend side of the current phase.
+
+### P0: foundation (contract 4.0.0-p0)
+| Item | Backend change | Status |
+|---|---|---|
+| Point at the V2 API and database | Separate `ClinicFlowV2` database; same port under `dotnet run`, ports 5002/3001 under compose | Done: `v2` branch and docs set up |
+| URL fields must be `http`/`https` (contract 4.0.0-p0) | `profilePictureUrl` and `iconUrl` with another scheme return 400 with a field message | The message reaches the user through `getApiErrorMessage`. Optional: check the scheme in the form before sending, since `type="url"` accepts `javascript:` and `file:` |
+| Timestamps end in `Z` | Backend P0 PR 4 | Nothing to change: `parseUtc` already accepts both forms. Check the screens once PR 4 is merged |
+| New appointment statuses `CheckedIn`, `InProgress`, `Rescheduled` | Backend P0 PR 7 | To do: types, `StatusBadge`, filters and the actions each status allows |
