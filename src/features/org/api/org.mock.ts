@@ -1,7 +1,7 @@
-import { delay, type MockDb } from '@/mocks/db';
+import { delay, type MockDeps } from '@/mocks/db';
 import type { OrgService } from './org.service';
 
-export function createMockOrgService({ db, latencyMs }: { db: MockDb; latencyMs: number }): OrgService {
+export function createMockOrgService({ db, latencyMs }: MockDeps): OrgService {
   return {
     async listBranches() {
       await delay(latencyMs);

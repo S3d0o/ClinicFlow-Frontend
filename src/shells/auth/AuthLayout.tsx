@@ -6,7 +6,7 @@ import { Logo } from '@/shared/ui/Logo';
 import { SkipLink } from '@/shared/ui/SkipLink';
 import { ScreenOutlet } from '../ScreenOutlet';
 
-/** Sign-in, sign-up and recovery screens: a slim top bar and a centred column. */
+/** Sign-in, sign-up, recovery and staff onboarding screens: a slim top bar and a centred column. */
 export function AuthLayout() {
   const { t } = useTranslation(['screens', 'common']);
   return (
@@ -24,7 +24,8 @@ export function AuthLayout() {
           </div>
         </div>
       </header>
-      <ScreenOutlet className="mx-auto w-full max-w-md flex-1 px-4 py-10 sm:py-14" />
+      {/* A narrow column; a screen that needs two columns (two-step setup) marks itself data-layout="wide" */}
+      <ScreenOutlet className="mx-auto w-full max-w-md flex-1 px-4 py-8 sm:py-12 has-[[data-layout=wide]]:max-w-5xl" />
     </div>
   );
 }

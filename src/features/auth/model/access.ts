@@ -49,9 +49,15 @@ const HOME_BY_ROLE: [Role, string][] = [
   ['Patient', '/patient'],
 ];
 
+/** Staff must set up two-step sign-in before anything else (FR-STF-07). */
+export const needsMfaSetup = (user: CurrentUser | null | undefined) => !!user && user.mfaEnabled && !user.mfaEnrolled;
+
+export const MFA_SETUP_PATH = '/security/setup';
+
 /** The user's home page: their workspace, or "My application" for a doctor applicant. */
 export function homePath(user: CurrentUser | null | undefined): string {
   if (!user) return '/';
+  if (needsMfaSetup(user)) return MFA_SETUP_PATH;
   const match = HOME_BY_ROLE.find(([role]) => hasRole(user, role));
   if (match) return match[1];
   return user.hasDoctorApplication ? '/my-application' : '/';

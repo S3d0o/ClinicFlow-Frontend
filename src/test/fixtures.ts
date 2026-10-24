@@ -10,8 +10,11 @@ export function makeUser(roles: RoleAssignment[], overrides: Partial<CurrentUser
     preferredLanguage: 'en',
     roles,
     permissions: grantsFor(roles),
+    phoneVerified: true,
+    emailConfirmed: true,
     hasDoctorApplication: false,
     mfaEnabled: roles.some((r) => r.role !== 'Patient'),
+    mfaEnrolled: true,
     ...overrides,
   };
 }

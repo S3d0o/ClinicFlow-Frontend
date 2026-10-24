@@ -136,8 +136,8 @@ The V2 UI is a fresh build from the 63 Stitch screens in `design-v2/`, on an in-
 
 | # | Branch | Scope | Status |
 |---|---|---|---|
-| 0 | `feature/p1-ui-foundation` | Theme (ClinicFlow Navy), Arabic/English with right-to-left, service layer and mock backend, permission model and demo sign-in, the six frames, screen catalog with access rules, shared UI | In review |
-| 1 | `feature/p1-ui-public-auth` | Public site, sign-in (one phone-or-email field), staff two-step, sign-up with SMS code, password reset, doctor application and "My application" (14 screens) | To do |
+| 0 | `feature/p1-ui-foundation` | Theme (ClinicFlow Navy), Arabic/English with right-to-left, service layer and mock backend, permission model and demo sign-in, the six frames, screen catalog with access rules, shared UI | Done (merged 2026-10-24) |
+| 1 | `feature/p1-ui-public-auth` | Public site, sign-in (one phone-or-email field), staff two-step, sign-up with SMS code, password reset, doctor application and "My application" (14 screens, plus the email-confirmation page) | In review |
 | 2 | `feature/p2-ui-patient-portal` | Patient portal (13 screens) | To do |
 | 3 | `feature/p2-ui-front-desk` | Front desk and nurse station (10 screens) | To do |
 | 4 | `feature/p4-ui-doctor` | Doctor workspace (4 screens) | To do |
@@ -148,7 +148,27 @@ The V2 UI is a fresh build from the 63 Stitch screens in `design-v2/`, on an in-
 Open points for the rebuild:
 - **Real API:** each screen runs on the mock backend. Swapping in the API means writing HTTP adapters behind the same service interfaces (on `shared/api/http-client.ts`, which keeps V1's tested token refresh) as the backend phases ship their endpoints.
 - **Error messages:** `shared/api/api-error.ts` still holds V1's English messages per error code; they move into the translation files when the HTTP adapters land.
-- **Demo-only pieces:** the demo account list on the sign-in page and the demo session store exist only in the mock backend and disappear with it.
+- **Demo-only pieces:** the demo account list and sample invitation on the sign-in page, the "Demo: open the link" buttons where an email would arrive, and the demo session store exist only in the mock backend (`DemoAccountsService`) and disappear with it.
+- **Demo data resets on reload:** accounts, applications and lockouts made in the browser live in memory. A persisted mock store is possible if reviewers need it.
+- **Dependencies:** `npm audit` reports 16 advisories (11 high) in packages installed before phase 1 (axios, react-router, vite, postcss and Tailwind's chain, among others); `qrcode`, added in phase 1, has none. Upgrading them is its own change.
+
+### Phase 1 (public site and account access): to confirm with the backend
+
+The screens run on the mock, which follows 04 (FR-ACC, FR-STF-01/02/07, FR-REC), 07 §4 and the V1 contract. The backend's draft P1 plan (`docs/v2/plans/P1.md` on its `docs/p1-plan` branch, not merged yet) already compares these interfaces with 07 in its §7, and its question **Q-A** (for the owner) recommends taking the frontend's shapes where they are richer and 07's names otherwise. Settled shapes go into `API_CONTRACT.md` 4.0.0 with each backend PR, then into this repo's mirror.
+
+**Already on the backend's list** (P1 plan §7 and its PRs): the `OtpTicket` answer from `otp/send` and `register` (`{ phone, expiresAt, resendAt }`); `attemptsLeft` on `Otp.InvalidCode` and `retryAt` on `Otp.TooManyAttempts` and `Auth.AccountLockedOut` (PR 0 adds ProblemDetails extensions); the reset code check before the new password; the two-step challenge (`challenge: { id, identifier, roleLabel }`, `Auth.MfaChallengeExpired`, recovery codes); `/me` roles with scopes and branch ids, `mfaEnabled`, `mfaEnrolled`; `phone` vs 07's `phoneNumber` (the HTTP adapter maps whichever name is chosen); the account usable only after its SMS code (PR 10); the reapply cool-down as a setting (PR 13).
+
+**Not on the backend's list yet:**
+
+| Point | What the frontend does now |
+|---|---|
+| Ids are strings | The app types every id as a string (`branchIds: string[]`, `doctorId`, …). If the API keeps integer ids, the HTTP adapters convert them; nothing else changes. Listed in P1 plan §7 as a difference, without a decision |
+| Error codes no doc names | Chosen by the mock: `Auth.Unauthorized`, `Invitation.NotFound`, `Invitation.Expired`, `DoctorApplication.ReapplyTooSoon`, `File.NotFound`, `Validation.InvalidPhone`. Reused from the V1 contract: `Auth.InvalidPasswordResetToken`, `Auth.InvalidEmailConfirmationToken`, `Auth.UserNotFound`. Each has a translated message in `common:errors`; a different code only needs a new message |
+| Reading an invitation | The accept screen first reads the invitation by its token (email, name, roles with branches, inviter's name, expiry). P1 PR 6 has only `POST /auth/invitations/accept`; it needs a public `GET` too |
+| Accepting an invitation | Sends the name, a mobile number and a password, and gets a signed-in session back (two-step setup follows). PR 6 says "sets the password and activates" |
+| Application cool-down date | `canReapplyFrom` (branch-local date) on the applicant's own application after a rejection or withdrawal, so My application and Join can show the date |
+| Public doctor search | `/public/doctors` with text, branch, specialty, availability (today, tomorrow, this week), language, sort (soonest, rating, price) and paging, returning each doctor's lowest consultation price and next three free slots; slots for a doctor at a branch with `from` optional (today at the branch). P1 has `public/branches` and `public/services` but no doctor search; prices on public routes are P2 (FR-SVC-04) |
+| Booking hand-off | "Continue to book" opens `/patient/book/:doctorId?branch=&service=&slot=&deposit=` (phase 2); frontend only |
 
 ### P0: foundation (contract 4.0.0-p0)
 | Item | Backend change | Status |

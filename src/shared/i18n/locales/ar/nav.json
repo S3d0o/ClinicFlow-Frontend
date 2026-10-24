@@ -2,7 +2,7 @@
   "public": {
     "findDoctor": "ابحث عن طبيب",
     "branches": "الفروع",
-    "services": "الخدمات والأسعار",
+    "specialties": "التخصصات",
     "joinAsDoctor": "انضم كطبيب"
   },
   "patient": {

@@ -16,5 +16,8 @@ export const directionOf = (language: Language): Direction => (language === 'ar'
  */
 export const localeOf = (language: Language): string => (language === 'ar' ? 'ar-EG-u-nu-latn' : 'en-EG');
 
-/** The language's own name, shown in the language toggle. */
+/** The language's own short name, shown in the language toggle. */
 export const nativeNameOf = (language: Language): string => (language === 'ar' ? 'عربي' : 'EN');
+
+/** The language's own full name, for choosing a preferred language (FR-ACC-06). */
+export const fullNativeNameOf = (language: Language): string => (language === 'ar' ? 'العربية' : 'English');

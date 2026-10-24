@@ -20,6 +20,7 @@ The V2 UI is a fresh build from the Stitch designs in [`design-v2/`](../design-v
 | Components | Radix UI primitives (shadcn/ui, adapted to Tailwind 3) |
 | HTTP | axios client with token refresh (kept for the HTTP adapters; not wired yet) |
 | Feedback / icons / dates | sonner, lucide-react, date-fns + `Intl` |
+| QR codes | qrcode (SVG, only in the two-step setup chunk) |
 | Tests | Vitest, Testing Library, jsdom |
 
 ### Layers and folders
@@ -30,16 +31,17 @@ src/
 ├── app/             Composition root: App, providers, the service container, i18n setup,
 │                    the screen catalog and router, navigation config, generic pages
 ├── shells/          The frames screens render in: public, auth, patient, staff, tablet, bare
-├── features/<x>/    One folder per business domain (auth, org, … more per phase):
+├── features/<x>/    One folder per business domain (auth, org, catalog, doctors, recruitment, site, … more per phase):
 │   ├── model/       types and pure domain rules (no React)
 │   ├── api/         <x>.service.ts (the interface) and <x>.mock.ts (the in-memory adapter)
 │   ├── hooks/       TanStack Query hooks over the service
 │   ├── components/  presentational components (props in, markup out)
 │   └── pages/       screens: compose hooks and components
 ├── shared/          Domain-free building blocks: ui/ (design system), lib/ (cn, format, intl,
-│                    phone, password), i18n/ (languages, shared strings), api/ (HTTP client,
-│                    errors, paging)
-├── mocks/           The in-memory backend: db.ts, seed data, session store, createMockServices
+│                    phone, password, branch-time, countdown), i18n/ (languages, shared strings,
+│                    error and validation messages), api/ (HTTP client, errors, paging)
+├── mocks/           The in-memory backend: db.ts, seed data, session store, SMS-code store, slot
+│                    generator, createMockServices
 ├── styles/          tokens.css (the theme) and index.css (base styles)
 └── test/            setup, fixtures, renderApp helper
 ```
@@ -51,7 +53,7 @@ Dependencies point inward: `shared` imports nothing from features; a feature use
 - **Single responsibility:** pages compose; components render props; rules live in `model/` functions; validation in zod schemas; data access in services.
 - **Open/closed:** screens are entries in the route catalog, menus are entries in `app/navigation.ts`, statuses map to chip tones in one place. Adding a screen never edits a shell.
 - **Liskov:** the mock adapters and the future HTTP adapters implement the same interfaces with contract-shaped data and `ServiceError` codes, so either can be wired in.
-- **Interface segregation:** small per-domain services (`AuthService`, `OrgService`, …) instead of one API object; demo-only capabilities are a separate optional `DemoAccountsService`.
+- **Interface segregation:** small per-domain services instead of one API object. Accounts alone are split by job: `AuthService` (session, sign-in, two-step code), `OtpService`, `RegistrationService`, `PasswordResetService`, `MfaService`, `InvitationService`, `AccountService`. Demo-only capabilities are a separate optional `DemoAccountsService`.
 - **Dependency inversion:** screens depend on interfaces from `useServices()`; `main.tsx` decides which implementation backs them.
 
 ## 2. Startup
@@ -92,11 +94,15 @@ Every screen is one entry in `app/routes/catalog/*.routes.ts` (`ScreenRoute`):
 | `signed-in` | any signed-in user | sign-in |
 | `patient` | the patient capacity of an account | "no access" |
 | `applicant` | doctor applicants | "no access" |
-| `permission` | holders of one of `anyOf`, at `minScope` or wider | sign-in, or "no access" |
+| `permission` | holders of one of `anyOf`, at `minScope` or wider | sign-in, two-step setup (staff who haven't set it up), or "no access" |
 
 Staff screens check **permissions, never role names** (backend ADR 0002). `minScope: 'Branch'` keeps a grant over one's own records (a doctor's own reports) from opening branch-wide screens (the manager dashboard).
 
 `RouteGuard` applies the decision. A signed-out user is sent to `/sign-in` with `state.from`; once signed in, the guard on the guest page sends them to `postSignInPath(user, from, canOpenPath)`: the requested page if they may open it, otherwise their home. Every sign-in path (password, two-step code, demo account) therefore lands the same way.
+
+Staff without an authenticator (`needsMfaSetup`) get `setup-mfa` for every permission screen, which sends them to `/security/setup` (FR-STF-07); their home page is that screen too.
+
+Multi-step account flows (sign-up → code, sign-in → two-step code, reset code → new password) hand data to the next screen through router state (`features/auth/model/flow-state.ts`). A step opened without it restarts its flow, so no code or challenge id sits in a URL. Lockouts and code limits always open `/locked?until=…`.
 
 Home pages (`homePath`, 02 §8): Manager `/manager`, Admin `/admin`, Doctor `/doctor`, Receptionist `/desk`, Nurse `/nurse`, Accountant `/finance`, Patient `/patient`, doctor applicant `/my-application`. With several roles the first in that order wins.
 
@@ -111,8 +117,9 @@ Backend emails link to `/#/reset-password?…` and `/#/confirm-email?…` (API c
 ## 4. Services and the mock backend
 
 - **Ports:** each feature declares an interface in `features/<x>/api/<x>.service.ts`. `app/services.ts` collects them in `Services`, provided by `ServicesProvider` and read with `useServices()`.
-- **Adapters:** `features/<x>/api/<x>.mock.ts` implements the interface against `mocks/db.ts`, an in-memory database seeded from `mocks/seed/`. All adapters share one database, so a change on one screen shows up on the others. Calls wait `latencyMs` (250 ms in the app, 0 in tests) so loading states are visible.
-- **Errors:** adapters throw `ServiceError` with the API's codes (`Auth.InvalidCredentials`, …, `shared/api/service-error.ts`). The query client never retries them.
+- **Adapters:** `features/<x>/api/<x>.mock.ts` implements the interface against `mocks/db.ts`, an in-memory database seeded from `mocks/seed/`. All adapters share one database, so a change on one screen shows up on the others. Every adapter gets `MockDeps`: the database, `latencyMs` (250 ms in the app, 0 in tests) so loading states are visible, and `now()`, so tests control time. Dated seeds (interviews, invitations, reviews) are made relative to `now`, so the demo never goes stale.
+- **What the mock enforces** (as the backend will): SMS codes (`mocks/otp-store.ts`: 6 digits, 5 minutes, 5 tries, 60 s between sends, 15-minute block), sign-in lockout (5 failures, 15 minutes), uniform answers that never reveal whether an account exists, single-use invitation and email-link tokens, price resolution (`features/catalog/model/pricing.ts`, FR-SVC-02), slot generation from weekly shifts in branch time (`mocks/slots.ts`), and the doctor-application rules (one open application, PDF/DOCX up to 5 MB, 90-day cool-down).
+- **Errors:** adapters throw `ServiceError` with the API's codes (`Auth.InvalidCredentials`, …, `shared/api/service-error.ts`) and optional `details` (`attemptsLeft`, `retryAt`, from ProblemDetails extensions in the HTTP adapters). The query client never retries them.
 - **Permissions in the mock:** `mocks/seed/role-permissions.ts` reproduces the default role × permission matrix (02 §6) that the real backend resolves into `/me`, including scopes; `grantsFor` keeps the widest scope across roles.
 - **Session:** the mock auth service remembers the signed-in demo user in `localStorage` (`clinicflow:demo-session`), so a reload keeps the session.
 - **Server state:** hooks wrap services in TanStack Query (`features/auth/hooks/use-session.ts` keeps the current user under `['auth', 'me']`). Signing out clears the whole cache.
@@ -130,7 +137,7 @@ Backend emails link to `/#/reset-password?…` and `/#/confirm-email?…` (API c
 
 ## 6. Errors and states
 
-- Business errors are `ServiceError` codes; screens branch on `code`, never on a message. `shared/api/api-error.ts` (from V1) maps HTTP error bodies to codes and messages for the HTTP adapters; its messages move to translations when those adapters land.
+- Business errors are `ServiceError` codes; screens branch on `code`, never on a message. `useErrorMessage()` (`shared/i18n/use-messages.ts`) turns one into a sentence from `common:errors.<Module>.<Reason>`, filled with its details, or a generic message for unknown codes and network failures. `shared/api/api-error.ts` (from V1) maps HTTP error bodies to codes and messages for the HTTP adapters; its messages move to translations when those adapters land.
 - A failed load renders `ErrorState` with a retry, never an empty state. Loading renders `LoadingState`.
 - Each screen sits in an `ErrorBoundary` keyed by path (`shells/ScreenOutlet.tsx`), so a crash shows "This page couldn't be displayed" and leaving the page clears it.
 
@@ -140,7 +147,10 @@ Backend emails link to `/#/reset-password?…` and `/#/confirm-email?…` (API c
 - **Namespaces:** `common`, `nav`, `screens` in `shared/i18n/locales/{en,ar}/`; features add their own and register them in `app/locales.ts`. The English files define the keys and are typed (`app/i18next.d.ts`), so a wrong key fails `npm run build`. `locales.test.ts` checks that Arabic has exactly the English keys and no empty strings.
 - **Formatting:** `shared/lib/intl.ts` formats money (EGP), numbers, branch wall-clock times and dates with `Intl`, using Egyptian Arabic with Latin digits (`ar-EG-u-nu-latn`), so prices, phone numbers and ticket numbers read the same in both languages.
 - **Layout:** logical utilities only (`ms-`, `ps-`, `start-`, `end-`, `text-start`, `border-e`); sheets open from the start side. Directional icons (arrows, chevrons, sign-out) get the `rtl-flip` class; other icons, numbers, charts and photos are not mirrored. Wrap Latin or numeric values inside Arabic sentences in `<bdi dir="ltr">` (with `Trans` when they come from a translation).
-- **Reference data** has both names (`nameEn`/`nameAr`, R9); helpers such as `branchName(branch, language)` pick one.
+- **Reference data** has both names (`nameEn`/`nameAr`, R9); `nameIn(item, language)` (`shared/i18n/bilingual.ts`) and `branchName` pick one, and `textIn` picks a free text written in either or both languages (a doctor's bio).
+- **Text people typed** (names, reviews, notes) gets `dir="auto"`, so a Latin sentence inside the Arabic layout keeps its punctuation in place.
+- **Plurals** use i18next plural keys; Arabic has all six forms (`locales.test.ts` checks them).
+- **Branch time:** `shared/lib/branch-time.ts` gives today, the wall-clock time, date arithmetic and wall-clock ↔ UTC conversion in a branch's zone (ADR 0003), independent of the viewer's device zone. UTC timestamps (an interview) are shown with `formatInstant(…, branch.timeZone)`.
 
 ## 8. UI system
 
@@ -178,7 +188,7 @@ Fonts are tokens too (`--font-sans`, `--font-display`): Inter and Plus Jakarta S
 | Shell | Used by | Frame |
 |---|---|---|
 | `PublicLayout` | visitors | Navbar (links, language, sign-in or "My account"; sheet below `lg`), page, footer |
-| `AuthLayout` | sign-in, sign-up, recovery | Slim top bar, centred column |
+| `AuthLayout` | sign-in, sign-up, recovery, staff onboarding | Slim top bar, a narrow centred column; a screen marked `data-layout="wide"` (two-step setup) widens it |
 | `PatientShell` | patient portal | Top bar; five-item bottom tab bar on mobile that moves into the top bar from `md` |
 | `StaffShell` | staff workspaces | Fixed 260px sidebar from `lg` (logo, branch switcher, permission-filtered menu, user card), top bar with patient search, language, notifications; sheet below `lg` |
 | `TabletShell` | nurse station | 72px icon rail, top bar with branch and user, large targets |
@@ -188,7 +198,7 @@ All shells share `ScreenOutlet` (the `<main>` landmark, error boundary, loading 
 
 ### Shared components (`shared/ui/`)
 
-`Logo`, `LanguageToggle`, `Avatar`, `PageHeader`, `StatusChip` (tones: success, warning, info, danger, neutral, highlight, primary; dot + label), `Field` (wires label, hint, error and `aria-*` to a control through a render prop), `StatTile`, `LoadingState` / `ErrorState` / `EmptyState`, `ErrorBoundary`, `SkipLink`, and the Radix primitives (button, card, dialog, alert-dialog, sheet, select, dropdown-menu, tabs, switch, input, textarea, label, badge, skeleton, spinner, sonner). The primitives use logical direction classes, translated close labels and a 2px focus ring. They were generated for Tailwind v4: v4-only syntax (`aria-invalid:`, `outline-hidden`, `max-h-(--var)`) does nothing in Tailwind 3, so use `aria-[invalid=true]:`, `[var(--x)]` and the compatibility utilities in `styles/index.css`.
+`Logo`, `LanguageToggle`, `Avatar`, `PageHeader`, `Breadcrumbs`, `Pagination`, `Stepper` (numbered steps, a bar on phones), form controls (`PasswordInput` with show/hide, `PasswordChecklist`, `OtpInput` (six boxes: SMS autofill, paste, auto-submit, always left to right), `PhoneInput` (+20), `Checkbox`, `ChoiceCard` (a radio drawn as a card), `FileDrop`), `FormAlert`, `CopyButton`, `StatusChip` (tones: success, warning, info, danger, neutral, highlight, primary; dot + label), `Field` (wires label, hint, error and `aria-*` to a control through a render prop), `StatTile`, `LoadingState` / `ErrorState` / `EmptyState`, `ErrorBoundary`, `SkipLink`, and the Radix primitives (button, card, dialog, alert-dialog, sheet, select, dropdown-menu, tabs, switch, input, textarea, label, badge, skeleton, spinner, sonner). The primitives use logical direction classes, translated close labels and a 2px focus ring. They were generated for Tailwind v4: v4-only syntax (`aria-invalid:`, `outline-hidden`, `max-h-(--var)`) does nothing in Tailwind 3, so use `aria-[invalid=true]:`, `[var(--x)]` and the compatibility utilities in `styles/index.css`.
 
 Button variants: `default` (navy, the main action), `strong` (deep navy), `outline`, `secondary` (tonal), `ghost`, `destructive`, `destructive-outline`, `link`. Sizes `sm` (36px), `default` (40px), `lg` (44px), `icon*`.
 

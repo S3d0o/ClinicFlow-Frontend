@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { postSignInPath } from '@/features/auth/model/access';
+import { MFA_SETUP_PATH, postSignInPath } from '@/features/auth/model/access';
 import { useSession } from '@/features/auth/hooks/use-session';
 import { LoadingState } from '@/shared/ui/states';
 import ForbiddenPage from '../pages/ForbiddenPage';
@@ -29,6 +29,8 @@ export function RouteGuard({ access, children }: { access: Access; children: Rea
       const from = (location.state as { from?: string } | null)?.from;
       return <Navigate to={postSignInPath(user!, from, (path) => canOpenPath(user!, path))} replace />;
     }
+    case 'setup-mfa':
+      return <Navigate to={MFA_SETUP_PATH} replace />;
     case 'forbidden':
       return <ForbiddenPage />;
   }

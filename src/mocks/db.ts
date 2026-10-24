@@ -1,6 +1,29 @@
+import type { PriceListItem, Service, Specialty } from '@/features/catalog/model/catalog';
 import type { Branch } from '@/features/org/model/branch';
+import { applicationsSeed, type ApplicationRecord } from './seed/applications';
 import { branchesSeed } from './seed/branches';
+import { priceListSeed, servicesSeed, specialtiesSeed } from './seed/catalog';
+import { doctorsSeed, type DoctorSeed } from './seed/doctors';
+import { invitationsSeed, type InvitationSeed } from './seed/invitations';
+import { reviewsSeed, type ReviewSeed } from './seed/reviews';
 import { usersSeed, type UserSeed } from './seed/users';
+
+/** An email the mock "sent". The demo shows its link, since no real email leaves the browser. */
+export interface SentEmail {
+  to: string;
+  kind: 'PasswordReset' | 'EmailConfirmation' | 'ApplicationStage';
+  /** The app path the email links to, if any. */
+  path?: string;
+  sentAt: string;
+}
+
+/** A single-use token from an emailed link (confirm email, reset password). */
+export interface EmailToken {
+  token: string;
+  userId: string;
+  purpose: 'ConfirmEmail' | 'ResetPassword';
+  expiresAt: string;
+}
 
 /**
  * The in-memory backend the mock adapters read and write. Every adapter gets the same instance, so a
@@ -10,13 +33,48 @@ import { usersSeed, type UserSeed } from './seed/users';
 export interface MockDb {
   branches: Branch[];
   users: UserSeed[];
+  specialties: Specialty[];
+  services: Service[];
+  priceList: PriceListItem[];
+  doctors: DoctorSeed[];
+  reviews: ReviewSeed[];
+  applications: ApplicationRecord[];
+  invitations: InvitationSeed[];
+  /** Uploaded files by id (seeded files are made up on download). */
+  files: Map<string, Blob>;
+  sentEmails: SentEmail[];
+  emailTokens: EmailToken[];
 }
 
-/** A fresh copy of the seed data (tests get an isolated database each). */
-export function createMockDb(): MockDb {
-  return structuredClone({ branches: branchesSeed, users: usersSeed });
+/** A fresh copy of the seed data (tests get an isolated database each). Dated seeds are relative to `now`. */
+export function createMockDb(now: Date = new Date()): MockDb {
+  const fixed = structuredClone({
+    branches: branchesSeed,
+    users: usersSeed,
+    specialties: specialtiesSeed,
+    services: servicesSeed,
+    priceList: priceListSeed,
+    doctors: doctorsSeed,
+  });
+  return {
+    ...fixed,
+    reviews: reviewsSeed(now),
+    applications: applicationsSeed(now),
+    invitations: invitationsSeed(now),
+    files: new Map(),
+    sentEmails: [],
+    emailTokens: [],
+  };
 }
 
 /** Resolves after `ms` milliseconds, to make loading states visible like a real network. */
 export const delay = (ms: number) =>
   ms > 0 ? new Promise<void>((resolve) => setTimeout(resolve, ms)) : Promise.resolve();
+
+/** What every mock adapter is built from. */
+export interface MockDeps {
+  db: MockDb;
+  latencyMs: number;
+  /** The current time; tests pass a fixed clock. */
+  now: () => Date;
+}
