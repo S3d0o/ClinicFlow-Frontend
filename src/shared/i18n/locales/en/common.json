@@ -14,7 +14,113 @@
     "tryAgain": "Try again",
     "openMenu": "Open menu",
     "myAccount": "My account",
-    "viewAll": "View all"
+    "viewAll": "View all",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "copy": "Copy",
+    "copied": "Copied",
+    "download": "Download",
+    "edit": "Edit",
+    "change": "Change",
+    "next": "Next",
+    "previous": "Previous",
+    "remove": "Remove",
+    "clearAll": "Clear all"
+  },
+  "validation": {
+    "required": "This field is required.",
+    "phone": "Enter an Egyptian mobile number, e.g. 010 1234 5678.",
+    "email": "Enter a valid email address.",
+    "identifier": "Enter your mobile number or email.",
+    "passwordPolicy": "The password doesn't meet every rule below.",
+    "passwordMismatch": "The passwords don't match.",
+    "terms": "Please accept to continue.",
+    "maxLength": "Use at most {{max}} characters.",
+    "code": "Enter the 6-digit code.",
+    "wholeNumber": "Enter a whole number between {{min}} and {{max}}."
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "Auth": {
+      "InvalidCredentials": "The phone or email and password don't match an account.",
+      "InvalidMfaCode": "That code isn't right. Check your authenticator app and try again.",
+      "MfaChallengeExpired": "Your sign-in timed out. Please sign in again.",
+      "UserNotFound": "We couldn't find that account.",
+      "PhoneNotVerified": "Verify your mobile number first.",
+      "EmailNotConfirmed": "Confirm your email first.",
+      "Unauthorized": "Your session has ended. Please sign in again.",
+      "AccountLockedOut": "Too many failed attempts. Try again later.",
+      "InvalidPasswordResetToken": "This reset link isn't valid or has expired. Ask for a new one.",
+      "InvalidEmailConfirmationToken": "This confirmation link isn't valid or has expired."
+    },
+    "Validation": {
+      "InvalidPhone": "Enter an Egyptian mobile number, e.g. 010 1234 5678."
+    },
+    "Otp": {
+      "InvalidCode": "That code isn't right or has expired. Attempts left: {{attemptsLeft}}.",
+      "TooManyAttempts": "Too many attempts. Please wait before trying again.",
+      "ResendTooSoon": "Please wait a little before asking for a new code."
+    },
+    "Invitation": {
+      "NotFound": "This invitation link isn't valid. It may have been used or cancelled.",
+      "Expired": "This invitation has expired."
+    },
+    "DoctorApplication": {
+      "AlreadyOpen": "You already have an open application.",
+      "CvRequired": "Attach your CV to apply.",
+      "InvalidStatusTransition": "This application can't be changed in its current stage.",
+      "ReapplyTooSoon": "You can't apply again yet. Your application page shows the date."
+    },
+    "File": {
+      "NotFound": "We couldn't find this file.",
+      "TypeNotAllowed": "This file type isn't accepted.",
+      "TooLarge": "The file is larger than 5 MB."
+    },
+    "Doctor": {
+      "NotFound": "We couldn't find this doctor."
+    },
+    "RateLimit": {
+      "Exceeded": "Too many attempts. Please wait a minute and try again."
+    }
+  },
+  "password": {
+    "rulesTitle": "Your password needs",
+    "length": "At least 8 characters",
+    "upper": "An uppercase letter",
+    "lower": "A lowercase letter",
+    "number": "A number",
+    "symbol": "A symbol (@, #, $, …)",
+    "met": "met",
+    "notMet": "not met yet",
+    "match": "Passwords match"
+  },
+  "otp": {
+    "label": "Verification code",
+    "digit": "Digit {{n}} of 6"
+  },
+  "dates": {
+    "today": "Today",
+    "tomorrow": "Tomorrow"
+  },
+  "pagination": {
+    "label": "Pages",
+    "page": "Page {{page}} of {{total}}"
+  },
+  "breadcrumb": {
+    "label": "Breadcrumb"
+  },
+  "stepper": {
+    "label": "Progress",
+    "progress": "Step {{current}} of {{total}}",
+    "step": "Step {{n}}",
+    "done": "done",
+    "current": "current step",
+    "upcoming": "not started"
+  },
+  "fileDrop": {
+    "drop": "Drag and drop your file here, or",
+    "browse": "browse files",
+    "remove": "Remove {{name}}"
   },
   "language": {
     "label": "Language",
@@ -69,7 +175,8 @@
     "title": "Demo sign-in",
     "intro": "The V2 frontend runs on sample data. Pick an account to see its workspace.",
     "password": "Every demo account uses the password <value>{{password}}</value>, and every SMS or authenticator code is <value>{{code}}</value>.",
-    "signInAs": "Sign in as {{name}}"
+    "signInAs": "Sign in as {{name}}",
+    "invitation": "Try a staff invitation (a new nurse joining Nasr City)"
   },
   "footer": {
     "tagline": "One clinic, every branch: book, visit, pay and get your records in one place.",

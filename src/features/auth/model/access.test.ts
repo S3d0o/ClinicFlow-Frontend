@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { at, makeUser, org } from '@/test/fixtures';
-import { can, canAny, homePath, isStaff, postSignInPath } from './access';
+import { can, canAny, homePath, isStaff, needsMfaSetup, postSignInPath } from './access';
 
 describe('can', () => {
   const receptionist = makeUser([at('Receptionist', 'br-nc')]);
@@ -57,6 +57,13 @@ describe('homePath', () => {
 
   it('sends a signed-out visitor to the landing page', () => {
     expect(homePath(null)).toBe('/');
+  });
+
+  it('sends staff without an authenticator to two-step setup first (FR-STF-07)', () => {
+    const nurse = makeUser([at('Nurse', 'br-nc')], { mfaEnrolled: false });
+    expect(needsMfaSetup(nurse)).toBe(true);
+    expect(homePath(nurse)).toBe('/security/setup');
+    expect(needsMfaSetup(makeUser([org('Patient')], { mfaEnrolled: false }))).toBe(false);
   });
 });
 

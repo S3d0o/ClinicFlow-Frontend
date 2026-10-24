@@ -104,7 +104,7 @@ export const patientNav: NavItem<PatientKey>[] = [
 export const publicNav: { to: string; label: PublicKey }[] = [
   { to: '/doctors', label: 'findDoctor' },
   { to: '/#branches', label: 'branches' },
-  { to: '/doctors?view=services', label: 'services' },
+  { to: '/#specialties', label: 'specialties' },
   { to: '/join', label: 'joinAsDoctor' },
 ];
 

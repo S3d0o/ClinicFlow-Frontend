@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isEgyptianMobile, maskPhone, toE164EgyptianMobile } from './phone';
+import { formatEgyptianPhone, isEgyptianMobile, maskPhone, toE164EgyptianMobile } from './phone';
 
 describe('toE164EgyptianMobile', () => {
   it.each([
@@ -16,6 +16,14 @@ describe('toE164EgyptianMobile', () => {
   it.each(['0131234567', '01312345678', '0101234567', '+44 20 7946 0958', 'abc'])('rejects %s', (input) => {
     expect(toE164EgyptianMobile(input)).toBeNull();
     expect(isEgyptianMobile(input)).toBe(false);
+  });
+});
+
+describe('formatEgyptianPhone', () => {
+  it('writes mobiles and Cairo landlines the local way', () => {
+    expect(formatEgyptianPhone('+201012345678')).toBe('010 1234 5678');
+    expect(formatEgyptianPhone('+20224018890')).toBe('02 2401 8890');
+    expect(formatEgyptianPhone('+442079460958')).toBe('+442079460958');
   });
 });
 

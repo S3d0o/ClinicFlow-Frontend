@@ -1,0 +1,68 @@
+{
+  "hero": {
+    "title": "Your clinic visit, from booking to prescription",
+    "body": "See every price in Egyptian pounds before you book, get an SMS confirmation and reminder, and find your prescriptions and receipts in your account, at every branch.",
+    "book": "Book an appointment",
+    "specialties": "Browse specialties"
+  },
+  "quick": {
+    "title": "Next available",
+    "intro": "The soonest free times at each branch.",
+    "branch": "Branch",
+    "empty": "No free times in the next 2 weeks at this branch.",
+    "seeAll": "See all doctors"
+  },
+  "search": {
+    "label": "Find a time",
+    "branch": "Branch",
+    "anyBranch": "All branches",
+    "specialty": "Specialty",
+    "anySpecialty": "All specialties",
+    "when": "When",
+    "anyTime": "Any time",
+    "submit": "Search availability"
+  },
+  "branches": {
+    "eyebrow": "Our branches",
+    "title": "One clinic, every branch",
+    "intro": "The same records, prices and booking at every location.",
+    "viewDoctors": "View doctors and book",
+    "call": "Call {{branch}}"
+  },
+  "journey": {
+    "eyebrow": "How a visit works",
+    "title": "From booking to prescription",
+    "step1Title": "Book online or by phone",
+    "step1Body": "Choose a doctor, branch and time, and see the price first. You get an SMS confirmation and a reminder.",
+    "step2Title": "Check in at the desk",
+    "step2Body": "Give your name or mobile number at reception. Your booking is already there.",
+    "step3Title": "See your doctor",
+    "step3Body": "Your file, vitals and previous visits are ready for the doctor before you sit down.",
+    "step4Title": "Prescriptions and receipts",
+    "step4Body": "Your visit summary, prescription and receipt appear in your account."
+  },
+  "specialties": {
+    "eyebrow": "Specialties",
+    "title": "Find the right specialist",
+    "intro": "Prices are shown on every doctor's profile before you book.",
+    "doctors": "Doctors in {{specialty}}"
+  },
+  "promise": {
+    "badge": "For patients",
+    "title": "Care that fits your schedule and budget",
+    "point1": "Clear prices in EGP before you book",
+    "point2": "SMS reminders in Arabic or English",
+    "point3": "Pay a deposit online or everything at the desk",
+    "point4": "Your visits, prescriptions and receipts in one account",
+    "cta": "Create a patient account",
+    "ctaSignedIn": "Go to my account"
+  },
+  "careers": {
+    "badge": "For doctors",
+    "title": "Practise with ClinicFlow",
+    "body": "Run outpatient clinics with front-desk, nursing and billing support at every branch. Apply online and follow your application step by step.",
+    "point1": "Reception, triage and billing handled by the clinic team",
+    "point2": "Schedules across branches without double bookings",
+    "cta": "Apply as a doctor"
+  }
+}

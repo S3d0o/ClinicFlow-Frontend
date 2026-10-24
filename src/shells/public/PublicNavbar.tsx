@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Menu } from 'lucide-react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { publicNav } from '@/app/navigation';
 import { homePath } from '@/features/auth/model/access';
@@ -46,6 +46,7 @@ const linkClass = ({ isActive }: { isActive: boolean }) =>
 export function PublicNavbar() {
   const { t } = useTranslation(['nav', 'common']);
   const { direction } = useLanguage();
+  const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -54,7 +55,12 @@ export function PublicNavbar() {
         <Logo />
         <nav aria-label={t('common:appName')} className="hidden flex-1 items-center gap-6 lg:flex">
           {publicNav.map((item) => (
-            <NavLink key={item.to} to={item.to} className={linkClass}>
+            <NavLink
+              key={item.to}
+              to={item.to}
+              // A section link ("/#branches") is current only when its section is the target, not on every visit to "/"
+              className={({ isActive }) => linkClass({ isActive: item.to.includes('#') ? location.hash === item.to.slice(item.to.indexOf('#')) : isActive })}
+            >
               {t(`public.${item.label}`)}
             </NavLink>
           ))}

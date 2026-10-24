@@ -2,7 +2,7 @@
   "public": {
     "findDoctor": "Find a doctor",
     "branches": "Branches",
-    "services": "Services & prices",
+    "specialties": "Specialties",
     "joinAsDoctor": "Join as a doctor"
   },
   "patient": {

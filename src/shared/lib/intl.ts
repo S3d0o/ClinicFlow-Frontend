@@ -26,6 +26,50 @@ export function formatWallClock(time: string, language: Language): string {
     .format(new Date(Date.UTC(2000, 0, 1, h, m)));
 }
 
+/**
+ * A UTC timestamp (API, ends in `Z`) shown in a branch's zone, e.g. an interview time:
+ * "Wed, Nov 4, 11:00 AM". Pass `timeZone` so every viewer sees the branch's wall clock.
+ */
+export function formatInstant(
+  timestamp: string,
+  language: Language,
+  timeZone: string,
+  options: Intl.DateTimeFormatOptions = { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }
+): string {
+  return new Intl.DateTimeFormat(localeOf(language), { ...options, timeZone }).format(new Date(timestamp));
+}
+
+/** 0 (Sunday) … 6 (Saturday) → "Sunday" / "الأحد". */
+export function formatWeekday(weekday: number, language: Language, style: 'long' | 'short' = 'long'): string {
+  // 2026-10-18 is a Sunday
+  return new Intl.DateTimeFormat(localeOf(language), { weekday: style, timeZone: 'UTC' }).format(new Date(Date.UTC(2026, 9, 18 + weekday)));
+}
+
+/** The Egyptian working week starts on Saturday. */
+export const WEEK_FROM_SATURDAY = [6, 0, 1, 2, 3, 4, 5] as const;
+
+/** ["Nasr City", "Maadi"] → "Nasr City and Maadi" / "مدينة نصر والمعادي". */
+export function formatList(items: string[], language: Language): string {
+  return new Intl.ListFormat(localeOf(language), { style: 'long', type: 'conjunction' }).format(items);
+}
+
+/** 2 400 000 bytes → "2.3 MB" (file sizes in upload lists). */
+export function formatFileSize(bytes: number, language: Language): string {
+  const units = ['byte', 'kilobyte', 'megabyte'] as const;
+  let value = bytes;
+  let unit = 0;
+  while (value >= 1024 && unit < units.length - 1) {
+    value /= 1024;
+    unit += 1;
+  }
+  return new Intl.NumberFormat(localeOf(language), {
+    style: 'unit',
+    unit: units[unit],
+    unitDisplay: 'short',
+    maximumFractionDigits: unit === 0 ? 0 : 1,
+  }).format(value);
+}
+
 /** "2026-10-24" → "Sat, Oct 24" / "السبت، 24 أكتوبر" (style configurable). */
 export function formatDay(
   date: string,

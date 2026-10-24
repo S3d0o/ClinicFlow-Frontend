@@ -26,7 +26,7 @@ npm install
 npm run dev     # http://localhost:3000
 ```
 
-Open `/#/sign-in` and pick a **demo account**. They are seeded in `src/mocks/seed/users.ts`:
+Open `/#/sign-in` and sign in with a phone or email and the demo password, or pick a **demo account** from the list under the form (it skips the password and two-step code). They are seeded in `src/mocks/seed/users.ts`:
 
 | Account | Role(s) | Home |
 |---|---|---|
@@ -40,7 +40,15 @@ Open `/#/sign-in` and pick a **demo account**. They are seeded in `src/mocks/see
 | Mohamed Adel | Patient | `/patient` |
 | Dr. Nour El-Din Samy | Doctor applicant (no role) | `/my-application` |
 
-Every demo password is **`Demo@1234`** and every SMS or authenticator code is **`123456`**. The session survives reloads; to start over, sign out or clear `clinicflow:demo-session` from local storage. The mock data resets on every reload.
+Every demo password is **`Demo@1234`** and every SMS or authenticator code is **`123456`**. Staff recovery codes are in `users.ts` too. The session survives reloads; to start over, sign out or clear `clinicflow:demo-session` from local storage. **The mock data resets on every reload**, including accounts and applications made in the browser: a new account is gone after a reload (its session then reads as signed out).
+
+Trying the phase 1 flows:
+- **Sign-up:** `/#/sign-up` with any unused Egyptian mobile number (e.g. `0122 333 4444`), then the code `123456`. Five wrong codes open the lockout screen.
+- **Lockout:** five wrong passwords for any account lock it for 15 minutes (until a reload).
+- **Staff invitation:** "Try a staff invitation" under the demo accounts opens `/#/invitation/demo-nurse-invite` (a new nurse at Nasr City), then two-step setup.
+- **Emails:** nothing is sent. Where a real email would carry a link (password reset, email confirmation), the screen shows a "Demo: open the link" button.
+- **Applying as a doctor:** Dr. Ahmed Fathy and the other staff have confirmed emails, so they can go straight through `/#/join`; Mohamed Adel (patient, no email) shows the add-and-confirm-email step. Dr. Nour El-Din Samy already has an application at the interview stage.
+- **Doctors and slots** are generated from weekly schedules in `src/mocks/seed/doctors.ts` for the next 14 days; about one slot in four is shown as taken.
 
 The UI starts in **Arabic** (right-to-left), as the docs require; switch with the "EN | عربي" toggle. The choice is remembered.
 
@@ -60,8 +68,8 @@ The UI starts in **Arabic** (right-to-left), as the docs require; switch with th
 
 - **Tests** sit next to the code as `*.test.ts(x)` and import `describe`/`it`/`expect` from `vitest`. Cover:
   - pure rules in `model/` (and `mocks/seed` logic) with plain unit tests;
-  - mock adapters by calling them with `createMockDb()`, `memorySessionStore()` and `latencyMs: 0`;
-  - screens with `renderApp({ path, signedInAs })` from `src/test/render-app.tsx`, which renders the real routes, shells and guards on a fresh mock backend (see `app/routes/AppRoutes.test.tsx`). Tests run in English.
+  - mock adapters through `createTestBackend({ signedInAs, now })` (`src/test/mock-backend.ts`): no delay, an in-memory session, and a clock you move with `advance(ms)` (code expiry, lockouts, invitation expiry);
+  - screens with `renderApp({ path, signedInAs })` from `src/test/render-app.tsx`, which renders the real routes, shells and guards on a fresh mock backend (see `app/routes/AppRoutes.test.tsx` and the `*-flows.test.tsx` files, which walk whole flows such as sign-up → code → home). Tests run in English, with a 30 s per-test limit and 5 s for `findBy…` queries, because screens load as separate chunks. `src/test/setup.ts` adds the browser APIs Radix Select needs, so tests can open selects.
 - **Lint:** non-component exports (constants, hooks, contexts) go in a `.ts` file, not next to a component in a `.tsx` file, or `react-refresh/only-export-components` fails.
 - **CI:** `.github/workflows/ci.yml` runs `npm ci`, lint, tests and build on Node 22, plus `docker build -f DockerFile`.
 - **Check screens by hand** in both languages, at desktop (1280px) and mobile (390px) widths, against `design-v2/screens/<area>/<screen>/screen.png`.
@@ -110,7 +118,9 @@ The backend owns it ([API_CONTRACT.md §11](API_CONTRACT.md#11-how-to-change-thi
   - tokens only (`bg-primary`, `text-muted-foreground`, `bg-success/10 text-success`), no raw palettes or gradients, and orange (`highlight`) only for small accents;
   - logical direction classes (`ms-`, `ps-`, `start-`, `text-start`), and `rtl-flip` on directional icons;
   - form controls in a `Field`; icon-only buttons with an `aria-label`; statuses as `StatusChip` (dot + text); one primary button per area; 44px targets in the patient portal.
-- **Strings:** every visible string comes from a translation file, in both languages.
+- **Forms:** react-hook-form with a zod schema in `model/`; schema messages are `common:validation.*` keys, shown with `useValidationMessage()`. Show a failed call with `useErrorMessage()(error)`, which translates the `ServiceError` code (`common:errors.<Module>.<Reason>`) and fills in its details (tries left, retry time).
+- **Strings:** every visible string comes from a translation file, in both languages. Counts use i18next plurals: English needs `_one`/`_other`, Arabic all six forms (`_zero`, `_one`, `_two`, `_few`, `_many`, `_other`); `locales.test.ts` checks both.
+- **Text people typed** (names, reviews, notes) can be in either language: give its element `dir="auto"` so punctuation lands on the right side. Phone numbers, emails, codes and times sit in `<bdi dir="ltr">`; show phones with `formatEgyptianPhone`.
 
 ## 6. Troubleshooting
 
@@ -121,4 +131,6 @@ The backend owns it ([API_CONTRACT.md §11](API_CONTRACT.md#11-how-to-change-thi
 | Text shows as a key such as `nav:items.deskToday` | The key is missing from a translation file or the namespace isn't registered in `app/locales.ts` |
 | `npm run build` fails on a `t('…')` call | The key doesn't exist in the English file (keys are typed) |
 | Layout looks wrong only in Arabic | A physical class (`ml-`, `pl-`, `left-`, `text-left`) instead of a logical one |
+| An account made in the browser stopped working | The mock data resets on reload; sign up again or use a demo account |
+| A screen opened from a bookmark sends you back a step (`/sign-up/verify`, `/sign-in/verify`, `/forgot-password/verify`) | Those steps need what the previous step handed over; they restart the flow when opened directly |
 | `docker build` can't find a Dockerfile on Linux/CI | The file is named `DockerFile`. Use `docker build -f DockerFile …` |

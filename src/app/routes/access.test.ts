@@ -37,6 +37,12 @@ describe('decideAccess', () => {
     expect(decideAccess(applicant, { kind: 'applicant' })).toBe('allow');
     expect(decideAccess(patient, { kind: 'applicant' })).toBe('forbidden');
   });
+
+  it('sends staff without an authenticator to setup instead of their screens', () => {
+    const newNurse = makeUser([at('Nurse', 'br-nc')], { mfaEnrolled: false });
+    expect(decideAccess(newNurse, { kind: 'permission', anyOf: ['vitals.write'] })).toBe('setup-mfa');
+    expect(decideAccess(newNurse, { kind: 'signed-in' })).toBe('allow');
+  });
 });
 
 describe('screen catalog', () => {
@@ -45,7 +51,7 @@ describe('screen catalog', () => {
     expect(new Set(paths).size).toBe(paths.length);
   });
 
-  it('gives every screen of phase 1 or later a design reference', () => {
-    expect(screenRoutes.filter((r) => !r.design).map((r) => r.path)).toEqual([]);
+  it('gives every screen a design reference, except the email-link page the designs leave out', () => {
+    expect(screenRoutes.filter((r) => !r.design).map((r) => r.path)).toEqual(['/confirm-email']);
   });
 });

@@ -27,8 +27,12 @@ export interface CurrentUser {
   preferredLanguage: Language;
   roles: RoleAssignment[];
   permissions: PermissionGrant[];
+  phoneVerified: boolean;
+  emailConfirmed: boolean;
   /** A doctor applicant has no role but an open application (02 §2). */
   hasDoctorApplication: boolean;
   /** Staff must use two-step sign-in (FR-STF-07). */
   mfaEnabled: boolean;
+  /** Whether the authenticator app is set up. Staff without it can only open the setup screen. */
+  mfaEnrolled: boolean;
 }

@@ -1,4 +1,5 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, MailPlus } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { Avatar } from '@/shared/ui/Avatar';
 import { ErrorState, LoadingState } from '@/shared/ui/states';
@@ -55,6 +56,12 @@ export function DemoAccountsPanel() {
           </li>
         ))}
       </ul>
+      {demo.data.invitationPath && (
+        <Link to={demo.data.invitationPath} className="flex items-center gap-2 text-label-md text-primary hover:underline">
+          <MailPlus aria-hidden="true" className="size-4" />
+          {t('demo.invitation')}
+        </Link>
+      )}
     </section>
   );
 }

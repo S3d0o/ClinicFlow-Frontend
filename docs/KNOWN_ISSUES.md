@@ -136,8 +136,8 @@ The V2 UI is a fresh build from the 63 Stitch screens in `design-v2/`, on an in-
 
 | # | Branch | Scope | Status |
 |---|---|---|---|
-| 0 | `feature/p1-ui-foundation` | Theme (ClinicFlow Navy), Arabic/English with right-to-left, service layer and mock backend, permission model and demo sign-in, the six frames, screen catalog with access rules, shared UI | In review |
-| 1 | `feature/p1-ui-public-auth` | Public site, sign-in (one phone-or-email field), staff two-step, sign-up with SMS code, password reset, doctor application and "My application" (14 screens) | To do |
+| 0 | `feature/p1-ui-foundation` | Theme (ClinicFlow Navy), Arabic/English with right-to-left, service layer and mock backend, permission model and demo sign-in, the six frames, screen catalog with access rules, shared UI | Done (merged 2026-10-24) |
+| 1 | `feature/p1-ui-public-auth` | Public site, sign-in (one phone-or-email field), staff two-step, sign-up with SMS code, password reset, doctor application and "My application" (14 screens, plus the email-confirmation page) | In review |
 | 2 | `feature/p2-ui-patient-portal` | Patient portal (13 screens) | To do |
 | 3 | `feature/p2-ui-front-desk` | Front desk and nurse station (10 screens) | To do |
 | 4 | `feature/p4-ui-doctor` | Doctor workspace (4 screens) | To do |
@@ -148,7 +148,25 @@ The V2 UI is a fresh build from the 63 Stitch screens in `design-v2/`, on an in-
 Open points for the rebuild:
 - **Real API:** each screen runs on the mock backend. Swapping in the API means writing HTTP adapters behind the same service interfaces (on `shared/api/http-client.ts`, which keeps V1's tested token refresh) as the backend phases ship their endpoints.
 - **Error messages:** `shared/api/api-error.ts` still holds V1's English messages per error code; they move into the translation files when the HTTP adapters land.
-- **Demo-only pieces:** the demo account list on the sign-in page and the demo session store exist only in the mock backend and disappear with it.
+- **Demo-only pieces:** the demo account list and sample invitation on the sign-in page, the "Demo: open the link" buttons where an email would arrive, and the demo session store exist only in the mock backend (`DemoAccountsService`) and disappear with it.
+- **Demo data resets on reload:** accounts, applications and lockouts made in the browser live in memory. A persisted mock store is possible if reviewers need it.
+- **Dependencies:** `npm audit` reports 16 advisories (11 high) in packages installed before phase 1 (axios, react-router, vite, postcss and Tailwind's chain, among others); `qrcode`, added in phase 1, has none. Upgrading them is its own change.
+
+### Phase 1 (public site and account access): to confirm with the backend
+
+The screens run on the mock, which follows 04 (FR-ACC, FR-STF-01/02/07, FR-REC), 07 §4 and the V1 contract. Points the `/api/v2` endpoints still have to settle:
+
+| Point | What the frontend does now |
+|---|---|
+| Error codes 07 doesn't list yet | Reused from the V1 contract: `Auth.AccountLockedOut`, `Auth.InvalidPasswordResetToken`, `Auth.InvalidEmailConfirmationToken`, `Auth.UserNotFound`. Chosen by the mock: `Auth.MfaChallengeExpired`, `Auth.Unauthorized`, `Invitation.NotFound`, `Invitation.Expired`, `DoctorApplication.ReapplyTooSoon`, `File.NotFound`, `Validation.InvalidPhone`. Each has a translated message in `common:errors` |
+| Error details | `Otp.InvalidCode` carries `attemptsLeft`; `Otp.TooManyAttempts`, `Otp.ResendTooSoon` and `Auth.AccountLockedOut` carry `retryAt`. The HTTP adapters will read them from ProblemDetails extensions (or `Retry-After`); the lockout screen counts down to `retryAt` |
+| Two-step sign-in | `POST /auth/login` answers `Auth.MfaRequired` with an `mfaToken` (07). The code screen also shows the account and its role, which the HTTP adapter fills from what the user typed and the response. Recovery codes are accepted in the same step |
+| Unverified phone at sign-in | After a correct password for a self-registered account, the mock answers `Auth.PhoneNotVerified` and the screen offers a new code. Staff accounts are activated by their invitation instead |
+| Reset code check | The code is checked first (`otp/verify`, purpose `PasswordReset`, not used up), then sent again with the new password (`password/reset-by-otp`) |
+| Invitations | Reading an invitation by its token (name, email, roles, inviter, expiry) isn't in 07 yet. Accepting takes the name, a mobile number and a password and signs the user in; two-step setup follows |
+| Doctor search | `/public/doctors` with text, branch, specialty, availability (today, tomorrow, this week), language and sort (soonest, rating, price), returning each doctor's lowest consultation price and next three free slots. A slot query without `from` starts today at the branch |
+| Reapply cool-down | 90 days, shown as `canReapplyFrom` on the applicant's application |
+| Booking hand-off | "Continue to book" opens `/patient/book/:doctorId?branch=&service=&slot=&deposit=` (phase 2) |
 
 ### P0: foundation (contract 4.0.0-p0)
 | Item | Backend change | Status |
