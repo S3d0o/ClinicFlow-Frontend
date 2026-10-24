@@ -45,7 +45,7 @@
     "book": "Book"
   },
   "profile": {
-    "license": "License {{number}}",
+    "license": "License <num>{{number}}</num>",
     "years_one": "{{count}} year of experience",
     "years_other": "{{count}} years of experience",
     "languagesLine": "Speaks {{languages}}",

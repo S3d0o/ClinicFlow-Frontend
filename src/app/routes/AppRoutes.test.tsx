@@ -28,7 +28,7 @@ describe('app routes and shells', () => {
 
   it('sends a signed-in user away from sign-in to their home page', async () => {
     renderApp({ path: '/sign-in', signedInAs: 'u-mohamed' });
-    expect(await screen.findByRole('heading', { name: 'Home' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 1, name: /^Good (morning|afternoon|evening),/ })).toBeInTheDocument();
     expect(screen.getAllByRole('link', { name: 'Appointments' }).length).toBeGreaterThan(0);
   });
 

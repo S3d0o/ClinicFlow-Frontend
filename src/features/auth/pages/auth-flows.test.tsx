@@ -20,7 +20,7 @@ describe('sign-in', () => {
   it('signs a patient in with their phone number and opens the patient portal', async () => {
     renderApp({ path: '/sign-in' });
     await signInWith('010 1234 5678', DEMO_PASSWORD);
-    expect(await screen.findByRole('heading', { name: 'Home' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 1, name: /^Good (morning|afternoon|evening),/ })).toBeInTheDocument();
   });
 
   it('asks staff for the two-step code, then returns them to the page they wanted', async () => {
@@ -71,7 +71,7 @@ describe('patient sign-up', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent('Attempts left: 4');
 
     await typeCode(DEMO_CODE);
-    expect(await screen.findByRole('heading', { name: 'Home' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 1, name: /^Good (morning|afternoon|evening),/ })).toBeInTheDocument();
   });
 
   it('explains every invalid field before sending anything', async () => {
@@ -103,7 +103,7 @@ describe('password reset', () => {
     expect(await screen.findByRole('heading', { name: 'Password changed' })).toBeInTheDocument();
     await userEvent.click(screen.getByRole('link', { name: 'Sign in' }));
     await signInWith('01012345678', 'Fresh#Pass9');
-    expect(await screen.findByRole('heading', { name: 'Home' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 1, name: /^Good (morning|afternoon|evening),/ })).toBeInTheDocument();
   });
 
   it('sends an email link and shows it in demo mode', async () => {

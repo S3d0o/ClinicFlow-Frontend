@@ -176,7 +176,8 @@
     "intro": "The V2 frontend runs on sample data. Pick an account to see its workspace.",
     "password": "Every demo account uses the password <value>{{password}}</value>, and every SMS or authenticator code is <value>{{code}}</value>.",
     "signInAs": "Sign in as {{name}}",
-    "invitation": "Try a staff invitation (a new nurse joining Nasr City)"
+    "invitation": "Try a staff invitation (a new nurse joining Nasr City)",
+    "reminder": "Open an SMS visit reminder (Mohamed Adel's eye exam)"
   },
   "footer": {
     "tagline": "One clinic, every branch: book, visit, pay and get your records in one place.",

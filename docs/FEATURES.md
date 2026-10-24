@@ -134,6 +134,52 @@ The applicant's home page (02 §8):
 
 Reviewing applications (moving them to interview, accepted or rejected, with the email preview) is the manager's Recruitment screen, in phase 5.
 
+## Patient portal (phase 2)
+
+For a signed-in patient (02 §8). Dates and times are the branch's; the status of every appointment is shown as a coloured chip with its name (Confirmed, Checked in, In progress, Completed, Cancelled, Rescheduled, No-show).
+
+### Home — `/patient`
+- A greeting by time of day, then **the visit that matters now**: today's appointment, or the next one. Once the patient has checked in it shows the **live queue** (UX_NOTES U3): ticket number, place in line, estimated wait, the doctor's delay if any, and the room once the doctor is ready. It updates live as the queue moves (in the demo it moves on every 20 seconds).
+- Call the branch, directions, and the appointment's details. With nothing booked: **Book a visit**.
+- Shortcuts (book, prescriptions, invoices) and the other upcoming visits.
+
+### Book — `/patient/book`, then `/patient/book/:doctorId`, then `/patient/booked/:appointmentId`
+1. **Choose a doctor** (FR-PAT-01): branch, specialty (one at a time, so the list stays short), service with its starting price and duration, then the doctors who offer it at that branch with their next free time. Everything is in the URL, so a link from the public site or a follow-up lands on the right choice.
+2. **Time and review** (FR-APT-02): the next 14 days and their times (taken ones struck through), the price split with the optional deposit (UX_NOTES U4, FR-APT-08), and acceptance of the attendance terms and the 2-hour cancellation rule (FR-PAT-08). The doctor profile's "Continue to book" opens this step with its choices already made. If someone else takes the time first, the patient is told and picks another.
+3. **You're booked** (UX_NOTES U1): reference, "Confirmed by Nasr City", date and time in the branch's time, place, fee, **Add to calendar** (`.ics`), directions, call, the optional deposit, and how reminders will arrive (SMS, email or both, from the profile).
+
+Booking is confirmed at once. A deposit opens Paymob's checkout and comes back to the appointment.
+
+### My appointments — `/patient/appointments`
+Upcoming (soonest first) and past (latest first), with counts (FR-PAT-09). Each card shows the date, doctor, service, branch, time, ticket and fee, and the actions allowed now:
+- **Reschedule** and **Cancel** while the appointment is Confirmed and more than **2 hours** away ("Free to cancel or reschedule until Thu 4:00 PM"). Later, the card says to call the branch.
+- **Leave a review** after a completed visit (once), and **View visit summary** when the doctor has published one.
+- A cancelled visit says who cancelled it; a rescheduled one links to its new time.
+
+### Appointment details — `/patient/appointments/:appointmentId`
+The live queue and the visit-day steps (check-in, triage, waiting, with the doctor) once checked in; when and what; **Add to calendar**; the branch with call and directions; the fee, any deposit paid and what's left to pay at the desk; **Pay the deposit** if one is offered and unpaid. **Change** opens two sections: a new date and time (the paid deposit moves with it, and the page opens the new appointment), or cancelling with a reason and an optional note. The lists open these sections directly (`?action=reschedule` or `?action=cancel`).
+
+### SMS reminder page — `/r/:token`
+What the reminder SMS links to, without signing in (FR-APT-10, UX_NOTES U2): "Your visit is tomorrow at 6:00 PM", the doctor, branch and fee, then **Yes, I'm coming**, **Reschedule** (after signing in) and **Cancel visit** (with confirmation), plus tips for the visit. An unknown or expired link, or a visit that can no longer change, says so. In the demo, the sign-in page links to a sample reminder.
+
+### Records — `/patient/visits`, `/patient/invoices`, `/patient/documents`
+Three tabs under the **Records** tab.
+- **My visits** (FR-PAT-05): each published visit summary with the doctor, branch, date, number of medicines and tests and the suggested follow-up, filterable by branch. The **visit summary** (`/patient/visits/:visitId`) shows what the doctor found, the medicines (dose, how often, for how long, notes) with the prescription code and **Download prescription (PDF)**, the tests ordered and their status, the doctor's instructions, and the suggested follow-up window with **Book the follow-up** (with the same doctor, service and branch).
+- **Invoices and receipts** (FR-PAT-04): open and paid invoices, each with its lines, the total, the deposit and insurance share taken off, payments made and the balance. **Pay online** opens Paymob's checkout (card or mobile wallet) and comes back to the list; invoices and receipts download as PDF.
+- **Documents and insurance** (FR-PAT-06, FR-INS-03): insurance cards with the company, member number, validity, coverage and status. **Add an insurance card** takes the company, holder, member number, expiry and a photo of each side; a new card waits for the desk to check it. **My documents** uploads PDFs and photos up to 20 MB from other clinics, to download or remove; only the patient and their treating doctors see them.
+
+### Profile and settings — `/patient/profile`
+- Name, record number and since when (FR-ACC-05).
+- **Mobile number:** change it with a code sent to the new number; the old one stays until the code is entered. A number another account uses is refused.
+- **Email:** add one and confirm it by link (the demo shows the link).
+- **Booking confirmations and reminders** by SMS, email or both (FR-NTF-04). Email needs a confirmed address.
+- **Language** for the app and for SMS and emails (FR-ACC-06).
+- **Medical information** recorded by the clinic (blood type, allergies with severity, long-term conditions), read-only.
+- **Change password** and **Sign out**.
+
+### Notifications — `/patient/notifications`
+The bell in the top bar shows the unread count, refreshed every minute and on every page change, since notifications arrive a moment after the action that causes them (backend outbox). The inbox groups notifications into today and earlier, filters by appointments, payments and prescriptions, marks one read when it's opened (it goes to what it's about) or all at once. Notifications are written in the patient's language, whatever the app's language.
+
 ## Screens by phase
 
 Every V2 screen is already routed: until its phase lands, it shows a placeholder with the phase number and its design folder.
@@ -142,7 +188,7 @@ Every V2 screen is already routed: until its phase lands, it shows a placeholder
 |---|---|---|
 | 0 | Foundation | Frames, language, navigation, access rules (done) |
 | 1 | Public and account access | Landing, sign in, staff two-step code and setup, accept invitation, patient sign-up, verify phone, reset password (2), too many attempts, find a doctor, doctor profile, join as a doctor, my application, plus the email-confirmation page (done) |
-| 2 | Patient portal | Home with live queue, booking (2 steps + confirmation), my appointments, appointment details, SMS reminder page, visits, visit summary, invoices, documents and insurance, profile and settings, notifications |
+| 2 | Patient portal | Home with live queue, booking (2 steps + confirmation), my appointments, appointment details, SMS reminder page, visits, visit summary, invoices, documents and insurance, profile and settings, notifications (done) |
 | 3 | Front desk and nurse station | Today, patient search and registration, book / walk-in, check-in, queue board, waiting-room TV, checkout, cash session, triage queue, vitals form |
 | 4 | Doctor | Today, encounter workspace, patient history, schedule and leave |
 | 5 | Manager | Dashboard, services and prices, recruitment, application detail, doctor schedules, leave and reschedule worklist, approvals, daily close, reports |

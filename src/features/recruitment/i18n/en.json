@@ -22,12 +22,6 @@
     "email": "Email",
     "verified": "Verified",
     "notConfirmed": "Not confirmed yet",
-    "addEmail": "Add your email",
-    "addEmailHint": "We'll send interview invitations and decisions here.",
-    "sendLink": "Send confirmation link",
-    "linkSent": "We sent a confirmation link to <email>{{email}}</email>. Open it, then come back here.",
-    "demoConfirm": "Demo: open the confirmation link",
-    "checkAgain": "I've confirmed it",
     "practiceTitle": "Your practice",
     "specialty": "Specialty",
     "chooseSpecialty": "Choose a specialty",
@@ -71,7 +65,7 @@
     "Withdrawn": "Withdrawn"
   },
   "mine": {
-    "reference": "Reference {{reference}}",
+    "reference": "Reference <num>{{reference}}</num>",
     "title": "Your application: {{specialty}}",
     "submittedOn": "Submitted {{date}}",
     "preferredBranch": "Preferred branch: {{branch}}",

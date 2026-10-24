@@ -4,6 +4,7 @@ import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { useErrorMessage } from '@/shared/i18n/use-messages';
+import { saveFile } from '@/shared/lib/download';
 import { Button } from '@/shared/ui/button';
 import { Checkbox } from '@/shared/ui/Checkbox';
 import { CopyButton } from '@/shared/ui/CopyButton';
@@ -28,13 +29,6 @@ function SetupStep({ n, title, children }: { n: number; title: string; children:
     </li>
   );
 }
-
-const downloadText = (fileName: string, text: string) => {
-  const url = URL.createObjectURL(new Blob([text], { type: 'text/plain' }));
-  const link = Object.assign(document.createElement('a'), { href: url, download: fileName });
-  link.click();
-  URL.revokeObjectURL(url);
-};
 
 /**
  * Authenticator setup, required before staff can open anything else (FR-STF-07): scan the key, save
@@ -131,7 +125,7 @@ export default function MfaSetupPage() {
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={() => downloadText('clinicflow-recovery-codes.txt', `${t('mfaSetup.recoveryFileTitle', { account })}\n\n${codesText}\n`)}
+                onClick={() => saveFile('clinicflow-recovery-codes.txt', `${t('mfaSetup.recoveryFileTitle', { account })}\n\n${codesText}\n`)}
               >
                 <Download aria-hidden="true" />
                 {t('mfaSetup.downloadCodes')}

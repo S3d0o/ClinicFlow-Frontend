@@ -75,5 +75,9 @@ export const publicRoutes: ScreenRoute[] = [
     component: lazy(() => import('@/features/auth/pages/LockedPage')),
   },
 
-  { path: '/r/:token', screen: 'reminder', layout: 'bare', access: PUBLIC, phase: 2, design: 'patient/12-sms-visit-reminder-page' },
+  {
+    // Opened from the SMS reminder without signing in (FR-APT-10)
+    path: '/r/:token', screen: 'reminder', layout: 'bare', access: PUBLIC, phase: 2, design: 'patient/12-sms-visit-reminder-page',
+    component: lazy(() => import('@/features/appointments/pages/ReminderPage')),
+  },
 ];

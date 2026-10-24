@@ -1,0 +1,18 @@
+{
+  "markAllRead": "Mark all as read",
+  "categories": {
+    "label": "Show",
+    "all": "All",
+    "appointments": "Appointments",
+    "billing": "Payments",
+    "prescriptions": "Prescriptions"
+  },
+  "today": "Today",
+  "earlier": "Earlier",
+  "unread": "Unread",
+  "empty": "No notifications yet.",
+  "emptyCategory": "Nothing in this category.",
+  "preferences": "Choose how we send reminders in Profile & settings",
+  "bellLabel_one": "Notifications, {{count}} unread",
+  "bellLabel_other": "Notifications, {{count}} unread"
+}

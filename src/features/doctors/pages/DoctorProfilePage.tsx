@@ -1,6 +1,6 @@
 import { Award, BadgeCheck, Languages, MapPin } from 'lucide-react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useServiceCatalog, useSpecialties } from '@/features/catalog/hooks/use-catalog';
 import { branchName } from '@/features/org/model/branch-access';
 import { useBranches } from '@/features/org/hooks/use-branches';
@@ -65,7 +65,7 @@ export default function DoctorProfilePage() {
             {profile.reviewCount > 0 && <RatingBadge rating={profile.rating} count={profile.reviewCount} />}
             <span className="inline-flex items-center gap-1 text-body-sm text-muted-foreground">
               <BadgeCheck aria-hidden="true" className="size-4 text-info" />
-              <bdi dir="ltr">{t('profile.license', { number: profile.licenseNo })}</bdi>
+              <Trans t={t} i18nKey="profile.license" values={{ number: profile.licenseNo }} components={{ num: <bdi dir="ltr" /> }} />
             </span>
           </div>
           <ul className="flex flex-wrap gap-2 pt-1 text-body-sm">

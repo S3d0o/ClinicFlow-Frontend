@@ -48,7 +48,16 @@ Trying the phase 1 flows:
 - **Staff invitation:** "Try a staff invitation" under the demo accounts opens `/#/invitation/demo-nurse-invite` (a new nurse at Nasr City), then two-step setup.
 - **Emails:** nothing is sent. Where a real email would carry a link (password reset, email confirmation), the screen shows a "Demo: open the link" button.
 - **Applying as a doctor:** Dr. Ahmed Fathy and the other staff have confirmed emails, so they can go straight through `/#/join`; Mohamed Adel (patient, no email) shows the add-and-confirm-email step. Dr. Nour El-Din Samy already has an application at the interview stage.
-- **Doctors and slots** are generated from weekly schedules in `src/mocks/seed/doctors.ts` for the next 14 days; about one slot in four is shown as taken.
+- **Doctors and slots** are generated from weekly schedules in `src/mocks/seed/doctors.ts` for the next 14 days; about one slot in four is shown as taken, and so is every slot someone books.
+
+Trying the phase 2 flows (sign in as **Mohamed Adel**; his data is in `src/mocks/seed/patient-portal.ts`, dated relative to today):
+- **Home:** today's cardiology visit, already checked in (ticket A-14, third in line). The queue moves on every 20 seconds until he is called in.
+- **Appointments:** three upcoming (today's; an eye exam in 5 days with an optional EGP 100 deposit; a dental check-up in 9 days) and three past (a completed cardiology visit with a summary, waiting for a review; a reviewed dental cleaning; a cancelled dermatology visit). Booking, rescheduling and cancelling change the lists and add a notification about 2 seconds later.
+- **SMS reminder:** "Open an SMS visit reminder" under the demo accounts opens `/#/r/demo-reminder` (the eye exam) without signing in.
+- **Payments:** the deposit and the open invoice (EGP 350) "pay" at once and come back with "Payment received"; there is no Paymob page in the demo.
+- **Records:** the cardiology visit summary (two medicines, a pending test, a follow-up window), the prescription and invoices as sample PDFs, an insurance card and two documents. An uploaded document or added card stays until a reload.
+- **Profile:** no email yet, so email reminders are off until one is added and confirmed. Changing the number takes any unused mobile number and the code `123456`.
+- **Notifications** are seeded in Arabic, Mohamed's language, so they stay Arabic in the English UI.
 
 The UI starts in **Arabic** (right-to-left), as the docs require; switch with the "EN | عربي" toggle. The choice is remembered.
 

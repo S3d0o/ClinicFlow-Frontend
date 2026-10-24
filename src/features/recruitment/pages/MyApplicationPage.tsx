@@ -1,6 +1,6 @@
 import { CalendarDays, MapPin } from 'lucide-react';
 import { Navigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { useSpecialties } from '@/features/catalog/hooks/use-catalog';
 import { branchName } from '@/features/org/model/branch-access';
@@ -62,7 +62,7 @@ export default function MyApplicationPage() {
       <header className="flex flex-col gap-4 border-b border-border pb-6 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-2">
           <p className="eyebrow">
-            <bdi dir="ltr">{t('mine.reference', { reference: application.reference })}</bdi>
+            <Trans t={t} i18nKey="mine.reference" values={{ reference: application.reference }} components={{ num: <bdi dir="ltr" /> }} />
           </p>
           <h1 className="font-display text-headline-lg text-ink sm:text-headline-xl">
             {t('mine.title', { specialty: specialty ? nameIn(specialty, language) : '' })}

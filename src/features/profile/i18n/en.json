@@ -1,0 +1,59 @@
+{
+  "header": {
+    "active": "Active patient",
+    "mrn": "Record number <num>{{mrn}}</num>",
+    "since": "Patient since {{date}}"
+  },
+  "contact": {
+    "title": "Contact details",
+    "phone": "Mobile number",
+    "verified": "Verified",
+    "changePhone": "Change number",
+    "changePhoneHint": "We'll text a code to the new number. It replaces the old one once you enter the code.",
+    "newPhone": "New mobile number",
+    "sendCode": "Send code",
+    "verify": "Confirm new number",
+    "phoneChanged": "Your mobile number was changed.",
+    "email": "Email",
+    "noEmail": "No email added",
+    "notConfirmed": "Not confirmed yet",
+    "addEmail": "Add email"
+  },
+  "channel": {
+    "title": "Booking confirmations and reminders",
+    "intro": "How should we reach you?",
+    "Sms": "SMS",
+    "Email": "Email",
+    "Both": "Both",
+    "needsEmail": "Email reminders need a confirmed email address.",
+    "saved": "Your choice is saved."
+  },
+  "language": {
+    "title": "Language",
+    "intro": "For the app, and for the SMS and emails we send you.",
+    "saved": "Language saved."
+  },
+  "medical": {
+    "title": "Medical information",
+    "badge": "Confidential",
+    "bloodType": "Blood type",
+    "allergies": "Known allergies",
+    "conditions": "Long-term conditions",
+    "none": "None recorded",
+    "severity": {
+      "Mild": "mild",
+      "Moderate": "moderate",
+      "Severe": "severe"
+    },
+    "note": "Your doctor or nurse updates this at your visits. Tell them if something has changed."
+  },
+  "password": {
+    "title": "Change password",
+    "current": "Current password",
+    "new": "New password",
+    "confirm": "Confirm new password",
+    "save": "Save new password",
+    "saved": "Your password was changed."
+  },
+  "signOut": "Sign out"
+}

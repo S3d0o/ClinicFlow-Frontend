@@ -31,17 +31,19 @@ src/
 ├── app/             Composition root: App, providers, the service container, i18n setup,
 │                    the screen catalog and router, navigation config, generic pages
 ├── shells/          The frames screens render in: public, auth, patient, staff, tablet, bare
-├── features/<x>/    One folder per business domain (auth, org, catalog, doctors, recruitment, site, … more per phase):
+├── features/<x>/    One folder per business domain (auth, org, catalog, doctors, recruitment, site, appointments,
+│                    visits, billing, documents, profile, notifications, records, … more per phase):
 │   ├── model/       types and pure domain rules (no React)
 │   ├── api/         <x>.service.ts (the interface) and <x>.mock.ts (the in-memory adapter)
 │   ├── hooks/       TanStack Query hooks over the service
 │   ├── components/  presentational components (props in, markup out)
 │   └── pages/       screens: compose hooks and components
 ├── shared/          Domain-free building blocks: ui/ (design system), lib/ (cn, format, intl,
-│                    phone, password, branch-time, countdown), i18n/ (languages, shared strings,
-│                    error and validation messages), api/ (HTTP client, errors, paging)
+│                    phone, password, branch-time, countdown, calendar, download, places, use-now,
+│                    use-follow-link), i18n/ (languages, shared strings, error and validation
+│                    messages), api/ (HTTP client, errors, paging)
 ├── mocks/           The in-memory backend: db.ts, seed data, session store, SMS-code store, slot
-│                    generator, createMockServices
+│                    generator and availability, notification rendering, sample PDF, createMockServices
 ├── styles/          tokens.css (the theme) and index.css (base styles)
 └── test/            setup, fixtures, renderApp helper
 ```
@@ -53,7 +55,7 @@ Dependencies point inward: `shared` imports nothing from features; a feature use
 - **Single responsibility:** pages compose; components render props; rules live in `model/` functions; validation in zod schemas; data access in services.
 - **Open/closed:** screens are entries in the route catalog, menus are entries in `app/navigation.ts`, statuses map to chip tones in one place. Adding a screen never edits a shell.
 - **Liskov:** the mock adapters and the future HTTP adapters implement the same interfaces with contract-shaped data and `ServiceError` codes, so either can be wired in.
-- **Interface segregation:** small per-domain services instead of one API object. Accounts alone are split by job: `AuthService` (session, sign-in, two-step code), `OtpService`, `RegistrationService`, `PasswordResetService`, `MfaService`, `InvitationService`, `AccountService`. Demo-only capabilities are a separate optional `DemoAccountsService`.
+- **Interface segregation:** small per-domain services instead of one API object. Accounts alone are split by job: `AuthService` (session, sign-in, two-step code), `OtpService`, `RegistrationService`, `PasswordResetService`, `MfaService`, `InvitationService`, `AccountService`. Appointments likewise: `PatientAppointmentsService` (list, book, reschedule, cancel, deposit, review), `QueueStatusService` (the live queue) and `ReminderService` (the signed-out SMS link); documents and insurance cards are `DocumentsService` and `InsuranceService`. Demo-only capabilities are a separate optional `DemoAccountsService`.
 - **Dependency inversion:** screens depend on interfaces from `useServices()`; `main.tsx` decides which implementation backs them.
 
 ## 2. Startup
@@ -64,7 +66,7 @@ Dependencies point inward: `shared` imports nothing from features; a feature use
    - installs the `MutationObserver` that strips Radix's `pointer-events`/`padding-right` body styles (keep it, with the matching rules in `styles/index.css`);
    - calls `initI18n()` (the stored language, else Arabic) and `createMockServices()`;
    - renders `<App services={…} />`.
-3. **`app/App.tsx`**: `HashRouter` → `AppProviders` (services, TanStack Query, toasts) → `AppRoutes`.
+3. **`app/App.tsx`**: `HashRouter` → `AppProviders` (services, TanStack Query, Radix's `DirectionProvider`, toasts) → `AppRoutes`.
 
 ## 3. Routing and access
 
@@ -112,16 +114,18 @@ Backend emails link to `/#/reset-password?…` and `/#/confirm-email?…` (API c
 
 ### Navigation
 
-`app/navigation.ts` holds the staff menu (groups: front desk, nurse station, clinical, management, finance, administration, account), the patient tab bar and the public links. An item names a path; `visibleStaffNav(user)` shows it only when that route's access rule allows the user, so menus and guards always agree.
+`app/navigation.ts` holds the staff menu (groups: front desk, nurse station, clinical, management, finance, administration, account), the patient tab bar and the public links. An item names a path; `visibleStaffNav(user)` shows it only when that route's access rule allows the user, so menus and guards always agree. An item is highlighted on its own path and on the paths in its `activeFor` (`isNavItemActive`): the patient's Records tab stays selected on visits, invoices and documents, which share one set of tabs (`features/records/components/RecordsTabs.tsx`).
 
 ## 4. Services and the mock backend
 
 - **Ports:** each feature declares an interface in `features/<x>/api/<x>.service.ts`. `app/services.ts` collects them in `Services`, provided by `ServicesProvider` and read with `useServices()`.
-- **Adapters:** `features/<x>/api/<x>.mock.ts` implements the interface against `mocks/db.ts`, an in-memory database seeded from `mocks/seed/`. All adapters share one database, so a change on one screen shows up on the others. Every adapter gets `MockDeps`: the database, `latencyMs` (250 ms in the app, 0 in tests) so loading states are visible, and `now()`, so tests control time. Dated seeds (interviews, invitations, reviews) are made relative to `now`, so the demo never goes stale.
-- **What the mock enforces** (as the backend will): SMS codes (`mocks/otp-store.ts`: 6 digits, 5 minutes, 5 tries, 60 s between sends, 15-minute block), sign-in lockout (5 failures, 15 minutes), uniform answers that never reveal whether an account exists, single-use invitation and email-link tokens, price resolution (`features/catalog/model/pricing.ts`, FR-SVC-02), slot generation from weekly shifts in branch time (`mocks/slots.ts`), and the doctor-application rules (one open application, PDF/DOCX up to 5 MB, 90-day cool-down).
+- **Adapters:** `features/<x>/api/<x>.mock.ts` implements the interface against `mocks/db.ts`, an in-memory database seeded from `mocks/seed/`. All adapters share one database, so a change on one screen shows up on the others. Every adapter gets `MockDeps`: the database, `latencyMs` (250 ms in the app, 0 in tests) so loading states are visible, `now()`, so tests control time, `outboxDelayMs` (2 s in the app: notifications arrive after the action, like the backend's outbox) and `queueTickMs` (20 s in the app: the demo queue moves on). Both timings are 0 in tests. Dated seeds (interviews, invitations, reviews, the patient's appointments, visits and invoices) are made relative to `now`, so the demo never goes stale.
+- **What the mock enforces** (as the backend will): SMS codes (`mocks/otp-store.ts`: 6 digits, 5 minutes, 5 tries, 60 s between sends, 15-minute block), sign-in lockout (5 failures, 15 minutes), uniform answers that never reveal whether an account exists, single-use invitation and email-link tokens, price resolution (`features/catalog/model/pricing.ts`, FR-SVC-02), slot generation from weekly shifts in branch time (`mocks/slots.ts`), the doctor-application rules (one open application, PDF/DOCX up to 5 MB, 90-day cool-down), and the booking rules: a slot taken once (`mocks/slot-availability.ts` subtracts booked appointments from the generated slots), no booking in the past, consent required, changes only while Confirmed and more than `CHANGE_WINDOW_HOURS` (2, `features/appointments/model/policy.ts`, read by the screens and the mock alike) before the start, one review per visit. Reminder links stop working after the visit day. Notifications (`mocks/notifications.ts`) are rendered in the recipient's language when they are created, as the backend does, and queued with the outbox delay.
 - **Errors:** adapters throw `ServiceError` with the API's codes (`Auth.InvalidCredentials`, …, `shared/api/service-error.ts`) and optional `details` (`attemptsLeft`, `retryAt`, from ProblemDetails extensions in the HTTP adapters). The query client never retries them.
 - **Permissions in the mock:** `mocks/seed/role-permissions.ts` reproduces the default role × permission matrix (02 §6) that the real backend resolves into `/me`, including scopes; `grantsFor` keeps the widest scope across roles.
 - **Session:** the mock auth service remembers the signed-in demo user in `localStorage` (`clinicflow:demo-session`), so a reload keeps the session.
+- **Live data:** `QueueStatusService.watch(appointmentId, listener)` pushes queue changes and returns an unsubscribe; the HTTP adapter can back it with SignalR or polling without touching the screens. The unread-notification count polls every 60 s and refreshes on every page change until `/hubs/notifications` is wired.
+- **Leaving the app:** payment checkouts return a URL; `useFollowLink` (`shared/lib/use-follow-link.ts`) navigates in the app for a path (the mock's "checkout" returns straight to `?payment=success`) and leaves for Paymob's page otherwise. Files the patient downloads (PDFs, `.ics`) go through `shared/lib/download.ts`.
 - **Server state:** hooks wrap services in TanStack Query (`features/auth/hooks/use-session.ts` keeps the current user under `['auth', 'me']`). Signing out clears the whole cache.
 - **Swapping in the API:** write `<x>.http.ts` adapters on `shared/api/http-client.ts`, map ProblemDetails to `ServiceError`, and build `Services` from them in `main.tsx`. Nothing else changes.
 
@@ -146,7 +150,7 @@ Backend emails link to `/#/reset-password?…` and `/#/confirm-email?…` (API c
 - **Languages:** `ar` (default) and `en` (`shared/i18n/languages.ts`). The choice is stored as `clinicflow:language`; `initI18n` and every change set `<html lang dir>`.
 - **Namespaces:** `common`, `nav`, `screens` in `shared/i18n/locales/{en,ar}/`; features add their own and register them in `app/locales.ts`. The English files define the keys and are typed (`app/i18next.d.ts`), so a wrong key fails `npm run build`. `locales.test.ts` checks that Arabic has exactly the English keys and no empty strings.
 - **Formatting:** `shared/lib/intl.ts` formats money (EGP), numbers, branch wall-clock times and dates with `Intl`, using Egyptian Arabic with Latin digits (`ar-EG-u-nu-latn`), so prices, phone numbers and ticket numbers read the same in both languages.
-- **Layout:** logical utilities only (`ms-`, `ps-`, `start-`, `end-`, `text-start`, `border-e`); sheets open from the start side. Directional icons (arrows, chevrons, sign-out) get the `rtl-flip` class; other icons, numbers, charts and photos are not mirrored. Wrap Latin or numeric values inside Arabic sentences in `<bdi dir="ltr">` (with `Trans` when they come from a translation).
+- **Layout:** logical utilities only (`ms-`, `ps-`, `start-`, `end-`, `text-start`, `border-e`); sheets open from the start side. Radix primitives read the direction from `DirectionProvider` in `AppProviders`; without it tabs, menus and selects lay their content out left to right. Directional icons (arrows, chevrons, sign-out) get the `rtl-flip` class; other icons, numbers, charts and photos are not mirrored. Wrap Latin or numeric values inside Arabic sentences in `<bdi dir="ltr">`. When the value comes inside a translation, wrap only the value, with `Trans` and a tag in the string (`"Invoice <num>{{number}}</num>"`, `components={{ num: <bdi dir="ltr" /> }}`); wrapping the whole sentence lays the Arabic words out backwards.
 - **Reference data** has both names (`nameEn`/`nameAr`, R9); `nameIn(item, language)` (`shared/i18n/bilingual.ts`) and `branchName` pick one, and `textIn` picks a free text written in either or both languages (a doctor's bio).
 - **Text people typed** (names, reviews, notes) gets `dir="auto"`, so a Latin sentence inside the Arabic layout keeps its punctuation in place.
 - **Plurals** use i18next plural keys; Arabic has all six forms (`locales.test.ts` checks them).

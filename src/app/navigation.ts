@@ -19,7 +19,13 @@ export interface NavItem<K extends string = ItemKey> {
   to: string;
   label: K;
   icon: LucideIcon;
+  /** Other paths (and what's under them) where this item shows as current. */
+  activeFor?: string[];
 }
+
+/** Whether a nav item is current at `pathname`: its own path or one of its `activeFor` paths, or below them. */
+export const isNavItemActive = (item: Pick<NavItem<string>, 'to' | 'activeFor'>, pathname: string, exact = false) =>
+  [item.to, ...(item.activeFor ?? [])].some((path) => pathname === path || (!exact && pathname.startsWith(`${path}/`)));
 
 export interface NavGroup {
   label: GroupKey;
@@ -97,7 +103,7 @@ export const patientNav: NavItem<PatientKey>[] = [
   { to: '/patient', label: 'home', icon: House },
   { to: '/patient/book', label: 'book', icon: CalendarPlus },
   { to: '/patient/appointments', label: 'appointments', icon: CalendarCheck },
-  { to: '/patient/visits', label: 'records', icon: FileHeart },
+  { to: '/patient/visits', label: 'records', icon: FileHeart, activeFor: ['/patient/invoices', '/patient/documents'] },
   { to: '/patient/profile', label: 'profile', icon: CircleUser },
 ];
 

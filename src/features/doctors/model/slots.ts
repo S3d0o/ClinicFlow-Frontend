@@ -18,3 +18,6 @@ export function slotsByPeriod(slots: Slot[], date: string): { period: DayPeriod;
   const ofDay = slots.filter((s) => s.date === date).sort((a, b) => a.startTime.localeCompare(b.startTime));
   return periods.map((period) => ({ period, slots: ofDay.filter((s) => periodOf(s.startTime) === period) })).filter((g) => g.slots.length > 0);
 }
+
+/** How far ahead patients can book (V1: slots exist for the next 14 days). */
+export const BOOKING_DAYS = 14;
