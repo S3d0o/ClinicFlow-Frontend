@@ -150,7 +150,7 @@ Open points for the rebuild:
 - **Error messages:** `shared/api/api-error.ts` still holds V1's English messages per error code; they move into the translation files when the HTTP adapters land.
 - **Demo-only pieces:** the demo account list and sample invitation on the sign-in page, the "Demo: open the link" buttons where an email would arrive, and the demo session store exist only in the mock backend (`DemoAccountsService`) and disappear with it.
 - **Demo data resets on reload:** accounts, applications and lockouts made in the browser live in memory. A persisted mock store is possible if reviewers need it.
-- **Dependencies:** `npm audit` reports 16 advisories (11 high) in packages installed before phase 1 (axios, react-router, vite, postcss and Tailwind's chain, among others); `qrcode`, added in phase 1, has none. Upgrading them is its own change.
+- **Dependencies:** `npm audit` reports 4 moderate advisories, all in Tailwind 3's build-time CSS tooling (`postcss-selector-parser` via `postcss-nested`). No fixed version exists for Tailwind 3; moving to Tailwind 4 clears them. The 12 others, including 11 high (axios, react-router, vite, postcss, …), were fixed by `chore/dependency-security` (2026-10-24).
 
 ### Phase 1 (public site and account access): to confirm with the backend
 
