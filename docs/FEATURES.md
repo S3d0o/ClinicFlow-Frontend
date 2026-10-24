@@ -227,7 +227,7 @@ Both actions ask for confirmation first.
 - **Filter:** All or Unread. Changing it goes back to page 1.
 - **Actions:** mark one as read (✓, labelled with the notification's title), or "Mark all as read". Both refresh the notification bell.
 
-The backend creates notifications for bookings, cancellations, completions, reminders (24 hours before), and doctor approval or suspension.
+The backend creates notifications for bookings, cancellations, completions, reminders (24 hours before), and doctor approval or suspension. On the V2 backend they (and the emails) are sent about 2 seconds after the action, not during it ([API_CONTRACT.md §1](API_CONTRACT.md#1-general-conventions)), so the next refresh below picks them up.
 
 **There's no real-time push.** The app shell refreshes unread notifications on navigation, on window focus, when the tab becomes visible, and every 60 seconds while it is visible (see [Navigation](#navigation)).
 
