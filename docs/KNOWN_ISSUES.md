@@ -128,18 +128,6 @@ Open questions for the maintainer:
 
 ## V2
 
-V2 is built on the `v2` branch against the backend's `v2` branch (see `CLAUDE.md`, "V1 and V2"). Its phases P0–P7 and the frontend work for each are planned in the backend repo: `docs/v2/09_MIGRATION_FROM_V1.md` §4 and `docs/v2/10_ROADMAP.md`. The table below tracks the frontend side of the current phase.
-
-### P0: foundation (contract 4.0.0-p0)
-| Item | Backend change | Status |
-|---|---|---|
-| Point at the V2 API and database | Separate `ClinicFlowV2` database; same port under `dotnet run`, ports 5002/3001 under compose | Done: `v2` branch and docs set up |
-| URL fields must be `http`/`https` (contract 4.0.0-p0) | `profilePictureUrl` and `iconUrl` with another scheme return 400 with a field message | The message reaches the user through `getApiErrorMessage`. Optional: check the scheme in the form before sending, since `type="url"` accepts `javascript:` and `file:` |
-| Timestamps end in `Z` | Backend P0 PR 4, merged 2026-10-23 (contract 4.0.0-p0 changelog) | Nothing to change: `parseUtc` already accepts both forms. Still to do: check the screens that show times against the V2 backend |
-| New appointment statuses `CheckedIn`, `InProgress`, `Rescheduled` | Backend P0 PR 7, merged 2026-10-23 (contract 4.0.0-p0 changelog and §7). No route produces them yet; the check-in, queue and reschedule routes come in later phases | To do (small): (1) add the three values to `AppointmentStatus` in `src/types/index.ts`; (2) give each a label and style in `StatusBadge` (the compiler asks for them once the type changes), e.g. "Checked in", "In progress", "Rescheduled". Today an unknown status falls back to the `Pending` style **and label**, so it would read "Pending"; make the fallback show the raw status instead. Not needed yet: filter options (nothing produces these statuses) and new actions. Every action is already gated on explicit statuses (`canComplete` and `canMarkNoShow` on `Confirmed`, `canPatientCancel` on `Confirmed`, notes on `Confirmed`/`Completed`/`NoShow`), so the new statuses get none, which is correct until their routes exist |
-| New error code `Appointment.InvalidStatusTransition` (409) | Backend P0 PR 7: a status change the rules don't allow when no older code applies | Nothing to change: `getApiErrorMessage` shows its message, and with the statuses the API creates in P0 no route returns it |
-| `hasReview` was always `false` on `GET /api/appointments/{id}` and the doctor's list | Backend P0 PR 7 bug fix | Nothing to change: the patient list, which drives "Leave a review", was already correct, and the doctor page doesn't read the field. Screens built on those two routes can now rely on it |## V2
-
 V2 is built on the `v2` branch against the backend's `v2` branch (see `CLAUDE.md`, "V1 and V2"). Its phases P0–P7 and the frontend work for each are planned in the backend repo: `docs/v2/09_MIGRATION_FROM_V1.md` §4 and `docs/v2/10_ROADMAP.md`.
 
 ### UI rebuild (frontend phases)
