@@ -1,0 +1,70 @@
+/*
+ * ClinicFlow Navy — the app's theme (design-v2/DESIGN.md). Every color is an HSL channel triplet that
+ * tailwind.config.js reads as `hsl(var(--name) / <alpha-value>)`, so opacity modifiers work
+ * (`bg-primary/90`, `bg-success/10`). Change colors and fonts here, not in components.
+ *
+ * Navy is the brand and interactive color, deep navy (ink) is structure, orange (highlight) is a
+ * sparing accent, and green appears only as a semantic status. Semantic colors are readable (WCAG AA)
+ * as text on a 10% tint of themselves.
+ */
+:root {
+  /* Canvas and surfaces */
+  --background: 220 60% 98%;          /* #F7F9FD */
+  --foreground: 210 8% 14.1%;         /* #212427 */
+  --card: 0 0% 100%;
+  --card-foreground: 210 8% 14.1%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 210 8% 14.1%;
+  --muted: 214 26% 94.7%;             /* #EEF1F5 fills inside cards */
+  --muted-foreground: 215 12% 40.4%;  /* #5B6573 secondary text */
+  --accent: 214 44% 93.7%;            /* #E8EEF6 hover fill */
+  --accent-foreground: 210 54% 25.5%;
+
+  /* Brand */
+  --primary: 210 54% 25.5%;           /* #1E4164 navy: buttons, links, selected states */
+  --primary-foreground: 0 0% 100%;
+  --primary-hover: 210 53% 19.6%;     /* #16324E */
+  --ink: 212 51% 15.3%;               /* #13263B deep navy: logo, headings, dark bands */
+  --ink-foreground: 0 0% 100%;
+  --secondary: 214 44% 93.7%;         /* #E8EEF6 tonal buttons, selected nav item, avatars */
+  --secondary-foreground: 210 54% 25.5%;
+  --highlight: 22 100% 50%;           /* #FF5E00 orange: unread dots, small tags, active underline */
+  --highlight-strong: 21 100% 35.1%;  /* #B33F00 orange text on a highlight tint */
+
+  /* Semantic */
+  --info: 204 99% 30.4%;              /* #015C9A */
+  --info-foreground: 0 0% 100%;
+  --success: 163 94% 24.3%;           /* #047857 */
+  --success-foreground: 0 0% 100%;
+  --warning: 23 83% 31.4%;            /* #92400E */
+  --warning-foreground: 0 0% 100%;
+  --destructive: 0 74% 41.8%;         /* #B91C1C */
+  --destructive-foreground: 0 0% 100%;
+  --violet: 273 67% 39.4%;            /* #6B21A8 Admin role only */
+  --violet-foreground: 0 0% 100%;
+
+  /* Lines and focus */
+  --border: 215 28% 86.5%;            /* #D3DBE6 hairlines */
+  --input: 215 27% 82.4%;             /* #C6D0DE control borders */
+  --ring: 204 99% 30.4%;              /* focus ring = info blue */
+
+  /* Controls and buttons 10px; panels and cards 12px (rounded-xl); dialogs 16px (rounded-2xl) */
+  --radius: 0.625rem;
+  /* Tailwind v4 spacing variable used by a few generated shadcn components */
+  --spacing: 0.25rem;
+
+  /* Staff sidebar */
+  --sidebar-background: 0 0% 100%;
+  --sidebar-foreground: 215 12% 40.4%;
+  --sidebar-active: 214 44% 93.7%;
+  --sidebar-active-foreground: 210 54% 25.5%;
+
+  /* Fonts. Arabic text uses IBM Plex Sans Arabic (Inter and Plus Jakarta Sans have no Arabic glyphs). */
+  --font-sans: 'Inter', 'IBM Plex Sans Arabic', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Plus Jakarta Sans', 'IBM Plex Sans Arabic', 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+:root[dir='rtl'] {
+  --font-sans: 'IBM Plex Sans Arabic', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'IBM Plex Sans Arabic', 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+}

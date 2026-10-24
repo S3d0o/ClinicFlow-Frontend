@@ -1,0 +1,81 @@
+{
+  "appName": "ClinicFlow",
+  "skipToContent": "Skip to content",
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "back": "Back",
+    "close": "Close",
+    "search": "Search",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "createAccount": "Create account",
+    "tryAgain": "Try again",
+    "openMenu": "Open menu",
+    "myAccount": "My account",
+    "viewAll": "View all"
+  },
+  "language": {
+    "label": "Language",
+    "switchTo": "Switch to English"
+  },
+  "states": {
+    "loading": "Loading…",
+    "errorTitle": "Something went wrong",
+    "errorBody": "We couldn't load this. Check your connection and try again.",
+    "emptyTitle": "Nothing here yet"
+  },
+  "crash": {
+    "title": "This page couldn't be displayed",
+    "body": "Something unexpected happened. Reloading usually fixes it.",
+    "reload": "Reload page"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "The page you're looking for doesn't exist or has moved.",
+    "home": "Go to the home page"
+  },
+  "forbidden": {
+    "title": "You don't have access to this page",
+    "body": "Your account doesn't have permission to open it. If you think it should, ask your clinic administrator.",
+    "home": "Go to my home page"
+  },
+  "comingSoon": {
+    "eyebrow": "Phase {{phase}}",
+    "body": "This screen is designed and will be built in phase {{phase}} of the V2 frontend.",
+    "design": "Design reference:"
+  },
+  "roles": {
+    "Admin": "Admin",
+    "Manager": "Manager",
+    "Receptionist": "Receptionist",
+    "Nurse": "Nurse",
+    "Doctor": "Doctor",
+    "Accountant": "Accountant",
+    "Patient": "Patient",
+    "Applicant": "Doctor applicant"
+  },
+  "branch": {
+    "label": "Branch",
+    "all": "All branches"
+  },
+  "topbar": {
+    "search": "Search patients by name, phone or MRN",
+    "notifications": "Notifications",
+    "account": "Account menu"
+  },
+  "demo": {
+    "title": "Demo sign-in",
+    "intro": "The V2 frontend runs on sample data. Pick an account to see its workspace.",
+    "password": "Every demo account uses the password <value>{{password}}</value>, and every SMS or authenticator code is <value>{{code}}</value>.",
+    "signInAs": "Sign in as {{name}}"
+  },
+  "footer": {
+    "tagline": "One clinic, every branch: book, visit, pay and get your records in one place.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "contact": "Contact",
+    "rights": "© {{year}} ClinicFlow. All rights reserved."
+  }
+}

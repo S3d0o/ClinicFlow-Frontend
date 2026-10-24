@@ -1,0 +1,57 @@
+{
+  "public": {
+    "findDoctor": "ابحث عن طبيب",
+    "branches": "الفروع",
+    "services": "الخدمات والأسعار",
+    "joinAsDoctor": "انضم كطبيب"
+  },
+  "patient": {
+    "home": "الرئيسية",
+    "book": "احجز",
+    "appointments": "مواعيدي",
+    "records": "السجلات",
+    "profile": "حسابي"
+  },
+  "groups": {
+    "frontDesk": "الاستقبال",
+    "nurse": "محطة التمريض",
+    "clinical": "العيادة",
+    "management": "الإدارة",
+    "finance": "المالية",
+    "administration": "إدارة النظام",
+    "account": "الحساب"
+  },
+  "items": {
+    "deskToday": "اليوم",
+    "deskQueue": "قائمة الانتظار",
+    "deskPatients": "المرضى",
+    "deskBook": "حجز",
+    "deskPayments": "المدفوعات",
+    "deskCash": "الخزينة",
+    "nurseTriage": "قائمة الفرز",
+    "doctorToday": "اليوم",
+    "doctorPatients": "المرضى",
+    "doctorSchedule": "الجدول والإجازات",
+    "managerDashboard": "لوحة المتابعة",
+    "managerApprovals": "الموافقات",
+    "managerSchedules": "الجداول",
+    "managerLeave": "الإجازات",
+    "managerRecruitment": "التوظيف",
+    "managerCatalog": "الخدمات والأسعار",
+    "managerDailyClose": "الإغلاق اليومي",
+    "managerReports": "التقارير",
+    "financeOverview": "نظرة عامة",
+    "financeInvoices": "الفواتير",
+    "financePayers": "شركات التأمين والخطط",
+    "financeClaims": "المطالبات",
+    "adminOverview": "نظرة عامة",
+    "adminStaff": "الموظفون",
+    "adminRoles": "الأدوار والصلاحيات",
+    "adminBranches": "الفروع",
+    "adminSpecialties": "التخصصات",
+    "adminSettings": "الإعدادات",
+    "adminIntegrations": "التكاملات",
+    "adminAudit": "سجل التدقيق",
+    "notifications": "الإشعارات"
+  }
+}

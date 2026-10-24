@@ -1,258 +1,77 @@
-# ClinicFlow Frontend — Features
+# ClinicFlow Frontend — Features (V2)
 
-What each kind of user can do in the app, page by page, and the rules behind each feature. Page components are in `src/pages/`; routes are listed in [ARCHITECTURE.md §3](ARCHITECTURE.md#3-routing). Where a page has a known limitation, it's noted here and tracked in [KNOWN_ISSUES.md](KNOWN_ISSUES.md).
+What each kind of user can do in the V2 app and the rules behind it. V2 is built in phases from the Stitch designs in [`design-v2/`](../design-v2/README.md); this file grows with each phase. Progress is tracked in [KNOWN_ISSUES.md](KNOWN_ISSUES.md#v2). V1's features are documented on the `main` branch.
+
+The app runs on sample data until the `/api/v2` endpoints exist (see [DEVELOPMENT.md](DEVELOPMENT.md#2-running-the-app) for the demo accounts).
 
 ---
 
-## Roles at a glance
+## Roles and home pages
 
-| Role | How the account is created | Main pages |
+V2 has seven roles (backend `docs/v2/02_ROLES_AND_PERMISSIONS.md`). A role is a bundle of permissions, held at a scope: own records, assigned branches, or the whole organization. **The app checks permissions, never role names**, so a clinic can adjust what each role may do.
+
+| Who | Works in | Home page |
 |---|---|---|
-| **Visitor** (signed out) | — | Landing, Find Doctors, Doctor details, Register, Sign in |
-| **Patient** | Registers, then confirms their email | Book appointment, My Appointments, Profile, Notifications |
-| **Doctor** | Registers, confirms their email, then waits for **admin approval** before appearing in search | Dashboard, Appointments, Schedules, Profile, Notifications |
-| **Admin** | Created by the backend at startup (see [BACKEND_OVERVIEW.md](BACKEND_OVERVIEW.md)) | Dashboard, Pending doctors, Specialties, Notifications |
+| Patient | Patient portal (mobile-first) | `/patient` |
+| Doctor applicant (no role) | Public site | `/my-application` |
+| Receptionist | Staff workspace: front desk | `/desk` |
+| Nurse | Tablet workspace: nurse station | `/nurse` |
+| Doctor | Staff workspace: clinical | `/doctor` |
+| Manager (organization or branch) | Staff workspace: management (and finance) | `/manager` |
+| Accountant (optional) | Staff workspace: finance | `/finance` |
+| Admin | Staff workspace: administration | `/admin` |
 
-## Navigation
+A user with several roles (an organization manager who is also a doctor) sees every workspace their permissions open; the home page is the first match in the order manager, admin, doctor, receptionist, nurse, accountant, patient.
 
-Signed-in users work inside an **app shell** (`src/components/shell/AppShell.tsx`): a sidebar with the role's navigation (fixed on large screens, a slide-in panel opened from the menu button on smaller ones) and a slim top bar. Visitors get a top **Navbar** (`src/components/Navbar.tsx`). The current page is highlighted in both. The links per role (`src/lib/navigation.ts`):
+## Language
 
-| Role | Main navigation |
-|---|---|
-| Visitor | Find doctors (plus "Sign in" and "Create account") |
-| Patient | Appointments, Find doctors |
-| Doctor | Dashboard, Appointments, Schedule |
-| Admin | Overview, Doctor approvals, Specialties |
+Arabic is the default and lays the app out right-to-left; English is one click away in every frame ("EN | عربي"). The choice is remembered. Prices are in EGP with Latin digits in both languages, and times are the branch's local wall-clock time.
 
-Signed-in users also get:
-- **Sidebar "Account" group:** Notifications (with the unread count) and Profile (patients and doctors), plus a user card with the role badge and **Sign out**.
-- **Top bar:** the workspace name ("Patient portal", "Clinic workspace", "Clinic administration") with a role pill.
-- **Notification bell:** shows the total unread count (from the API's `X-Total-Count` header, so it isn't capped by paging) and lists the 5 newest unread notifications with how long ago they arrived. Clicking one marks it as read and opens the related appointments page. "Mark all read" clears them, and **"View all notifications"** is always available. The unread list refreshes on navigation, when the window regains focus, every 60 seconds, and when the Notifications page changes something.
-- **Account menu:** name, email and role badge, with Profile (patients and doctors), Notifications and Sign out.
+## Frames and navigation
 
-A "Skip to content" link appears on keyboard focus. The footer is full for visitors and a slim line for signed-in users. If a page crashes while rendering, it shows "This page couldn’t be displayed" with a reload button instead of a blank screen.
+- **Visitors:** a top navbar with Find a doctor, Branches, Services & prices and Join as a doctor, the language toggle, and Sign in / Create account (or "My account" when signed in). Below `lg` the links move into a side sheet. A footer lists the branches.
+- **Sign-in and sign-up pages:** a slim top bar (logo, back to the home page, language) and a centred column.
+- **Patient portal:** a top bar with the language toggle and notifications, and a bottom tab bar with Home, Book, Appointments, Records and Profile. From `md` up the tabs move into the top bar.
+- **Staff workspaces:** a 260px sidebar (a sheet below `lg`) with the logo, the **branch switcher**, the menu and the user's card (name, role, sign out), plus a top bar with patient search (for users who can open the patient list), language and notifications. The menu shows one group per workspace the user's permissions open: front desk, nurse station, clinical, management, finance, administration, and account (notifications).
+- **Nurse station:** a 72px icon rail and large touch targets for tablets, with the branch switcher and the user in the top bar.
+- **Waiting-room TV and the SMS reminder page:** full screen, no app chrome.
 
----
+### Branch switcher
 
-## Public pages
+Staff work on one branch at a time. Branch staff see only their branches; organization-wide roles can also pick **All branches**. The choice is remembered.
 
-### Landing page — `/`
-A marketing page with:
-- a hero with calls to action ("Find a doctor", "Create a free account") and an illustration of the booking UI. The sample doctor in the illustration is decorative and hidden from screen readers;
-- "How it works";
-- what the product does for patients, doctors and clinic admins;
-- trust points;
-- a final call to action.
+## Access rules
 
-It calls no API and shows no invented statistics.
+- Opening a protected page while signed out goes to sign-in, then back to that page once signed in, if the user may open it; otherwise to their home page.
+- Signed-in users who open sign-in or sign-up pages go straight on.
+- A page outside the user's permissions shows "You don't have access to this page" with a link home.
+- Branch-wide pages (the manager dashboard, reports) need the permission at branch or organization scope; a doctor's right to see their *own* reports doesn't open them.
+- Unknown paths show "Page not found". A crash in one page shows "This page couldn't be displayed" with a reload button instead of a blank screen.
 
-### Find a doctor — `/doctors`
-- **Search by name and city.** Typing applies after a 300 ms pause; Enter or the Search button applies it straight away.
-- **Filter by specialty:** a row of chips (active specialties from `GET /api/Specialty`) that applies immediately.
-- **Sort by** Top Rated, Lowest Fee or Most Experienced.
-- **Results:** 12 doctors per page as cards showing initials, name, specialty, rating ("New" when there is none yet), city, years of experience and fee. The whole card links to the doctor's profile.
-- **Paging:** previous/next. Changing any filter or the sort goes back to page 1. Next is disabled when a page comes back with fewer than 12 results.
-- **States:**
-  - skeleton cards while loading;
-  - "No doctors match your search", with **Clear filters** when filters are set;
-  - "No more doctors" on an empty later page, with paging still visible so you can go back;
-  - an error message with **Try again** if the request fails.
-- Only approved, active doctors are returned by the API.
+## Signing in
 
-### Doctor details — `/doctors/:id`
-- **Header:** initials, specialty, name, average rating and review count, then fact tiles for experience, city and fee.
-- **Booking card** (sticky on desktop; on mobile it sits just after the header):
-  - shows the fee and address;
-  - patients see **Book an appointment** (→ `/patient/book/:id`);
-  - visitors see **Sign in to book**, which returns them to the booking page after signing in, plus a link to create an account;
-  - doctors and admins see a note that booking is for patient accounts.
-- **About:** the doctor's bio.
-- **Patient reviews:** the 10 newest visible reviews, with stars, comment, patient name and date.
-- **States:**
-  - "Doctor not found" (404), with a link back to the list;
-  - a failed request shows an error with **Try again** instead.
+**Now (foundation):** the sign-in page lists the demo accounts; choosing one signs in as that user.
 
-### Register as patient — `/register/patient`
-- **Sections:**
-  - **Account:** email, password;
-  - **About you:** first and last name (≤ 50 characters), phone, gender, date of birth;
-  - **Health & emergency contact** (optional): blood type, allergies, chronic conditions, emergency contact name and phone.
-- **Password:** a live checklist shows each rule as you type: at least 8 characters, upper case, lower case, a number and a special character. Submitting is blocked until all are met.
-- **Required fields** are marked with \*. Empty fields are flagged by the browser, and a missing gender gets an inline message.
-- **Phone:** international format, e.g. `+201234567890`.
-- **Errors:** server validation errors appear as one toast per message.
-- **On success:** a "check your inbox" screen. The account can't sign in until the email is confirmed.
+**Phase 1** builds the designed flow: one **phone-or-email** field and a password for everyone; staff then enter a two-step code. The account decides where the user lands, so there is no "patient / staff" switch.
 
-### Register as doctor — `/register/doctor`
-- **Sections:**
-  - **Account** and **About you**: the same fields as for patients;
-  - **Your practice:** specialty, years of experience, consultation fee (1–10,000 EGP), bio (≤ 500 characters, with a counter), clinic address (≤ 300) and city (≤ 100).
-- Gender and specialty are checked before sending, with inline messages.
-- **On success:** a three-step "what happens next": confirm your email, wait for **admin approval**, then set your weekly hours.
+### How doctors join (phase 1)
 
-### Sign in — `/login`
-- Email and password, with an accessible show/hide toggle and a "Forgot password?" link next to the password label.
-- **On success,** users return to the page they were trying to open (for example the booking page), if their role can open it. Otherwise they go to their home page: Admin → `/admin/dashboard`, Doctor → `/doctor/dashboard`, Patient → `/patient/appointments`.
-- Signed-in users who open the sign-in, registration or forgot-password pages are sent straight to their home page. A signed-in user who opens another role's page also lands on their own home page.
-- **Errors** appear inline above the form. They explain the cause: wrong credentials, account locked for 15 minutes after 5 failed attempts, account suspended, or email not confirmed.
-- Links: create a patient account, join as a doctor.
+1. **Apply:** "Join as a doctor" (navbar, sign-in page) opens the application: create an account with phone and email (both verified by code), then specialty, license number, years of experience, preferred branch, a CV (required) and a cover letter (optional). The application starts as *Applied*.
+2. **Follow it:** the applicant signs in with the same single field and lands on **My application**: the stage, interview details, history, and Withdraw.
+3. **Review:** a manager opens **Recruitment**, reviews the CV, and moves the application to *Interview* (date, branch, interviewer, note) and then *Accepted* (start date, branch) or *Rejected* (optional message), seeing each email before it is sent.
+4. **Start:** acceptance creates a doctor staff member, active from the start date. The same login then opens the doctor workspace.
 
-### Forgot password — `/forgot-password`
-Enter an email to receive a reset link. The page always says "If an account exists with … you will receive a link", so it never reveals whether an email is registered. The one exception is a 429 (too many requests from this connection, [API contract §2.7](API_CONTRACT.md#27-rate-limiting)): no email was sent, so the page stays on the form and shows "Too many attempts. Please wait N seconds and try again." The limit is per IP address, so this reveals nothing about the account.
+## Screens by phase
 
-### Reset password — `/reset-password` (opened from the email)
-- Reads `userId` and `token` from the link.
-- Asks for the new password twice and checks that they match.
-- **On success,** all of the user's sessions are signed out by the server and the page links to Sign In.
-- If the link is missing its parameters, the user is sent to Forgot password.
+Every V2 screen is already routed: until its phase lands, it shows a placeholder with the phase number and its design folder.
 
-### Confirm email — `/confirm-email` (opened from the email)
-Confirms the account automatically from the link's `userId` and `token`, then shows success with a Sign In button, or "The confirmation link is invalid or has expired". A 429 (rate limit) shows "Too many attempts" with the wait time and a **Try again** button instead, because the link itself may be fine.
-
-**Rate limiting on every auth form.** Sign-in, both registrations, confirm email, forgot password and reset password share one limit per IP address (10 per minute by default). Over it, every form shows "Too many attempts. Please wait N seconds and try again." (`getApiErrorMessage` in `src/lib/api-error.ts`), and nothing retries automatically.
-
----
-
-## Patient
-
-### Book an appointment — `/patient/book/:doctorId`
-
-```mermaid
-flowchart LR
-    A[Doctor details] -->|Book Appointment| B[Pick a date]
-    B --> C[Pick a time slot]
-    C --> D[Optional reason for visit]
-    D -->|Confirm Booking| E[Review dialog]
-    E -->|Confirm| F{API}
-    F -->|201| G[My Appointments]
-    F -->|slot taken / in the past| H[Error message + slot list refreshed]
-```
-
-The page is laid out as three numbered steps (date, time, reason), next to a **booking summary** card. The summary sticks on desktop and sits at the bottom on mobile. It shows the selected date, time, clinic and fee, and holds the **Review & confirm** button.
-
-- **Date strip:** 7 days at a time, starting today, with paging up to **14 days ahead**, the window in which the backend creates slots.
-- **Slots:** only *available* slots for the chosen date, grouped into Morning, Afternoon and Evening and shown as "9:30 AM". Changing the date clears the selected slot, so a slot from another day can't be booked by mistake. Date and time buttons announce their selected state to screen readers.
-- **Reason:** optional, up to 500 characters with a counter.
-- **Confirmation dialog:** shows the doctor, the slot's own date and time, the fee, and the reason.
-- **On success** a toast appears and the user goes to My Appointments. A booking is **Confirmed** immediately; the doctor doesn't need to accept it. Both sides get a notification and the patient gets a confirmation email.
-- **If someone else took the slot first,** or it has already started, the page explains why and reloads the slots.
-
-### My appointments — `/patient/appointments`
-- **List:** newest first, 10 per page. A segmented filter offers All, Confirmed, Completed and Cancelled.
-- **Each card shows:**
-  - a calendar date tile;
-  - doctor, time range and reason;
-  - a status badge (dot + text, so the state never depends on color alone);
-  - the doctor's notes (if any);
-  - who cancelled, and why.
-- **Cancel appointment** (Confirmed appointments): opens a dialog naming the visit, with an optional reason. Patients can cancel **up to 2 hours before** the start. Inside that window the button is hidden and the card says the visit can no longer be cancelled. Cancelling frees the slot for others.
-- **Leave a review** (Completed appointments not yet reviewed): a 1–5 star rating (a keyboard-accessible radio group with labels such as "Excellent") and an optional comment of up to 300 characters, with a counter. One review per appointment. The doctor's average rating updates.
-- **Book an appointment** goes to Find a doctor.
-
-### Profile — `/patient/profile`
-A summary card (name, email, member since), then two tabs, each saved separately:
-- **Personal:** first and last name, phone, date of birth, gender, profile picture URL (`PATCH /api/profile/me`).
-- **Medical:** blood type, allergies, chronic conditions, emergency contact name and phone (`PATCH /api/patients/profile`).
-
-If the profile fails to load, the page shows an error with **Try again** rather than an empty form, which could blank out data if saved.
-
-Limitation: a medical field can't be cleared. Emptying it leaves the old value in place.
-
----
-
-## Doctor
-
-### Dashboard — `/doctor/dashboard`
-- **Greeting** with today's date, plus quick links to Manage schedule and All appointments.
-- **Stats:** today's patients, completed today (with a progress bar), remaining today (with the next start time), and upcoming confirmed visits (only visits that haven't started). They're based on the doctor's 50 most recent appointments.
-- **Today's queue:** today's appointments in time order, with patient, reason and status. A **Complete** button appears once the appointment's start time has passed.
-- **Weekly availability:** all seven days, showing each day's hours, "Off", or a **Paused** label for inactive schedules. Today is highlighted.
-
-### Appointments — `/doctor/appointments`
-- **List:** newest first, 10 per page. A segmented filter offers All, Confirmed, Completed, Cancelled and No-show. "Pending" was removed because the backend never uses it.
-- **Mark as completed:** offered for Confirmed appointments **after their start time**, with a confirmation dialog naming the patient. Completing lets the patient leave a review.
-- **Mark as no-show:** offered for Confirmed appointments from **15 minutes after their start time**, with a confirmation dialog. The patient is notified, and the visit can no longer be completed, cancelled or reviewed.
-- **Add / Edit notes:** clinical notes on Confirmed, Completed or No-show appointments (up to 4,000 characters). The patient can see them.
-
-There is no cancel button for doctors yet, although the API allows doctors to cancel.
-
-### Schedules — `/doctor/schedules`
-A doctor's weekly availability. Each schedule defines one weekday's working hours and slot length, and the backend turns it into bookable slots for the **next 14 days**.
-
-- **Weekly planner:** seven day cards (Sunday to Saturday). Each shows its hours, slot length and how many slots that makes, with a status dot (active, paused or day off) and a **Paused** label for inactive days.
-- **One schedule per weekday.** "Add hours" appears only on days without one and opens the dialog with that day already chosen. The dialog's day list only offers free days, and the header's "Add hours" is disabled once all 7 days are set.
-- **Slot length:** 10, 15, 20, 30, 45, 60, 90 or 120 minutes. The dialog previews how many slots the hours produce.
-- **Validation before saving:** both times are required, the end must be after the start, and the window must fit at least one slot. The error appears in the dialog and the save button stays disabled until it's fixed.
-- **Edit:** change the hours, slot length or **Accept bookings** switch (pause a day without deleting it). Saving regenerates future *available* slots. Booked slots are kept. A paused schedule produces no slots.
-- **Delete:** removes the schedule and stops slot generation for that day. The backend may refuse if past appointments used its slots.
-
-### Profile — `/doctor/profile`
-- **Personal tab:** the same fields as the patient's personal tab.
-- **Practice tab:** consultation fee, bio (with a counter), clinic address and city.
-  - The **fee is required** on every save (more than 0, at most 10,000 EGP).
-  - The tab starts empty because the API has no endpoint that returns a doctor's own professional details. **Blank fields keep their current values.**
-
----
-
-## Admin
-
-### Dashboard — `/admin/dashboard`
-- **Approvals banner:** shown when doctors are waiting, linking to the approvals page.
-- **Six counters:** doctors, patients, appointments, reviews, specialties, pending approvals (highlighted when any are waiting).
-- **Appointment flow:** a stacked bar of appointments by status (decorative), plus a tile per status with its count and percentage, which carries the same information as text.
-- **Rates:** completion and cancellation rate, each with a progress bar.
-- **Quick actions:** Review pending doctors and Manage specialties.
-
-The numbers load once, when the page opens. If they fail to load, the page shows an error with **Try again**.
-
-### Doctor approvals — `/admin/pending-doctors`
-Doctors waiting for approval, as a table on desktop and cards on mobile: name, specialty, city, experience and fee.
-- **Approve:** the doctor appears in search and is notified.
-- **Reject:** **suspends** the account, which deactivates it so the doctor can't sign in. The confirmation dialog says this explicitly.
-
-Both actions ask for confirmation first.
-
-### Specialties — `/admin/specialties`
-- **List:** all specialties, including inactive ones, with an Active/Inactive badge and a count in the page description. A search box filters the list by name or description.
-- **Add / Edit:** name (required, ≤ 100 characters, must be unique), description (≤ 500, with a counter), icon URL (an absolute URL, optional), and an **Active** switch (on for a new specialty). Turning it off hides the specialty from patients and doctor registration; turning it on again reactivates it. Enter submits the form.
-- **Delete:** with confirmation. The API refuses if any doctor uses the specialty.
-
----
-
-## Shared features
-
-### Notifications — `/notifications`
-- **Inbox:** newest first, 20 per page with "Page 2 of 5" paging, with an icon per type (reminder, confirmed, cancelled, completed, system) and a relative time ("3 hours ago"; hover for the exact time). Unread items are highlighted and announced as "Unread" to screen readers.
-- **Unread count:** the header counts unread notifications on every page, not only the one shown.
-- **Filter:** All or Unread. Changing it goes back to page 1.
-- **Actions:** mark one as read (✓, labelled with the notification's title), or "Mark all as read". Both refresh the notification bell.
-
-The backend creates notifications for bookings, cancellations, completions, reminders (24 hours before), and doctor approval or suspension.
-
-**There's no real-time push.** The app shell refreshes unread notifications on navigation, on window focus, when the tab becomes visible, and every 60 seconds while it is visible (see [Navigation](#navigation)).
-
-### Appointment lifecycle
-
-```mermaid
-stateDiagram-v2
-    [*] --> Confirmed: patient books an available slot
-    Confirmed --> Cancelled: cancelled (patient ≥ 2h before start, doctor or admin any time)
-    Confirmed --> Completed: doctor marks complete
-    Confirmed --> NoShow: doctor marks no-show (≥ 15 min after start)
-    Completed --> Reviewed: patient leaves one review
-    Cancelled --> [*]: slot becomes available again
-```
-
-`Pending` exists in the API's status list but is never set. Admins can also mark a no-show through the API (contract #24b), but the app has no admin appointment list.
-
-### Email-driven flows
-
-| Email | Sent when | Link opens | What happens |
-|---|---|---|---|
-| Confirm your email | Registration | `/#/confirm-email?userId=…&token=…` | The account is confirmed and can sign in |
-| Reset your password | Forgot password | `/#/reset-password?userId=…&token=…` | The user sets a new password; all sessions are revoked |
-| Appointment confirmed | Booking | — | Informational |
-| Appointment reminder | About 24 hours before | — | Informational (hourly background job) |
-
-### Sessions
-Signing in keeps the user signed in across page reloads for up to 7 days of inactivity. Access tokens renew silently in the background. A rejected session (expired, revoked, account suspended or password reset) signs the user out and sends them to the sign-in page. Temporary server or network problems don't sign the user out. Details are in [ARCHITECTURE.md §5](ARCHITECTURE.md#5-authentication-and-session).
+| Phase | Area | Screens |
+|---|---|---|
+| 0 | Foundation | Frames, language, navigation, access rules, demo sign-in (done) |
+| 1 | Public and account access | Landing, sign in, staff two-step code and setup, accept invitation, patient sign-up, verify phone, reset password (2), too many attempts, find a doctor, doctor profile, join as a doctor, my application |
+| 2 | Patient portal | Home with live queue, booking (2 steps + confirmation), my appointments, appointment details, SMS reminder page, visits, visit summary, invoices, documents and insurance, profile and settings, notifications |
+| 3 | Front desk and nurse station | Today, patient search and registration, book / walk-in, check-in, queue board, waiting-room TV, checkout, cash session, triage queue, vitals form |
+| 4 | Doctor | Today, encounter workspace, patient history, schedule and leave |
+| 5 | Manager | Dashboard, services and prices, recruitment, application detail, doctor schedules, leave and reschedule worklist, approvals, daily close, reports |
+| 6 | Admin | Overview, staff, staff member, roles and permissions, branches, settings, integrations and templates, audit log, specialties |
+| 7 | Finance | Overview, invoices, payers and plans, claims |

@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { HashRouter } from 'react-router-dom';
-import App from './App';
-import { reloadOnceForChunkError } from './lib/chunk-reload';
-import './index.css';
+import { App } from './app/App';
+import { initI18n } from './app/i18n';
+import { createMockServices } from './mocks/create-mock-services';
+import { reloadOnceForChunkError } from './shared/lib/chunk-reload';
+import './styles/index.css';
 
 // A preloaded chunk from an older deploy is gone: reload to pick up the new version
 window.addEventListener('vite:preloadError', (event) => {
@@ -22,10 +23,14 @@ const observer = new MutationObserver(() => {
 });
 observer.observe(document.body, { attributes: true, attributeFilter: ['style'] });
 
+initI18n();
+
+// The V2 API isn't built yet, so the app runs on the in-memory mock backend (src/mocks). The HTTP
+// adapters will be wired in here, behind the same `Services` interfaces.
+const services = createMockServices();
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <HashRouter>
-      <App />
-    </HashRouter>
+    <App services={services} />
   </React.StrictMode>
 );
