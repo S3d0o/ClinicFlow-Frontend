@@ -1,4 +1,4 @@
-import { ArrowRight, MailPlus } from 'lucide-react';
+import { ArrowRight, MailPlus, MessageSquareText } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { Avatar } from '@/shared/ui/Avatar';
@@ -60,6 +60,12 @@ export function DemoAccountsPanel() {
         <Link to={demo.data.invitationPath} className="flex items-center gap-2 text-label-md text-primary hover:underline">
           <MailPlus aria-hidden="true" className="size-4" />
           {t('demo.invitation')}
+        </Link>
+      )}
+      {demo.data.reminderPath && (
+        <Link to={demo.data.reminderPath} className="flex items-center gap-2 text-label-md text-primary hover:underline">
+          <MessageSquareText aria-hidden="true" className="size-4" />
+          {t('demo.reminder')}
         </Link>
       )}
     </section>

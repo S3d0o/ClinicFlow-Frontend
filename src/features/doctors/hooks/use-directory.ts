@@ -34,6 +34,16 @@ export function useDoctorSlots(doctorId: string, query: SlotQuery | null) {
   });
 }
 
+/** The services bookable at a branch, with their lowest price there (booking step 1). */
+export function useBranchServices(branchId: string | undefined) {
+  const { directory } = useServices();
+  return useQuery({
+    queryKey: ['directory', 'branch-services', branchId ?? ''],
+    queryFn: () => directory.listBranchServices(branchId!),
+    enabled: !!branchId,
+  });
+}
+
 export function useDoctorReviews(doctorId: string, request: PageRequest & { rating?: number }) {
   const { directory } = useServices();
   return useQuery({

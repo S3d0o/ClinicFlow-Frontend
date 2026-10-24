@@ -1,4 +1,5 @@
 import { createContext, useContext } from 'react';
+import type { PatientAppointmentsService, QueueStatusService, ReminderService } from '@/features/appointments/api/appointments.service';
 import type {
   AccountService,
   AuthService,
@@ -9,10 +10,15 @@ import type {
   PasswordResetService,
   RegistrationService,
 } from '@/features/auth/api/auth.service';
+import type { PatientBillingService } from '@/features/billing/api/billing.service';
 import type { CatalogService } from '@/features/catalog/api/catalog.service';
 import type { DirectoryService } from '@/features/doctors/api/directory.service';
+import type { DocumentsService, InsuranceService } from '@/features/documents/api/documents.service';
+import type { NotificationsService } from '@/features/notifications/api/notifications.service';
 import type { OrgService } from '@/features/org/api/org.service';
+import type { ProfileService } from '@/features/profile/api/profile.service';
 import type { ApplicationsService } from '@/features/recruitment/api/applications.service';
+import type { VisitsService } from '@/features/visits/api/visits.service';
 
 /**
  * Every backend capability the UI uses, as interfaces (ports). Screens and hooks depend on these,
@@ -32,6 +38,15 @@ export interface Services {
   catalog: CatalogService;
   directory: DirectoryService;
   applications: ApplicationsService;
+  appointments: PatientAppointmentsService;
+  queue: QueueStatusService;
+  reminders: ReminderService;
+  visits: VisitsService;
+  billing: PatientBillingService;
+  documents: DocumentsService;
+  insurance: InsuranceService;
+  profile: ProfileService;
+  notifications: NotificationsService;
   /** Only the mock backend offers demo accounts. */
   demoAccounts?: DemoAccountsService;
 }

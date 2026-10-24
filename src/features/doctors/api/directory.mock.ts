@@ -1,40 +1,39 @@
 import { resolvePrice } from '@/features/catalog/model/pricing';
 import { delay, type MockDeps } from '@/mocks/db';
 import type { DoctorSeed } from '@/mocks/seed/doctors';
-import { generateSlots } from '@/mocks/slots';
+import { slotsAt, timeZoneOf } from '@/mocks/slot-availability';
 import { ServiceError } from '@/shared/api/service-error';
 import { addDays, todayIn } from '@/shared/lib/branch-time';
 import type { DoctorProfile, DoctorSummary, Slot } from '../model/doctor';
-import type { DirectoryService, DoctorSearch } from './directory.service';
+import type { BranchService, DirectoryService, DoctorSearch } from './directory.service';
 
 const NEXT_SLOTS = 3;
 const SEARCH_DAYS = 14; // V1 books up to 14 days ahead
 
 export function createMockDirectoryService({ db, latencyMs, now }: MockDeps): DirectoryService {
-  const timeZoneOf = (branchId: string) => db.branches.find((b) => b.id === branchId)?.timeZone ?? 'Africa/Cairo';
   const branchIdsOf = (doctor: DoctorSeed) => [...new Set(doctor.schedule.map((s) => s.branchId))];
   const today = () => todayIn('Africa/Cairo', now());
 
   /** Slots at one branch or all of the doctor's branches, each in its own branch's zone. */
   const slotsOf = (doctor: DoctorSeed, from: string, days: number, branchId?: string): Slot[] =>
     (branchId ? [branchId] : branchIdsOf(doctor))
-      .flatMap((id) => generateSlots(doctor, { branchId: id, from, days, timeZone: timeZoneOf(id), now: now() }))
+      .flatMap((id) => slotsAt(db, doctor.id, id, from, days, now()))
       .sort((a, b) => a.startsAtUtc.localeCompare(b.startsAtUtc));
 
   const consultationOf = (doctor: DoctorSeed) =>
     doctor.services.map((s) => db.services.find((svc) => svc.id === s.serviceId)).find((svc) => svc?.category === 'Consultation');
 
   const priceAt = (doctor: DoctorSeed, serviceId: string, branchId: string) =>
-    resolvePrice(db.priceList, { serviceId, branchId, doctorId: doctor.id, date: todayIn(timeZoneOf(branchId), now()) });
+    resolvePrice(db.priceList, { serviceId, branchId, doctorId: doctor.id, date: todayIn(timeZoneOf(db, branchId), now()) });
 
   const reviewsOf = (doctorId: string) => db.reviews.filter((r) => r.doctorId === doctorId);
 
-  function summarize(doctor: DoctorSeed, branchId?: string): DoctorSummary {
+  function summarize(doctor: DoctorSeed, branchId?: string, serviceId?: string): DoctorSummary {
     const user = db.users.find((u) => u.id === doctor.userId)!;
     const reviews = reviewsOf(doctor.id);
-    const consultation = consultationOf(doctor);
-    const prices = consultation
-      ? (branchId ? [branchId] : branchIdsOf(doctor)).map((id) => priceAt(doctor, consultation.id, id)).filter((p) => p !== null)
+    const priced = serviceId ?? consultationOf(doctor)?.id;
+    const prices = priced
+      ? (branchId ? [branchId] : branchIdsOf(doctor)).map((id) => priceAt(doctor, priced, id)).filter((p) => p !== null)
       : [];
     return {
       id: doctor.id,
@@ -54,6 +53,7 @@ export function createMockDirectoryService({ db, latencyMs, now }: MockDeps): Di
     if (!doctor.isPublic) return false;
     if (search.branchId && !branchIdsOf(doctor).includes(search.branchId)) return false;
     if (search.specialtyId && doctor.specialtyId !== search.specialtyId) return false;
+    if (search.serviceId && !doctor.services.some((s) => s.serviceId === search.serviceId)) return false;
     if (search.language && !doctor.languages.includes(search.language)) return false;
     if (search.text?.trim()) {
       const text = search.text.trim().toLowerCase();
@@ -87,7 +87,7 @@ export function createMockDirectoryService({ db, latencyMs, now }: MockDeps): Di
       await delay(latencyMs);
       const results = db.doctors
         .filter((d) => matches(d, search))
-        .map((d) => summarize(d, search.branchId))
+        .map((d) => summarize(d, search.branchId, search.serviceId))
         .sort(compare[search.sort]);
       const start = (search.page - 1) * search.pageSize;
       return { items: results.slice(start, start + search.pageSize), total: results.length };
@@ -124,7 +124,7 @@ export function createMockDirectoryService({ db, latencyMs, now }: MockDeps): Di
 
     async getSlots(doctorId, { branchId, from, days }) {
       await delay(latencyMs);
-      return slotsOf(publicDoctor(doctorId), from ?? todayIn(timeZoneOf(branchId), now()), days, branchId);
+      return slotsOf(publicDoctor(doctorId), from ?? todayIn(timeZoneOf(db, branchId), now()), days, branchId);
     },
 
     async listReviews(doctorId, { page, pageSize, rating }) {
@@ -138,6 +138,16 @@ export function createMockDirectoryService({ db, latencyMs, now }: MockDeps): Di
         .slice(start, start + pageSize)
         .map((r) => ({ id: r.id, authorName: r.authorName, rating: r.rating, comment: r.comment, createdAt: r.createdAt }));
       return { items, total: reviews.length };
+    },
+
+    async listBranchServices(branchId) {
+      await delay(latencyMs);
+      const atBranch = db.doctors.filter((d) => d.isPublic && branchIdsOf(d).includes(branchId));
+      return db.services.flatMap((service): BranchService[] => {
+        const offering = atBranch.filter((d) => d.services.some((s) => s.serviceId === service.id));
+        const prices = offering.map((d) => priceAt(d, service.id, branchId)).filter((p) => p !== null);
+        return prices.length ? [{ ...service, fromPrice: Math.min(...prices), doctorCount: offering.length }] : [];
+      });
     },
   };
 }

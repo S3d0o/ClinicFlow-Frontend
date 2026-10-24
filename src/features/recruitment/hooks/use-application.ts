@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useServices } from '@/app/services';
 import { authKeys } from '@/features/auth/hooks/use-session';
+import { openFile } from '@/shared/lib/download';
 import type { ApplyRequest } from '../api/applications.service';
 
 export const applicationKeys = {
@@ -38,11 +39,6 @@ export function useWithdrawApplication() {
 export function useOpenApplicationFile() {
   const { applications } = useServices();
   return useMutation({
-    mutationFn: async (fileId: string) => {
-      const blob = await applications.downloadFile(fileId);
-      const url = URL.createObjectURL(blob);
-      window.open(url, '_blank', 'noopener');
-      setTimeout(() => URL.revokeObjectURL(url), 60_000);
-    },
+    mutationFn: async (fileId: string) => openFile(await applications.downloadFile(fileId)),
   });
 }

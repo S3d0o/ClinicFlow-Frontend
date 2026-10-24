@@ -20,7 +20,7 @@ export function buildIcs(event: CalendarEvent, now: Date = new Date()): string {
   const lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//ClinicFlow//Recruitment//EN',
+    'PRODID:-//ClinicFlow//Calendar//EN',
     'BEGIN:VEVENT',
     `UID:${event.uid}@clinicflow`,
     `DTSTAMP:${stamp(now.toISOString())}`,

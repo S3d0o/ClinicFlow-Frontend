@@ -32,8 +32,13 @@ export function createMockOtpService({ db, otp, latencyMs, now }: AuthMockDeps):
       await delay(latencyMs);
       const e164 = requirePhone(phone);
       const user = findByPhone(db, e164);
-      // Sign-up codes go to accounts waiting for verification; reset codes to verified ones
-      const eligible = purpose === 'SignUp' ? user && !user.phoneVerified : user?.phoneVerified;
+      // Sign-up codes go to accounts waiting for verification, reset codes to verified ones, and
+      // phone-change codes to a number no other account uses
+      const eligible = {
+        SignUp: !!user && !user.phoneVerified,
+        PasswordReset: !!user?.phoneVerified,
+        ChangePhone: !user,
+      }[purpose];
       return eligible ? otp.send(e164, purpose) : silentTicket(e164, now());
     },
   };

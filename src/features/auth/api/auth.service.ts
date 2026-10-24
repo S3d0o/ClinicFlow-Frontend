@@ -31,7 +31,7 @@ export interface AuthService {
   signOut(): Promise<void>;
 }
 
-export type OtpPurpose = 'SignUp' | 'PasswordReset';
+export type OtpPurpose = 'SignUp' | 'PasswordReset' | 'ChangePhone';
 
 /** A code was sent (or, for unknown numbers, the same answer is given: 08 §2). */
 export interface OtpTicket {
@@ -134,6 +134,8 @@ export interface DemoAccounts {
   code: string;
   /** A pending staff invitation to try, as an app path (`/invitation/…`). */
   invitationPath: string | null;
+  /** A sample SMS reminder link, as an app path (`/r/…`). */
+  reminderPath: string | null;
 }
 
 /** Demo-only helpers: there is no real SMS or email, so the demo shows what would have arrived. */

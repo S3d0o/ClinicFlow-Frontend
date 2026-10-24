@@ -155,5 +155,13 @@
     "doneTitle": "Email confirmed",
     "doneBody": "You can now use it to sign in and to get notifications.",
     "continue": "Continue"
+  },
+  "email": {
+    "add": "Add your email",
+    "addHint": "We'll send messages about your account and visits here.",
+    "sendLink": "Send confirmation link",
+    "linkSent": "We sent a confirmation link to <email>{{email}}</email>. Open it, then come back here.",
+    "demoConfirm": "Demo: open the confirmation link",
+    "checkAgain": "I've confirmed it"
   }
 }

@@ -53,7 +53,7 @@
     "book": "احجز"
   },
   "profile": {
-    "license": "ترخيص {{number}}",
+    "license": "ترخيص <num>{{number}}</num>",
     "years_zero": "خبرة أقل من سنة",
     "years_one": "سنة خبرة واحدة",
     "years_two": "سنتان من الخبرة",

@@ -22,12 +22,6 @@
     "email": "البريد الإلكتروني",
     "verified": "مؤكَّد",
     "notConfirmed": "لم يتم التأكيد بعد",
-    "addEmail": "أضف بريدك الإلكتروني",
-    "addEmailHint": "سنرسل إليه دعوات المقابلات والقرارات.",
-    "sendLink": "أرسل رابط التأكيد",
-    "linkSent": "أرسلنا رابط تأكيد إلى <email>{{email}}</email>. افتحه ثم عد إلى هنا.",
-    "demoConfirm": "تجريبي: افتح رابط التأكيد",
-    "checkAgain": "أكّدته",
     "practiceTitle": "ممارستك",
     "specialty": "التخصص",
     "chooseSpecialty": "اختر تخصصًا",
@@ -71,7 +65,7 @@
     "Withdrawn": "مسحوب"
   },
   "mine": {
-    "reference": "المرجع {{reference}}",
+    "reference": "المرجع <num>{{reference}}</num>",
     "title": "طلبك: {{specialty}}",
     "submittedOn": "قُدّم في {{date}}",
     "preferredBranch": "الفرع المفضّل: {{branch}}",

@@ -95,6 +95,7 @@ export function createMockDemoAccountsService({ db, session, latencyMs, now }: A
         password: DEMO_PASSWORD,
         code: DEMO_CODE,
         invitationPath: invitation ? `/invitation/${invitation.token}` : null,
+        reminderPath: db.reminderTokens[0] ? `/r/${db.reminderTokens[0].token}` : null,
         accounts: db.users
           .filter((u) => u.demoLabel)
           .map((u) => ({ userId: u.id, fullName: u.fullName, roleLabel: u.demoLabel!, identifier: u.email ?? u.phone })),

@@ -17,7 +17,7 @@ describe('calendar file', () => {
     expect(ics.split('\r\n')).toEqual([
       'BEGIN:VCALENDAR',
       'VERSION:2.0',
-      'PRODID:-//ClinicFlow//Recruitment//EN',
+      'PRODID:-//ClinicFlow//Calendar//EN',
       'BEGIN:VEVENT',
       'UID:app-1@clinicflow',
       'DTSTAMP:20261024T100000Z',

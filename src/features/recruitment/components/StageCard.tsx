@@ -9,7 +9,9 @@ import { todayIn } from '@/shared/lib/branch-time';
 import { formatDay, formatInstant } from '@/shared/lib/intl';
 import { Button } from '@/shared/ui/button';
 import type { DoctorApplication, InterviewDetails } from '../model/application';
-import { buildIcs } from '../model/calendar';
+import { buildIcs } from '@/shared/lib/calendar';
+import { saveFile } from '@/shared/lib/download';
+import { directionsHref } from '@/shared/lib/places';
 
 const longDate = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' } as const;
 
@@ -26,12 +28,6 @@ function Detail({ icon, label, children }: { icon: ReactNode; label: string; chi
     </div>
   );
 }
-
-const download = (fileName: string, text: string, type: string) => {
-  const url = URL.createObjectURL(new Blob([text], { type }));
-  Object.assign(document.createElement('a'), { href: url, download: fileName }).click();
-  URL.revokeObjectURL(url);
-};
 
 function InterviewCard({ application, interview, branches }: { application: DoctorApplication; interview: InterviewDetails; branches: Branch[] }) {
   const { t } = useTranslation('recruitment');
@@ -68,7 +64,7 @@ function InterviewCard({ application, interview, branches }: { application: Doct
         <Button
           variant="outline"
           onClick={() =>
-            download(
+            saveFile(
               'clinicflow-interview.ics',
               buildIcs({ uid: `${application.id}-${interview.at}`, title: t('mine.calendarTitle'), start: interview.at, durationMinutes: 60, location: place, description: interview.notes }),
               'text/calendar'
@@ -80,7 +76,7 @@ function InterviewCard({ application, interview, branches }: { application: Doct
         </Button>
         {address && (
           <Button asChild variant="link">
-            <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place)}`} target="_blank" rel="noreferrer">
+            <a href={directionsHref(place)} target="_blank" rel="noreferrer">
               <Navigation aria-hidden="true" />
               {t('mine.directions')}
             </a>

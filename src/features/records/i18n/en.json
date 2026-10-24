@@ -1,0 +1,116 @@
+{
+  "tabs": {
+    "label": "Records",
+    "visits": "My visits",
+    "invoices": "Invoices & receipts",
+    "documents": "Documents & insurance"
+  },
+  "visits": {
+    "intro": "Your doctors' summaries, medicines and tests.",
+    "allBranches": "All branches",
+    "empty": "No visit summaries yet. They appear here once your doctor completes a visit.",
+    "medicines_one": "{{count}} medicine prescribed",
+    "medicines_other": "{{count}} medicines prescribed",
+    "tests_one": "{{count}} test ordered",
+    "tests_other": "{{count}} tests ordered",
+    "followUp": "Follow-up recommended {{from}} – {{to}}",
+    "viewSummary": "View visit summary",
+    "reportNote": "Need an official medical report? Ask at the branch's reception."
+  },
+  "summary": {
+    "back": "Back to visits",
+    "reference": "Booking reference",
+    "found": "What the doctor found",
+    "medicines": "Your medicines",
+    "rxCode": "Prescription code <code>{{code}}</code>",
+    "days_one": "{{count}} day",
+    "days_other": "{{count}} days",
+    "downloadRx": "Download prescription (PDF)",
+    "noMedicines": "No medicines were prescribed.",
+    "tests": "Tests ordered",
+    "orderStatus": {
+      "Pending": "Pending",
+      "ResultReceived": "Result received"
+    },
+    "instructions": "Doctor's instructions",
+    "followUpTitle": "Next check-up",
+    "followUpWindow": "Recommended between {{from}} and {{to}}",
+    "bookFollowUp": "Book the follow-up"
+  },
+  "invoices": {
+    "intro": "Your invoices, payments and receipts.",
+    "open": "Open ({{count}})",
+    "paid": "Paid ({{count}})",
+    "noOpen": "Nothing to pay.",
+    "noPaid": "No receipts yet.",
+    "number": "Invoice <num>{{number}}</num>",
+    "status": {
+      "Issued": "Due",
+      "PartiallyPaid": "Partly paid",
+      "Paid": "Paid",
+      "Void": "Void"
+    },
+    "doctor": "Doctor: {{doctor}}",
+    "total": "Total",
+    "deduction": {
+      "Deposit": "Deposit paid online",
+      "Insurance": "Insurance share",
+      "Discount": "Discount"
+    },
+    "balance": "Your balance",
+    "payOnline": "Pay {{amount}} online",
+    "payMethods": "Card or mobile wallet, through Paymob",
+    "downloadInvoice": "Download invoice (PDF)",
+    "downloadReceipt": "Download receipt (PDF)",
+    "paidVia": "Paid by {{method}}, {{date}}",
+    "method": {
+      "Cash": "cash",
+      "Card": "card",
+      "Online": "online payment",
+      "Wallet": "mobile wallet",
+      "BankTransfer": "bank transfer"
+    },
+    "paymentDone": "Payment received. Thank you."
+  },
+  "documents": {
+    "intro": "Your insurance cards and the files you share with your doctors.",
+    "cards": "My insurance cards",
+    "member": "Card holder",
+    "memberNo": "Member number",
+    "validUntil": "Valid until {{date}}",
+    "coverage": "Covers {{percent}}% of outpatient visits",
+    "default": "Default",
+    "status": {
+      "Verified": "Verified",
+      "PendingVerification": "Waiting for the desk to check it",
+      "Expired": "Expired"
+    },
+    "noCards": "No insurance card added.",
+    "addCard": "Add an insurance card",
+    "addCardHint": "A photo of the front of your card, and the back if it has details.",
+    "payer": "Insurance company",
+    "choosePayer": "Choose your insurer",
+    "holder": "Card holder's name",
+    "validTo": "Valid until",
+    "cardFront": "Front of the card",
+    "cardBack": "Back of the card (optional)",
+    "cardFileHint": "JPG or PNG, up to 20 MB",
+    "saveCard": "Add card",
+    "cardAdded": "Card added. The desk will check it at your next visit.",
+    "myDocs": "My documents",
+    "myDocsIntro": "Upload results or reports from other clinics so your doctors can see them.",
+    "upload": "Upload a document",
+    "uploadHint": "PDF or image, up to 20 MB",
+    "uploaded": "Uploaded {{date}}",
+    "shared": "Shared with {{doctor}}",
+    "download": "Download {{name}}",
+    "remove": "Delete {{name}}",
+    "removeTitle": "Delete this document?",
+    "removeBody": "It will be removed from your records.",
+    "removeConfirm": "Delete",
+    "removed": "Document deleted.",
+    "uploadedToast": "Document uploaded.",
+    "noDocs": "No documents yet.",
+    "privacy": "Only you and the doctors treating you can see your documents."
+  }
+}
