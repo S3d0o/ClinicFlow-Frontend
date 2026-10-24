@@ -52,9 +52,14 @@ function Expandable({ title, icon, open, onToggle, children }: { title: string; 
 
 /** One appointment (design patient/11): live queue, place, fee and deposit, and changes. */
 export default function AppointmentDetailsPage() {
+  const { appointmentId = '' } = useParams();
+  // A fresh page per appointment, so an open section or dialog doesn't carry over to the next one
+  return <AppointmentDetails key={appointmentId} appointmentId={appointmentId} />;
+}
+
+function AppointmentDetails({ appointmentId }: { appointmentId: string }) {
   const { t } = useTranslation(['appointments', 'common']);
   const { language } = useLanguage();
-  const { appointmentId = '' } = useParams();
   const [params, setParams] = useSearchParams();
   const now = useNow();
   const appointment = useMyAppointment(appointmentId);

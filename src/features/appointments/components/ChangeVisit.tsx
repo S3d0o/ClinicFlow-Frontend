@@ -28,20 +28,20 @@ export function RescheduleForm({ appointment, timeZone, onDone }: { appointment:
   const [slotId, setSlotId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const confirm = () => {
+  // mutateAsync, not mutate's callbacks: the refetch after the move turns this appointment Rescheduled
+  // and unmounts this form, and TanStack drops mutate callbacks of unmounted components
+  const confirm = async () => {
     if (!slotId) return;
     setError(null);
-    reschedule.mutate(slotId, {
-      onSuccess: (moved) => {
-        toast.success(t('details.rescheduled'));
-        onDone();
-        navigate(`/patient/appointments/${moved.id}`, { replace: true });
-      },
-      onError: (err) => {
-        setError(isServiceError(err, 'Slot.CapacityReached') ? t('book.slotTaken') : errorMessage(err));
-        setSlotId(null);
-      },
-    });
+    try {
+      const moved = await reschedule.mutateAsync(slotId);
+      toast.success(t('details.rescheduled'));
+      onDone();
+      navigate(`/patient/appointments/${moved.id}`, { replace: true });
+    } catch (err) {
+      setError(isServiceError(err, 'Slot.CapacityReached') ? t('book.slotTaken') : errorMessage(err));
+      setSlotId(null);
+    }
   };
 
   // The visit's own slot is shown as taken; it frees up once the move is saved
@@ -58,7 +58,7 @@ export function RescheduleForm({ appointment, timeZone, onDone }: { appointment:
         selectedSlotId={slotId}
         onSelect={setSlotId}
       />
-      <Button className="w-full" disabled={!slotId || reschedule.isPending} onClick={confirm}>
+      <Button className="w-full" disabled={!slotId || reschedule.isPending} onClick={() => void confirm()}>
         <CalendarClock aria-hidden="true" />
         {t('details.confirmReschedule')}
       </Button>
@@ -74,21 +74,20 @@ export function CancelForm({ appointment, onDone }: { appointment: Appointment; 
   const [reason, setReason] = useState<CancellationReasonCode>('ScheduleConflict');
   const [note, setNote] = useState('');
 
-  const handleSubmit = (event: FormEvent) => {
+  // As above: cancelling unmounts this form, so the toast can't hang on mutate's callbacks
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    cancel.mutate(
-      { reason, note: note.trim() || undefined },
-      {
-        onSuccess: () => {
-          toast.success(t('details.cancelled'));
-          onDone();
-        },
-      }
-    );
+    try {
+      await cancel.mutateAsync({ reason, note: note.trim() || undefined });
+      toast.success(t('details.cancelled'));
+      onDone();
+    } catch {
+      // Shown from cancel.error below
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={(event) => void handleSubmit(event)} className="space-y-4">
       {cancel.isError && <FormAlert>{errorMessage(cancel.error)}</FormAlert>}
       <fieldset className="space-y-1">
         <legend className="mb-2 text-label-md text-foreground">{t('details.cancelReason')}</legend>

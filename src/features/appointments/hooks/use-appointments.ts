@@ -41,7 +41,11 @@ export function useBookAppointment() {
 export function useRescheduleAppointment(appointmentId: string) {
   const { appointments } = useServices();
   const invalidate = useInvalidateAfterChange();
-  return useMutation({ mutationFn: (slotId: string) => appointments.reschedule(appointmentId, slotId), onSuccess: invalidate });
+  return useMutation({
+    mutationFn: (slotId: string) => appointments.reschedule(appointmentId, slotId),
+    // Not awaited: the page moves to the new appointment at once instead of first showing this one as moved
+    onSuccess: () => void invalidate(),
+  });
 }
 
 export function useCancelAppointment(appointmentId: string) {

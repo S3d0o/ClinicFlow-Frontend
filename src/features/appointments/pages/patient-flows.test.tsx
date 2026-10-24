@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { DEMO_REMINDER_TOKEN } from '@/mocks/seed/patient-portal';
@@ -76,7 +76,12 @@ describe('my appointments', () => {
     await pickFirstFreeTime();
     await userEvent.click(screen.getByRole('button', { name: 'Move my visit' }));
     expect(await screen.findByText('Your visit was moved.')).toBeInTheDocument();
-    expect(await screen.findByRole('heading', { name: 'Appointment details' })).toBeInTheDocument();
+    // The old appointment turns Rescheduled, then the page opens the new one, which can still change
+    await waitFor(() => {
+      expect(screen.queryByText('This visit was moved')).not.toBeInTheDocument();
+      expect(screen.getByText(/^You can move or cancel your visit until/)).toBeInTheDocument();
+    });
+    expect(screen.queryByRole('button', { name: 'Move my visit' })).not.toBeInTheDocument();
   });
 
   it('takes the optional deposit online', async () => {
