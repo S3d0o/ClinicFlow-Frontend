@@ -1,6 +1,6 @@
-# ClinicFlow Frontend — Development Guide
+# ClinicFlow Frontend — Development Guide (V2)
 
-How to set up, run, change and check the frontend. For how the code is organized, see [ARCHITECTURE.md](ARCHITECTURE.md).
+How to set up, run, change and check the V2 frontend. For how the code is organized, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ---
 
@@ -8,185 +8,117 @@ How to set up, run, change and check the frontend. For how the code is organized
 
 | Tool | Why |
 |---|---|
-| Node.js 22+ and npm | Install, run, build and test the app (Vitest needs Node 22; the Docker build uses it too) |
-| The ClinicFlow backend | The app has no mock data; every page talks to the API. See [BACKEND_OVERVIEW.md](BACKEND_OVERVIEW.md) and the backend repo's `docs/SETUP_AND_DEPLOYMENT.md` |
-| Docker Desktop (optional) | Running the full stack (database + backend + frontend) in containers |
+| Node.js 22+ and npm | Install, run, build and test (Vitest needs Node 22; the Docker build uses it too) |
+| Docker Desktop (optional) | Building the production image |
+
+No backend is needed yet: V2 runs on an in-memory **mock backend** (`src/mocks`) until the `/api/v2` endpoints exist.
 
 ```bash
 git clone https://github.com/S3d0o/ClinicFlow-Frontend.git
 cd ClinicFlow-Frontend
+git switch v2
 npm install
 ```
 
-## 2. Configuration
-
-The only setting is **`VITE_API_URL`**: the backend's origin, **without** `/api`. The app adds `/api` itself.
-
-| File | Committed | Value | Used by |
-|---|---|---|---|
-| `.env` | Yes | `VITE_API_URL=` (empty) | Default for every mode |
-| `.env.production` | Yes | `VITE_API_URL=` (empty) | `npm run build` / Docker image |
-| `.env.local` | **No** (git-ignored) | e.g. `VITE_API_URL=http://localhost:5143` | Your local development |
-
-When it's empty, requests go to the **same origin** (`/api/...`). That's correct behind nginx in Docker, which forwards `/api` to the backend. The Vite dev server has **no proxy**, though, so for local development you must create `.env.local`:
+## 2. Running the app
 
 ```bash
-# .env.local
-VITE_API_URL=http://localhost:5143      # backend "http" launch profile
-# VITE_API_URL=https://localhost:7129   # backend "https" profile (needs the .NET dev certificate trusted)
+npm run dev     # http://localhost:3000
 ```
 
-Restart `npm run dev` after changing env files; Vite reads them only at startup. Save the file as UTF-8. In Windows PowerShell 5.1, `echo … > .env.local` writes UTF-16, which Vite can't read.
+Open `/#/sign-in` and pick a **demo account**. They are seeded in `src/mocks/seed/users.ts`:
 
-**Keep port 3000.** The backend's CORS policy and email links use `Frontend:BaseUrl`, which defaults to `http://localhost:3000`. `vite.config.ts` pins the dev server to 3000 for that reason.
+| Account | Role(s) | Home |
+|---|---|---|
+| Dr. Hala Mostafa | Manager (organization) + Doctor (Nasr City) | `/manager` |
+| Omar Saeed | Manager (Maadi branch) | `/manager` |
+| Mona Samir | Receptionist (Nasr City) | `/desk` |
+| Sara Ibrahim | Nurse (Nasr City) | `/nurse` |
+| Dr. Ahmed Fathy | Doctor (Nasr City, Maadi) | `/doctor` |
+| Youssef Kamal | Accountant (organization) | `/finance` |
+| Karim Adel | Admin | `/admin` |
+| Mohamed Adel | Patient | `/patient` |
+| Dr. Nour El-Din Samy | Doctor applicant (no role) | `/my-application` |
 
-## 3. Running the app
+Every demo password is **`Demo@1234`** and every SMS or authenticator code is **`123456`**. The session survives reloads; to start over, sign out or clear `clinicflow:demo-session` from local storage. The mock data resets on every reload.
 
-### Frontend with a local backend
+The UI starts in **Arabic** (right-to-left), as the docs require; switch with the "EN | عربي" toggle. The choice is remembered.
 
-1. Start the backend: `dotnet run --project ClinicFlow/ClinicFlow.csproj` from the backend repo. It serves `http://localhost:5143`, applies migrations, and seeds demo data in Development.
-2. Create `.env.local` as shown above.
-3. Run `npm run dev` and open http://localhost:3000.
+### Configuration
 
-**Demo accounts:** in Development, the backend seeds an admin, doctors and patients. Their emails and passwords are listed in the backend repo's `docs/SETUP_AND_DEPLOYMENT.md` (section "Running locally").
+`VITE_API_URL` (the backend origin without `/api`) is only read by the HTTP client, which nothing calls until the HTTP adapters land. `.env` and `.env.production` leave it empty. Keep the dev server on **port 3000**; the backend's CORS policy and email links expect it.
 
-### Full stack with Docker
-
-The backend repo's `docker-compose.yml` runs SQL Server, the backend and this frontend together.
-
-```bash
-# in this repo
-docker build -f DockerFile -t clinicflow-frontend .
-
-# in the backend repo
-docker build -t clinicflow-backend .
-cp .env.example .env        # fill in DB_PASSWORD, JWT_SECRET, email settings, ADMIN_EMAIL/ADMIN_PASSWORD
-docker compose up -d
-```
-
-| Service | URL |
-|---|---|
-| Frontend | http://localhost:3000 |
-| Backend | http://localhost:5001 |
-
-Compose runs the backend in Production, so there's **no demo data**. Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` in `.env` to get a first admin account.
-
-## 4. Scripts and checks
+## 3. Scripts and checks
 
 | Command | What it does |
 |---|---|
-| `npm run dev` | Vite dev server on http://localhost:3000 with hot reload |
-| `npm run build` | `tsc -b` type check, then production build to `dist/` |
-| `npm run lint` | ESLint over the project |
-| `npm test` | Runs the Vitest suite once (`npm run test:watch` re-runs on change) |
-| `npm run preview` | Serves the built `dist/` locally |
+| `npm run dev` | Dev server with hot reload |
+| `npm run build` | `tsc -b` type-check (tests and translation keys included), then the production build |
+| `npm run lint` | ESLint; must report 0 errors (CI fails otherwise) |
+| `npm test` | Vitest once (`npm run test:watch` re-runs on change) |
+| `npm run preview` | Serves `dist/` |
 
-- **`npm run build` is the only type check.** Run it before committing. It type-checks the tests too.
-- **Tests:** Vitest with jsdom and Testing Library. Test files sit next to the code they cover (`src/lib/format.test.ts`, `src/pages/DoctorsPage.test.tsx`), and import `describe`/`it`/`expect` from `vitest`. What's covered so far:
-  - the token refresh in `src/api/axios.test.ts`: one refresh for concurrent 401s, reusing another tab's token, which failures end the session, cross-tab sign-out. It swaps axios's adapter, so the real interceptors run;
-  - restoring the session on load and following a sign-in made in another tab (`src/context/AuthContext.test.tsx`);
-  - `useApiQuery` (errors, retry, out-of-date responses);
-  - the `src/lib` helpers (redirect after sign-in, the cancellation window, time formatting, API error messages);
-  - `DoctorsPage` as an example page test: it mocks `@/api` with `vi.mock` and renders inside a `MemoryRouter`.
+- **Tests** sit next to the code as `*.test.ts(x)` and import `describe`/`it`/`expect` from `vitest`. Cover:
+  - pure rules in `model/` (and `mocks/seed` logic) with plain unit tests;
+  - mock adapters by calling them with `createMockDb()`, `memorySessionStore()` and `latencyMs: 0`;
+  - screens with `renderApp({ path, signedInAs })` from `src/test/render-app.tsx`, which renders the real routes, shells and guards on a fresh mock backend (see `app/routes/AppRoutes.test.tsx`). Tests run in English.
+- **Lint:** non-component exports (constants, hooks, contexts) go in a `.ts` file, not next to a component in a `.tsx` file, or `react-refresh/only-export-components` fails.
+- **CI:** `.github/workflows/ci.yml` runs `npm ci`, lint, tests and build on Node 22, plus `docker build -f DockerFile`.
+- **Check screens by hand** in both languages, at desktop (1280px) and mobile (390px) widths, against `design-v2/screens/<area>/<screen>/screen.png`.
 
-  For a new page test, copy that pattern. Still check UI changes by hand in the browser against a running backend.
-- **Lint:** `npm run lint` reports **0 errors**; keep it that way. To keep `only-export-components` happy, put non-component exports (constants, helpers, hooks, contexts) in a `.ts` file, not in a `.tsx` component file: usually `src/lib/`, or next to the component it belongs to (`ui/button-variants.ts`, `context/auth-context.ts`).
-- **CI:** `.github/workflows/ci.yml` runs on every push and on pull requests to `main`. One job runs `npm ci`, lint, tests and build on Node 22. Another builds the Docker image (`docker build -f DockerFile`). A red run means one of the commands above fails, so run them locally first.
+## 4. How to…
 
-## 5. How to…
+### Build a screen from the catalog
 
-### Add a page
+1. Find its entry in `src/app/routes/catalog/*.routes.ts`; `design` names its Stitch folder under `design-v2/screens/`.
+2. Create the page in its feature: `src/features/<domain>/pages/MyPage.tsx` with a **default export** (it's lazily loaded).
+3. Set `component: lazy(() => import('@/features/<domain>/pages/MyPage'))` on the entry. The placeholder disappears; access, layout and title come from the entry.
+4. Compose the page from hooks (data) and presentational components (markup). Start with `PageHeader`; show `LoadingState` while loading and `ErrorState` with a retry on failure, never an empty state.
+5. Take layout from the design and behavior from the V2 docs; leave out the invented Stitch content listed in `design-v2/README.md`.
 
-1. Create `src/pages/MyPage.tsx` exporting a named component (`export function MyPage()`). Build it from the shared layout:
+### Add a screen that isn't in the catalog
 
-   ```tsx
-   import { Page, PageHeader } from '@/components/layout/Page';
-   import { EmptyState, ErrorState, LoadingState } from '@/components/states';
+Add a `ScreenRoute` entry (path, `screen` title key, layout, access, phase, design), add the title to both `screens.json` files, and, if it belongs in a menu, an item in `src/app/navigation.ts`. Its access rule decides who sees the menu item.
 
-   export function MyPage() {
-     return (
-       <Page width="default">
-         <PageHeader title="Reports" description="One sentence on what this page is for." actions={/* primary button */ null} />
-         {/* LoadingState / ErrorState / EmptyState / content */}
-       </Page>
-     );
-   }
-   ```
-   Load its data with `useApiQuery` and render `ErrorState` with `onRetry={reload}` when `error` is set ([ARCHITECTURE.md §7](ARCHITECTURE.md#7-data-fetching-and-state)).
-2. Register it as a lazy page in `src/App.tsx`, then add its `<Route>` inside the `AppLayout` layout route. Put it under the matching `ProtectedRoute` group if it needs sign-in (for a new role-only group, `<Route element={<ProtectedRoute roles={['Doctor']} />}>`):
+### Add a backend capability
 
-   ```tsx
-   const MyPage = page(() => import('@/pages/MyPage'), 'MyPage');
+1. **Interface:** declare it in `features/<domain>/api/<domain>.service.ts` with contract-shaped types (07_API_DESIGN: lists are arrays plus a total; slot times are branch wall-clock; money in EGP; errors are codes).
+2. **Mock:** implement it in `<domain>.mock.ts` over `MockDb`, adding tables to `mocks/db.ts` and seed data to `mocks/seed/`. Throw `ServiceError('<Module>.<Reason>')` for business errors, and `await delay(latencyMs)` first.
+3. **Wire:** add it to `Services` (`app/services.ts`) and `createMockServices` (`mocks/create-mock-services.ts`).
+4. **Hook:** wrap it in a TanStack Query hook in `features/<domain>/hooks/`, with its query keys in the same file. Mutations invalidate the keys they change.
+5. **Test** the adapter and any rules it applies.
 
-   {/* Doctor routes */}
-   <Route element={<ProtectedRoute roles={['Doctor']} />}>
-     …
-     <Route path="/doctor/reports" element={<MyPage />} />
-   </Route>
-   ```
-3. Add it to the role's entry in `navByRole` in `src/lib/navigation.ts` if it belongs in the main navigation (with a `lucide-react` icon; it then appears in the sidebar and in the mobile menu).
+### Add text
 
-### Call a new endpoint
+Add the key to the English file first (it defines the type), then the same key to the Arabic file; `locales.test.ts` fails if they differ. A new feature namespace is `features/<domain>/i18n/{en,ar}.json`, registered in `app/locales.ts`. Format money, numbers, times and dates with `shared/lib/intl.ts`, and wrap Latin or numeric values inside sentences in `<bdi dir="ltr">`.
 
-1. Read the endpoint in [API_CONTRACT.md](API_CONTRACT.md): its body, response, error codes and quirks.
-2. Add or adjust the request and response types in `src/types/index.ts`. Use string unions for enums, and mark fields `| null` where the contract says so.
-3. Add a function to the right module in `src/api/`. If you create a new module, re-export it from `src/api/index.ts`.
-4. Call it from the page and handle failures with `getApiErrorMessage`:
+### Add a Radix (shadcn/ui) primitive
 
-   ```ts
-   try {
-     await doctorsApi.createSchedule(form);
-     toast.success('Schedule created');
-   } catch (err) {
-     toast.error(getApiErrorMessage(err, 'Failed to create schedule'));
-   }
-   ```
-5. If the endpoint has new error codes, add friendly messages for them to `messagesByCode` in `src/lib/api-error.ts`.
-
-### Ignore out-of-date responses
-
-If the user can start a new request before the previous one finishes (filters, pickers), load the data with `useApiQuery` and put every request input in its key: responses for an older key are ignored ([ARCHITECTURE.md §7](ARCHITECTURE.md#7-data-fetching-and-state)).
-
-### Add a shadcn/ui component
-
-The project is configured for the shadcn CLI (`components.json`: style "new-york", aliases under `@/components/ui`). Only the primitives the app uses are kept in `src/components/ui/`, so check there first. A newly generated component uses Tailwind v4 syntax; convert it as described in [ARCHITECTURE.md §9](ARCHITECTURE.md#shadcnui-primitives), and add any dependency it needs. Use `cn()` from `@/lib/utils` to merge class names.
+`components.json` still targets the shadcn CLI; generated files go to `src/shared/ui/`. Convert Tailwind v4 syntax (`aria-invalid:` → `aria-[invalid=true]:`, `max-h-(--x)` → `max-h-[var(--x)]`), use logical direction classes, and translate any built-in labels.
 
 ### Change the API contract
 
-The contract is shared with the backend. Follow [API_CONTRACT.md §11](API_CONTRACT.md#11-how-to-change-this-contract):
-- the change is made in the backend repo first;
-- `docs/API_CONTRACT.md` here is kept identical to the backend's copy;
-- breaking changes are agreed with both sides before release.
+The backend owns it ([API_CONTRACT.md §11](API_CONTRACT.md#11-how-to-change-this-contract)). After a backend bump on `v2`, copy it in on a `docs/` branch and update the related docs in the same change.
 
-## 6. Conventions
+## 5. Conventions
 
-- **Imports:** use the `@/` alias (`@/api`, `@/components/ui/button`, `@/lib/api-error`), not long relative paths.
-- **Type-only imports:** `import type { … }`. This is required by `verbatimModuleSyntax`.
-- **No TypeScript `enum`s and no constructor parameter properties.** This is enforced by `erasableSyntaxOnly`; use string unions instead.
-- **Unused variables and parameters fail the build** (`noUnusedLocals`, `noUnusedParameters`).
-- **Naming:**
-  - pages are `PascalCasePage.tsx` with a named export;
-  - API modules are `camelCase.ts` exporting `somethingApi`;
-  - shared helpers live in `src/lib/`.
-- **Errors:** use `getApiErrorMessage`; never put `err.response.data.title` in a toast. Use `catch (err)` rather than `catch (err: any)`.
-- **Session data:** use `saveSession` / `clearSession` from `@/api`; don't call `localStorage.clear()`.
-- **Dates:** follow the date and time rules in [ARCHITECTURE.md §8](ARCHITECTURE.md#8-shared-helpers-and-types). Display times with `formatTime`/`formatTimeRange`, and parse API timestamps with `parseUtc`.
+- **Structure:** a page composes; a component renders props; a rule is a pure function in `model/`; validation is a zod schema; data access is a service. Screens never import mock files; they get services from `useServices()`.
+- **Permissions, not roles:** guard screens with permission rules in the catalog, and actions with `can(user, permission, branchId)`. Use `minScope: 'Branch'` for branch-wide screens.
+- **Imports:** the `@/` alias; `import type` for types (`verbatimModuleSyntax`); no `enum`s or constructor parameter properties (`erasableSyntaxOnly`); unused code fails the build.
+- **Naming:** pages `PascalCasePage.tsx` (default export); components `PascalCase.tsx` (named export); hooks `use-thing.ts`; services `<domain>.service.ts` / `.mock.ts`.
 - **UI:**
-  - Use the design tokens (`bg-primary`, `text-muted-foreground`, `bg-success/10 text-success`) and the shared components in [ARCHITECTURE.md §9](ARCHITECTURE.md#9-ui-system). Don't use raw palettes (`teal-600`, `slate-500`) or decorative gradients.
-  - Form controls go in a `Field`, so the label, hint and error are wired up.
-  - Icon-only buttons need an `aria-label`.
-  - Statuses need text, not just color.
-  - One primary button per area.
+  - tokens only (`bg-primary`, `text-muted-foreground`, `bg-success/10 text-success`), no raw palettes or gradients, and orange (`highlight`) only for small accents;
+  - logical direction classes (`ms-`, `ps-`, `start-`, `text-start`), and `rtl-flip` on directional icons;
+  - form controls in a `Field`; icon-only buttons with an `aria-label`; statuses as `StatusChip` (dot + text); one primary button per area; 44px targets in the patient portal.
+- **Strings:** every visible string comes from a translation file, in both languages.
 
-## 7. Troubleshooting
+## 6. Troubleshooting
 
 | Symptom | Likely cause and fix |
 |---|---|
-| Requests go to `http://localhost:3000/api/...` and return 404 | `VITE_API_URL` isn't set for development. Create `.env.local` ([§2](#2-configuration)) and restart `npm run dev` |
-| CORS error in the browser console | The frontend isn't on `http://localhost:3000`, or the backend's `Frontend:BaseUrl` was changed. Use port 3000 or update the backend setting |
-| `https://localhost:7129` requests fail with a certificate error | Trust the .NET dev certificate (`dotnet dev-certs https --trust`) or use `http://localhost:5143` |
-| Signed out unexpectedly | The refresh token was rejected: it expired after 7 days, the password was reset, the account was suspended, or the user signed out in another tab (tabs share one session). See [ARCHITECTURE.md §5](ARCHITECTURE.md#5-authentication-and-session) |
-| Email link opens the 404 page | The link must use the hash routes `/#/confirm-email` and `/#/reset-password`. Check the backend's `Frontend:BaseUrl` |
-| Blank page after deploying `dist/` to a sub-path | Assets use relative paths (`base: './'`); serve `index.html` for unknown paths (see `nginx.conf`) |
-| `docker build` can't find a Dockerfile on Linux/CI | The file is named `DockerFile` (capital F). Use `docker build -f DockerFile …` |
-| Login works but pages show "Failed to load …" | The backend is unreachable or returning 5xx. Check that it's running and that `VITE_API_URL` points to it |
+| Stuck on someone else's workspace | The demo session is remembered. Sign out, or remove `clinicflow:demo-session` from local storage |
+| A screen says "This screen is designed and will be built in phase N" | Expected: it is a placeholder until that phase |
+| Text shows as a key such as `nav:items.deskToday` | The key is missing from a translation file or the namespace isn't registered in `app/locales.ts` |
+| `npm run build` fails on a `t('…')` call | The key doesn't exist in the English file (keys are typed) |
+| Layout looks wrong only in Arabic | A physical class (`ml-`, `pl-`, `left-`, `text-left`) instead of a logical one |
+| `docker build` can't find a Dockerfile on Linux/CI | The file is named `DockerFile`. Use `docker build -f DockerFile …` |

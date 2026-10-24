@@ -8,6 +8,8 @@ This repository is the **React frontend**. It talks to the [ClinicFlow .NET 10 b
 
 > **Looking for the original UI?** It is kept on the [`legacy-ui`](https://github.com/S3d0o/ClinicFlow-Frontend/tree/legacy-ui) branch (tag `v0-legacy-ui`). The LinkedIn demo shows that version.
 
+> **This is the `v2` branch.** V2 turns ClinicFlow into the operating system of a multi-branch clinic (seven roles, front desk, nurse station, clinical records, billing, insurance), in Arabic and English. Its UI is being rebuilt in phases from the designs in [`design-v2/`](design-v2/README.md) and runs on sample data until the V2 API exists; see [docs/FEATURES.md](docs/FEATURES.md) and [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md). The feature list below describes V1, which lives on `main`.
+
 ---
 
 ## Features
@@ -101,18 +103,19 @@ To run the whole stack (SQL Server + backend + frontend) with Docker, see [docs/
 
 ## Project structure
 
+On the `v2` branch:
+
 ```
 ClinicFlow-Frontend/
+├── design-v2/            V2 Stitch designs: screens (HTML + screenshot), design system, UX notes
 ├── docs/                 Documentation (see above)
 ├── src/
-│   ├── api/              axios instance + one module per API resource
-│   ├── components/       Shared UI, app shell (sidebar + top bar), Navbar, Footer
-│   │   └── ui/           shadcn/ui components
-│   ├── context/          AuthContext (session, login, logout)
-│   ├── lib/              Shared helpers (class names, API errors, appointments)
-│   ├── pages/            One component per route
-│   ├── types/            API request/response types
-│   ├── App.tsx           Routes and role-based route protection
+│   ├── app/              Composition root: providers, service container, i18n, screen catalog and routes
+│   ├── shells/           Frames: public, auth, patient, staff, tablet, bare
+│   ├── features/         One folder per domain: model, service interface + mock, hooks, components, pages
+│   ├── shared/           Design system (ui), helpers (lib), translations (i18n), HTTP client (api)
+│   ├── mocks/            In-memory backend and seed data
+│   ├── styles/           Theme tokens and base styles
 │   └── main.tsx          Entry point
 ├── DockerFile            Production image (Node build → nginx)
 └── nginx.conf            Serves the app and proxies /api to the backend

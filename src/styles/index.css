@@ -1,0 +1,115 @@
+@import './tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  /* Always reserve the scrollbar so the layout doesn't shift when Radix locks scrolling */
+  html {
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+    overflow: hidden auto !important;
+  }
+  body[style] {
+    padding-right: 0 !important;
+  }
+  /* Prevent Radix from locking scroll on the html element (see main.tsx) */
+  html[style*="overflow"] {
+    overflow-y: scroll !important;
+  }
+
+  ::selection {
+    background-color: hsl(var(--primary) / 0.16);
+  }
+
+  /* Visible keyboard focus for links and other native controls that don't style their own */
+  a:focus-visible,
+  summary:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  h1, h2, h3, h4 {
+    text-wrap: balance;
+  }
+
+  /* Times, dates, money and counts never jitter */
+  table,
+  time {
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Plus Jakarta Sans for page titles, panel headers and names */
+  .font-display {
+    letter-spacing: -0.015em;
+  }
+  :root[dir='rtl'] .font-display {
+    letter-spacing: 0;
+  }
+
+  /* Small uppercase section label ("TODAY'S APPOINTMENT") */
+  .eyebrow {
+    @apply text-label-sm uppercase tracking-[0.08em] text-muted-foreground;
+  }
+}
+
+@layer utilities {
+  /* Tailwind v4 utilities used by the generated shadcn components, mapped for Tailwind 3 */
+  .outline-hidden {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+  .field-sizing-content {
+    field-sizing: content;
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Directional icons (arrows, chevrons) point the other way in right-to-left layouts */
+  :root[dir='rtl'] .rtl-flip {
+    transform: scaleX(-1);
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--border));
+    border-radius: 3px;
+  }
+}

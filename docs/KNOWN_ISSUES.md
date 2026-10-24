@@ -2,6 +2,8 @@
 
 Open problems in the frontend, the improvements planned for them, and recent fixes. It's based on a full code audit (October 2026), updated after the UI/UX redesign (branch `feature/ui-ux-redesign`). Backend issues are tracked separately in the backend repo's `docs/REVIEW.md`.
 
+> **On the `v2` branch:** "Recently fixed", "Open issues" and "Roadmap" describe the **V1** UI (still live on `main`). The V2 UI is a fresh build from `design-v2/`; its progress and V2-specific items are in [V2](#v2) at the end.
+
 **Priority:** P1 = broken or wrong behavior in a core workflow · P2 = usability, correctness at the edges, accessibility, maintainability · P3 = polish and cleanup.
 
 ---
@@ -126,15 +128,35 @@ Open questions for the maintainer:
 
 ## V2
 
-V2 is built on the `v2` branch against the backend's `v2` branch (see `CLAUDE.md`, "V1 and V2"). Its phases P0–P7 and the frontend work for each are planned in the backend repo: `docs/v2/09_MIGRATION_FROM_V1.md` §4 and `docs/v2/10_ROADMAP.md`. The table below tracks the frontend side of the current phase.
+V2 is built on the `v2` branch against the backend's `v2` branch (see `CLAUDE.md`, "V1 and V2"). Its phases P0–P7 and the frontend work for each are planned in the backend repo: `docs/v2/09_MIGRATION_FROM_V1.md` §4 and `docs/v2/10_ROADMAP.md`.
+
+### UI rebuild (frontend phases)
+
+The V2 UI is a fresh build from the 63 Stitch screens in `design-v2/`, on an in-memory mock backend until the `/api/v2` endpoints exist (see [ARCHITECTURE.md](ARCHITECTURE.md)). Each phase is its own branch and pull request, reviewed before the next starts.
+
+| # | Branch | Scope | Status |
+|---|---|---|---|
+| 0 | `feature/p1-ui-foundation` | Theme (ClinicFlow Navy), Arabic/English with right-to-left, service layer and mock backend, permission model and demo sign-in, the six frames, screen catalog with access rules, shared UI | In review |
+| 1 | `feature/p1-ui-public-auth` | Public site, sign-in (one phone-or-email field), staff two-step, sign-up with SMS code, password reset, doctor application and "My application" (14 screens) | To do |
+| 2 | `feature/p2-ui-patient-portal` | Patient portal (13 screens) | To do |
+| 3 | `feature/p2-ui-front-desk` | Front desk and nurse station (10 screens) | To do |
+| 4 | `feature/p4-ui-doctor` | Doctor workspace (4 screens) | To do |
+| 5 | `feature/p2-ui-manager` | Manager workspace (9 screens) | To do |
+| 6 | `feature/p1-ui-admin` | Administration (9 screens) | To do |
+| 7 | `feature/p3-ui-accountant` | Finance (4 screens) | To do |
+
+Open points for the rebuild:
+- **Real API:** each screen runs on the mock backend. Swapping in the API means writing HTTP adapters behind the same service interfaces (on `shared/api/http-client.ts`, which keeps V1's tested token refresh) as the backend phases ship their endpoints.
+- **Error messages:** `shared/api/api-error.ts` still holds V1's English messages per error code; they move into the translation files when the HTTP adapters land.
+- **Demo-only pieces:** the demo account list on the sign-in page and the demo session store exist only in the mock backend and disappear with it.
 
 ### P0: foundation (contract 4.0.0-p0)
 | Item | Backend change | Status |
 |---|---|---|
 | Point at the V2 API and database | Separate `ClinicFlowV2` database; same port under `dotnet run`, ports 5002/3001 under compose | Done: `v2` branch and docs set up |
-| URL fields must be `http`/`https` (contract 4.0.0-p0) | `profilePictureUrl` and `iconUrl` with another scheme return 400 with a field message | The message reaches the user through `getApiErrorMessage`. Optional: check the scheme in the form before sending, since `type="url"` accepts `javascript:` and `file:` |
-| Timestamps end in `Z` | Backend P0 PR 4, merged 2026-10-23 (contract 4.0.0-p0 changelog) | Nothing to change: `parseUtc` already accepts both forms. Still to do: check the screens that show times against the V2 backend |
-| New appointment statuses `CheckedIn`, `InProgress`, `Rescheduled` | Backend P0 PR 7, merged 2026-10-23 (contract 4.0.0-p0 changelog and §7). No route produces them yet; the check-in, queue and reschedule routes come in later phases | To do (small): (1) add the three values to `AppointmentStatus` in `src/types/index.ts`; (2) give each a label and style in `StatusBadge` (the compiler asks for them once the type changes), e.g. "Checked in", "In progress", "Rescheduled". Today an unknown status falls back to the `Pending` style **and label**, so it would read "Pending"; make the fallback show the raw status instead. Not needed yet: filter options (nothing produces these statuses) and new actions. Every action is already gated on explicit statuses (`canComplete` and `canMarkNoShow` on `Confirmed`, `canPatientCancel` on `Confirmed`, notes on `Confirmed`/`Completed`/`NoShow`), so the new statuses get none, which is correct until their routes exist |
-| New error code `Appointment.InvalidStatusTransition` (409) | Backend P0 PR 7: a status change the rules don't allow when no older code applies | Nothing to change: `getApiErrorMessage` shows its message, and with the statuses the API creates in P0 no route returns it |
-| `hasReview` was always `false` on `GET /api/appointments/{id}` and the doctor's list | Backend P0 PR 7 bug fix | Nothing to change: the patient list, which drives "Leave a review", was already correct, and the doctor page doesn't read the field. Screens built on those two routes can now rely on it |
-| Notifications and emails are sent about 2 s after the action (outbox) | Backend P0 PR 9, merged 2026-10-24 (contract 4.0.0-p0 §1, #22 and changelog). Every response, status code and error code is unchanged | Nothing to change: the bell refreshes on navigation, on focus and every 60 s, so a notification caused by the user's own action shows on the next of those instead of at once, as §1 recommends. The V1 open issue "`ForgotPasswordPage` shows success even when the server failed to send the email" is fixed on the V2 backend: a failed reset or confirmation email is now retried, and forgot-password takes about as long for unknown emails as for registered ones |
+| URL fields must be `http`/`https` (contract 4.0.0-p0) | `profilePictureUrl` and `iconUrl` with another scheme return 400 with a field message | To do in the rebuilt forms (patient profile, phase 2; specialties, phase 6): validate the scheme in their zod schemas, since `type="url"` accepts `javascript:` and `file:` |
+| Timestamps end in `Z` | Backend P0 PR 4, merged 2026-10-23 (contract 4.0.0-p0 changelog) | Nothing to change: `parseUtc` (`shared/lib/format.ts`) accepts both forms |
+| New appointment statuses `CheckedIn`, `InProgress`, `Rescheduled` | Backend P0 PR 7, merged 2026-10-23 (contract 4.0.0-p0 changelog and §7) | Part of the rebuild: the appointment model with all eight statuses, their chip tones and the actions each allows arrive with the patient portal (phase 2) and the front desk (phase 3) |
+| New error code `Appointment.InvalidStatusTransition` (409) | Backend P0 PR 7 | Handled as a `ServiceError` code by the rebuilt screens |
+| `hasReview` was always `false` on `GET /api/appointments/{id}` and the doctor's list | Backend P0 PR 7 bug fix | Nothing to change: the rebuilt screens can rely on it |
+| Notifications and emails are sent about 2 s after the action (outbox) | Backend P0 PR 9, merged 2026-10-24 (contract 4.0.0-p0 §1, #22 and changelog). Every response, status code and error code is unchanged | To do in the rebuilt notification screens (bell and list, phase 2): don't expect a notification the moment an action returns. Refetch on focus, on navigation and on an interval (as V1 did), and let the mock deliver notifications after a short delay so the screens are built for it. Forgot-password needs nothing: the backend now retries failed emails and answers as fast for unknown emails as for registered ones |

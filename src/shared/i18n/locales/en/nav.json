@@ -1,0 +1,57 @@
+{
+  "public": {
+    "findDoctor": "Find a doctor",
+    "branches": "Branches",
+    "services": "Services & prices",
+    "joinAsDoctor": "Join as a doctor"
+  },
+  "patient": {
+    "home": "Home",
+    "book": "Book",
+    "appointments": "Appointments",
+    "records": "Records",
+    "profile": "Profile"
+  },
+  "groups": {
+    "frontDesk": "Front desk",
+    "nurse": "Nurse station",
+    "clinical": "Clinical",
+    "management": "Management",
+    "finance": "Finance",
+    "administration": "Administration",
+    "account": "Account"
+  },
+  "items": {
+    "deskToday": "Today",
+    "deskQueue": "Queue",
+    "deskPatients": "Patients",
+    "deskBook": "Book",
+    "deskPayments": "Payments",
+    "deskCash": "Cash session",
+    "nurseTriage": "Triage queue",
+    "doctorToday": "Today",
+    "doctorPatients": "Patients",
+    "doctorSchedule": "Schedule & leave",
+    "managerDashboard": "Dashboard",
+    "managerApprovals": "Approvals",
+    "managerSchedules": "Schedules",
+    "managerLeave": "Leave",
+    "managerRecruitment": "Recruitment",
+    "managerCatalog": "Services & prices",
+    "managerDailyClose": "Daily close",
+    "managerReports": "Reports",
+    "financeOverview": "Overview",
+    "financeInvoices": "Invoices",
+    "financePayers": "Payers & plans",
+    "financeClaims": "Claims",
+    "adminOverview": "Overview",
+    "adminStaff": "Staff",
+    "adminRoles": "Roles & permissions",
+    "adminBranches": "Branches",
+    "adminSpecialties": "Specialties",
+    "adminSettings": "Settings",
+    "adminIntegrations": "Integrations",
+    "adminAudit": "Audit log",
+    "notifications": "Notifications"
+  }
+}
