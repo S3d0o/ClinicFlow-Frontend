@@ -154,19 +154,21 @@ Open points for the rebuild:
 
 ### Phase 1 (public site and account access): to confirm with the backend
 
-The screens run on the mock, which follows 04 (FR-ACC, FR-STF-01/02/07, FR-REC), 07 §4 and the V1 contract. Points the `/api/v2` endpoints still have to settle:
+The screens run on the mock, which follows 04 (FR-ACC, FR-STF-01/02/07, FR-REC), 07 §4 and the V1 contract. The backend's draft P1 plan (`docs/v2/plans/P1.md` on its `docs/p1-plan` branch, not merged yet) already compares these interfaces with 07 in its §7, and its question **Q-A** (for the owner) recommends taking the frontend's shapes where they are richer and 07's names otherwise. Settled shapes go into `API_CONTRACT.md` 4.0.0 with each backend PR, then into this repo's mirror.
+
+**Already on the backend's list** (P1 plan §7 and its PRs): the `OtpTicket` answer from `otp/send` and `register` (`{ phone, expiresAt, resendAt }`); `attemptsLeft` on `Otp.InvalidCode` and `retryAt` on `Otp.TooManyAttempts` and `Auth.AccountLockedOut` (PR 0 adds ProblemDetails extensions); the reset code check before the new password; the two-step challenge (`challenge: { id, identifier, roleLabel }`, `Auth.MfaChallengeExpired`, recovery codes); `/me` roles with scopes and branch ids, `mfaEnabled`, `mfaEnrolled`; `phone` vs 07's `phoneNumber` (the HTTP adapter maps whichever name is chosen); the account usable only after its SMS code (PR 10); the reapply cool-down as a setting (PR 13).
+
+**Not on the backend's list yet:**
 
 | Point | What the frontend does now |
 |---|---|
-| Error codes 07 doesn't list yet | Reused from the V1 contract: `Auth.AccountLockedOut`, `Auth.InvalidPasswordResetToken`, `Auth.InvalidEmailConfirmationToken`, `Auth.UserNotFound`. Chosen by the mock: `Auth.MfaChallengeExpired`, `Auth.Unauthorized`, `Invitation.NotFound`, `Invitation.Expired`, `DoctorApplication.ReapplyTooSoon`, `File.NotFound`, `Validation.InvalidPhone`. Each has a translated message in `common:errors` |
-| Error details | `Otp.InvalidCode` carries `attemptsLeft`; `Otp.TooManyAttempts`, `Otp.ResendTooSoon` and `Auth.AccountLockedOut` carry `retryAt`. The HTTP adapters will read them from ProblemDetails extensions (or `Retry-After`); the lockout screen counts down to `retryAt` |
-| Two-step sign-in | `POST /auth/login` answers `Auth.MfaRequired` with an `mfaToken` (07). The code screen also shows the account and its role, which the HTTP adapter fills from what the user typed and the response. Recovery codes are accepted in the same step |
-| Unverified phone at sign-in | After a correct password for a self-registered account, the mock answers `Auth.PhoneNotVerified` and the screen offers a new code. Staff accounts are activated by their invitation instead |
-| Reset code check | The code is checked first (`otp/verify`, purpose `PasswordReset`, not used up), then sent again with the new password (`password/reset-by-otp`) |
-| Invitations | Reading an invitation by its token (name, email, roles, inviter, expiry) isn't in 07 yet. Accepting takes the name, a mobile number and a password and signs the user in; two-step setup follows |
-| Doctor search | `/public/doctors` with text, branch, specialty, availability (today, tomorrow, this week), language and sort (soonest, rating, price), returning each doctor's lowest consultation price and next three free slots. A slot query without `from` starts today at the branch |
-| Reapply cool-down | 90 days, shown as `canReapplyFrom` on the applicant's application |
-| Booking hand-off | "Continue to book" opens `/patient/book/:doctorId?branch=&service=&slot=&deposit=` (phase 2) |
+| Ids are strings | The app types every id as a string (`branchIds: string[]`, `doctorId`, …). If the API keeps integer ids, the HTTP adapters convert them; nothing else changes. Listed in P1 plan §7 as a difference, without a decision |
+| Error codes no doc names | Chosen by the mock: `Auth.Unauthorized`, `Invitation.NotFound`, `Invitation.Expired`, `DoctorApplication.ReapplyTooSoon`, `File.NotFound`, `Validation.InvalidPhone`. Reused from the V1 contract: `Auth.InvalidPasswordResetToken`, `Auth.InvalidEmailConfirmationToken`, `Auth.UserNotFound`. Each has a translated message in `common:errors`; a different code only needs a new message |
+| Reading an invitation | The accept screen first reads the invitation by its token (email, name, roles with branches, inviter's name, expiry). P1 PR 6 has only `POST /auth/invitations/accept`; it needs a public `GET` too |
+| Accepting an invitation | Sends the name, a mobile number and a password, and gets a signed-in session back (two-step setup follows). PR 6 says "sets the password and activates" |
+| Application cool-down date | `canReapplyFrom` (branch-local date) on the applicant's own application after a rejection or withdrawal, so My application and Join can show the date |
+| Public doctor search | `/public/doctors` with text, branch, specialty, availability (today, tomorrow, this week), language, sort (soonest, rating, price) and paging, returning each doctor's lowest consultation price and next three free slots; slots for a doctor at a branch with `from` optional (today at the branch). P1 has `public/branches` and `public/services` but no doctor search; prices on public routes are P2 (FR-SVC-04) |
+| Booking hand-off | "Continue to book" opens `/patient/book/:doctorId?branch=&service=&slot=&deposit=` (phase 2); frontend only |
 
 ### P0: foundation (contract 4.0.0-p0)
 | Item | Backend change | Status |
