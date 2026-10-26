@@ -18,6 +18,6 @@ export interface DeskService {
   markNoShow(appointmentId: string): Promise<DeskAppointment>;
   /** Books on the patient's behalf; always `Confirmed` (FR-APT-03). Sends an `Idempotency-Key`. */
   book(request: DeskBookRequest): Promise<DeskAppointment>;
-  /** Books into a free slot now or an unslotted queue place, checked in at once (FR-APT-04). */
+  /** Books into a free slot now or an unslotted queue place, checked in at once (FR-APT-04). Sends an `Idempotency-Key` (§13.16). */
   walkIn(request: WalkInRequest): Promise<DeskAppointment>;
 }
