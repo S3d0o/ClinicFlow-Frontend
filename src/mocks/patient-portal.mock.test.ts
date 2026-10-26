@@ -41,6 +41,15 @@ describe('documents and insurance (FR-PAT-06, FR-INS-03)', () => {
     await rejectsWith(services.documents.upload(new File(['x'], 'notes.docx')), 'File.TypeNotAllowed');
   });
 
+  it('downloads a new upload only once its virus scan has passed (§13.8)', async () => {
+    const { services, advance } = createTestBackend({ signedInAs: 'u-mohamed', scanDelayMs: 5000 });
+    const uploaded = await services.documents.upload(new File(['%PDF'], 'lab.pdf', { type: 'application/pdf' }));
+    await rejectsWith(services.documents.download(uploaded.id), 'File.NotScanned');
+    advance(5000);
+    expect((await services.documents.download(uploaded.id)).size).toBeGreaterThan(0);
+    expect((await services.documents.download('doc-cbc')).type).toBe('application/pdf'); // seeded files are scanned
+  });
+
   it('adds an insurance card that waits for the desk to verify it', async () => {
     const { services } = createTestBackend({ signedInAs: 'u-mohamed' });
     const policy = await services.insurance.add({

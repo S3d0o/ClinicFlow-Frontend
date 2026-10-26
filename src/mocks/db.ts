@@ -6,6 +6,18 @@ import { applicationsSeed, type ApplicationRecord } from './seed/applications';
 import { branchesSeed } from './seed/branches';
 import { priceListSeed, servicesSeed, specialtiesSeed } from './seed/catalog';
 import { doctorsSeed, type DoctorSeed } from './seed/doctors';
+import {
+  deskPatientsSeed,
+  doctorRoomsSeed,
+  drawersSeed,
+  frontDeskSeed,
+  roomsSeed,
+  type CashSessionRecord,
+  type DoctorRoomSeed,
+  type DrawerSeed,
+  type PaymentRecord,
+  type RoomSeed,
+} from './seed/front-desk';
 import { invitationsSeed, type InvitationSeed } from './seed/invitations';
 import {
   patientPortalSeed,
@@ -65,8 +77,15 @@ export interface MockDb {
   policies: PolicyRecord[];
   payers: Payer[];
   notifications: NotificationRecord[];
-  /** SMS reminder links (`/r/:token`) → appointment. */
+  /** Reminder message links (`/r/:token`) → appointment. */
   reminderTokens: { token: string; appointmentId: string }[];
+  rooms: RoomSeed[];
+  doctorRooms: DoctorRoomSeed[];
+  drawers: DrawerSeed[];
+  payments: PaymentRecord[];
+  cashSessions: CashSessionRecord[];
+  /** Who listens to queue changes per branch: the stand-in for the `/hubs/queue` SignalR hub. */
+  queueListeners: Set<(branchId: string) => void>;
 }
 
 /** A fresh copy of the seed data (tests get an isolated database each). Dated seeds are relative to `now`. */
@@ -79,11 +98,23 @@ export function createMockDb(now: Date = new Date()): MockDb {
     priceList: priceListSeed,
     doctors: doctorsSeed,
     payers: payersSeed,
+    rooms: roomsSeed,
+    doctorRooms: doctorRoomsSeed,
+    drawers: drawersSeed,
+    deskPatients: deskPatientsSeed,
   });
   const { notificationEvents, ...portal } = patientPortalSeed(now);
+  const desk = frontDeskSeed(now);
+  const { deskPatients, ...reference } = fixed;
   const db: MockDb = {
-    ...fixed,
+    ...reference,
     ...portal,
+    patients: [...portal.patients, ...deskPatients],
+    appointments: [...portal.appointments, ...desk.appointments],
+    invoices: [...portal.invoices, ...desk.invoices],
+    payments: desk.payments,
+    cashSessions: desk.cashSessions,
+    queueListeners: new Set(),
     reviews: reviewsSeed(now),
     applications: applicationsSeed(now),
     invitations: invitationsSeed(now),
@@ -98,7 +129,7 @@ export function createMockDb(now: Date = new Date()): MockDb {
     const invoice = /Invoice|Payment/.test(event.type)
       ? db.invoices.find((i) => i.patientUserId === appointment.patientUserId && i.doctorName === appointment.doctorName)
       : undefined;
-    const notification = renderNotification(db, appointment.patientUserId, event.type, { appointment, invoice, amount: invoice?.total }, event.at);
+    const notification = renderNotification(db, appointment.patientUserId!, event.type, { appointment, invoice, amount: invoice?.total }, event.at);
     return { ...notification, isRead: event.read };
   });
   return db;
@@ -118,4 +149,6 @@ export interface MockDeps {
   outboxDelayMs: number;
   /** How often the simulated queue moves forward (0 keeps it still, as in tests). */
   queueTickMs: number;
+  /** How long an uploaded file waits for its virus scan before it can be downloaded (0 in tests by default). */
+  scanDelayMs: number;
 }

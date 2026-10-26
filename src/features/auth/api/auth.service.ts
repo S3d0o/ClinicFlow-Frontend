@@ -42,7 +42,7 @@ export interface OtpTicket {
   resendAt: string;
 }
 
-/** SMS one-time codes (`/api/v2/auth/otp/send`). Errors: `Otp.ResendTooSoon`, `Otp.TooManyAttempts` with `retryAt`. */
+/** One-time codes by WhatsApp, or SMS when it is on (`/api/v2/auth/otp/send`). Errors: `Otp.ResendTooSoon`, `Otp.TooManyAttempts` with `retryAt`. */
 export interface OtpService {
   send(phone: string, purpose: OtpPurpose): Promise<OtpTicket>;
 }
@@ -63,15 +63,15 @@ export interface RegistrationService {
   verifyPhone(phone: string, code: string): Promise<CurrentUser>;
 }
 
-/** Password reset by SMS code or email link (FR-ACC-04). Every success revokes all sessions. */
+/** Password reset by one-time code or email link (FR-ACC-04). Every success revokes all sessions. */
 export interface PasswordResetService {
   /** Always succeeds, whether or not the email has an account (08 §2). */
   requestEmailLink(email: string): Promise<void>;
-  /** Checks an SMS code without using it up, before asking for the new password. */
+  /** Checks a one-time code without using it up, before asking for the new password. */
   checkCode(phone: string, code: string): Promise<void>;
   resetWithCode(phone: string, code: string, newPassword: string): Promise<void>;
-  /** From the emailed link (`/#/reset-password?email=…&token=…`, API contract §8). */
-  resetWithEmailToken(email: string, token: string, newPassword: string): Promise<void>;
+  /** From the emailed link (`/#/reset-password?userId=…&token=…`, API contract §13.9: no email address in the URL). */
+  resetWithEmailToken(userId: string, token: string, newPassword: string): Promise<void>;
 }
 
 /** TOTP authenticator setup (`/auth/mfa/enroll`, `/auth/mfa/confirm`). */
@@ -130,15 +130,15 @@ export interface DemoAccounts {
   accounts: DemoAccount[];
   /** The password every demo account uses. */
   password: string;
-  /** The code every demo SMS or authenticator "sends". */
+  /** The code every demo message or authenticator "sends". */
   code: string;
   /** A pending staff invitation to try, as an app path (`/invitation/…`). */
   invitationPath: string | null;
-  /** A sample SMS reminder link, as an app path (`/r/…`). */
+  /** A sample reminder link, as an app path (`/r/…`). */
   reminderPath: string | null;
 }
 
-/** Demo-only helpers: there is no real SMS or email, so the demo shows what would have arrived. */
+/** Demo-only helpers: there is no real WhatsApp, SMS or email, so the demo shows what would have arrived. */
 export interface DemoAccountsService {
   list(): Promise<DemoAccounts>;
   /** Signs in as the account directly, skipping the password and two-step code. */

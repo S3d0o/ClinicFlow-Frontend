@@ -1,6 +1,6 @@
 import type { AddPolicyRequest, InsurancePolicy, Payer, PatientDocument } from '../model/documents';
 
-/** Files the patient shares with their doctors (FR-PAT-06). Errors: `File.TypeNotAllowed`, `File.TooLarge`, `File.NotFound`. */
+/** Files the patient shares with their doctors (FR-PAT-06). Errors: `File.TypeNotAllowed`, `File.TooLarge`, `File.NotFound`, `File.NotScanned` (a fresh upload until its virus scan passes), `Document.SharedWithDoctor`. */
 export interface DocumentsService {
   listMine(): Promise<PatientDocument[]>;
   upload(file: File): Promise<PatientDocument>;

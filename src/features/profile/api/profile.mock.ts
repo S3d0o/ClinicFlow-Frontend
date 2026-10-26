@@ -1,5 +1,6 @@
 import { findByPhone, sessionUser, type AuthMockDeps } from '@/features/auth/api/mock-accounts';
 import { delay } from '@/mocks/db';
+import { patientRecordFor } from '@/mocks/front-desk';
 import type { PatientRecordSeed } from '@/mocks/seed/patient-portal';
 import type { UserSeed } from '@/mocks/seed/users';
 import { ServiceError } from '@/shared/api/service-error';
@@ -10,22 +11,7 @@ import type { ProfileService } from './profile.service';
 export function createMockProfileService(deps: AuthMockDeps): ProfileService {
   const { db, otp, latencyMs, now } = deps;
 
-  /** The patient record, created on first use for patients who signed up in the browser. */
-  const recordOf = (user: UserSeed): PatientRecordSeed => {
-    let record = db.patients.find((p) => p.userId === user.id);
-    if (!record) {
-      record = {
-        userId: user.id,
-        mrn: `MRN-${String(1000 + db.patients.length).padStart(6, '0')}`,
-        memberSince: now().toISOString().slice(0, 10),
-        allergies: [],
-        conditions: [],
-        notificationChannel: user.emailConfirmed ? 'Both' : 'Sms', // FR-NTF-04 default
-      };
-      db.patients.push(record);
-    }
-    return record;
-  };
+  const recordOf = (user: UserSeed): PatientRecordSeed => patientRecordFor(db, user, now());
 
   const profileOf = (user: UserSeed): PatientProfile => {
     const record = recordOf(user);

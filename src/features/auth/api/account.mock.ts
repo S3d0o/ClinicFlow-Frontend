@@ -108,7 +108,7 @@ export function createMockPasswordResetService(deps: AuthMockDeps): PasswordRese
       const user = findByEmail(db, email);
       if (!user?.email || !user.emailConfirmed) return;
       sendEmailLink(deps, user, user.email, 'ResetPassword', (token) =>
-        `/reset-password?email=${encodeURIComponent(user.email!)}&token=${token}`
+        `/reset-password?userId=${user.id}&token=${token}`
       );
     },
 
@@ -126,10 +126,10 @@ export function createMockPasswordResetService(deps: AuthMockDeps): PasswordRese
       setPassword(user, newPassword);
     },
 
-    async resetWithEmailToken(email, token, newPassword) {
+    async resetWithEmailToken(userId, token, newPassword) {
       await delay(latencyMs);
       const user = consumeEmailToken(deps, token, 'ResetPassword');
-      if (!user || user.email?.toLowerCase() !== email.trim().toLowerCase()) {
+      if (!user || user.id !== userId) {
         throw new ServiceError('Auth.InvalidPasswordResetToken');
       }
       setPassword(user, newPassword);

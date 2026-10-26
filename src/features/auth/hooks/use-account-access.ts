@@ -3,7 +3,7 @@ import { useServices } from '@/app/services';
 import type { OtpPurpose, RegisterRequest } from '../api/auth.service';
 import { authKeys, useSetSessionUser } from './use-session';
 
-// Sign-up, SMS codes, password reset and account email (FR-ACC-01 … FR-ACC-05).
+// Sign-up, one-time codes, password reset and account email (FR-ACC-01 … FR-ACC-05).
 
 export function useRegister() {
   const { registration } = useServices();
@@ -34,15 +34,15 @@ export function useCheckResetCode() {
   return useMutation({ mutationFn: ({ phone, code }: { phone: string; code: string }) => passwordReset.checkCode(phone, code) });
 }
 
-/** Sets the new password with an SMS code or an email token. A reset ends every session. */
+/** Sets the new password with a one-time code or an email token. A reset ends every session. */
 export function useResetPassword() {
   const { passwordReset } = useServices();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (request: { password: string } & ({ phone: string; code: string } | { email: string; token: string })) =>
+    mutationFn: (request: { password: string } & ({ phone: string; code: string } | { userId: string; token: string })) =>
       'phone' in request
         ? passwordReset.resetWithCode(request.phone, request.code, request.password)
-        : passwordReset.resetWithEmailToken(request.email, request.token, request.password),
+        : passwordReset.resetWithEmailToken(request.userId, request.token, request.password),
     onSuccess: () => {
       queryClient.clear();
       queryClient.setQueryData(authKeys.me, null);

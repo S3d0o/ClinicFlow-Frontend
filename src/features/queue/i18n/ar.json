@@ -1,0 +1,77 @@
+{
+  "ticket": "التذكرة",
+  "stage": {
+    "WaitingTriage": "ينتظر الفرز",
+    "ReadyForDoctor": "جاهز للطبيب",
+    "WithDoctor": "مع الطبيب",
+    "Done": "انتهت الزيارة"
+  },
+  "board": {
+    "intro": "كل مريض سجّل حضوره، من الفرز حتى الدفع. تتحدث الشاشة لحظة بلحظة.",
+    "live": "مباشر",
+    "openDisplay": "فتح شاشة صالة الانتظار",
+    "filterLabel": "عرض الطبيب",
+    "allDoctors": "كل الأطباء",
+    "count": "عدد المرضى:",
+    "empty": {
+      "WaitingTriage": "لا أحد ينتظر الفرز.",
+      "ReadyForDoctor": "لا أحد جاهز بعد.",
+      "WithDoctor": "لا أحد مع طبيب الآن.",
+      "Done": "لم تنتهِ أي زيارة بعد."
+    }
+  },
+  "card": {
+    "walkIn": "بدون موعد",
+    "late": "حضر متأخرًا {{minutes}} دقيقة",
+    "more": "إجراءات أخرى للتذكرة {{ticket}}",
+    "moveToFront": "نقل إلى أول الدور…",
+    "priority": "أولوية",
+    "vitals": "العلامات الحيوية",
+    "inRoom": "{{room}} · {{minutes}} دقيقة",
+    "toPay": "مستحق {{amount}}",
+    "paid": "مدفوع",
+    "waiting": "ينتظر منذ {{minutes}} دقيقة",
+    "call": "استدعاء",
+    "called": "تم استدعاء التذكرة {{ticket}} ({{name}}).",
+    "checkout": "الدفع"
+  },
+  "moveToFront": {
+    "title": "نقل التذكرة {{ticket}} إلى أول الدور",
+    "body": "سيكون {{name}} التالي في الدور، ويبقى ترتيب الباقين كما هو.",
+    "reason": "السبب",
+    "reasonHint": "يُحفظ في سجل التدقيق، مثل: ألم في الصدر أثناء الانتظار.",
+    "reasonRequired": "اذكر سبب نقل هذا المريض.",
+    "confirm": "نقل إلى أول الدور",
+    "done": "أصبحت التذكرة {{ticket}} الأولى في الدور."
+  },
+  "display": {
+    "noRoom": "سيُعلن عن الغرفة",
+    "nowServing": "يتم خدمة",
+    "proceed": "يُرجى التوجه إلى {{room}}",
+    "next": "التالي في الدور",
+    "waiting_zero": "لا أحد في الانتظار",
+    "waiting_one": "واحد في الانتظار",
+    "waiting_two": "اثنان في الانتظار",
+    "waiting_few": "{{count}} في الانتظار",
+    "waiting_many": "{{count}} في الانتظار",
+    "waiting_other": "{{count}} في الانتظار",
+    "nextN": "التالي {{n}}",
+    "averageWait": "متوسط الانتظار",
+    "minutes": "~{{count}} دقيقة",
+    "empty": "لا توجد عيادات تعمل الآن.",
+    "announce": "التذكرة {{ticket}}، يُرجى التوجه إلى {{room}}.",
+    "instructions": "تابع رقم تذكرتك. عندما يظهر تحت «يتم خدمة»، توجّه إلى الغرفة المكتوبة في نفس البطاقة.",
+    "doctorsOnDuty_zero": "لا يوجد أطباء الآن",
+    "doctorsOnDuty_one": "طبيب واحد في العمل",
+    "doctorsOnDuty_two": "طبيبان في العمل",
+    "doctorsOnDuty_few": "{{count}} أطباء في العمل",
+    "doctorsOnDuty_many": "{{count}} طبيبًا في العمل",
+    "doctorsOnDuty_other": "{{count}} طبيب في العمل",
+    "patientsWaiting_zero": "لا أحد في الانتظار",
+    "patientsWaiting_one": "مريض واحد في الانتظار",
+    "patientsWaiting_two": "مريضان في الانتظار",
+    "patientsWaiting_few": "{{count}} مرضى في الانتظار",
+    "patientsWaiting_many": "{{count}} مريضًا في الانتظار",
+    "patientsWaiting_other": "{{count}} مريض في الانتظار"
+  }
+}

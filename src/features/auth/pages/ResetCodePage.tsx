@@ -8,7 +8,7 @@ import { OtpCodeForm } from '../components/OtpCodeForm';
 import { useCheckResetCode } from '../hooks/use-account-access';
 import { readState, type ResetCodeState, type ResetWithCodeState } from '../model/flow-state';
 
-/** Password recovery by SMS, step 2: check the code, then choose the new password. */
+/** Password recovery by phone, step 2: check the code, then choose the new password. */
 export default function ResetCodePage() {
   const { t } = useTranslation(['auth', 'common']);
   const location = useLocation();

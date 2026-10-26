@@ -3,6 +3,8 @@ import type { PatientInvoice } from '@/features/billing/model/invoice';
 import type { InsurancePolicy, Payer, PatientDocument } from '@/features/documents/model/documents';
 import type { AppNotification } from '@/features/notifications/model/notification';
 import type { Allergy, NotificationChannel } from '@/features/profile/model/profile';
+import type { Gender } from '@/features/patients/model/patient';
+import type { TriageForm } from '@/features/triage/model/vitals';
 import type { VisitSummary } from '@/features/visits/model/visit';
 import { CHANGE_WINDOW_HOURS } from '@/features/appointments/model/policy';
 import { addDays, todayIn, wallClockIn, wallClockToUtc } from '@/shared/lib/branch-time';
@@ -10,17 +12,44 @@ import { BRANCH_IDS } from './branches';
 import { SPECIALTY_IDS } from './catalog';
 
 // Owner columns the API keeps but never returns to the patient.
-export type AppointmentRecord = Appointment & { patientUserId: string; slotId?: string };
+export type AppointmentRecord = Appointment & {
+  /** The patient record (05 §3.3). A patient registered at the desk may have no account (`patientUserId`). */
+  patientId: string;
+  patientUserId?: string;
+  slotId?: string;
+  // Desk and queue columns
+  calledAt?: string;
+  noShowAt?: string;
+  priorityReason?: string;
+  complaint?: string;
+  triage?: { form: TriageForm; recordedBy: string; recordedAt: string };
+  triageDraft?: { form: TriageForm; savedAt: string };
+  /** Services added at the checkout (FR-BIL-02); the booked service is always billed. */
+  extraLines?: { id: string; serviceId: string; quantity: number; unitPrice: number }[];
+};
 export type VisitRecord = VisitSummary & { patientUserId: string };
-export type InvoiceRecord = PatientInvoice & { patientUserId: string };
-export type DocumentRecord = PatientDocument & { patientUserId: string };
+export type InvoiceRecord = PatientInvoice & { patientId: string; patientUserId?: string; appointmentId?: string };
+/** `scanPassesAt`: until then a download is `File.NotScanned` (§13.8); seeded files are already scanned. */
+export type DocumentRecord = PatientDocument & { patientUserId: string; scanPassesAt?: string };
 export type PolicyRecord = InsurancePolicy & { patientUserId: string };
 export type NotificationRecord = AppNotification & { userId: string };
 
-/** The organization-specific part of a patient (`PatientRecord`, 05 §3.3) plus their channel choice. */
+/**
+ * The organization-specific part of a patient (`PatientRecord`, 05 §3.3) plus their channel choice.
+ * A patient registered at the desk has no account yet, so the record holds the name and phone; with
+ * an account they come from it (`patientIdentity` in mocks/front-desk.ts).
+ */
 export interface PatientRecordSeed {
-  userId: string;
+  id: string;
+  userId?: string;
   mrn: string;
+  fullName?: string;
+  phone?: string;
+  gender?: Gender;
+  dateOfBirth?: string;
+  nationalId?: string;
+  emergencyContactName?: string;
+  emergencyContactPhone?: string;
   memberSince: string;
   bloodType?: string;
   allergies: Allergy[];
@@ -29,6 +58,8 @@ export interface PatientRecordSeed {
 }
 
 export const PATIENT_ID = 'u-mohamed';
+/** Mohamed Adel's patient record. */
+export const PATIENT_RECORD_ID = 'pat-000412';
 export const DEMO_REMINDER_TOKEN = 'demo-reminder';
 const CAIRO = 'Africa/Cairo';
 
@@ -69,7 +100,7 @@ export function patientPortalSeed(now: Date) {
   const nextHalfHour = Math.ceil((h * 60 + m + 20) / 30) * 30;
   const todayTime = nextHalfHour > 21 * 60 + 30 ? '21:30' : `${pad(Math.floor(nextHalfHour / 60))}:${pad(nextHalfHour % 60)}`;
 
-  const base = { patientUserId: PATIENT_ID, source: 'Online' as const, attendanceConfirmed: false, hasReview: false, depositPaid: false };
+  const base = { patientId: PATIENT_RECORD_ID, patientUserId: PATIENT_ID, source: 'Online' as const, attendanceConfirmed: false, hasReview: false, depositPaid: false };
 
   const appointments: AppointmentRecord[] = [
     {
@@ -160,7 +191,7 @@ export function patientPortalSeed(now: Date) {
 
   const invoices: InvoiceRecord[] = [
     {
-      patientUserId: PATIENT_ID, id: 'inv-nc-412', number: 'NC-2026-000412', branchId: BRANCH_IDS.nasrCity,
+      patientId: PATIENT_RECORD_ID, patientUserId: PATIENT_ID, appointmentId: 'apt-cardio-consult', id: 'inv-nc-412', number: 'NC-2026-000412', branchId: BRANCH_IDS.nasrCity,
       doctorName: 'Dr. Ahmed Fathy', issuedAt: ago(14, '11:10'), status: 'PartiallyPaid',
       lines: [
         { description: 'Cardiology consultation', amount: 450 },
@@ -175,7 +206,7 @@ export function patientPortalSeed(now: Date) {
       balanceDue: 350,
     },
     {
-      patientUserId: PATIENT_ID, id: 'inv-ma-914', number: 'MA-2026-000914', branchId: BRANCH_IDS.maadi,
+      patientId: PATIENT_RECORD_ID, patientUserId: PATIENT_ID, appointmentId: 'apt-dental-cleaning', id: 'inv-ma-914', number: 'MA-2026-000914', branchId: BRANCH_IDS.maadi,
       doctorName: 'Dr. Mona Khalil', issuedAt: ago(45, '16:55'), status: 'Paid',
       lines: [{ description: 'Scaling and polishing', amount: 500 }],
       total: 500,
@@ -206,9 +237,10 @@ export function patientPortalSeed(now: Date) {
 
   const patients: PatientRecordSeed[] = [
     {
-      userId: PATIENT_ID, mrn: 'MRN-000412', memberSince: '2024-11-03', bloodType: 'O+',
+      id: PATIENT_RECORD_ID, userId: PATIENT_ID, mrn: 'MRN-000412', memberSince: '2024-11-03', bloodType: 'O+',
+      gender: 'Male', dateOfBirth: '1988-05-14', nationalId: '28805140103456',
       allergies: [{ name: 'Penicillin', severity: 'Severe' }, { name: 'Dust mites' }],
-      conditions: ['Mild hypertension'], notificationChannel: 'Sms',
+      conditions: ['Mild hypertension'], notificationChannel: 'Phone',
     },
   ];
 

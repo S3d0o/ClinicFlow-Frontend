@@ -20,7 +20,7 @@ export interface MfaState {
   from?: string;
 }
 
-/** Forgot password (SMS) → code. */
+/** Forgot password (phone) → code. */
 export interface ResetCodeState {
   ticket: OtpTicket;
 }

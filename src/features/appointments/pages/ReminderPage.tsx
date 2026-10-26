@@ -40,7 +40,7 @@ function Frame({ children }: { children: ReactNode }) {
 }
 
 /**
- * The page the SMS reminder links to (`/r/:token`, design patient/12, UX_NOTES U2): confirm with one
+ * The page the reminder message links to (`/r/:token`, design patient/12, UX_NOTES U2): confirm with one
  * tap, reschedule (after signing in) or cancel. Works without signing in.
  */
 export default function ReminderPage() {

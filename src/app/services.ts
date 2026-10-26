@@ -11,13 +11,18 @@ import type {
   RegistrationService,
 } from '@/features/auth/api/auth.service';
 import type { PatientBillingService } from '@/features/billing/api/billing.service';
+import type { CashSessionService, CheckoutService } from '@/features/billing/api/checkout.service';
 import type { CatalogService } from '@/features/catalog/api/catalog.service';
+import type { DeskService } from '@/features/desk/api/desk.service';
 import type { DirectoryService } from '@/features/doctors/api/directory.service';
 import type { DocumentsService, InsuranceService } from '@/features/documents/api/documents.service';
 import type { NotificationsService } from '@/features/notifications/api/notifications.service';
 import type { OrgService } from '@/features/org/api/org.service';
+import type { PatientsService } from '@/features/patients/api/patients.service';
 import type { ProfileService } from '@/features/profile/api/profile.service';
+import type { QueueBoardService } from '@/features/queue/api/queue.service';
 import type { ApplicationsService } from '@/features/recruitment/api/applications.service';
+import type { TriageService } from '@/features/triage/api/triage.service';
 import type { VisitsService } from '@/features/visits/api/visits.service';
 
 /**
@@ -47,6 +52,13 @@ export interface Services {
   insurance: InsuranceService;
   profile: ProfileService;
   notifications: NotificationsService;
+  // Front desk and nurse station (phase 3)
+  patients: PatientsService;
+  desk: DeskService;
+  queueBoard: QueueBoardService;
+  triage: TriageService;
+  checkout: CheckoutService;
+  cashSessions: CashSessionService;
   /** Only the mock backend offers demo accounts. */
   demoAccounts?: DemoAccountsService;
 }

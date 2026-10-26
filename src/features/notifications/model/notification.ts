@@ -1,5 +1,5 @@
 // In-app notifications (V1 feature, FR-NTF-03 events). Title and message are rendered by the backend
-// in the recipient's preferred language (R10), like emails and SMS.
+// in the recipient's preferred language (R10), like emails and phone messages.
 
 export type NotificationType =
   | 'AppointmentConfirmed'

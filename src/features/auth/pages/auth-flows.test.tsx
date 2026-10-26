@@ -55,7 +55,7 @@ describe('sign-in', () => {
 });
 
 describe('patient sign-up', () => {
-  it('creates the account, verifies the phone by SMS code and signs the patient in', async () => {
+  it('creates the account, verifies the phone by one-time code and signs the patient in', async () => {
     renderApp({ path: '/sign-up' });
     await userEvent.type(await screen.findByLabelText(/First name/), 'Omar');
     await userEvent.type(screen.getByLabelText(/Last name/), 'Hassan');
@@ -87,7 +87,7 @@ describe('patient sign-up', () => {
 });
 
 describe('password reset', () => {
-  it('resets by SMS code and lets the patient sign in with the new password', async () => {
+  it('resets by one-time code and lets the patient sign in with the new password', async () => {
     renderApp({ path: '/forgot-password' });
     await userEvent.type(await screen.findByLabelText(/^Mobile number/), '01012345678');
     await userEvent.click(screen.getByRole('button', { name: 'Send code' }));

@@ -2,7 +2,8 @@ import type { Appointment, BookRequest, CancelRequest, QueueStatus } from '../mo
 
 /**
  * The signed-in patient's appointments (`/api/v2/appointments`, patient-owned). Errors:
- * `Appointment.NotFound`, `Slot.CapacityReached` (taken meanwhile), `Appointment.SlotInPast`,
+ * `Appointment.NotFound`, `Slot.CapacityReached` (taken meanwhile), `Appointment.SlotInPast`, `Appointment.SlotNotFound`,
+ * `Booking.ServiceNotOffered`, `Deposit.NotOffered`, `Deposit.AlreadyPaid`,
  * `Appointment.CancellationWindowExpired` (cancel or reschedule too late), `Consent.Required`,
  * `Auth.PhoneNotVerified`, `Appointment.InvalidStatusTransition`, `Appointment.ReviewAlreadyExists`,
  * `Appointment.ReviewNotAllowed`, `Payment.GatewayUnavailable`.
@@ -29,7 +30,7 @@ export interface QueueStatusService {
   watch(appointmentId: string, listener: (status: QueueStatus) => void): () => void;
 }
 
-/** What the SMS reminder link shows, without signing in (FR-APT-09, FR-APT-10). */
+/** What the reminder link (WhatsApp or SMS) shows, without signing in (FR-APT-09, FR-APT-10). */
 export interface ReminderView {
   appointmentId: string;
   reference: string;

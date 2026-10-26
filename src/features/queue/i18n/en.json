@@ -1,0 +1,66 @@
+{
+  "ticket": "Ticket",
+  "stage": {
+    "WaitingTriage": "Waiting for triage",
+    "ReadyForDoctor": "Ready for the doctor",
+    "WithDoctor": "With the doctor",
+    "Done": "Done"
+  },
+  "board": {
+    "intro": "Every checked-in patient, from triage to checkout. It updates as things happen.",
+    "live": "Live",
+    "openDisplay": "Open the waiting-room screen",
+    "filterLabel": "Show doctor",
+    "allDoctors": "All doctors",
+    "count": "Patients:",
+    "empty": {
+      "WaitingTriage": "No one is waiting for triage.",
+      "ReadyForDoctor": "No one is ready yet.",
+      "WithDoctor": "No one is with a doctor.",
+      "Done": "No visits finished yet."
+    }
+  },
+  "card": {
+    "walkIn": "Walk-in",
+    "late": "Arrived {{minutes}} min late",
+    "more": "More actions for ticket {{ticket}}",
+    "moveToFront": "Move to the front…",
+    "priority": "Priority",
+    "vitals": "Vitals",
+    "inRoom": "{{room}} · {{minutes}} min",
+    "toPay": "{{amount}} to pay",
+    "paid": "Paid",
+    "waiting": "Waiting {{minutes}} min",
+    "call": "Call in",
+    "called": "Ticket {{ticket}} ({{name}}) is called in.",
+    "checkout": "Checkout"
+  },
+  "moveToFront": {
+    "title": "Move ticket {{ticket}} to the front",
+    "body": "{{name}} will be next in line. Everyone else keeps their order.",
+    "reason": "Reason",
+    "reasonHint": "Kept in the audit log, e.g. chest pain while waiting.",
+    "reasonRequired": "Give a reason for moving this patient.",
+    "confirm": "Move to the front",
+    "done": "Ticket {{ticket}} is now first in line."
+  },
+  "display": {
+    "noRoom": "Room to be announced",
+    "nowServing": "Now serving",
+    "proceed": "Please go to {{room}}",
+    "next": "Next in line",
+    "waiting_zero": "No one waiting",
+    "waiting_one": "{{count}} waiting",
+    "waiting_other": "{{count}} waiting",
+    "nextN": "Next {{n}}",
+    "averageWait": "Average wait",
+    "minutes": "~{{count}} min",
+    "empty": "No clinics are running right now.",
+    "announce": "Ticket {{ticket}}, please go to {{room}}.",
+    "instructions": "Watch for your ticket number. When it shows under Now serving, go to the room on that card.",
+    "doctorsOnDuty_one": "{{count}} doctor on duty",
+    "doctorsOnDuty_other": "{{count}} doctors on duty",
+    "patientsWaiting_one": "{{count}} patient waiting",
+    "patientsWaiting_other": "{{count}} patients waiting"
+  }
+}

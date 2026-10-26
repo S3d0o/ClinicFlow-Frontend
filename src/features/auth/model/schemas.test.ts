@@ -39,7 +39,7 @@ describe('account form schemas', () => {
   });
 
   it('validates only the field of the chosen reset channel', () => {
-    expect(forgotPasswordSchema.safeParse({ channel: 'sms', phone: '01012345678', email: '' }).success).toBe(true);
+    expect(forgotPasswordSchema.safeParse({ channel: 'phone', phone: '01012345678', email: '' }).success).toBe(true);
     expect(forgotPasswordSchema.safeParse({ channel: 'email', phone: '', email: 'a@b.eg' }).success).toBe(true);
     expect(issues(forgotPasswordSchema.safeParse({ channel: 'email', phone: '', email: '' }))).toEqual({ email: 'validation.email' });
   });

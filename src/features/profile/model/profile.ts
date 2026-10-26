@@ -1,7 +1,7 @@
 import type { Language } from '@/shared/i18n/languages';
 
-/** How booking confirmations and reminders reach the patient (FR-NTF-04). */
-export type NotificationChannel = 'Sms' | 'Email' | 'Both';
+/** How booking confirmations and reminders reach the patient (FR-NTF-04). `Phone` is WhatsApp, or SMS when the platform has it on (backend 06 §9.2). */
+export type NotificationChannel = 'Phone' | 'Email' | 'Both';
 
 export interface Allergy {
   name: string;
@@ -26,4 +26,4 @@ export interface PatientProfile {
 }
 
 /** Email delivery needs a confirmed email (FR-NTF-04). */
-export const channelAllowed = (channel: NotificationChannel, emailConfirmed: boolean) => channel === 'Sms' || emailConfirmed;
+export const channelAllowed = (channel: NotificationChannel, emailConfirmed: boolean) => channel === 'Phone' || emailConfirmed;

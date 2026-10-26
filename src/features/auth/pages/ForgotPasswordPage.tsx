@@ -38,7 +38,7 @@ function DemoEmailLink({ email }: { email: string }) {
   );
 }
 
-/** Password recovery, step 1 (FR-ACC-04): an SMS code or an email link. Never reveals whether an account exists. */
+/** Password recovery, step 1 (FR-ACC-04): a one-time code or an email link. Never reveals whether an account exists. */
 export default function ForgotPasswordPage() {
   const { t } = useTranslation(['auth', 'common']);
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ export default function ForgotPasswordPage() {
 
   const form = useForm<ForgotPasswordValues>({
     resolver: zodResolver(forgotPasswordSchema),
-    defaultValues: { channel: 'sms', phone: '', email: '' },
+    defaultValues: { channel: 'phone', phone: '', email: '' },
   });
   const { errors } = form.formState;
   const channel = useWatch({ control: form.control, name: 'channel' });
@@ -59,7 +59,7 @@ export default function ForgotPasswordPage() {
   const onSubmit = form.handleSubmit(async (values) => {
     setFormError(null);
     try {
-      if (values.channel === 'sms') {
+      if (values.channel === 'phone') {
         const ticket = await sendCode.mutateAsync({ phone: values.phone, purpose: 'PasswordReset' });
         navigate('/forgot-password/verify', { state: { ticket } satisfies ResetCodeState });
       } else {
@@ -101,11 +101,11 @@ export default function ForgotPasswordPage() {
 
         <fieldset className="space-y-3">
           <legend className="sr-only">{t('forgot.channel')}</legend>
-          <ChoiceCard value="sms" {...form.register('channel')} icon={<MessageSquareText className="size-5" />} label={t('forgot.sms')} description={t('forgot.smsHint')} />
+          <ChoiceCard value="phone" {...form.register('channel')} icon={<MessageSquareText className="size-5" />} label={t('forgot.phone')} description={t('forgot.phoneHint')} />
           <ChoiceCard value="email" {...form.register('channel')} icon={<Mail className="size-5" />} label={t('forgot.email')} description={t('forgot.emailHint')} />
         </fieldset>
 
-        {channel === 'sms' ? (
+        {channel === 'phone' ? (
           <Field key="phone" label={t('forgot.phoneLabel')} error={validation(errors.phone?.message)} required>
             {(control) => <PhoneInput {...control} {...form.register('phone')} placeholder="010 1234 5678" />}
           </Field>
@@ -123,7 +123,7 @@ export default function ForgotPasswordPage() {
         </p>
 
         <Button type="submit" size="lg" className="w-full" disabled={form.formState.isSubmitting}>
-          {channel === 'sms' ? t('forgot.submitSms') : t('forgot.submitEmail')}
+          {channel === 'phone' ? t('forgot.submitPhone') : t('forgot.submitEmail')}
         </Button>
       </form>
     </AuthCard>

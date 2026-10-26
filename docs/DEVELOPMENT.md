@@ -40,7 +40,7 @@ Open `/#/sign-in` and sign in with a phone or email and the demo password, or pi
 | Mohamed Adel | Patient | `/patient` |
 | Dr. Nour El-Din Samy | Doctor applicant (no role) | `/my-application` |
 
-Every demo password is **`Demo@1234`** and every SMS or authenticator code is **`123456`**. Staff recovery codes are in `users.ts` too. The session survives reloads; to start over, sign out or clear `clinicflow:demo-session` from local storage. **The mock data resets on every reload**, including accounts and applications made in the browser: a new account is gone after a reload (its session then reads as signed out).
+Every demo password is **`Demo@1234`** and every one-time (WhatsApp or SMS) or authenticator code is **`123456`**. Staff recovery codes are in `users.ts` too. The session survives reloads; to start over, sign out or clear `clinicflow:demo-session` from local storage. **The mock data resets on every reload**, including accounts and applications made in the browser: a new account is gone after a reload (its session then reads as signed out).
 
 Trying the phase 1 flows:
 - **Sign-up:** `/#/sign-up` with any unused Egyptian mobile number (e.g. `0122 333 4444`), then the code `123456`. Five wrong codes open the lockout screen.
@@ -53,11 +53,20 @@ Trying the phase 1 flows:
 Trying the phase 2 flows (sign in as **Mohamed Adel**; his data is in `src/mocks/seed/patient-portal.ts`, dated relative to today):
 - **Home:** today's cardiology visit, already checked in (ticket A-14, third in line). The queue moves on every 20 seconds until he is called in.
 - **Appointments:** three upcoming (today's; an eye exam in 5 days with an optional EGP 100 deposit; a dental check-up in 9 days) and three past (a completed cardiology visit with a summary, waiting for a review; a reviewed dental cleaning; a cancelled dermatology visit). Booking, rescheduling and cancelling change the lists and add a notification about 2 seconds later.
-- **SMS reminder:** "Open an SMS visit reminder" under the demo accounts opens `/#/r/demo-reminder` (the eye exam) without signing in.
+- **Reminder message:** "Open a visit reminder message" under the demo accounts opens `/#/r/demo-reminder` (the eye exam) without signing in.
 - **Payments:** the deposit and the open invoice (EGP 350) "pay" at once and come back with "Payment received"; there is no Paymob page in the demo.
 - **Records:** the cardiology visit summary (two medicines, a pending test, a follow-up window), the prescription and invoices as sample PDFs, an insurance card and two documents. An uploaded document or added card stays until a reload.
 - **Profile:** no email yet, so email reminders are off until one is added and confirmed. Changing the number takes any unused mobile number and the code `123456`.
 - **Notifications** are seeded in Arabic, Mohamed's language, so they stay Arabic in the English UI.
+
+Trying the phase 3 flows (sign in as **Mona Samir**, receptionist at Nasr City, or **Sara Ibrahim**, nurse; the day is in `src/mocks/seed/front-desk.ts`, placed around the current time):
+- **Today** (`/#/desk`): three doctors (Dr. Ahmed Fathy, Dr. Laila Hassan, Dr. Hala Mostafa) with about twenty visits: done and paid, done and unpaid, in the room, ready, waiting for triage (two walk-ins), coming up, one late, one no-show, one cancelled. Mohamed Adel's visit (phase 2) is Dr. Ahmed's, ticket A-14. Check in a visit that starts within the hour, or mark the late one as a no-show. Late at night or early in the morning, visits that would fall outside today are left out, so the day looks thinner.
+- **Patients** (`/#/desk/patients`): try `احمد ابراهيم` or `فاطمه` (the Arabic spellings fold), `010 1234 5678` (Mohamed and Mona Adel share it, so registering with it warns about duplicates), `412` (an MRN) or a date of birth.
+- **Book / walk-in**: any patient's **Book a visit** or **Walk-in**. A walk-in for a doctor whose next slot is more than 30 minutes away joins the queue without a slot.
+- **Queue board** (`/#/desk/queue`) and the **waiting-room screen** (`/#/display/br-nc`, also from the board). The demo doctors finish a consultation after a minute and call the next ready patient every 20 seconds, so both screens move on their own; **Call in** works when a doctor's room is free.
+- **Checkout** (`/#/desk/payments`): Kamal Fouad and Alyaa Mansour finished and haven't paid; Salma Nabil (coming up, Dr. Ahmed) has an EGP 100 deposit paid online. Cash needs Mona's open session; Dr. Hala Mostafa (manager) takes payments but has no drawer, so she's asked to open one.
+- **Cash session** (`/#/desk/cash`): Desk 1, opened this morning with an EGP 500 float, two payments and a cash refund (EGP 950 expected). Close it with a banknote count, then open a new one.
+- **Nurse station** (Sara, `/#/nurse`): three patients waiting for vitals; Tamer Zaki is allergic to amoxicillin. Sending the vitals moves the patient to "ready for the doctor" on the board.
 
 The UI starts in **Arabic** (right-to-left), as the docs require; switch with the "EN | عربي" toggle. The choice is remembered.
 

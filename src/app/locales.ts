@@ -2,18 +2,28 @@ import arAppointments from '@/features/appointments/i18n/ar.json';
 import enAppointments from '@/features/appointments/i18n/en.json';
 import arAuth from '@/features/auth/i18n/ar.json';
 import enAuth from '@/features/auth/i18n/en.json';
+import arBilling from '@/features/billing/i18n/ar.json';
+import enBilling from '@/features/billing/i18n/en.json';
+import arDesk from '@/features/desk/i18n/ar.json';
+import enDesk from '@/features/desk/i18n/en.json';
 import arDoctors from '@/features/doctors/i18n/ar.json';
 import enDoctors from '@/features/doctors/i18n/en.json';
 import arNotifications from '@/features/notifications/i18n/ar.json';
 import enNotifications from '@/features/notifications/i18n/en.json';
+import arPatients from '@/features/patients/i18n/ar.json';
+import enPatients from '@/features/patients/i18n/en.json';
 import arProfile from '@/features/profile/i18n/ar.json';
 import enProfile from '@/features/profile/i18n/en.json';
+import arQueue from '@/features/queue/i18n/ar.json';
+import enQueue from '@/features/queue/i18n/en.json';
 import arRecords from '@/features/records/i18n/ar.json';
 import enRecords from '@/features/records/i18n/en.json';
 import arRecruitment from '@/features/recruitment/i18n/ar.json';
 import enRecruitment from '@/features/recruitment/i18n/en.json';
 import arSite from '@/features/site/i18n/ar.json';
 import enSite from '@/features/site/i18n/en.json';
+import arTriage from '@/features/triage/i18n/ar.json';
+import enTriage from '@/features/triage/i18n/en.json';
 import arCommon from '@/shared/i18n/locales/ar/common.json';
 import arNav from '@/shared/i18n/locales/ar/nav.json';
 import arScreens from '@/shared/i18n/locales/ar/screens.json';
@@ -36,6 +46,11 @@ export const resources = {
     records: enRecords,
     profile: enProfile,
     notifications: enNotifications,
+    patients: enPatients,
+    desk: enDesk,
+    queue: enQueue,
+    triage: enTriage,
+    billing: enBilling,
   },
   ar: {
     common: arCommon,
@@ -49,6 +64,11 @@ export const resources = {
     records: arRecords,
     profile: arProfile,
     notifications: arNotifications,
+    patients: arPatients,
+    desk: arDesk,
+    queue: arQueue,
+    triage: arTriage,
+    billing: arBilling,
   },
 } as const;
 

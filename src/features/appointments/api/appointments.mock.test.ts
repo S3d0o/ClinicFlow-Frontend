@@ -60,11 +60,21 @@ describe("patient's appointments", () => {
     await rejectsWith(services.appointments.cancel('apt-eyes', { reason: 'Other' }), 'Appointment.CancellationWindowExpired');
   });
 
-  it('takes the optional deposit once', async () => {
+  it('takes the optional deposit once, only where the service offers one (§13.7)', async () => {
     const { services } = createTestBackend({ signedInAs: 'u-mohamed' });
     expect(await services.appointments.startDepositCheckout('apt-eyes')).toEqual({ checkoutUrl: '/patient/appointments/apt-eyes?payment=success' });
     expect((await services.appointments.getMine('apt-eyes')).depositPaid).toBe(true);
-    await rejectsWith(services.appointments.startDepositCheckout('apt-eyes'), 'Appointment.InvalidStatusTransition');
+    await rejectsWith(services.appointments.startDepositCheckout('apt-eyes'), 'Deposit.AlreadyPaid');
+    await rejectsWith(services.appointments.startDepositCheckout('apt-dental-checkup'), 'Deposit.NotOffered');
+  });
+
+  it('tells an unknown slot from a started one, and a service the doctor doesn’t offer (§13.7)', async () => {
+    const { services } = createTestBackend({ signedInAs: 'u-mohamed' });
+    const book = (slotId: string, serviceId = 'svc-car-c') =>
+      services.appointments.book({ doctorId: 'doc-ahmed', branchId: 'br-nc', serviceId, slotId, acceptTerms: true });
+    await rejectsWith(book('doc-ahmed|br-nc|2026-10-24|04:00'), 'Appointment.SlotInPast');
+    await rejectsWith(book('no-such-slot'), 'Appointment.SlotNotFound');
+    await rejectsWith(book((await freeSlot(services)).id, 'svc-ped-c'), 'Booking.ServiceNotOffered');
   });
 
   it('accepts one review per completed visit', async () => {
@@ -80,7 +90,7 @@ describe("patient's appointments", () => {
   });
 });
 
-describe('SMS reminder link (FR-APT-10)', () => {
+describe('reminder link (FR-APT-10)', () => {
   it('shows the visit without signing in, and confirms attendance', async () => {
     const { services } = createTestBackend();
     expect(await services.reminders.get(DEMO_REMINDER_TOKEN)).toMatchObject({ appointmentId: 'apt-eyes', attendanceConfirmed: false });

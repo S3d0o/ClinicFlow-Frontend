@@ -6,14 +6,15 @@ import { ServiceError } from '@/shared/api/service-error';
 import { CARD_ACCEPT, checkDocument, type InsurancePolicy, type PatientDocument } from '../model/documents';
 import type { DocumentsService, InsuranceService } from './documents.service';
 
-const strip = <T extends { patientUserId: string }>(record: T): Omit<T, 'patientUserId'> => {
+const strip = <T extends { patientUserId: string; scanPassesAt?: string }>(record: T): Omit<T, 'patientUserId' | 'scanPassesAt'> => {
   const view: Partial<T> = structuredClone(record);
   delete view.patientUserId;
-  return view as Omit<T, 'patientUserId'>;
+  delete view.scanPassesAt;
+  return view as Omit<T, 'patientUserId' | 'scanPassesAt'>;
 };
 
 export function createMockDocumentsService(deps: AuthMockDeps): DocumentsService {
-  const { db, latencyMs, now } = deps;
+  const { db, latencyMs, now, scanDelayMs } = deps;
 
   const own = (documentId: string) => {
     const user = sessionUser(deps);
@@ -44,6 +45,8 @@ export function createMockDocumentsService(deps: AuthMockDeps): DocumentsService
         contentType: file.type,
         sizeBytes: file.size,
         uploadedAt: now().toISOString(),
+        // Scanned in the background (§13.8); downloadable once it passes
+        scanPassesAt: new Date(now().getTime() + scanDelayMs).toISOString(),
       };
       db.files.set(record.id, file);
       db.documents.push(record);
@@ -53,6 +56,7 @@ export function createMockDocumentsService(deps: AuthMockDeps): DocumentsService
     async download(documentId) {
       await delay(latencyMs);
       const record = own(documentId);
+      if (record.scanPassesAt && now().getTime() < Date.parse(record.scanPassesAt)) throw new ServiceError('File.NotScanned');
       return db.files.get(record.id) ?? samplePdf(record.fileName, ['Uploaded by the patient.']);
     },
 

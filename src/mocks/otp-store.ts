@@ -14,7 +14,7 @@ interface PendingCode {
   blockedUntil?: number;
 }
 
-/** SMS codes per phone and purpose, as the backend keeps them (hashed there, in memory here). */
+/** One-time codes per phone and purpose, as the backend keeps them (hashed there, in memory here). */
 export function createOtpStore(now: () => Date) {
   const codes = new Map<string, PendingCode>();
   const keyOf = (phone: string, purpose: OtpPurpose) => `${purpose}:${phone}`;

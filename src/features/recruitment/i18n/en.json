@@ -2,7 +2,7 @@
   "join": {
     "eyebrow": "Careers for doctors",
     "title": "Apply to join our clinic",
-    "intro": "Practise outpatient medicine across our branches. Apply online with your CV; we'll reply by email and SMS at every step.",
+    "intro": "Practise outpatient medicine across our branches. Apply online with your CV; we'll reply by email and WhatsApp at every step.",
     "steps": {
       "account": "Account",
       "accountHint": "Phone and email verified",
@@ -74,7 +74,7 @@
     "pending": "Pending",
     "reachedOn": "{{date}}",
     "appliedTitle": "We received your application",
-    "appliedBody": "Our medical team reviews every application. If your profile fits, you'll get an interview invitation by email and SMS.",
+    "appliedBody": "Our medical team reviews every application. If your profile fits, you'll get an interview invitation by email and WhatsApp.",
     "interviewTitle": "Your interview",
     "dateTime": "Date and time",
     "branchTime": "{{time}} (branch time)",

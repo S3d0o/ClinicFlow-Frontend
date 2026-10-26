@@ -48,7 +48,7 @@ export const invitationSchema = z
 export type InvitationValues = z.infer<typeof invitationSchema>;
 
 export const forgotPasswordSchema = z.discriminatedUnion('channel', [
-  z.object({ channel: z.literal('sms'), phone, email: z.string() }),
+  z.object({ channel: z.literal('phone'), phone, email: z.string() }),
   z.object({ channel: z.literal('email'), email, phone: z.string() }),
 ]);
 export type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>;
