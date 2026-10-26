@@ -75,9 +75,11 @@ export function renderNotification(
 
 /**
  * Delivers a notification the way the outbox does: after `delayMs` (about 2 s in the app, at once in
- * tests), never inside the request (contract 4.0.0-p0 §1).
+ * tests), never inside the request (contract 4.0.0-p0 §1). A patient without an account (registered
+ * at the desk) has no in-app inbox: the backend texts them instead.
  */
-export function notify(db: MockDb, delayMs: number, userId: string, type: NotificationType, context: Context, now: () => Date) {
+export function notify(db: MockDb, delayMs: number, userId: string | undefined, type: NotificationType, context: Context, now: () => Date) {
+  if (!userId) return;
   const deliver = () => db.notifications.push(renderNotification(db, userId, type, context, now().toISOString()));
   if (delayMs > 0) setTimeout(deliver, delayMs);
   else deliver();

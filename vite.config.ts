@@ -17,6 +17,11 @@ export default defineConfig({
           if (/[\\/]node_modules[\\/](react|react-dom|scheduler|react-router|react-router-dom)[\\/]/.test(id)) {
             return 'react';
           }
+          // Every translation file, loaded at startup like the entry but kept out of it so the entry
+          // stays under Vite's size warning. JSON imports nothing, so this chunk can't form a cycle
+          if (/[\\/]src[\\/].*[\\/]i18n[\\/].*\.json$/.test(id)) {
+            return 'locales';
+          }
         },
       },
     },

@@ -2,7 +2,7 @@ import type { Role, RoleAssignment } from '@/features/auth/model/user';
 import type { Language } from '@/shared/i18n/languages';
 import { BRANCH_IDS } from './branches';
 
-/** The password of every demo account, and the code every demo SMS or authenticator "sends". */
+/** The password of every demo account, and the code every demo message or authenticator "sends". */
 export const DEMO_PASSWORD = 'Demo@1234';
 export const DEMO_CODE = '123456';
 

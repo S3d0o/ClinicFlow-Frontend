@@ -22,7 +22,7 @@ import { ChangePhoneDialog } from '../components/ChangePhoneDialog';
 import { useMyProfile, useUpdatePreferences } from '../hooks/use-profile';
 import { channelAllowed, type NotificationChannel } from '../model/profile';
 
-const CHANNELS: NotificationChannel[] = ['Sms', 'Email', 'Both'];
+const CHANNELS: NotificationChannel[] = ['Phone', 'Email', 'Both'];
 
 function Card({ title, icon, aside, children }: { title: string; icon: ReactNode; aside?: ReactNode; children: ReactNode }) {
   return (
@@ -159,6 +159,7 @@ export default function ProfilePage() {
             })}
           </div>
         </fieldset>
+        <p className="text-body-sm text-muted-foreground">{t('channel.phoneHint')}</p>
         {!me.emailConfirmed && <p className="rounded-lg bg-info/10 p-3 text-body-sm text-info">{t('channel.needsEmail')}</p>}
         {update.isError && <FormAlert>{errorMessage(update.error)}</FormAlert>}
       </Card>

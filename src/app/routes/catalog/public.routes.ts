@@ -4,7 +4,7 @@ import type { ScreenRoute } from '../types';
 const PUBLIC = { kind: 'public' } as const;
 const GUEST = { kind: 'guest' } as const;
 
-// Visitors, account access and the doctor application (phase 1); the SMS reminder page (phase 2).
+// Visitors, account access and the doctor application (phase 1); the reminder message page (phase 2).
 export const publicRoutes: ScreenRoute[] = [
   {
     path: '/', screen: 'landing', layout: 'public', access: PUBLIC, phase: 1, design: 'public/01-outpatient-clinic-network-landing-page',
@@ -56,12 +56,12 @@ export const publicRoutes: ScreenRoute[] = [
     component: lazy(() => import('@/features/auth/pages/ForgotPasswordPage')),
   },
   {
-    // The SMS code step reuses the verify-phone design
+    // The one-time code step reuses the verify-phone design
     path: '/forgot-password/verify', screen: 'resetCode', layout: 'auth', access: GUEST, phase: 1, design: 'patient/02-verify-your-phone',
     component: lazy(() => import('@/features/auth/pages/ResetCodePage')),
   },
   {
-    // Opened from the reset email (`/#/reset-password?…`, API contract §8), so it stays public
+    // Opened from the reset email (`/#/reset-password?userId=…&token=…`, API contract §13.9), so it stays public
     path: '/reset-password', screen: 'resetPassword', layout: 'auth', access: PUBLIC, phase: 1, design: 'patient/04-set-new-password',
     component: lazy(() => import('@/features/auth/pages/ResetPasswordPage')),
   },
@@ -76,7 +76,7 @@ export const publicRoutes: ScreenRoute[] = [
   },
 
   {
-    // Opened from the SMS reminder without signing in (FR-APT-10)
+    // Opened from the reminder message without signing in (FR-APT-10)
     path: '/r/:token', screen: 'reminder', layout: 'bare', access: PUBLIC, phase: 2, design: 'patient/12-sms-visit-reminder-page',
     component: lazy(() => import('@/features/appointments/pages/ReminderPage')),
   },

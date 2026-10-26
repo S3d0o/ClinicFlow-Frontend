@@ -1,0 +1,101 @@
+{
+  "queue": {
+    "waiting_zero": "No one is waiting for vitals",
+    "waiting_one": "{{count}} patient waiting for vitals",
+    "waiting_other": "{{count}} patients waiting for vitals",
+    "filterLabel": "Show doctor",
+    "allDoctors": "All doctors",
+    "search": "Search by ticket or name",
+    "nextInLine": "Next in line for vitals",
+    "walkIn": "Walk-in",
+    "allergy": "Allergy: {{name}}",
+    "checkedIn": "Checked in {{time}} (waiting {{minutes}} min)",
+    "priority": "Moved to the front: {{reason}}",
+    "start": "Start triage",
+    "startFor": "Start triage for {{name}}",
+    "emptyTitle": "No one is waiting for triage",
+    "emptyBody": "Checked-in patients appear here as they arrive."
+  },
+  "rooms": {
+    "title": "Consultation rooms",
+    "empty": "No clinics are running today.",
+    "noRoom": "No room assigned",
+    "busy": "With a patient",
+    "free": "Free",
+    "serving": "Seeing ticket {{ticket}} · {{minutes}} min",
+    "ready_zero": "No one ready yet",
+    "ready_one": "{{count}} patient ready",
+    "ready_other": "{{count}} patients ready"
+  },
+  "vitals": {
+    "systolic": "Systolic",
+    "diastolic": "Diastolic",
+    "pulse": "Heart rate",
+    "temperature": "Temperature",
+    "respiratoryRate": "Breathing rate",
+    "spo2": "Oxygen saturation",
+    "weightKg": "Weight",
+    "heightCm": "Height",
+    "painScore": "Pain"
+  },
+  "units": {
+    "systolic": "mmHg",
+    "diastolic": "mmHg",
+    "pulse": "bpm",
+    "temperature": "°C",
+    "respiratoryRate": "/min",
+    "spo2": "%",
+    "weightKg": "kg",
+    "heightCm": "cm",
+    "painScore": "/10"
+  },
+  "flags": {
+    "high": "High",
+    "low": "Low"
+  },
+  "normalRange": "Normal {{min}}–{{max}}",
+  "accepted": "{{min}}–{{max}}",
+  "outOfRange": "Check this value: it should be between {{min}} and {{max}}.",
+  "bmi": {
+    "underweight": "Underweight",
+    "normal": "Healthy weight",
+    "overweight": "Overweight",
+    "obese": "Obese"
+  },
+  "form": {
+    "back": "Back to the triage queue",
+    "checkedIn": "Checked in {{time}} (waiting {{minutes}} min)",
+    "doctor": "Seeing",
+    "noAllergies": "No known allergies",
+    "allergy": "Allergy: {{name}}",
+    "allergySeverity": "{{severity}} allergy: {{name}}",
+    "severity": {
+      "Mild": "Mild",
+      "Moderate": "Moderate",
+      "Severe": "Severe"
+    },
+    "bloodType": "Blood type {{type}}",
+    "alreadySent": "This patient's vitals are done. They are now: {{stage}}.",
+    "vitalsLegend": "Vital signs",
+    "bloodPressure": "Blood pressure",
+    "signs": "Heart, temperature and breathing",
+    "body": "Weight and height",
+    "bmiAuto": "BMI is worked out for you",
+    "bmi": "BMI {{value}} · {{band}}",
+    "bmiPending": "Enter weight and height to see the BMI.",
+    "pain": "Pain (0 = none, 10 = worst)",
+    "painHint": "Ask the patient to rate their pain right now. Tap the number again to clear it.",
+    "complaint": "Complaint and allergies",
+    "complaintLabel": "Chief complaint",
+    "complaintHint": "In the patient's words, in Arabic or English.",
+    "allergiesConfirm": "I confirmed the allergies with {{name}}",
+    "saving": "Saving draft…",
+    "savedAt": "Draft saved at {{time}}",
+    "notSaved": "Not saved yet",
+    "fixValues": "Fix the highlighted values first.",
+    "confirmAllergiesFirst": "Confirm the allergies to send.",
+    "saveDraft": "Save draft",
+    "send": "Send to the doctor ({{room}})",
+    "sent": "Ticket {{ticket}} is ready for {{doctor}}."
+  }
+}

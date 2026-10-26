@@ -21,7 +21,7 @@ interface OtpCodeFormProps {
 }
 
 /**
- * Enter an SMS code (UX_NOTES U5): auto-submits at six digits, shows tries left after a wrong code,
+ * Enter a one-time code (UX_NOTES U5): auto-submits at six digits, shows tries left after a wrong code,
  * a resend countdown (60 s) and the code's expiry (5 min). Too many tries open the lockout screen.
  */
 export function OtpCodeForm({ ticket, purpose, submitLabel, onSubmit, onTicketChange }: OtpCodeFormProps) {

@@ -11,7 +11,7 @@ import { Field } from '@/shared/ui/Field';
 import { PhoneInput } from '@/shared/ui/PhoneInput';
 import { useConfirmPhoneChange, useRequestPhoneChange } from '../hooks/use-profile';
 
-/** A new number replaces the old one only after its SMS code is entered (FR-ACC-05). */
+/** A new number replaces the old one only after its one-time code is entered (FR-ACC-05). */
 export function ChangePhoneDialog({ onClose }: { onClose: () => void }) {
   const { t } = useTranslation(['profile', 'common']);
   const errorMessage = useErrorMessage();

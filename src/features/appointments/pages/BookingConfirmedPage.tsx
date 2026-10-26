@@ -48,8 +48,8 @@ export default function BookingConfirmedPage() {
   const visit = appointment.data;
   const visitBranch = branch(visit.branchId);
   const address = visitBranch ? (language === 'ar' ? visitBranch.addressAr : visitBranch.addressEn) : '';
-  const channel = profile.data?.notificationChannel ?? 'Sms';
-  const reminders = { Sms: 'booked.remindersSms', Email: 'booked.remindersEmail', Both: 'booked.remindersBoth' } as const;
+  const channel = profile.data?.notificationChannel ?? 'Phone';
+  const reminders = { Phone: 'booked.remindersPhone', Email: 'booked.remindersEmail', Both: 'booked.remindersBoth' } as const;
 
   return (
     <div className="mx-auto max-w-lg space-y-5">

@@ -32,6 +32,7 @@ import { checkDocument, DOCUMENT_ACCEPT, type PatientDocument } from '../model/d
 function DocumentRow({ document }: { document: PatientDocument }) {
   const { t } = useTranslation(['records', 'common']);
   const { language } = useLanguage();
+  const errorMessage = useErrorMessage();
   const download = useDownloadDocument();
   const remove = useRemoveDocument();
   const Icon = document.contentType.startsWith('image/') ? Image : FileText;
@@ -56,7 +57,7 @@ function DocumentRow({ document }: { document: PatientDocument }) {
         size="icon"
         aria-label={t('documents.download', { name: document.fileName })}
         disabled={download.isPending}
-        onClick={() => download.mutate({ documentId: document.id, fileName: document.fileName })}
+        onClick={() => download.mutate({ documentId: document.id, fileName: document.fileName }, { onError: (err) => toast.error(errorMessage(err)) })}
       >
         <Download />
       </Button>
@@ -73,7 +74,7 @@ function DocumentRow({ document }: { document: PatientDocument }) {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>{t('common:actions.cancel')}</AlertDialogCancel>
-            <AlertDialogAction onClick={() => remove.mutate(document.id, { onSuccess: () => toast.success(t('documents.removed')) })}>
+            <AlertDialogAction onClick={() => remove.mutate(document.id, { onSuccess: () => toast.success(t('documents.removed')), onError: (err) => toast.error(errorMessage(err)) })}>
               {t('documents.removeConfirm')}
             </AlertDialogAction>
           </AlertDialogFooter>

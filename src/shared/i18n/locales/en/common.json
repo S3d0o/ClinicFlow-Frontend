@@ -37,7 +37,9 @@
     "terms": "Please accept to continue.",
     "maxLength": "Use at most {{max}} characters.",
     "code": "Enter the 6-digit code.",
-    "wholeNumber": "Enter a whole number between {{min}} and {{max}}."
+    "wholeNumber": "Enter a whole number between {{min}} and {{max}}.",
+    "nationalId": "Enter the 14 digits of the national ID.",
+    "dateOfBirth": "Enter a date of birth that has already passed."
   },
   "errors": {
     "generic": "Something went wrong. Please try again.",
@@ -51,10 +53,17 @@
       "Unauthorized": "Your session has ended. Please sign in again.",
       "AccountLockedOut": "Too many failed attempts. Try again later.",
       "InvalidPasswordResetToken": "This reset link isn't valid or has expired. Ask for a new one.",
-      "InvalidEmailConfirmationToken": "This confirmation link isn't valid or has expired."
+      "InvalidEmailConfirmationToken": "This confirmation link isn't valid or has expired.",
+      "PhoneAlreadyUsed": "Another account already uses this mobile number.",
+      "MfaEnrollmentRequired": "Set up two-step sign-in with your authenticator app to continue.",
+      "EmailAlreadyExists": "Another account already uses this email.",
+      "AccountNotActive": "This account has been deactivated. Contact the clinic if you think this is a mistake."
     },
     "Validation": {
       "InvalidPhone": "Enter an Egyptian mobile number, e.g. 010 1234 5678."
+    },
+    "Messaging": {
+      "PhoneUnreachable": "We couldn't reach this number on WhatsApp. Check the number, or sign up with another one."
     },
     "Otp": {
       "InvalidCode": "That code isn't right or has expired. Attempts left: {{attemptsLeft}}.",
@@ -69,18 +78,111 @@
       "AlreadyOpen": "You already have an open application.",
       "CvRequired": "Attach your CV to apply.",
       "InvalidStatusTransition": "This application can't be changed in its current stage.",
-      "ReapplyTooSoon": "You can't apply again yet. Your application page shows the date."
+      "ReapplyTooSoon": "You can't apply again yet. Your application page shows the date.",
+      "NotFound": "You don't have an application yet."
     },
     "File": {
       "NotFound": "We couldn't find this file.",
       "TypeNotAllowed": "This file type isn't accepted.",
-      "TooLarge": "The file is larger than 5 MB."
+      "TooLarge": "The file is too large for this upload.",
+      "NotScanned": "This file is still being checked for viruses. Try again in a moment."
     },
     "Doctor": {
       "NotFound": "We couldn't find this doctor."
     },
     "RateLimit": {
       "Exceeded": "Too many attempts. Please wait a minute and try again."
+    },
+    "Access": {
+      "OutOfScope": "You don't have access to this branch's records."
+    },
+    "Appointment": {
+      "NotFound": "We couldn't find this appointment.",
+      "SlotInPast": "This time has already started. Please pick a later one.",
+      "CancellationWindowExpired": "It's too close to the visit to change it online. Please call the branch.",
+      "InvalidStatusTransition": "This appointment can't be changed in its current status. Refresh to see the latest.",
+      "ReviewAlreadyExists": "You have already reviewed this visit.",
+      "ReviewNotAllowed": "You can review a visit once it is completed.",
+      "CheckInWindowClosed": "Check-in opens an hour before the visit, on the visit day.",
+      "NoShowTooEarly": "A visit can be marked as a no-show 15 minutes after it starts.",
+      "WalkInCapReached": "This doctor can't take more walk-ins today. Book the next free time instead.",
+      "DoctorBusy": "The doctor already has a patient in the room.",
+      "SlotNotFound": "This time no longer exists. Please pick another.",
+      "Unauthorized": "You don't have access to this appointment."
+    },
+    "Slot": {
+      "CapacityReached": "Someone just booked this time. Please pick another."
+    },
+    "Consent": {
+      "Required": "Please accept the terms to book."
+    },
+    "Reminder": {
+      "LinkInvalid": "This reminder link isn't valid any more."
+    },
+    "Visit": {
+      "NotFound": "We couldn't find this visit summary.",
+      "NoPrescription": "This visit has no prescription."
+    },
+    "Invoice": {
+      "NotFound": "We couldn't find this invoice.",
+      "NothingDue": "Nothing is left to pay.",
+      "NotDraft": "The invoice is already issued, so its services can't change."
+    },
+    "Payer": {
+      "NotFound": "We couldn't find this insurance company."
+    },
+    "Profile": {
+      "EmailRequired": "Confirm an email address first to get reminders by email."
+    },
+    "Payment": {
+      "GatewayUnavailable": "Online payment isn't available right now. Your booking is safe; try again later.",
+      "InvalidAmount": "Enter an amount greater than zero and no more than what is due.",
+      "NoOpenCashSession": "Open a cash session before taking cash.",
+      "NotFound": "We couldn't find this payment."
+    },
+    "Patient": {
+      "NotFound": "We couldn't find this patient.",
+      "ProfileNotFound": "We couldn't find your patient record. Contact the clinic."
+    },
+    "Queue": {
+      "ReasonRequired": "Give a reason for moving this patient."
+    },
+    "Vitals": {
+      "OutOfRange": "Some values are outside what can be measured. Check them and try again."
+    },
+    "Triage": {
+      "AllergiesNotConfirmed": "Confirm the allergies with the patient first."
+    },
+    "CashSession": {
+      "AlreadyOpen": "You already have an open cash session. Close it first.",
+      "NotOpen": "This cash session is already closed."
+    },
+    "CashDrawer": {
+      "InUse": "Someone else has this drawer open. Choose another one.",
+      "NotFound": "We couldn't find this drawer."
+    },
+    "Service": {
+      "NotFound": "This doctor doesn't offer that service."
+    },
+    "Branch": {
+      "NotFound": "We couldn't find this branch. It may be closed."
+    },
+    "Booking": {
+      "ServiceNotOffered": "This doctor doesn't offer that service at this branch. Please pick another."
+    },
+    "Deposit": {
+      "NotOffered": "This visit doesn't take a deposit.",
+      "AlreadyPaid": "The deposit is already paid."
+    },
+    "Document": {
+      "SharedWithDoctor": "This document is part of a visit record, so it can't be removed."
+    },
+    "Idempotency": {
+      "KeyReused": "This request was already sent with different details. Refresh the page and try again."
+    },
+    "Notification": {
+      "NotFound": "We couldn't find this notification.",
+      "Unauthorized": "You don't have access to this notification."
     }
   },
   "password": {
@@ -164,7 +266,9 @@
   },
   "branch": {
     "label": "Branch",
-    "all": "All branches"
+    "all": "All branches",
+    "requiredTitle": "Choose a branch",
+    "requiredBody": "This screen works on one branch at a time. Pick one in the branch switcher."
   },
   "topbar": {
     "search": "Search patients by name, phone or MRN",
@@ -174,10 +278,10 @@
   "demo": {
     "title": "Demo sign-in",
     "intro": "The V2 frontend runs on sample data. Pick an account to see its workspace.",
-    "password": "Every demo account uses the password <value>{{password}}</value>, and every SMS or authenticator code is <value>{{code}}</value>.",
+    "password": "Every demo account uses the password <value>{{password}}</value>, and every one-time or authenticator code is <value>{{code}}</value>.",
     "signInAs": "Sign in as {{name}}",
     "invitation": "Try a staff invitation (a new nurse joining Nasr City)",
-    "reminder": "Open an SMS visit reminder (Mohamed Adel's eye exam)"
+    "reminder": "Open a visit reminder message (Mohamed Adel's eye exam)"
   },
   "footer": {
     "tagline": "One clinic, every branch: book, visit, pay and get your records in one place.",

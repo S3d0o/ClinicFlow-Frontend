@@ -113,7 +113,7 @@
     "depositOptional": "Optional",
     "depositBody": "Pay {{amount}} online by card or mobile wallet. Your booking is already confirmed either way.",
     "remindersTitle": "Visit reminders",
-    "remindersSms": "We'll text you a reminder 24 hours and 2 hours before your visit.",
+    "remindersPhone": "We'll send you a reminder on WhatsApp (or by SMS) 24 hours and 2 hours before your visit.",
     "remindersEmail": "We'll email you a reminder 24 hours and 2 hours before your visit.",
     "remindersBoth": "We'll text and email you a reminder 24 hours and 2 hours before your visit.",
     "viewAppointments": "View my appointments",

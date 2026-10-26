@@ -1,0 +1,67 @@
+{
+  "intro": "Search before you register, so no patient ends up with two records.",
+  "age": {
+    "years_one": "{{count}} year",
+    "years_other": "{{count}} years",
+    "months_one": "{{count}} month",
+    "months_other": "{{count}} months"
+  },
+  "search": {
+    "title": "Find a patient",
+    "label": "Search patients",
+    "placeholder": "Name, mobile, MRN, national ID or date of birth",
+    "hint": "Type at least two characters: a name, part of a mobile number, an MRN, a national ID or a date of birth (yyyy-mm-dd).",
+    "noMatches": "No patient matches",
+    "registerHint": "Check the spelling, or register them as a new patient.",
+    "count_one": "{{count}} match",
+    "count_other": "{{count}} matches",
+    "filterLabel": "Filter results",
+    "filters": {
+      "all": "All",
+      "balance": "Has a balance",
+      "insured": "Insured"
+    }
+  },
+  "card": {
+    "portal": "Portal account",
+    "balance": "Owes {{amount}}",
+    "phone": "Mobile",
+    "born": "Date of birth",
+    "nationalId": "National ID",
+    "nationalIdValue": "ID <num>{{id}}</num>",
+    "insurance": "Insurance",
+    "lastVisit": "Last visit",
+    "lastVisitValue": "Last visit {{date}} ({{doctor}})",
+    "noVisits": "No visits yet"
+  },
+  "actions": {
+    "book": "Book a visit",
+    "walkIn": "Walk-in",
+    "select": "Select",
+    "registerNew": "Register a new patient"
+  },
+  "register": {
+    "title": "Register a new patient",
+    "intro": "Name, mobile, gender and date of birth are enough to start. The patient can link a portal account later.",
+    "fullName": "Full name",
+    "fullNameHint": "As on the ID, in Arabic or English.",
+    "phone": "Mobile number",
+    "gender": "Gender",
+    "genders": {
+      "Male": "Male",
+      "Female": "Female"
+    },
+    "dateOfBirth": "Date of birth",
+    "nationalId": "National ID",
+    "nationalIdHint": "Optional: the 14 digits on the ID card.",
+    "emergencyName": "Emergency contact",
+    "emergencyPhone": "Emergency contact's mobile",
+    "save": "Save patient",
+    "saveAndBook": "Save and book a visit",
+    "duplicateTitle_one": "This may be a patient we already have",
+    "duplicateTitle_other": "These may be patients we already have",
+    "duplicateBody": "Same mobile number, or same name and date of birth. Use the existing record, or save anyway if it's someone else, such as a family member sharing a phone.",
+    "useThis": "Use this patient",
+    "done": "{{name}} is registered as {{mrn}}."
+  }
+}

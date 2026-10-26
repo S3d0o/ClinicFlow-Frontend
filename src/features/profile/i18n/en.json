@@ -22,15 +22,16 @@
   "channel": {
     "title": "Booking confirmations and reminders",
     "intro": "How should we reach you?",
-    "Sms": "SMS",
+    "Phone": "Phone",
     "Email": "Email",
     "Both": "Both",
+    "phoneHint": "Phone messages come by WhatsApp, or by SMS if your number has no WhatsApp.",
     "needsEmail": "Email reminders need a confirmed email address.",
     "saved": "Your choice is saved."
   },
   "language": {
     "title": "Language",
-    "intro": "For the app, and for the SMS and emails we send you.",
+    "intro": "For the app, and for the messages and emails we send you.",
     "saved": "Language saved."
   },
   "medical": {

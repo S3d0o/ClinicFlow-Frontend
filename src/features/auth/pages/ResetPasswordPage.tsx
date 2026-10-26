@@ -18,8 +18,8 @@ import { lockedPath, readState, type ResetWithCodeState } from '../model/flow-st
 import { newPasswordSchema, type NewPasswordValues } from '../model/schemas';
 
 /**
- * Password recovery, last step (FR-ACC-04). Reached after an SMS code (router state) or from the
- * emailed link (`?email=…&token=…`, API contract §8). Saving signs the user out everywhere.
+ * Password recovery, last step (FR-ACC-04). Reached after a one-time code (router state) or from the
+ * emailed link (`?userId=…&token=…`, API contract §13.9). Saving signs the user out everywhere.
  */
 export default function ResetPasswordPage() {
   const { t } = useTranslation(['auth', 'common']);
@@ -33,9 +33,9 @@ export default function ResetPasswordPage() {
   const [done, setDone] = useState(false);
 
   const viaCode = readState<ResetWithCodeState>(location.state, 'code');
-  const email = params.get('email');
+  const userId = params.get('userId');
   const token = params.get('token');
-  const proof = viaCode ?? (email && token ? { email, token } : null);
+  const proof = viaCode ?? (userId && token ? { userId, token } : null);
 
   const form = useForm<NewPasswordValues>({ resolver: zodResolver(newPasswordSchema), defaultValues: { password: '', confirmPassword: '' } });
   const { errors } = form.formState;

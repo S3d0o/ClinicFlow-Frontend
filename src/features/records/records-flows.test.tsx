@@ -27,6 +27,13 @@ describe('records', () => {
     expect(await screen.findByRole('tab', { name: 'Open (0)' })).toBeInTheDocument();
   });
 
+  it('says a new upload is still being checked when it’s downloaded before its virus scan passes', async () => {
+    renderApp({ path: '/patient/documents', signedInAs: PATIENT, scanDelayMs: 60_000 });
+    await userEvent.upload(await screen.findByLabelText('Upload a document'), new File(['%PDF'], 'lab-results.pdf', { type: 'application/pdf' }));
+    await userEvent.click(await screen.findByRole('button', { name: 'Download lab-results.pdf' }));
+    expect(await screen.findByText('This file is still being checked for viruses. Try again in a moment.')).toBeInTheDocument();
+  });
+
   it('uploads a document and adds an insurance card for the desk to verify', async () => {
     renderApp({ path: '/patient/documents', signedInAs: PATIENT });
     await userEvent.upload(await screen.findByLabelText('Upload a document'), new File(['%PDF'], 'lab-results.pdf', { type: 'application/pdf' }));
@@ -48,7 +55,7 @@ describe('profile and settings', () => {
   it('keeps email reminders off until an email is confirmed', async () => {
     renderApp({ path: '/patient/profile', signedInAs: PATIENT });
     expect(await screen.findByRole('radio', { name: 'Email' })).toBeDisabled();
-    expect(screen.getByRole('radio', { name: 'SMS' })).toBeChecked();
+    expect(screen.getByRole('radio', { name: 'Phone' })).toBeChecked();
   });
 
   it('changes the mobile number with a code sent to the new one', async () => {

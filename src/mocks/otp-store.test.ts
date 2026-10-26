@@ -20,7 +20,7 @@ const errorOf = (fn: () => void) => {
   throw new Error('expected an error');
 };
 
-describe('SMS code store (FR-ACC-02)', () => {
+describe('one-time code store (FR-ACC-02)', () => {
   it('sends a code valid for 5 minutes, resendable after 60 seconds', () => {
     const { store } = setup();
     expect(store.send(PHONE, 'SignUp')).toEqual({

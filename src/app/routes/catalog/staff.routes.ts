@@ -1,3 +1,4 @@
+import { lazy } from 'react';
 import type { Permission } from '@/features/auth/model/permissions';
 import type { ScreenRoute } from '../types';
 
@@ -5,18 +6,45 @@ const allow = (...anyOf: Permission[]) => ({ kind: 'permission', anyOf }) as con
 // Branch-wide screens: a grant over one's own records only (a doctor's own reports) doesn't open them
 const allowBranchWide = (...anyOf: Permission[]) => ({ kind: 'permission', anyOf, minScope: 'Branch' }) as const;
 
-// Front desk and nurse station (phase 3).
+// Front desk and nurse station (phase 3). Check-in (front-desk/04) is a panel on the Today screen.
 export const deskRoutes: ScreenRoute[] = [
-  { path: '/desk', screen: 'deskToday', layout: 'staff', access: allow('appointments.book_on_behalf'), phase: 3, design: 'front-desk/01-today' },
-  { path: '/desk/patients', screen: 'deskPatients', layout: 'staff', access: allow('patients.register'), phase: 3, design: 'front-desk/02-patient-search-and-register' },
-  { path: '/desk/book', screen: 'deskBook', layout: 'staff', access: allow('appointments.book_on_behalf'), phase: 3, design: 'front-desk/03-book-walk-in' },
-  { path: '/desk/queue', screen: 'deskQueue', layout: 'staff', access: allow('queue.view'), phase: 3, design: 'front-desk/05-queue-board' },
-  { path: '/desk/payments', screen: 'deskCheckout', layout: 'staff', access: allow('payments.collect'), phase: 3, design: 'front-desk/07-checkout' },
-  { path: '/desk/cash', screen: 'deskCash', layout: 'staff', access: allow('cash_sessions.operate'), phase: 3, design: 'front-desk/08-cash-session' },
+  {
+    path: '/desk', screen: 'deskToday', layout: 'staff', access: allow('appointments.book_on_behalf'), phase: 3, design: 'front-desk/01-today',
+    component: lazy(() => import('@/features/desk/pages/DeskTodayPage')),
+  },
+  {
+    path: '/desk/patients', screen: 'deskPatients', layout: 'staff', access: allow('patients.register'), phase: 3, design: 'front-desk/02-patient-search-and-register',
+    component: lazy(() => import('@/features/patients/pages/PatientsPage')),
+  },
+  {
+    path: '/desk/book', screen: 'deskBook', layout: 'staff', access: allow('appointments.book_on_behalf'), phase: 3, design: 'front-desk/03-book-walk-in',
+    component: lazy(() => import('@/features/desk/pages/DeskBookPage')),
+  },
+  {
+    path: '/desk/queue', screen: 'deskQueue', layout: 'staff', access: allow('queue.view'), phase: 3, design: 'front-desk/05-queue-board',
+    component: lazy(() => import('@/features/queue/pages/QueueBoardPage')),
+  },
+  {
+    path: '/desk/payments', screen: 'deskCheckout', layout: 'staff', access: allow('payments.collect'), phase: 3, design: 'front-desk/07-checkout',
+    component: lazy(() => import('@/features/billing/pages/CheckoutPage')),
+  },
+  {
+    path: '/desk/cash', screen: 'deskCash', layout: 'staff', access: allow('cash_sessions.operate'), phase: 3, design: 'front-desk/08-cash-session',
+    component: lazy(() => import('@/features/billing/pages/CashSessionPage')),
+  },
   // Read-only TV screen per branch (FR-FD-06); a device token replaces the staff login later
-  { path: '/display/:branchId', screen: 'waitingDisplay', layout: 'bare', access: allow('queue.view'), phase: 3, design: 'front-desk/06-waiting-room-tv-display' },
-  { path: '/nurse', screen: 'nurseQueue', layout: 'tablet', access: allow('vitals.write'), phase: 3, design: 'nurse/01-triage-queue' },
-  { path: '/nurse/triage/:appointmentId', screen: 'nurseTriage', layout: 'tablet', access: allow('vitals.write'), phase: 3, design: 'nurse/02-vitals-and-triage-form' },
+  {
+    path: '/display/:branchId', screen: 'waitingDisplay', layout: 'bare', access: allow('queue.view'), phase: 3, design: 'front-desk/06-waiting-room-tv-display',
+    component: lazy(() => import('@/features/queue/pages/WaitingDisplayPage')),
+  },
+  {
+    path: '/nurse', screen: 'nurseQueue', layout: 'tablet', access: allow('vitals.write'), phase: 3, design: 'nurse/01-triage-queue',
+    component: lazy(() => import('@/features/triage/pages/NurseQueuePage')),
+  },
+  {
+    path: '/nurse/triage/:appointmentId', screen: 'nurseTriage', layout: 'tablet', access: allow('vitals.write'), phase: 3, design: 'nurse/02-vitals-and-triage-form',
+    component: lazy(() => import('@/features/triage/pages/TriagePage')),
+  },
 ];
 
 // Doctor workspace (phase 4).

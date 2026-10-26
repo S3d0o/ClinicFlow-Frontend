@@ -51,7 +51,7 @@ describe('booking (FR-APT-02, FR-PAT-01)', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Confirm booking' }));
     expect(await screen.findByRole('heading', { name: "You're booked!" })).toBeInTheDocument();
     expect(screen.getByText('Confirmed by Nasr City')).toBeInTheDocument();
-    expect(screen.getByText("We'll text you a reminder 24 hours and 2 hours before your visit.")).toBeInTheDocument();
+    expect(screen.getByText("We'll send you a reminder on WhatsApp (or by SMS) 24 hours and 2 hours before your visit.")).toBeInTheDocument();
   });
 });
 
@@ -103,7 +103,7 @@ describe('my appointments', () => {
   });
 });
 
-describe('SMS reminder link (FR-APT-10)', () => {
+describe('reminder link (FR-APT-10)', () => {
   it('confirms attendance without signing in', async () => {
     renderApp({ path: `/r/${DEMO_REMINDER_TOKEN}` });
     expect(await screen.findByRole('heading', { level: 1, name: /^Your visit is on .+ at 6:00 PM$/ })).toBeInTheDocument();

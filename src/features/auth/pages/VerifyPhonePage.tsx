@@ -10,7 +10,7 @@ import { useVerifyPhone } from '../hooks/use-account-access';
 import { readState, type VerifyPhoneState } from '../model/flow-state';
 
 /**
- * Sign-up step 2 (FR-ACC-02): the SMS code. Verifying signs the patient in; the route guard then
+ * Sign-up step 2 (FR-ACC-02): the one-time code. Verifying signs the patient in; the route guard then
  * opens the page they were heading to, or their home page.
  */
 export default function VerifyPhonePage() {

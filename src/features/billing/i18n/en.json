@@ -1,0 +1,154 @@
+{
+  "intro": "Take payment for today's visits: the services, any deposit paid online, then cash, card or wallet.",
+  "list": {
+    "title": "Waiting to pay ({{count}})",
+    "empty": "No one is waiting to pay.",
+    "take": "Take payment",
+    "back": "All visits waiting to pay"
+  },
+  "visit": {
+    "doctor": "Doctor",
+    "specialty": "Specialty",
+    "room": "Room"
+  },
+  "lines": {
+    "title": "Services",
+    "draft": "Add any service done during the visit before taking payment.",
+    "issued": "Invoice {{number}} is issued, so the services can't change now.",
+    "service": "Service",
+    "quantity": "Qty",
+    "unitPrice": "Unit price",
+    "total": "Total",
+    "actions": "Actions",
+    "booked": "Booked",
+    "added": "Added at the desk",
+    "remove": "Remove {{service}}",
+    "addLabel": "Service to add",
+    "addPlaceholder": "Add a service…",
+    "add": "Add"
+  },
+  "totals": {
+    "subtotal": "Services",
+    "deposit": "Deposit paid online",
+    "paidSoFar": "Paid at the desk",
+    "due": "Due now",
+    "insurance": "Insurance card on file: {{payer}}.",
+    "insuranceWithCoverage": "Insurance card on file: {{payer}} ({{percent}}% outpatient cover)."
+  },
+  "pay": {
+    "title": "Payment",
+    "method": "Payment method",
+    "methods": {
+      "Cash": "Cash",
+      "Card": "Card (POS)",
+      "Wallet": "Mobile wallet"
+    },
+    "methodHints": {
+      "Cash": "Into your cash drawer",
+      "Card": "On the card terminal",
+      "Wallet": "A phone wallet or an instant transfer"
+    },
+    "noSession": "Cash goes into your drawer, so open a cash session first.",
+    "openSession": "Open a cash session",
+    "amount": "Amount to collect",
+    "amountHint": "Taking less leaves the rest due on the visit.",
+    "amountInvalid": "Enter an amount up to {{max}}.",
+    "tendered": "Cash received",
+    "tenderedShort": "That's less than the amount to collect.",
+    "quickFill": "Quick amounts",
+    "change": "Change to give back",
+    "reference": "Transaction reference",
+    "referenceHint": "Optional: from the terminal or wallet receipt.",
+    "submit": "Collect {{amount}}",
+    "nothingDue": "Nothing left to pay",
+    "nothingDueBody": "This visit is fully paid."
+  },
+  "receipt": {
+    "title": "Payment received",
+    "change": "Give back",
+    "number": "Receipt",
+    "invoice": "Invoice",
+    "paid": "Paid",
+    "remaining": "Still due",
+    "print": "Print receipt",
+    "payRest": "Take the remaining {{amount}}",
+    "next": "Next patient"
+  },
+  "cash": {
+    "intro": "Your drawer for this shift: what came in and went out, and the count when you close.",
+    "open": {
+      "title": "Open a cash session",
+      "intro": "Choose your drawer and count the float you start with.",
+      "drawer": "Drawer",
+      "inUse": "In use by {{name}}",
+      "free": "Free",
+      "float": "Opening float",
+      "floatHint": "The cash in the drawer before the first payment.",
+      "floatInvalid": "Enter an amount, e.g. 500.",
+      "submit": "Open session"
+    },
+    "session": {
+      "title": "Open session: {{drawer}}",
+      "openFor": "Open {{hours}} h {{minutes}} min",
+      "openedBy": "Opened at {{time}} by {{name}}",
+      "xReport": "Print interim report",
+      "close": "Close session"
+    },
+    "tiles": {
+      "float": "Opening float",
+      "cashIn": "Cash taken",
+      "cashInHint_one": "{{count}} cash payment",
+      "cashInHint_other": "{{count}} cash payments",
+      "cashOut": "Cash refunds",
+      "cashOutHint_one": "{{count}} refund",
+      "cashOutHint_other": "{{count}} refunds",
+      "expected": "Expected in the drawer",
+      "expectedHint": "Float + cash taken − refunds"
+    },
+    "methods": {
+      "title": "Takings by method",
+      "total": "Total",
+      "count_one": "{{count}} payment",
+      "count_other": "{{count}} payments"
+    },
+    "ledger": {
+      "title": "Drawer transactions",
+      "empty": "No payments in this session yet.",
+      "time": "Time",
+      "receipt": "Receipt",
+      "patient": "Patient",
+      "for": "For",
+      "method": "Method",
+      "amount": "Amount",
+      "refund": "Refund",
+      "payment": "Payment"
+    },
+    "close": {
+      "title": "Close the session",
+      "intro": "Count the cash in the drawer. The variance is worked out for you.",
+      "expected": "Expected",
+      "counted": "Counted",
+      "banknotes": "Banknotes and coins",
+      "note": "EGP {{value}}",
+      "noteCount": "Number of EGP {{value}} notes",
+      "variance": "Variance",
+      "exact": "None: the drawer balances",
+      "over": "Over by {{amount}}",
+      "short": "Short by {{amount}}",
+      "approvalNeeded": "More than {{amount}} off: a manager approves this close.",
+      "handover": "Handover note",
+      "handoverHint": "Optional, for the next shift or the manager.",
+      "submit": "Close session",
+      "confirmTitle": "Close this session?",
+      "confirmBody": "You counted {{counted}} against {{expected}} expected. A closed session can't be changed.",
+      "confirm": "Close session"
+    },
+    "closed": {
+      "title": "{{drawer}} is closed",
+      "needsApproval": "The variance is above the limit, so a manager needs to approve this close.",
+      "balanced": "The session is closed. Hand the cash over as usual.",
+      "report": "Print closing report",
+      "openNew": "Open a new session"
+    }
+  }
+}

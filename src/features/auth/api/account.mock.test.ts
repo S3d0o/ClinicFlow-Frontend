@@ -44,7 +44,7 @@ describe('patient sign-up (FR-ACC-01, FR-ACC-02)', () => {
 });
 
 describe('password reset (FR-ACC-04)', () => {
-  it('resets by SMS code, checking the code before the new password is chosen', async () => {
+  it('resets by one-time code, checking the code before the new password is chosen', async () => {
     const { services } = createTestBackend();
     await services.otp.send('01012345678', 'PasswordReset');
     await services.passwordReset.checkCode('01012345678', DEMO_CODE);
@@ -58,11 +58,17 @@ describe('password reset (FR-ACC-04)', () => {
     const { services } = createTestBackend();
     await services.passwordReset.requestEmailLink('karim.adel@clinicflow.eg');
     const link = await services.demoAccounts!.latestEmailLink('karim.adel@clinicflow.eg');
+    expect(link).toMatch(/^\/reset-password\?userId=u-karim&token=[^&]+$/); // no email address in the URL (§13.9)
     const params = new URLSearchParams(link!.split('?')[1]);
 
-    await services.passwordReset.resetWithEmailToken(params.get('email')!, params.get('token')!, 'Fresh#Pass9');
+    await expect(services.passwordReset.resetWithEmailToken('u-mona', params.get('token')!, 'Fresh#Pass9')).rejects.toSatisfy((e) =>
+      isServiceError(e, 'Auth.InvalidPasswordResetToken')
+    );
+    const fresh = await services.passwordReset.requestEmailLink('karim.adel@clinicflow.eg').then(() => services.demoAccounts!.latestEmailLink('karim.adel@clinicflow.eg'));
+    const token = new URLSearchParams(fresh!.split('?')[1]).get('token')!;
+    await services.passwordReset.resetWithEmailToken('u-karim', token, 'Fresh#Pass9');
     await expect(
-      services.passwordReset.resetWithEmailToken(params.get('email')!, params.get('token')!, 'Other#Pass9')
+      services.passwordReset.resetWithEmailToken('u-karim', token, 'Other#Pass9')
     ).rejects.toSatisfy((e) => isServiceError(e, 'Auth.InvalidPasswordResetToken'));
   });
 

@@ -32,5 +32,5 @@ Not designed yet: the patient chat assistant (phase P7; its scope is decided at 
 ## Using these designs
 
 - Take layout, hierarchy and components from the screens; take behavior, rules and data shapes from the V2 docs and `docs/API_CONTRACT.md`. Where they disagree, the docs win.
-- Stitch filled the screens with sample content, some of it invented. Don't carry these into the app: the "Emergency Admit" button (V2 is outpatient only), WhatsApp reminders (later than SMS), valet parking, refreshments, hotline numbers, "zero waiting queues", "reserve in 30 seconds", ValU installments, named insurers, and hex codes or anomaly notes in chart captions.
+- Stitch filled the screens with sample content, some of it invented. Don't carry these into the app: the "Emergency Admit" button (V2 is outpatient only), valet parking, refreshments, hotline numbers, "zero waiting queues", "reserve in 30 seconds", ValU installments, named insurers, and hex codes or anomaly notes in chart captions. WhatsApp reminders are no longer invented: since 2026-10-26 WhatsApp is the first phone channel (backend 06 §9.2), so a screen may say a reminder went by WhatsApp.
 - The sign-in screen's "Patient / Doctor-Staff" tabs are not needed: everyone signs in with one phone-or-email field, and staff then get the two-step code (pending the owner's confirmation).

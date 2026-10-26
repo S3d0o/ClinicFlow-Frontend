@@ -1,62 +1,26 @@
 import { sessionUser, type AuthMockDeps } from '@/features/auth/api/mock-accounts';
-import { resolvePrice } from '@/features/catalog/model/pricing';
-import { delay, type MockDb } from '@/mocks/db';
+import { createAppointment } from '@/mocks/booking';
+import { delay } from '@/mocks/db';
+import { findPatient, patientRecordFor, subscribeQueue } from '@/mocks/front-desk';
 import { notify } from '@/mocks/notifications';
 import type { AppointmentRecord } from '@/mocks/seed/patient-portal';
-import { findSlot, timeZoneOf } from '@/mocks/slot-availability';
+import { timeZoneOf } from '@/mocks/slot-availability';
 import { ServiceError } from '@/shared/api/service-error';
 import { todayIn } from '@/shared/lib/branch-time';
-import type { Appointment, QueueStatus } from '../model/appointment';
-import { CHANGE_WINDOW_HOURS } from '../model/policy';
+import type { Appointment } from '../model/appointment';
 import type { PatientAppointmentsService, QueueStatusService, ReminderService, ReminderView } from './appointments.service';
+
+// Columns the patient's view leaves out: the owner and the desk's working data.
+const HIDDEN: (keyof AppointmentRecord)[] = [
+  'patientId', 'patientUserId', 'slotId', 'calledAt', 'noShowAt', 'priorityReason', 'complaint', 'triage', 'triageDraft', 'extraLines',
+];
 
 /** The patient's copy, without the owner columns. */
 const toView = (record: AppointmentRecord): Appointment => {
   const view: Partial<AppointmentRecord> = structuredClone(record);
-  delete view.patientUserId;
-  delete view.slotId;
+  for (const key of HIDDEN) delete view[key];
   return view as Appointment;
 };
-
-const nextReference = (db: MockDb, now: Date) =>
-  `CF-${String(now.getUTCFullYear()).slice(2)}-${String(9300 + db.appointments.length).padStart(5, '0')}`;
-
-/** A new appointment in `slotId`, priced from the price list (FR-SVC-02) on the visit date. */
-function createAppointment(db: MockDb, patientUserId: string, serviceId: string, slotId: string, now: Date): AppointmentRecord {
-  const slot = findSlot(db, slotId, now);
-  if (!slot) throw new ServiceError('Appointment.SlotInPast');
-  if (!slot.available) throw new ServiceError('Slot.CapacityReached');
-  const doctor = db.doctors.find((d) => d.id === slot.doctorId)!;
-  if (!doctor.services.some((s) => s.serviceId === serviceId)) throw new ServiceError('Appointment.SlotNotAvailable');
-  const service = db.services.find((s) => s.id === serviceId)!;
-  const price = resolvePrice(db.priceList, { serviceId, branchId: slot.branchId, doctorId: doctor.id, date: slot.date }) ?? 0;
-  const startsAt = Date.parse(slot.startsAtUtc);
-
-  return {
-    id: `apt-${crypto.randomUUID()}`,
-    patientUserId,
-    slotId,
-    reference: nextReference(db, now),
-    status: 'Confirmed', // deposit or not (FR-APT-02)
-    source: 'Online',
-    doctorId: doctor.id,
-    doctorName: db.users.find((u) => u.id === doctor.userId)!.fullName,
-    specialtyId: doctor.specialtyId,
-    branchId: slot.branchId,
-    serviceId,
-    date: slot.date,
-    startTime: slot.startTime,
-    endTime: slot.endTime,
-    startsAtUtc: slot.startsAtUtc,
-    price,
-    depositAmount: service.optionalDepositAmount || undefined,
-    depositPaid: false,
-    bookedAt: now.toISOString(),
-    changeableUntil: new Date(startsAt - CHANGE_WINDOW_HOURS * 3_600_000).toISOString(),
-    attendanceConfirmed: false,
-    hasReview: false,
-  };
-}
 
 export function createMockPatientAppointmentsService(deps: AuthMockDeps): PatientAppointmentsService {
   const { db, latencyMs, now, outboxDelayMs } = deps;
@@ -91,7 +55,7 @@ export function createMockPatientAppointmentsService(deps: AuthMockDeps): Patien
       const user = sessionUser(deps);
       if (!user.phoneVerified) throw new ServiceError('Auth.PhoneNotVerified');
       if (!acceptTerms) throw new ServiceError('Consent.Required');
-      const record = createAppointment(db, user.id, serviceId, slotId, now());
+      const record = createAppointment(db, patientRecordFor(db, user, now()), serviceId, slotId, now());
       db.appointments.push(record);
       notify(db, outboxDelayMs, user.id, 'AppointmentConfirmed', { appointment: record }, now);
       return toView(record);
@@ -101,7 +65,7 @@ export function createMockPatientAppointmentsService(deps: AuthMockDeps): Patien
       await delay(latencyMs);
       const old = own(appointmentId);
       assertChangeable(old);
-      const record = createAppointment(db, old.patientUserId, old.serviceId, slotId, now());
+      const record = createAppointment(db, findPatient(db, old.patientId)!, old.serviceId, slotId, now());
       // One transaction (FR-APT-05): the new booking, the old one Rescheduled, linked both ways, deposit carried
       record.rescheduledFromId = old.id;
       record.depositPaid = old.depositPaid;
@@ -127,9 +91,9 @@ export function createMockPatientAppointmentsService(deps: AuthMockDeps): Patien
     async startDepositCheckout(appointmentId) {
       await delay(latencyMs);
       const record = own(appointmentId);
-      if (record.status !== 'Confirmed' || !record.depositAmount || record.depositPaid) {
-        throw new ServiceError('Appointment.InvalidStatusTransition');
-      }
+      if (!record.depositAmount) throw new ServiceError('Deposit.NotOffered');
+      if (record.depositPaid) throw new ServiceError('Deposit.AlreadyPaid');
+      if (record.status !== 'Confirmed') throw new ServiceError('Appointment.InvalidStatusTransition');
       // The demo has no Paymob: the hosted checkout "succeeds" and its webhook marks the deposit paid
       record.depositPaid = true;
       notify(db, outboxDelayMs, record.patientUserId, 'DepositReceived', { appointment: record, amount: record.depositAmount }, now);
@@ -157,35 +121,23 @@ export function createMockPatientAppointmentsService(deps: AuthMockDeps): Patien
 }
 
 /**
- * The queue moves in the demo: every `queueTickMs` the patient gets triaged, then moves up one place,
- * then is called in (`InProgress`). With 0 (tests) it stays where it is.
+ * The patient's live place in line (the `/hubs/queue` push): the current status at once, then every
+ * change the desk, the nurse or the doctor makes. The demo queue moves on its own (`mocks/queue-demo.ts`).
  */
-export function createMockQueueStatusService({ db, now, queueTickMs }: AuthMockDeps): QueueStatusService {
-  const advance = (record: AppointmentRecord, queue: QueueStatus) => {
-    const at = now().toISOString();
-    if (queue.stage === 'WaitingTriage') Object.assign(queue, { stage: 'ReadyForDoctor', triagedAt: at });
-    else if (queue.stage === 'ReadyForDoctor' && queue.position > 1) {
-      queue.position -= 1;
-      queue.estimatedWaitMinutes = Math.max(5, queue.estimatedWaitMinutes - 7);
-    } else if (queue.stage === 'ReadyForDoctor') {
-      Object.assign(queue, { stage: 'WithDoctor', position: 0, estimatedWaitMinutes: 0, doctorDelayMinutes: undefined });
-      record.status = 'InProgress';
-    }
-    queue.updatedAt = at;
-  };
-
+export function createMockQueueStatusService({ db }: AuthMockDeps): QueueStatusService {
   return {
     watch(appointmentId, listener) {
       const record = db.appointments.find((a) => a.id === appointmentId);
       if (!record?.queue) return () => {};
+      let last = JSON.stringify(record.queue);
       listener(structuredClone(record.queue));
-      if (queueTickMs <= 0) return () => {};
-      const timer = setInterval(() => {
-        if (!record.queue || record.queue.stage === 'WithDoctor' || record.queue.stage === 'Done') return clearInterval(timer);
-        advance(record, record.queue);
+      return subscribeQueue(db, (branchId) => {
+        if (branchId !== record.branchId || !record.queue) return;
+        const current = JSON.stringify(record.queue);
+        if (current === last) return;
+        last = current;
         listener(structuredClone(record.queue));
-      }, queueTickMs);
-      return () => clearInterval(timer);
+      });
     },
   };
 }

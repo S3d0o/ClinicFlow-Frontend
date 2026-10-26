@@ -9,6 +9,7 @@ import { formatInstant } from '@/shared/lib/intl';
 import { useNow } from '@/shared/lib/use-now';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/button';
+import { FilterChips } from '@/shared/ui/FilterChips';
 import { Pagination } from '@/shared/ui/Pagination';
 import { EmptyState, ErrorState, LoadingState } from '@/shared/ui/states';
 import { useMarkAllRead, useMarkRead, useNotifications } from '../hooks/use-notifications';
@@ -104,25 +105,16 @@ export default function NotificationsPage() {
         </Button>
       </header>
 
-      <div role="group" aria-label={t('categories.label')} className="scrollbar-thin -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
-        {CATEGORIES.map((option) => (
-          <button
-            key={option ?? 'all'}
-            type="button"
-            aria-pressed={category === option}
-            onClick={() => {
-              setCategory(option);
-              setPage(1);
-            }}
-            className={cn(
-              'min-h-10 shrink-0 rounded-full border px-4 text-label-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-              category === option ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-card hover:border-primary'
-            )}
-          >
-            {t(`categories.${option ?? 'all'}`)}
-          </button>
-        ))}
-      </div>
+      <FilterChips
+        label={t('categories.label')}
+        options={CATEGORIES.map((option) => ({ value: option, label: t(`categories.${option ?? 'all'}`) }))}
+        value={category}
+        onChange={(option) => {
+          setCategory(option);
+          setPage(1);
+        }}
+        className="-mx-4 px-4 sm:mx-0 sm:px-0"
+      />
 
       {notifications.isPending ? (
         <LoadingState />
