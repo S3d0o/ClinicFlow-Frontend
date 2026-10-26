@@ -30,10 +30,10 @@ export function createMockCheckoutService(deps: AuthMockDeps): CheckoutService {
   const { db, latencyMs, now, outboxDelayMs } = deps;
 
   /** A checked-in visit at a branch where the user takes payments. */
-  const visit = (appointmentId: string, permission: 'payments.collect' | 'invoices.create' = 'payments.collect') => {
+  const visit = (appointmentId: string) => {
     const record = db.appointments.find((a) => a.id === appointmentId);
     if (!record) throw new ServiceError('Appointment.NotFound');
-    const user = requirePermission(deps, permission, record.branchId);
+    const user = requirePermission(deps, 'payments.collect', record.branchId);
     if (!CHECKED_IN.has(record.status)) throw new ServiceError('Appointment.InvalidStatusTransition');
     return { record, user };
   };
@@ -103,10 +103,11 @@ export function createMockCheckoutService(deps: AuthMockDeps): CheckoutService {
 
     async addLine(appointmentId, serviceId) {
       await delay(latencyMs);
-      const { record } = visit(appointmentId, 'invoices.create');
+      const { record } = visit(appointmentId);
       if (invoiceOf(db, record.id)) throw new ServiceError('Invoice.NotDraft');
+      if (!db.services.some((s) => s.id === serviceId)) throw new ServiceError('Service.NotFound');
       const offered = db.doctors.find((d) => d.id === record.doctorId)?.services.some((s) => s.serviceId === serviceId);
-      if (!offered) throw new ServiceError('Service.NotFound');
+      if (!offered) throw new ServiceError('Booking.ServiceNotOffered');
       record.extraLines = [
         ...(record.extraLines ?? []),
         { id: `line-${crypto.randomUUID()}`, serviceId, quantity: 1, unitPrice: priceOf(db, serviceId, record.branchId, record.doctorId, record.date) },
@@ -116,8 +117,10 @@ export function createMockCheckoutService(deps: AuthMockDeps): CheckoutService {
 
     async removeLine(appointmentId, lineId) {
       await delay(latencyMs);
-      const { record } = visit(appointmentId, 'invoices.create');
+      const { record } = visit(appointmentId);
       if (invoiceOf(db, record.id)) throw new ServiceError('Invoice.NotDraft');
+      if (lineId === chargeLines(record).find((line) => line.booked)?.id) throw new ServiceError('Invoice.BookedLineNotRemovable');
+      if (!(record.extraLines ?? []).some((line) => line.id === lineId)) throw new ServiceError('Invoice.LineNotFound');
       record.extraLines = (record.extraLines ?? []).filter((line) => line.id !== lineId);
       return view(record);
     },
@@ -278,7 +281,8 @@ export function createMockCashSessionService(deps: AuthMockDeps): CashSessionSer
       await delay(latencyMs);
       const user = sessionUser(deps);
       const session = db.cashSessions.find((s) => s.id === sessionId && s.openedBy === user.id);
-      if (!session || session.status !== 'Open') throw new ServiceError('CashSession.NotOpen');
+      if (!session) throw new ServiceError('CashSession.NotFound');
+      if (session.status !== 'Open') throw new ServiceError('CashSession.NotOpen');
       if (!(countedAmount >= 0)) throw new ServiceError('Payment.InvalidAmount');
       const expected = toView(session).expectedCash;
       // Closed sessions are immutable; a variance above the threshold waits for a manager (phase 5 approvals)
@@ -296,7 +300,7 @@ export function createMockCashSessionService(deps: AuthMockDeps): CashSessionSer
     async downloadReport(sessionId) {
       await delay(latencyMs);
       const session = db.cashSessions.find((s) => s.id === sessionId);
-      if (!session) throw new ServiceError('CashSession.NotOpen');
+      if (!session) throw new ServiceError('CashSession.NotFound');
       const view = toView(session);
       return samplePdf(`${view.status === 'Open' ? 'Interim (X) report' : 'Closing report'}: ${view.drawer.nameEn}`, [
         `Opened by ${view.openedByName}`,

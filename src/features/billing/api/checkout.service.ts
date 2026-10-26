@@ -2,9 +2,10 @@ import type { CashDrawer, CashSession } from '../model/cash-session';
 import type { Checkout, CheckoutSummary, CollectRequest, Receipt } from '../model/checkout';
 
 /**
- * Taking payment at the desk (`GET /api/v2/appointments/{id}/amount-due`, `/invoices`, `POST /payments`;
- * `payments.collect`). Errors: `Appointment.NotFound`, `Invoice.NotDraft`, `Invoice.NothingDue`,
- * `Payment.InvalidAmount`, `Payment.NoOpenCashSession`.
+ * Taking payment at the desk (`/api/v2/appointments/{id}/checkout`, `.../checkout/lines`, `.../payments`;
+ * `payments.collect`; API contract §13.19). Errors: `Appointment.NotFound`, `Invoice.NotDraft`, `Invoice.NothingDue`,
+ * `Invoice.LineNotFound`, `Invoice.BookedLineNotRemovable`, `Service.NotFound`, `Booking.ServiceNotOffered`,
+ * `Payment.InvalidAmount`, `Payment.NoOpenCashSession`, `Payment.NotFound`, `Access.OutOfScope`.
  */
 export interface CheckoutService {
   /** Today's checked-in visits at the branch with something left to pay. */
@@ -23,8 +24,9 @@ export interface CheckoutService {
 }
 
 /**
- * The receptionist's cash drawer (`/api/v2/branches/{id}/cash-sessions`, `cash_sessions.operate`).
- * Errors: `CashSession.AlreadyOpen`, `CashDrawer.InUse`, `CashSession.NotOpen`.
+ * The receptionist's cash drawer (`/api/v2/me/cash-session`, `/api/v2/cash-sessions`, `/api/v2/branches/{id}/cash-drawers`;
+ * `cash_sessions.operate`; API contract §13.19).
+ * Errors: `CashSession.AlreadyOpen`, `CashSession.NotOpen`, `CashSession.NotFound`, `CashDrawer.InUse`, `CashDrawer.NotFound`.
  */
 export interface CashSessionService {
   /** The signed-in user's open session, or null (one per user, FR-BIL-09). */

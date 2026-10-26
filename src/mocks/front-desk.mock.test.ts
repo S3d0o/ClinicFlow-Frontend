@@ -154,7 +154,11 @@ describe('checkout (FR-BIL-01/02/05/10/14)', () => {
     const { services } = createTestBackend({ signedInAs: RECEPTIONIST });
     expect((await services.checkout.listOpen(NC)).map((a) => a.id)).toEqual(expect.arrayContaining(['apt-d-a2', 'apt-d-h1']));
 
+    await rejectsWith(services.checkout.addLine('apt-d-a2', 'svc-ped-c'), 'Booking.ServiceNotOffered'); // Dr. Ahmed doesn't offer it (§13.19)
+    await rejectsWith(services.checkout.addLine('apt-d-a2', 'svc-none'), 'Service.NotFound');
     const checkout = await services.checkout.addLine('apt-d-a2', 'svc-car-ecg');
+    await rejectsWith(services.checkout.removeLine('apt-d-a2', checkout.lines[0].id), 'Invoice.BookedLineNotRemovable');
+    await rejectsWith(services.checkout.removeLine('apt-d-a2', 'line-none'), 'Invoice.LineNotFound');
     expect(checkout).toMatchObject({ subtotal: 350, due: 350, invoice: undefined });
     expect(checkout.lines.map((l) => [l.serviceId, l.total, l.booked])).toEqual([['svc-car-f', 200, true], ['svc-car-ecg', 150, false]]);
 
@@ -194,6 +198,7 @@ describe('cash sessions (FR-BIL-09)', () => {
     expect(closed).toMatchObject({ status: 'Closed', variance: -70, needsApproval: true });
     expect(await services.cashSessions.current()).toBeNull();
     await rejectsWith(services.cashSessions.close(session.id, { countedAmount: 880 }), 'CashSession.NotOpen');
+    await rejectsWith(services.cashSessions.close('cs-none', { countedAmount: 0 }), 'CashSession.NotFound');
 
     const reopened = await services.cashSessions.open({ drawerId: 'drw-nc-1', openingFloat: 300 });
     expect(reopened).toMatchObject({ expectedCash: 300, transactions: [] });

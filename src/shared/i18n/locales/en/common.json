@@ -108,7 +108,8 @@
       "WalkInCapReached": "This doctor can't take more walk-ins today. Book the next free time instead.",
       "DoctorBusy": "The doctor already has a patient in the room.",
       "SlotNotFound": "This time no longer exists. Please pick another.",
-      "Unauthorized": "You don't have access to this appointment."
+      "Unauthorized": "You don't have access to this appointment.",
+      "DoctorNotAvailable": "This doctor isn't working at this branch today. Choose another doctor."
     },
     "Slot": {
       "CapacityReached": "Someone just booked this time. Please pick another."
@@ -126,7 +127,9 @@
     "Invoice": {
       "NotFound": "We couldn't find this invoice.",
       "NothingDue": "Nothing is left to pay.",
-      "NotDraft": "The invoice is already issued, so its services can't change."
+      "NotDraft": "The invoice is already issued, so its services can't change.",
+      "LineNotFound": "This service isn't on the bill any more. Refresh to see the latest.",
+      "BookedLineNotRemovable": "The booked service can't be removed from the bill."
     },
     "Payer": {
       "NotFound": "We couldn't find this insurance company."
@@ -155,7 +158,8 @@
     },
     "CashSession": {
       "AlreadyOpen": "You already have an open cash session. Close it first.",
-      "NotOpen": "This cash session is already closed."
+      "NotOpen": "This cash session is already closed.",
+      "NotFound": "We couldn't find this cash session."
     },
     "CashDrawer": {
       "InUse": "Someone else has this drawer open. Choose another one.",

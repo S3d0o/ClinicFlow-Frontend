@@ -71,6 +71,38 @@ const CONTRACT: Record<string, Record<string, string[] | null>> = {
   'features/notifications/api/notifications.mock.ts': {
     createMockNotificationsService: ['Notification.Unauthorized', 'Notification.NotFound'], // §13.8
   },
+
+  // Front desk and nurse station (§13.13–§13.20). Every route there can also answer 403 Access.OutOfScope
+  'features/patients/api/patients.mock.ts': { createMockPatientsService: ['Patient.NotFound', 'Access.OutOfScope'] }, // §13.15
+  'features/desk/api/desk.mock.ts': {
+    // §13.16, and §13.15 upcoming-appointments
+    createMockDeskService: [
+      'Access.OutOfScope', 'Branch.NotFound', 'Appointment.NotFound', 'Patient.NotFound', 'Appointment.CheckInWindowClosed',
+      'Appointment.NoShowTooEarly', 'Appointment.InvalidStatusTransition', 'Appointment.SlotInPast', 'Appointment.SlotNotFound',
+      'Booking.ServiceNotOffered', 'Slot.CapacityReached', 'Idempotency.KeyReused', 'Appointment.DoctorNotAvailable',
+      'Appointment.WalkInCapReached',
+    ],
+  },
+  'features/queue/api/queue.mock.ts': {
+    // §13.17. Queue.ReasonRequired stands in for the 400 validation error on `reason` (§13.21 item 2)
+    createMockQueueBoardService: ['Access.OutOfScope', 'Branch.NotFound', 'Appointment.NotFound', 'Appointment.DoctorBusy', 'Appointment.InvalidStatusTransition', 'Queue.ReasonRequired'],
+  },
+  'features/triage/api/triage.mock.ts': {
+    createMockTriageService: ['Access.OutOfScope', 'Appointment.NotFound', 'Vitals.OutOfRange', 'Triage.AllergiesNotConfirmed', 'Appointment.InvalidStatusTransition'], // §13.18
+  },
+  'features/billing/api/checkout.mock.ts': {
+    // §13.19. Appointment.InvalidStatusTransition (paying for a visit not checked in) isn't listed there yet: asked of the backend
+    createMockCheckoutService: [
+      'Access.OutOfScope', 'Branch.NotFound', 'Appointment.NotFound', 'Booking.ServiceNotOffered', 'Service.NotFound', 'Invoice.NotDraft',
+      'Invoice.LineNotFound', 'Invoice.BookedLineNotRemovable', 'Payment.InvalidAmount', 'Invoice.NothingDue', 'Payment.NoOpenCashSession',
+      'Idempotency.KeyReused', 'Payment.NotFound', 'Appointment.InvalidStatusTransition',
+    ],
+    // §13.19. Payment.InvalidAmount stands in for the 400 validation errors on `openingFloat` and `countedAmount`
+    createMockCashSessionService: [
+      'Access.OutOfScope', 'Branch.NotFound', 'CashDrawer.NotFound', 'CashSession.AlreadyOpen', 'CashDrawer.InUse', 'CashSession.NotFound',
+      'CashSession.NotOpen', 'Payment.InvalidAmount',
+    ],
+  },
 };
 
 /** Shared mock modules and the codes they may throw (they serve the services above). */

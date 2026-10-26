@@ -113,7 +113,7 @@ function VisitCheckout({ appointmentId, onBack }: { appointmentId: string; onBac
     <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_24rem]">
       <div className="space-y-6">
         <VisitHeader checkout={data} />
-        <ChargeLines checkout={data} canEdit={can(user, 'invoices.create', data.appointment.branchId)} />
+        <ChargeLines checkout={data} canEdit={can(user, 'payments.collect', data.appointment.branchId)} />
       </div>
       <div className="space-y-4 lg:sticky lg:top-20">
         {receipt ? (
