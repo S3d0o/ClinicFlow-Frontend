@@ -6,8 +6,14 @@ import arBilling from '@/features/billing/i18n/ar.json';
 import enBilling from '@/features/billing/i18n/en.json';
 import arDesk from '@/features/desk/i18n/ar.json';
 import enDesk from '@/features/desk/i18n/en.json';
+import arDoctor from '@/features/doctor/i18n/ar.json';
+import enDoctor from '@/features/doctor/i18n/en.json';
 import arDoctors from '@/features/doctors/i18n/ar.json';
 import enDoctors from '@/features/doctors/i18n/en.json';
+import arEncounters from '@/features/encounters/i18n/ar.json';
+import enEncounters from '@/features/encounters/i18n/en.json';
+import arHistory from '@/features/history/i18n/ar.json';
+import enHistory from '@/features/history/i18n/en.json';
 import arNotifications from '@/features/notifications/i18n/ar.json';
 import enNotifications from '@/features/notifications/i18n/en.json';
 import arPatients from '@/features/patients/i18n/ar.json';
@@ -51,6 +57,9 @@ export const resources = {
     queue: enQueue,
     triage: enTriage,
     billing: enBilling,
+    doctor: enDoctor,
+    encounters: enEncounters,
+    history: enHistory,
   },
   ar: {
     common: arCommon,
@@ -69,6 +78,9 @@ export const resources = {
     queue: arQueue,
     triage: arTriage,
     billing: arBilling,
+    doctor: arDoctor,
+    encounters: arEncounters,
+    history: arHistory,
   },
 } as const;
 

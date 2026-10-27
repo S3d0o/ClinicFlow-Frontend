@@ -68,6 +68,12 @@ Trying the phase 3 flows (sign in as **Mona Samir**, receptionist at Nasr City, 
 - **Cash session** (`/#/desk/cash`): Desk 1, opened this morning with an EGP 500 float, two payments and a cash refund (EGP 950 expected). Close it with a banknote count, then open a new one.
 - **Nurse station** (Sara, `/#/nurse`): three patients waiting for vitals; Tamer Zaki is allergic to amoxicillin. Sending the vitals moves the patient to "ready for the doctor" on the board.
 
+Trying the phase 4 flows (sign in as **Dr. Ahmed Fathy**; his day is the desk's, so the demo doctors leave his patients alone while he's signed in):
+- **Today** (`/#/doctor`): Nadia Soliman is in the room and the next ready patient is waiting with the nurse's vitals; **Call to Room 204** stays disabled until Nadia's visit is signed or completed. Hazem Mostafa's note is signed; Kamal Fouad's and yesterday's Hassan Ali's wait in **Notes to sign**.
+- **Encounter** (Nadia, `/#/doctor/encounters/apt-d-a3`): try a template, an ICD-10 search (`I10`, `chest pain`), **Sign & complete visit** without a diagnosis, then with one. Mohamed Adel (`apt-today`) is allergic to penicillin: prescribing Augmentin or Amoxil is flagged and needs a reason. Hazem's signed note (`apt-d-a1`) takes addenda.
+- **Patient history** (`/#/doctor/patients/pat-000412`): Mohamed's blood pressure over two visits, his medicines and his dental visit at Maadi; filter by branch or period.
+- **Schedule and leave** (`/#/doctor/schedule`): Dr. Ahmed works Nasr City mornings and Maadi evenings; ask for leave on days with bookings to see the visits it affects, then cancel the request.
+
 The UI starts in **Arabic** (right-to-left), as the docs require; switch with the "EN | عربي" toggle. The choice is remembered.
 
 ### Configuration

@@ -1,0 +1,77 @@
+{
+  "back": "Back to patients",
+  "export": "Medical summary (PDF)",
+  "patient": {
+    "bloodType": "Blood {{type}}",
+    "nationalId": "National ID",
+    "insurance": "Insured with {{payer}}",
+    "policy": {
+      "Verified": "verified",
+      "PendingVerification": "being verified",
+      "Expired": "expired"
+    }
+  },
+  "filters": {
+    "branch": "Branch",
+    "allBranches": "All branches",
+    "period": "Period",
+    "periods": {
+      "12m": "Last 12 months",
+      "24m": "2 years",
+      "all": "All time"
+    }
+  },
+  "vitals": {
+    "title": "Vitals over time",
+    "count_one": "{{count}} reading",
+    "count_other": "{{count}} readings",
+    "noReadings": "No blood pressure readings in this period.",
+    "systolic": "Systolic",
+    "diastolic": "Diastolic",
+    "reading": "{{date}}: {{systolic}}/{{diastolic}} mmHg",
+    "chartLabel_one": "Blood pressure chart, {{count}} reading",
+    "chartLabel_other": "Blood pressure chart, {{count}} readings",
+    "asTable": "Show as a table",
+    "date": "Date",
+    "change": "{{value}} {{unit}} over the period"
+  },
+  "timeline": {
+    "title_one": "{{count}} visit",
+    "title_other": "{{count}} visits",
+    "emptyTitle": "No visits in this period",
+    "emptyBody": "Try a longer period or all branches.",
+    "today": "Today",
+    "inProgress": "In progress",
+    "unsigned": "Not signed",
+    "addenda_one": "{{count}} addendum",
+    "addenda_other": "{{count}} addenda",
+    "complaint": "Complaint",
+    "assessment": "Assessment",
+    "plan": "Plan",
+    "diagnoses": "Diagnoses",
+    "prescriptions": "Medicines",
+    "orders": "Orders",
+    "open": "Open the encounter"
+  },
+  "medicines": {
+    "title": "Medicines",
+    "active_one": "{{count}} current",
+    "active_other": "{{count}} current",
+    "none": "No medicines prescribed.",
+    "current": "Current",
+    "finished": "Finished",
+    "started": "Started {{date}} by {{doctor}}"
+  },
+  "documents": {
+    "title": "Files",
+    "none": "No files."
+  },
+  "list": {
+    "description": "Open a patient's visits, vitals and medicines across branches.",
+    "today": "Today's patients",
+    "search": "Find a patient",
+    "searchLabel": "Name, phone, MRN or national ID",
+    "open": "History",
+    "openFor": "Open the history of {{name}}"
+  }
+}

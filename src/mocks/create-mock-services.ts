@@ -16,8 +16,11 @@ import { createMockBillingService } from '@/features/billing/api/billing.mock';
 import { createMockCashSessionService, createMockCheckoutService } from '@/features/billing/api/checkout.mock';
 import { createMockCatalogService } from '@/features/catalog/api/catalog.mock';
 import { createMockDeskService } from '@/features/desk/api/desk.mock';
+import { createMockDoctorDayService, createMockScheduleService } from '@/features/doctor/api/doctor.mock';
 import { createMockDirectoryService } from '@/features/doctors/api/directory.mock';
 import { createMockDocumentsService, createMockInsuranceService } from '@/features/documents/api/documents.mock';
+import { createMockEncountersService } from '@/features/encounters/api/encounters.mock';
+import { createMockPatientHistoryService } from '@/features/history/api/history.mock';
 import { createMockNotificationsService } from '@/features/notifications/api/notifications.mock';
 import { createMockOrgService } from '@/features/org/api/org.mock';
 import { createMockPatientsService } from '@/features/patients/api/patients.mock';
@@ -85,6 +88,10 @@ export function createMockServices({
     triage: createMockTriageService(deps),
     checkout: createMockCheckoutService(deps),
     cashSessions: createMockCashSessionService(deps),
+    encounters: createMockEncountersService(deps),
+    doctorDay: createMockDoctorDayService(deps),
+    schedule: createMockScheduleService(deps),
+    history: createMockPatientHistoryService(deps),
     demoAccounts: createMockDemoAccountsService(deps),
   };
 }

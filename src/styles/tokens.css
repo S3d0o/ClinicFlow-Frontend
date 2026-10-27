@@ -38,6 +38,10 @@
   --success-foreground: 0 0% 100%;
   --warning: 23 83% 31.4%;            /* #92400E */
   --warning-foreground: 0 0% 100%;
+
+  /* Chart series, in this order (validated for colour-blind separation and 3:1 contrast on cards) */
+  --chart-1: 204 99% 30.4%;           /* #015C9A */
+  --chart-2: 207 61% 53%;             /* #3E8FD0 */
   --destructive: 0 74% 41.8%;         /* #B91C1C */
   --destructive-foreground: 0 0% 100%;
   --violet: 273 67% 39.4%;            /* #6B21A8 Admin role only */

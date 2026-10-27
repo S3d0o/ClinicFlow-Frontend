@@ -1,0 +1,97 @@
+{
+  "back": "العودة إلى المرضى",
+  "export": "الملخص الطبي (PDF)",
+  "patient": {
+    "bloodType": "فصيلة الدم {{type}}",
+    "nationalId": "الرقم القومي",
+    "insurance": "مؤمَّن عليه لدى {{payer}}",
+    "policy": {
+      "Verified": "تم التحقق",
+      "PendingVerification": "قيد التحقق",
+      "Expired": "منتهية"
+    }
+  },
+  "filters": {
+    "branch": "الفرع",
+    "allBranches": "كل الفروع",
+    "period": "الفترة",
+    "periods": {
+      "12m": "آخر 12 شهرًا",
+      "24m": "سنتان",
+      "all": "كل الوقت"
+    }
+  },
+  "vitals": {
+    "title": "العلامات الحيوية عبر الوقت",
+    "count_zero": "لا توجد قراءات",
+    "count_one": "قراءة واحدة",
+    "count_two": "قراءتان",
+    "count_few": "{{count}} قراءات",
+    "count_many": "{{count}} قراءة",
+    "count_other": "{{count}} قراءة",
+    "noReadings": "لا توجد قراءات لضغط الدم في هذه الفترة.",
+    "systolic": "الانقباضي",
+    "diastolic": "الانبساطي",
+    "reading": "{{date}}: {{systolic}}/{{diastolic}} مم زئبق",
+    "chartLabel_zero": "رسم ضغط الدم، بدون قراءات",
+    "chartLabel_one": "رسم ضغط الدم، قراءة واحدة",
+    "chartLabel_two": "رسم ضغط الدم، قراءتان",
+    "chartLabel_few": "رسم ضغط الدم، {{count}} قراءات",
+    "chartLabel_many": "رسم ضغط الدم، {{count}} قراءة",
+    "chartLabel_other": "رسم ضغط الدم، {{count}} قراءة",
+    "asTable": "عرض كجدول",
+    "date": "التاريخ",
+    "change": "{{value}} {{unit}} خلال الفترة"
+  },
+  "timeline": {
+    "title_zero": "لا توجد زيارات",
+    "title_one": "زيارة واحدة",
+    "title_two": "زيارتان",
+    "title_few": "{{count}} زيارات",
+    "title_many": "{{count}} زيارة",
+    "title_other": "{{count}} زيارة",
+    "emptyTitle": "لا توجد زيارات في هذه الفترة",
+    "emptyBody": "جرّب فترة أطول أو كل الفروع.",
+    "today": "اليوم",
+    "inProgress": "جارية",
+    "unsigned": "غير موقّعة",
+    "addenda_zero": "بدون ملاحق",
+    "addenda_one": "ملحق واحد",
+    "addenda_two": "ملحقان",
+    "addenda_few": "{{count}} ملاحق",
+    "addenda_many": "{{count}} ملحقًا",
+    "addenda_other": "{{count}} ملحق",
+    "complaint": "الشكوى",
+    "assessment": "التقييم",
+    "plan": "الخطة",
+    "diagnoses": "التشخيصات",
+    "prescriptions": "الأدوية",
+    "orders": "الطلبات",
+    "open": "فتح الكشف"
+  },
+  "medicines": {
+    "title": "الأدوية",
+    "active_zero": "لا أدوية حالية",
+    "active_one": "دواء حالي واحد",
+    "active_two": "دواءان حاليان",
+    "active_few": "{{count}} أدوية حالية",
+    "active_many": "{{count}} دواءً حاليًا",
+    "active_other": "{{count}} دواء حالي",
+    "none": "لم توصف أدوية.",
+    "current": "حالي",
+    "finished": "انتهى",
+    "started": "بدأ {{date}} بواسطة {{doctor}}"
+  },
+  "documents": {
+    "title": "الملفات",
+    "none": "لا توجد ملفات."
+  },
+  "list": {
+    "description": "افتح زيارات المريض وعلاماته الحيوية وأدويته في كل الفروع.",
+    "today": "مرضى اليوم",
+    "search": "البحث عن مريض",
+    "searchLabel": "الاسم أو الهاتف أو رقم الملف أو الرقم القومي",
+    "open": "السجل",
+    "openFor": "فتح سجل {{name}}"
+  }
+}

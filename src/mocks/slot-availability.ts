@@ -1,3 +1,4 @@
+import { leaveCovers } from '@/features/doctor/model/rules';
 import type { Slot } from '@/features/doctors/model/doctor';
 import type { MockDb } from './db';
 import { generateSlots } from './slots';
@@ -15,13 +16,14 @@ export function bookedSlotIds(db: MockDb): Set<string> {
 
 export const timeZoneOf = (db: MockDb, branchId: string) => db.branches.find((b) => b.id === branchId)?.timeZone ?? 'Africa/Cairo';
 
-/** A doctor's slots at one branch from `from` for `days`, with booked ones marked taken. */
+/** A doctor's slots at one branch from `from` for `days`, with booked ones and approved leave (FR-SCH-06) marked taken. */
 export function slotsAt(db: MockDb, doctorId: string, branchId: string, from: string, days: number, now: Date): Slot[] {
   const doctor = db.doctors.find((d) => d.id === doctorId);
   if (!doctor) return [];
   const booked = bookedSlotIds(db);
+  const leave = db.leaveRequests.filter((l) => l.doctorId === doctorId && l.status === 'Approved');
   return generateSlots(doctor, { branchId, from, days, timeZone: timeZoneOf(db, branchId), now }).map((slot) =>
-    booked.has(slot.id) ? { ...slot, available: false } : slot
+    booked.has(slot.id) || leave.some((l) => leaveCovers(l, slot.date, slot.startTime, slot.endTime)) ? { ...slot, available: false } : slot
   );
 }
 
