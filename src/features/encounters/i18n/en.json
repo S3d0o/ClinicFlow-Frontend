@@ -1,0 +1,152 @@
+{
+  "back": "Back to today",
+  "status": {
+    "Draft": "Draft",
+    "Signed": "Signed",
+    "Voided": "Voided"
+  },
+  "header": {
+    "bloodType": "Blood {{type}}",
+    "checkedIn": "checked in {{time}}",
+    "waited_one": "waited {{count}} min",
+    "waited_other": "waited {{count}} min",
+    "history": "Full history",
+    "vitals": "Vitals by {{nurse}} at {{time}} ({{minutes}} min ago)",
+    "complaint": "Complaint",
+    "noVitals": "No vitals recorded for this visit."
+  },
+  "vitals": {
+    "bloodPressure": "Blood pressure",
+    "bmi": "BMI {{value}}"
+  },
+  "signedBanner": "Signed by {{name}} on {{time}}.",
+  "notStarted": "The patient hasn't been called in yet. You can write notes now; signing opens once the visit starts.",
+  "signLater": "The visit is complete; this note still needs your signature.",
+  "conflict": "This note was changed elsewhere (perhaps in another tab), so your last changes weren't saved.",
+  "reload": "Load the latest",
+  "saving": "Saving…",
+  "unsaved": "Unsaved changes",
+  "savedAt": "Saved at {{time}}",
+  "notSaved": "Not saved yet",
+  "blockers": {
+    "diagnosis": "Add a diagnosis to sign",
+    "allergy_one": "Acknowledge {{count}} allergy conflict to sign",
+    "allergy_other": "Acknowledge {{count}} allergy conflicts to sign"
+  },
+  "soap": {
+    "title": "Clinical notes",
+    "templates": "Templates",
+    "letter": {
+      "subjective": "S",
+      "objective": "O",
+      "assessment": "A",
+      "plan": "P"
+    },
+    "subjective": "Subjective (history)",
+    "objective": "Objective (examination)",
+    "assessment": "Assessment",
+    "plan": "Plan",
+    "hint": {
+      "subjective": "What the patient reports.",
+      "objective": "What you found on examination.",
+      "assessment": "Your clinical impression.",
+      "plan": "Tests, treatment and next steps. Not shown to the patient."
+    }
+  },
+  "diagnosis": {
+    "title": "Diagnoses",
+    "icd": "ICD-10",
+    "search": "Search ICD-10 by code or words",
+    "results": "Matching codes",
+    "noMatches": "No codes match.",
+    "none": "No diagnosis yet. At least one is needed to sign.",
+    "primary": "Primary",
+    "status": {
+      "Confirmed": "Confirmed",
+      "Provisional": "Provisional",
+      "RuledOut": "Ruled out"
+    },
+    "statusFor": "Status of {{code}}",
+    "makePrimary": "Make {{code}} the primary diagnosis",
+    "remove": "Remove {{code}}"
+  },
+  "rx": {
+    "title": "Prescription",
+    "none": "No medicines prescribed.",
+    "addTitle": "Add a medicine",
+    "drug": "Medicine",
+    "drugHint": "Pick from the catalog or type a name.",
+    "suggestions": "Medicines in the catalog",
+    "conflictPreview": "Allergy warning: the patient is allergic to {{allergies}}.",
+    "strength": "Strength",
+    "form": "Form",
+    "dose": "Dose",
+    "doseHint": "e.g. 1 tablet",
+    "frequency": "How often",
+    "frequencyHint": "e.g. twice a day",
+    "duration": "Days",
+    "instructions": "Instructions",
+    "add": "Add medicine",
+    "days_one": "{{count}} day",
+    "days_other": "{{count}} days",
+    "remove": "Remove {{name}}",
+    "conflict": "Conflicts with a recorded allergy: {{allergies}}",
+    "override": "Reason to prescribe anyway",
+    "overrideHint": "Kept with the prescription as your acknowledgement of the allergy.",
+    "overrideReason": "Prescribed anyway: {{reason}}"
+  },
+  "orders": {
+    "title": "Lab, imaging & referrals",
+    "count_one": "{{count}} ordered",
+    "count_other": "{{count}} ordered",
+    "none": "No orders.",
+    "type": {
+      "Lab": "Lab",
+      "Radiology": "Imaging",
+      "Referral": "Referral"
+    },
+    "addTitle": "Add an order",
+    "typeLabel": "Type",
+    "description": "Order",
+    "placeholder": "e.g. HbA1c, chest X-ray",
+    "add": "Add",
+    "remove": "Remove {{name}}"
+  },
+  "plan": {
+    "title": "Patient instructions & follow-up",
+    "instructions": "Instructions for the patient",
+    "instructionsHint": "Shown in the patient's visit summary, one point per line.",
+    "followUp": "Follow-up",
+    "noFollowUp": "None",
+    "inDays_one": "In {{count}} day",
+    "inDays_other": "In {{count}} days",
+    "window": "Suggested between {{from}} and {{to}}; the patient and the front desk see it."
+  },
+  "addenda": {
+    "title": "Addenda",
+    "none": "No addenda.",
+    "by": "{{name}} · {{time}}",
+    "new": "New addendum",
+    "hint": "Corrects or adds to the signed note; the original stays as it was.",
+    "add": "Add addendum",
+    "added": "Addendum added."
+  },
+  "actions": {
+    "call": "Call in",
+    "callTo": "Call to {{room}}",
+    "called": "{{name}} has been called in.",
+    "save": "Save draft",
+    "complete": "Complete visit, sign later",
+    "completeTitle": "Complete the visit now?",
+    "completeBody": "The patient can go to checkout. The note stays a draft for you to sign within 24 hours.",
+    "completeConfirm": "Complete visit",
+    "completed": "{{name}}'s visit is complete. Sign the note within 24 hours.",
+    "keepWriting": "Keep writing",
+    "sign": "Sign note",
+    "signComplete": "Sign & complete visit",
+    "signTitle": "Sign this note?",
+    "signBody": "Signing locks the note and sends the patient their visit summary. Later corrections are added as addenda.",
+    "signConfirm": "Sign",
+    "signed": "Note signed. {{name}}'s visit is complete."
+  }
+}

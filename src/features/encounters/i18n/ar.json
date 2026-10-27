@@ -1,0 +1,172 @@
+{
+  "back": "العودة إلى اليوم",
+  "status": {
+    "Draft": "مسودة",
+    "Signed": "موقّعة",
+    "Voided": "ملغاة"
+  },
+  "header": {
+    "bloodType": "فصيلة الدم {{type}}",
+    "checkedIn": "سجّل الحضور {{time}}",
+    "waited_zero": "لم ينتظر",
+    "waited_one": "انتظر دقيقة واحدة",
+    "waited_two": "انتظر دقيقتين",
+    "waited_few": "انتظر {{count}} دقائق",
+    "waited_many": "انتظر {{count}} دقيقة",
+    "waited_other": "انتظر {{count}} دقيقة",
+    "history": "السجل الكامل",
+    "vitals": "العلامات الحيوية بواسطة {{nurse}} الساعة {{time}} (منذ {{minutes}} دقيقة)",
+    "complaint": "الشكوى",
+    "noVitals": "لم تُسجَّل علامات حيوية لهذه الزيارة."
+  },
+  "vitals": {
+    "bloodPressure": "ضغط الدم",
+    "bmi": "مؤشر كتلة الجسم {{value}}"
+  },
+  "signedBanner": "وقّعها {{name}} في {{time}}.",
+  "notStarted": "لم يُستدعَ المريض بعد. يمكنك كتابة الملاحظات الآن، ويُتاح التوقيع بعد بدء الزيارة.",
+  "signLater": "اكتملت الزيارة، وما زالت هذه الملاحظة تحتاج إلى توقيعك.",
+  "conflict": "تغيّرت هذه الملاحظة في مكان آخر (ربما في نافذة أخرى)، لذلك لم تُحفظ تعديلاتك الأخيرة.",
+  "reload": "تحميل أحدث نسخة",
+  "saving": "جارٍ الحفظ…",
+  "unsaved": "تعديلات غير محفوظة",
+  "savedAt": "حُفظت الساعة {{time}}",
+  "notSaved": "لم تُحفظ بعد",
+  "blockers": {
+    "diagnosis": "أضف تشخيصًا للتوقيع",
+    "allergy_zero": "لا توجد تعارضات حساسية",
+    "allergy_one": "أقرّ بتعارض حساسية واحد للتوقيع",
+    "allergy_two": "أقرّ بتعارضَي حساسية للتوقيع",
+    "allergy_few": "أقرّ بـ {{count}} تعارضات حساسية للتوقيع",
+    "allergy_many": "أقرّ بـ {{count}} تعارضًا للحساسية للتوقيع",
+    "allergy_other": "أقرّ بـ {{count}} تعارض حساسية للتوقيع"
+  },
+  "soap": {
+    "title": "الملاحظات الإكلينيكية",
+    "templates": "القوالب",
+    "letter": {
+      "subjective": "S",
+      "objective": "O",
+      "assessment": "A",
+      "plan": "P"
+    },
+    "subjective": "الشكوى والتاريخ المرضي",
+    "objective": "الفحص",
+    "assessment": "التقييم",
+    "plan": "الخطة",
+    "hint": {
+      "subjective": "ما يرويه المريض.",
+      "objective": "ما وجدته في الفحص.",
+      "assessment": "انطباعك الإكلينيكي.",
+      "plan": "الفحوص والعلاج والخطوات التالية. لا تظهر للمريض."
+    }
+  },
+  "diagnosis": {
+    "title": "التشخيصات",
+    "icd": "ICD-10",
+    "search": "ابحث في ICD-10 بالرمز أو الكلمات",
+    "results": "الرموز المطابقة",
+    "noMatches": "لا توجد رموز مطابقة.",
+    "none": "لا يوجد تشخيص بعد. يلزم تشخيص واحد على الأقل للتوقيع.",
+    "primary": "رئيسي",
+    "status": {
+      "Confirmed": "مؤكد",
+      "Provisional": "مبدئي",
+      "RuledOut": "مستبعد"
+    },
+    "statusFor": "حالة {{code}}",
+    "makePrimary": "اجعل {{code}} التشخيص الرئيسي",
+    "remove": "حذف {{code}}"
+  },
+  "rx": {
+    "title": "الروشتة",
+    "none": "لم توصف أدوية.",
+    "addTitle": "إضافة دواء",
+    "drug": "الدواء",
+    "drugHint": "اختر من القائمة أو اكتب الاسم.",
+    "suggestions": "أدوية من القائمة",
+    "conflictPreview": "تحذير حساسية: المريض لديه حساسية من {{allergies}}.",
+    "strength": "التركيز",
+    "form": "الشكل",
+    "dose": "الجرعة",
+    "doseHint": "مثل: قرص واحد",
+    "frequency": "عدد المرات",
+    "frequencyHint": "مثل: مرتين يوميًا",
+    "duration": "الأيام",
+    "instructions": "تعليمات",
+    "add": "إضافة الدواء",
+    "days_zero": "بدون مدة",
+    "days_one": "يوم واحد",
+    "days_two": "يومان",
+    "days_few": "{{count}} أيام",
+    "days_many": "{{count}} يومًا",
+    "days_other": "{{count}} يوم",
+    "remove": "حذف {{name}}",
+    "conflict": "يتعارض مع حساسية مسجلة: {{allergies}}",
+    "override": "سبب الوصف رغم ذلك",
+    "overrideHint": "يُحفظ مع الروشتة كإقرار منك بالحساسية.",
+    "overrideReason": "وُصف رغم ذلك: {{reason}}"
+  },
+  "orders": {
+    "title": "التحاليل والأشعة والتحويلات",
+    "count_zero": "لا توجد طلبات",
+    "count_one": "طلب واحد",
+    "count_two": "طلبان",
+    "count_few": "{{count}} طلبات",
+    "count_many": "{{count}} طلبًا",
+    "count_other": "{{count}} طلب",
+    "none": "لا توجد طلبات.",
+    "type": {
+      "Lab": "تحليل",
+      "Radiology": "أشعة",
+      "Referral": "تحويل"
+    },
+    "addTitle": "إضافة طلب",
+    "typeLabel": "النوع",
+    "description": "الطلب",
+    "placeholder": "مثل: HbA1c، أشعة على الصدر",
+    "add": "إضافة",
+    "remove": "حذف {{name}}"
+  },
+  "plan": {
+    "title": "تعليمات المريض والمتابعة",
+    "instructions": "تعليمات للمريض",
+    "instructionsHint": "تظهر في ملخص الزيارة للمريض، نقطة في كل سطر.",
+    "followUp": "المتابعة",
+    "noFollowUp": "بدون",
+    "inDays_zero": "اليوم",
+    "inDays_one": "بعد يوم",
+    "inDays_two": "بعد يومين",
+    "inDays_few": "بعد {{count}} أيام",
+    "inDays_many": "بعد {{count}} يومًا",
+    "inDays_other": "بعد {{count}} يوم",
+    "window": "مقترحة بين {{from}} و{{to}}، ويراها المريض ومكتب الاستقبال."
+  },
+  "addenda": {
+    "title": "الملاحق",
+    "none": "لا توجد ملاحق.",
+    "by": "{{name}} · {{time}}",
+    "new": "ملحق جديد",
+    "hint": "يصحّح الملاحظة الموقّعة أو يضيف إليها، ويبقى الأصل كما هو.",
+    "add": "إضافة ملحق",
+    "added": "أُضيف الملحق."
+  },
+  "actions": {
+    "call": "استدعاء",
+    "callTo": "استدعاء إلى {{room}}",
+    "called": "تم استدعاء {{name}}.",
+    "save": "حفظ المسودة",
+    "complete": "إنهاء الزيارة والتوقيع لاحقًا",
+    "completeTitle": "إنهاء الزيارة الآن؟",
+    "completeBody": "يمكن للمريض التوجه إلى الحساب. تبقى الملاحظة مسودة لتوقّعها خلال 24 ساعة.",
+    "completeConfirm": "إنهاء الزيارة",
+    "completed": "اكتملت زيارة {{name}}. وقّع الملاحظة خلال 24 ساعة.",
+    "keepWriting": "متابعة الكتابة",
+    "sign": "توقيع الملاحظة",
+    "signComplete": "التوقيع وإنهاء الزيارة",
+    "signTitle": "توقيع هذه الملاحظة؟",
+    "signBody": "التوقيع يقفل الملاحظة ويرسل للمريض ملخص زيارته. أي تصحيح لاحق يُضاف كملحق.",
+    "signConfirm": "توقيع",
+    "signed": "وُقّعت الملاحظة. اكتملت زيارة {{name}}."
+  }
+}

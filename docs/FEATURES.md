@@ -182,7 +182,7 @@ The bell in the top bar shows the unread count, refreshed every minute and on ev
 
 ## Front desk and nurse station (phase 3)
 
-For the receptionist (front desk screens, staff frame) and the nurse (tablet frame), at the branch picked in the branch switcher. An organization-wide user looking at "All branches" is asked to pick one first. Each action needs its permission at that branch (check-in, no-show, booking on behalf, calling in, collecting payment), so a nurse sees the queue board without the checkout. Every front desk screen updates live: a check-in, a triage or a payment on one screen shows on the others (the `/hubs/queue` push; in the demo the doctors also call patients in and finish visits on their own every 20 seconds, since their screens arrive in phase 4).
+For the receptionist (front desk screens, staff frame) and the nurse (tablet frame), at the branch picked in the branch switcher. An organization-wide user looking at "All branches" is asked to pick one first. Each action needs its permission at that branch (check-in, no-show, booking on behalf, calling in, collecting payment), so a nurse sees the queue board without the checkout. Every front desk screen updates live: a check-in, a triage or a payment on one screen shows on the others (the `/hubs/queue` push; in the demo the other doctors also call patients in and finish visits on their own every 20 seconds, while a signed-in doctor's own patients wait for them).
 
 ### Today — `/desk`
 - The branch's date, **New booking** and **Walk-in arrival**.
@@ -224,6 +224,48 @@ On the tablet (design nurse/01): how many are waiting for vitals, a filter by do
 ### Vitals and triage — `/nurse/triage/:appointmentId`
 (FR-EMR-02, U8.) The patient's ticket, age, MRN, check-in time, doctor and room, **allergies with severity**, conditions and blood type. Blood pressure, heart rate, temperature, oxygen saturation and breathing rate, each with its unit, normal range and a **High** or **Low** flag; weight and height with the **BMI worked out**; pain from 0 to 10; the chief complaint (prefilled from the desk). Nothing is required except confirming the allergies with the patient; a value that can't be real (a temperature of 384) must be fixed first. A draft saves itself two seconds after the last change ("Draft saved at 10:23"), or with **Save draft**. **Send to the doctor (Room 201)** records the vitals with who took them and when, and moves the patient to "ready for the doctor".
 
+## Doctor workspace (phase 4)
+
+For the doctor, in the staff frame, across every branch they work at. The doctor writes only their own visits' encounters (`encounters.write`, own records): another doctor's visit is refused. Their screens update live with the queue (a check-in or triage at any of their branches).
+
+### Today — `/doctor`
+(Design doctor/01, 05 §4.1.)
+- Counters: seen out of booked, waiting (with how many are ready for the doctor), the average consultation from call-in to completion, and whether a shift is on now.
+- **With you now:** the patient in the room, with **Continue the encounter**.
+- **Next patient:** the first one ready, by place in line, with the room, ticket, age, service, MRN, the **chief complaint**, the **allergies**, and the nurse's vitals with values outside the normal range flagged (U8: carried forward, never retyped). **Call to Room 204** calls them in and opens their encounter; it's disabled while someone is still in the room (one patient at a time, 05 §4.1).
+- **Today's visits** at every branch in time order, with where each stands (booked, waiting for triage, ready, with you, not signed, signed, no-show) and **Open**, **Sign** or **View note** once the patient has checked in.
+- **Today's shifts** per branch with hours, room and booked slots, struck through when approved leave covers them.
+- **Notes to sign:** finished visits whose encounter is still a draft, oldest first; over 24 hours is flagged overdue (FR-EMR-09). **Review & sign** opens the encounter.
+
+### Encounter — `/doctor/encounters/:appointmentId`
+(Design doctor/02, FR-EMR-01…10.) Keyed by the visit like triage; a draft exists from check-in.
+- **Header:** name, age, gender, blood type, MRN, service, room, check-in time and wait, the ticket, **allergies with severity** and conditions, the nurse's vitals and complaint, and **Full history**. While the patient is still waiting, **Call to Room 204** calls them in from here.
+- **Clinical notes (SOAP):** subjective, objective, assessment and plan. **Specialty templates** fill only the empty sections (FR-EMR-03).
+- **Diagnoses:** ICD-10 search by code or words; the first is primary and another can be made primary; each is confirmed, provisional or ruled out (FR-EMR-04).
+- **Prescription:** pick from the drug catalog (strength and form filled in) or type a name; dose, how often, days, instructions. A medicine matching an **allergy** (by name, generic name or drug class, e.g. Augmentin for a penicillin allergy) is flagged before and after adding; prescribing it anyway needs a reason, which is kept with the prescription (FR-EMR-05).
+- **Lab, imaging and referrals** (FR-EMR-07), and **patient instructions** with a **follow-up** (none, 7, 14, 30 or 90 days, shown as a window of ±3 days that the patient and the desk see, FR-APT-11). The SOAP notes are never shown to the patient; the instructions are.
+- **Autosave** two seconds after the last change ("Saved at 10:23:05"), or **Save draft**. Each save carries the version read; if the note was saved elsewhere meanwhile (another tab), the screen says so and offers **Load the latest** instead of overwriting.
+- **Sign & complete visit** (with `encounters.sign`): needs a diagnosis and every allergy conflict acknowledged; until then the bar says what's missing. After a confirmation it locks the note, completes the visit (the desk sees it at checkout) and publishes the patient's visit summary with the prescription, instructions and follow-up (FR-EMR-09, FR-EMR-13). **Complete visit, sign later** lets the patient go and leaves the note on the doctor's list to sign within 24 hours.
+- **A signed note** is read-only; corrections are **addenda** under it with author and time (FR-EMR-10, `encounters.addend`).
+
+### Patients — `/doctor/patients`
+Today's patients for a quick jump, and the patient search from the front desk (name, phone, MRN, national ID) with **History** on each result.
+
+### Patient history — `/doctor/patients/:patientId`
+(Design doctor/03, FR-EMR-12.) Only visits at branches the user may see (`encounters.view`); break-glass access is phase 5.
+- The patient's identity, phone, national ID, blood type, insurance and its status, allergies and conditions; **Medical summary (PDF)**.
+- Filters: branch and period (last 12 months, 2 years, all time).
+- **Vitals over time:** blood pressure as a chart (systolic and diastolic on one mmHg axis, the latest values labelled, a reading per point on hover or focus, and **Show as a table**), the latest heart rate and weight with their change over the period.
+- **Visits** newest first: date, doctor, specialty and branch, complaint, assessment and plan, ICD-10 diagnoses, medicines and orders, whether it's in progress, unsigned or has addenda; **Open the encounter** on the doctor's own visits.
+- **Medicines** from signed encounters, current ones first (a course still running), with when and by whom; and the patient's **files**.
+
+### Schedule and leave — `/doctor/schedule`
+(Design doctor/04, FR-SCH-01, FR-SCH-06.)
+- The week from Saturday, with previous, next and **This week**: hours scheduled (leave excluded), shifts and branches, booked visits out of the slots, and shifts on approved leave.
+- **Weekly roster:** each day's shifts per branch with hours, room and booked slots; today highlighted, days off marked.
+- **Ask for leave:** from and to dates (not in the past), whole days or some hours, and a reason. Before sending, **Effect on your patients** shows how many shifts it covers and how many booked visits would need moving, per branch. It goes to a manager for approval (their worklist is phase 5); slots stay bookable until then, and approved leave closes them.
+- **My leave requests,** newest first: dates, reason, reference, visits affected, status and who decided; **Cancel** until the leave starts.
+
 ## Screens by phase
 
 Every V2 screen is already routed: until its phase lands, it shows a placeholder with the phase number and its design folder.
@@ -234,7 +276,7 @@ Every V2 screen is already routed: until its phase lands, it shows a placeholder
 | 1 | Public and account access | Landing, sign in, staff two-step code and setup, accept invitation, patient sign-up, verify phone, reset password (2), too many attempts, find a doctor, doctor profile, join as a doctor, my application, plus the email-confirmation page (done) |
 | 2 | Patient portal | Home with live queue, booking (2 steps + confirmation), my appointments, appointment details, reminder message page, visits, visit summary, invoices, documents and insurance, profile and settings, notifications (done) |
 | 3 | Front desk and nurse station | Today, patient search and registration, book / walk-in, check-in, queue board, waiting-room TV, checkout, cash session, triage queue, vitals form (done) |
-| 4 | Doctor | Today, encounter workspace, patient history, schedule and leave |
+| 4 | Doctor | Today, encounter workspace, patient history, schedule and leave (done) |
 | 5 | Manager | Dashboard, services and prices, recruitment, application detail, doctor schedules, leave and reschedule worklist, approvals, daily close, reports |
 | 6 | Admin | Overview, staff, staff member, roles and permissions, branches, settings, integrations and templates, audit log, specialties |
 | 7 | Finance | Overview, invoices, payers and plans, claims |

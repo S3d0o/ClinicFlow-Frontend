@@ -14,8 +14,11 @@ import type { PatientBillingService } from '@/features/billing/api/billing.servi
 import type { CashSessionService, CheckoutService } from '@/features/billing/api/checkout.service';
 import type { CatalogService } from '@/features/catalog/api/catalog.service';
 import type { DeskService } from '@/features/desk/api/desk.service';
+import type { DoctorDayService, ScheduleService } from '@/features/doctor/api/doctor.service';
 import type { DirectoryService } from '@/features/doctors/api/directory.service';
 import type { DocumentsService, InsuranceService } from '@/features/documents/api/documents.service';
+import type { EncountersService } from '@/features/encounters/api/encounters.service';
+import type { PatientHistoryService } from '@/features/history/api/history.service';
 import type { NotificationsService } from '@/features/notifications/api/notifications.service';
 import type { OrgService } from '@/features/org/api/org.service';
 import type { PatientsService } from '@/features/patients/api/patients.service';
@@ -59,6 +62,11 @@ export interface Services {
   triage: TriageService;
   checkout: CheckoutService;
   cashSessions: CashSessionService;
+  // Doctor workspace (phase 4)
+  encounters: EncountersService;
+  doctorDay: DoctorDayService;
+  schedule: ScheduleService;
+  history: PatientHistoryService;
   /** Only the mock backend offers demo accounts. */
   demoAccounts?: DemoAccountsService;
 }

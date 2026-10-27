@@ -1,4 +1,5 @@
-import { requirePermission, type AuthMockDeps } from '@/features/auth/api/mock-accounts';
+import { requirePermission, sessionUser, type AuthMockDeps } from '@/features/auth/api/mock-accounts';
+import { doctorForUser } from '@/mocks/clinical';
 import { delay } from '@/mocks/db';
 import { moveToStage, publishQueue, queueRecords, renumberQueue, roomOf, subscribeQueue, toQueueEntry } from '@/mocks/front-desk';
 import { ServiceError } from '@/shared/api/service-error';
@@ -54,7 +55,8 @@ export function createMockQueueBoardService(deps: AuthMockDeps): QueueBoardServi
     async call(appointmentId) {
       await delay(latencyMs);
       const record = find(appointmentId);
-      requirePermission(deps, 'queue.manage', record.branchId);
+      // `queue.manage` at the branch, or the visit's own doctor (§13.17)
+      if (doctorForUser(db, sessionUser(deps).id)?.id !== record.doctorId) requirePermission(deps, 'queue.manage', record.branchId);
       if (record.queue!.stage !== 'ReadyForDoctor') throw new ServiceError('Appointment.InvalidStatusTransition');
       // One patient in the room at a time (05 §4.1 guard)
       const busy = queueRecords(db, record.branchId, now()).some((a) => a.doctorId === record.doctorId && a.queue!.stage === 'WithDoctor');

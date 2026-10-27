@@ -39,7 +39,10 @@
     "code": "Enter the 6-digit code.",
     "wholeNumber": "Enter a whole number between {{min}} and {{max}}.",
     "nationalId": "Enter the 14 digits of the national ID.",
-    "dateOfBirth": "Enter a date of birth that has already passed."
+    "dateOfBirth": "Enter a date of birth that has already passed.",
+    "notPast": "Pick today or a later date.",
+    "dateRange": "The end date must be on or after the start date.",
+    "timeRange": "The end time must be after the start time."
   },
   "errors": {
     "generic": "Something went wrong. Please try again.",
@@ -88,7 +91,8 @@
       "NotScanned": "This file is still being checked for viruses. Try again in a moment."
     },
     "Doctor": {
-      "NotFound": "We couldn't find this doctor."
+      "NotFound": "We couldn't find this doctor.",
+      "ProfileNotFound": "This account has no doctor profile."
     },
     "RateLimit": {
       "Exceeded": "Too many attempts. Please wait a minute and try again."
@@ -187,6 +191,26 @@
     "Notification": {
       "NotFound": "We couldn't find this notification.",
       "Unauthorized": "You don't have access to this notification."
+    },
+    "Encounter": {
+      "DiagnosisRequired": "Add at least one diagnosis before signing.",
+      "AlreadySigned": "This note is already signed. Add an addendum to correct it.",
+      "InvalidStatusTransition": "This can't be done to the note in its current state.",
+      "AddendumRequired": "Write the addendum first."
+    },
+    "Prescription": {
+      "AllergyConflict": "A medicine conflicts with the patient's allergies. Give a reason to prescribe it anyway, or remove it."
+    },
+    "Concurrency": {
+      "Conflict": "This was saved elsewhere in the meantime (perhaps in another tab). Load the latest version and try again."
+    },
+    "Leave": {
+      "InPast": "Leave can't start in the past.",
+      "InvalidRange": "Check the dates and times: the end must come after the start.",
+      "ReasonRequired": "Give a reason for the leave.",
+      "Overlaps": "You already have leave requested or approved on some of these days.",
+      "NotFound": "We couldn't find that leave request.",
+      "InvalidStatusTransition": "This leave can no longer be cancelled."
     }
   },
   "password": {

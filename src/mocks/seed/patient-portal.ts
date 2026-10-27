@@ -109,6 +109,11 @@ export function patientPortalSeed(now: Date) {
       doctorId: 'doc-ahmed', doctorName: 'Dr. Ahmed Fathy', specialtyId: SPECIALTY_IDS.cardiology,
       branchId: BRANCH_IDS.nasrCity, serviceId: 'svc-car-f', ...slotAt(0, todayTime, 15), price: 200,
       bookedAt: ago(13, '19:20'), attendanceConfirmed: true, checkedInAt: iso(now.getTime() - 10 * 60_000),
+      triage: {
+        form: { systolic: 150, diastolic: 95, pulse: 84, temperature: 36.8, spo2: 98, respiratoryRate: 16, weightKg: 82, heightCm: 177, painScore: 2,
+          chiefComplaint: 'Intermittent chest tightness at rest and palpitations since yesterday evening, with mild light-headedness.', allergiesConfirmed: true },
+        recordedBy: 'u-sara', recordedAt: iso(now.getTime() - 4 * 60_000),
+      },
       queue: {
         ticketNo: 'A-14', stage: 'ReadyForDoctor', position: 3, estimatedWaitMinutes: 20, roomName: 'Room 204',
         doctorDelayMinutes: 15, checkedInAt: iso(now.getTime() - 10 * 60_000), triagedAt: iso(now.getTime() - 4 * 60_000),
@@ -135,7 +140,11 @@ export function patientPortalSeed(now: Date) {
       doctorId: 'doc-ahmed', doctorName: 'Dr. Ahmed Fathy', specialtyId: SPECIALTY_IDS.cardiology,
       branchId: BRANCH_IDS.nasrCity, serviceId: 'svc-car-c', ...slotAt(-14, '10:30'), price: 450, depositAmount: 100,
       depositPaid: true, bookedAt: ago(18, '13:05'), attendanceConfirmed: true, checkedInAt: ago(14, '10:14'),
-      completedAt: ago(14, '11:05'), visitId: 'visit-cardio',
+      completedAt: ago(14, '11:05'), visitId: 'visit-cardio', calledAt: ago(14, '10:31'),
+      triage: {
+        form: { systolic: 142, diastolic: 90, pulse: 76, temperature: 36.7, spo2: 98, weightKg: 84, heightCm: 177, chiefComplaint: 'Morning headaches for two weeks.', allergiesConfirmed: true },
+        recordedBy: 'u-sara', recordedAt: ago(14, '10:22'),
+      },
     },
     {
       ...base,

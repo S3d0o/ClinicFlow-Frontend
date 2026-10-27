@@ -1,8 +1,10 @@
 import type { PriceListItem, Service, Specialty } from '@/features/catalog/model/catalog';
 import type { Payer } from '@/features/documents/model/documents';
+import type { Drug, EncounterTemplate, Icd10Code } from '@/features/encounters/model/encounter';
 import type { Branch } from '@/features/org/model/branch';
 import { renderNotification } from './notifications';
 import { applicationsSeed, type ApplicationRecord } from './seed/applications';
+import { clinicalSeed, drugsSeed, icd10Seed, templatesSeed, type EncounterRecord, type LeaveRecord } from './seed/clinical';
 import { branchesSeed } from './seed/branches';
 import { priceListSeed, servicesSeed, specialtiesSeed } from './seed/catalog';
 import { doctorsSeed, type DoctorSeed } from './seed/doctors';
@@ -86,6 +88,11 @@ export interface MockDb {
   cashSessions: CashSessionRecord[];
   /** Who listens to queue changes per branch: the stand-in for the `/hubs/queue` SignalR hub. */
   queueListeners: Set<(branchId: string) => void>;
+  icd10: Icd10Code[];
+  drugs: Drug[];
+  encounterTemplates: EncounterTemplate[];
+  encounters: EncounterRecord[];
+  leaveRequests: LeaveRecord[];
 }
 
 /** A fresh copy of the seed data (tests get an isolated database each). Dated seeds are relative to `now`. */
@@ -102,15 +109,23 @@ export function createMockDb(now: Date = new Date()): MockDb {
     doctorRooms: doctorRoomsSeed,
     drawers: drawersSeed,
     deskPatients: deskPatientsSeed,
+    icd10: icd10Seed,
+    drugs: drugsSeed,
+    encounterTemplates: templatesSeed,
   });
   const { notificationEvents, ...portal } = patientPortalSeed(now);
   const desk = frontDeskSeed(now);
+  const clinical = clinicalSeed(now);
   const { deskPatients, ...reference } = fixed;
+  const appointments = [...portal.appointments, ...desk.appointments, ...clinical.appointments];
   const db: MockDb = {
     ...reference,
     ...portal,
     patients: [...portal.patients, ...deskPatients],
-    appointments: [...portal.appointments, ...desk.appointments],
+    appointments,
+    // Desk visits that fall outside today (the demo opened very early or late) have no encounter either
+    encounters: clinical.encounters.filter((e) => appointments.some((a) => a.id === e.appointmentId)),
+    leaveRequests: clinical.leaveRequests,
     invoices: [...portal.invoices, ...desk.invoices],
     payments: desk.payments,
     cashSessions: desk.cashSessions,

@@ -49,11 +49,26 @@ export const deskRoutes: ScreenRoute[] = [
 
 // Doctor workspace (phase 4).
 export const doctorRoutes: ScreenRoute[] = [
-  { path: '/doctor', screen: 'doctorToday', layout: 'staff', access: allow('encounters.write'), phase: 4, design: 'doctor/01-today' },
-  { path: '/doctor/encounters/:appointmentId', screen: 'encounter', layout: 'staff', access: allow('encounters.write'), phase: 4, design: 'doctor/02-encounter-workspace' },
-  { path: '/doctor/patients', screen: 'patientHistory', layout: 'staff', access: allow('encounters.view'), phase: 4, design: 'doctor/03-patient-history-timeline' },
-  { path: '/doctor/patients/:patientId', screen: 'patientHistory', layout: 'staff', access: allow('encounters.view'), phase: 4, design: 'doctor/03-patient-history-timeline' },
-  { path: '/doctor/schedule', screen: 'doctorSchedule', layout: 'staff', access: allow('leave.request'), phase: 4, design: 'doctor/04-my-schedule-and-leave' },
+  {
+    path: '/doctor', screen: 'doctorToday', layout: 'staff', access: allow('encounters.write'), phase: 4, design: 'doctor/01-today',
+    component: lazy(() => import('@/features/doctor/pages/DoctorTodayPage')),
+  },
+  {
+    path: '/doctor/encounters/:appointmentId', screen: 'encounter', layout: 'staff', access: allow('encounters.write'), phase: 4, design: 'doctor/02-encounter-workspace',
+    component: lazy(() => import('@/features/encounters/pages/EncounterPage')),
+  },
+  {
+    path: '/doctor/patients', screen: 'patientHistory', layout: 'staff', access: allow('encounters.view'), phase: 4, design: 'doctor/03-patient-history-timeline',
+    component: lazy(() => import('@/features/history/pages/PatientsListPage')),
+  },
+  {
+    path: '/doctor/patients/:patientId', screen: 'patientHistory', layout: 'staff', access: allow('encounters.view'), phase: 4, design: 'doctor/03-patient-history-timeline',
+    component: lazy(() => import('@/features/history/pages/PatientHistoryPage')),
+  },
+  {
+    path: '/doctor/schedule', screen: 'doctorSchedule', layout: 'staff', access: allow('leave.request'), phase: 4, design: 'doctor/04-my-schedule-and-leave',
+    component: lazy(() => import('@/features/doctor/pages/DoctorSchedulePage')),
+  },
 ];
 
 // Manager workspace (phase 5).
