@@ -49,6 +49,13 @@
   },
   "errors": {
     "generic": "Something went wrong. Please try again.",
+    "Staff": {
+      "NotFound": "We couldn't find that staff member.",
+      "RoleNotGrantable": "You can't give one of these roles. Only an admin can give the Admin and Manager roles.",
+      "CannotChangeOwnAccess": "You can't change your own access. Ask another admin.",
+      "AlreadyDeactivated": "This account is already deactivated.",
+      "EndDateInPast": "Pick today or a later date."
+    },
     "Subscription": {
       "ModuleNotEnabled": "This isn't part of your clinic's plan.",
       "ModuleRequired": "Another add-on that is on needs this one, so it can't be switched off.",

@@ -156,6 +156,10 @@ Open points for the rebuild:
   - The doctor's Today screen needs `encounters.write`, so it closes without EMR. R1 (M3) opens it to the queue permissions and hides its EMR parts.
   - Without EMR the patient's Records tab (visits) is hidden, so invoices are reachable only from links. M4 points the tab at invoices.
   - The public doctor directory stays open without the patient portal; only booking needs it.
+- **Staff and roles** (R1 M1, `feature/r1-ui-admin-staff`): the staff directory, a staff member's page and the read-only roles matrix are built on the mock (`features/staff`). Still open:
+  - `StaffService` and `RolesService` aren't in API_CONTRACT.md §13 yet; they go into M1's contract update with the `Staff.*` codes (`NotFound`, `RoleNotGrantable`, `CannotChangeOwnAccess`, `AlreadyDeactivated`, `EndDateInPast`). The matrix needs a read endpoint (`GET /api/v2/roles`), which 07 doesn't list.
+  - Inviting a doctor doesn't ask for the specialty and services yet (design admin/02), and the doctor profile (licence, bio, languages, public visibility; FR-STF-05) can't be edited here yet.
+  - The design's *Sessions and security* tab (active sessions) is left out: no requirement asks for a session list.
 - **Main chunk size:** phase 3 took the entry chunk past Vite's 500 kB warning (531 kB), so every translation file now has its own `locales` chunk (162 kB, 48 kB gzipped after phase 4; `vite.config.ts`). The entry is about 434 kB (138 kB gzipped): TanStack Query, Radix, i18next and the mock backend with its seeds. Both still load at startup. Splitting the translations per screen and dropping the mock from the production build (with the HTTP adapters) are the next steps.
 - **Dependencies:** `npm audit` reports 4 moderate advisories, all in Tailwind 3's build-time CSS tooling (`postcss-selector-parser` via `postcss-nested`). No fixed version exists for Tailwind 3; moving to Tailwind 4 clears them. The 12 others, including 11 high (axios, react-router, vite, postcss, …), were fixed by `chore/dependency-security` (2026-10-24).
 

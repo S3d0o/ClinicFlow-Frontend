@@ -8,7 +8,7 @@ import type { PermissionGrant, Role, RoleAssignment } from '@/features/auth/mode
 // clinical reports, encounter voids) are left out of the sample data.
 type Code = 'O' | 'A' | 'S' | 'OO';
 
-const MATRIX: Record<Role, Partial<Record<Permission, Code>>> = {
+export const MATRIX: Record<Role, Partial<Record<Permission, Code>>> = {
   Admin: {
     'org.settings.manage': 'O', 'branches.manage': 'O', 'staff.view': 'O', 'staff.invite': 'O',
     'staff.deactivate': 'O', 'roles.manage': 'O', 'specialties.manage': 'O', 'audit.view': 'O',

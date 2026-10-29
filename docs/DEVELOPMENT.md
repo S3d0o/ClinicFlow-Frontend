@@ -76,6 +76,13 @@ Trying the phase 4 flows (sign in as **Dr. Ahmed Fathy**; his day is the desk's,
 
 Trying plans and modules (release R1; sign in as **Karim Adel**, admin, or **Dr. Hala Mostafa**, manager): open **Plan & modules** (`/#/admin/subscription`) and use **Demo: change the plan**. On Starter, the billing, front desk queue, clinical and reports menus disappear; on Clinic, clinical records and insurance do. Opening one of their pages says "Not in your clinic's plan". The choice is kept with the rest of the demo data (until "Reset demo data" or the next day).
 
+Trying staff administration (sign in as **Karim Adel**, admin):
+- **Staff** (`/#/admin/staff`) lists everyone, plus Fatma Hassan's open invitation.
+- Invite someone, or open a member to change their roles or deactivate them (now, or at the end of a day).
+- See **Roles & permissions** (`/#/admin/roles`).
+- Sign in as **Omar Saeed**, Maadi's manager, to see the directory limited to Maadi and the Admin and Manager roles closed to him.
+- A deactivated demo account can't sign in until **Reset demo data**.
+
 The UI starts in **Arabic** (right-to-left), as the docs require; switch with the "EN | عربي" toggle. The choice is remembered.
 
 ### Configuration

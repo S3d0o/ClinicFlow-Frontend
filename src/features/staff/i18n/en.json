@@ -1,0 +1,99 @@
+{
+  "directory": {
+    "description": "Everyone who works at the clinic, their roles and branches, and invitations still open.",
+    "filters": "Filter staff",
+    "search": "Search staff",
+    "searchPlaceholder": "Name, email or phone",
+    "role": "Role",
+    "allRoles": "All roles",
+    "branch": "Branch",
+    "status": "Status",
+    "allStatuses": "All statuses",
+    "emptyTitle": "No staff match",
+    "emptyBody": "Change the filters, or invite someone.",
+    "count_one": "{{count}} staff member",
+    "count_other": "{{count}} staff members"
+  },
+  "status": {
+    "Active": "Active",
+    "Invited": "Invited",
+    "Leaving": "Leaving",
+    "Deactivated": "Deactivated"
+  },
+  "invite": {
+    "open": "Invite staff member",
+    "title": "Invite a staff member",
+    "description": "They get an email with a link to set their password and join.",
+    "fullName": "Full name",
+    "email": "Work email",
+    "emailHint": "The invitation link is sent here.",
+    "validity": "The link works once and for 72 hours. Staff set up two-step sign-in the first time they sign in.",
+    "send": "Send invitation",
+    "sent": "Invitation sent to {{email}}."
+  },
+  "roles": {
+    "title": "Roles and branches",
+    "notGrantable": "Only an admin can give this role",
+    "scopeOf": "Where the {{role}} role applies",
+    "allBranches": "All branches",
+    "someBranches": "Chosen branches",
+    "errors": {
+      "noRole": "Choose at least one role.",
+      "noBranch": "Choose a branch for each role limited to some branches."
+    },
+    "editTitle": "Roles of {{name}}",
+    "editHint": "Changes apply the next time their session refreshes, within 15 minutes, and are kept in the audit log.",
+    "saved": "Roles saved."
+  },
+  "detail": {
+    "license": "Licence {{number}}",
+    "mfaOn": "Two-step sign-in set up",
+    "mfaMissing": "Two-step sign-in not set up",
+    "resetMfa": "Reset two-step sign-in",
+    "mfaResetDone": "Two-step sign-in reset. They set it up again at their next sign-in.",
+    "endsOn": "Access ends on {{date}}",
+    "endedOn": "Access ended on {{date}}",
+    "selfNote": "You can't change your own roles or deactivate yourself; ask another admin."
+  },
+  "invitation": {
+    "resend": "Send a new link",
+    "resent": "A new link was sent to {{email}}.",
+    "revoke": "Cancel invitation",
+    "revoked": "Invitation cancelled.",
+    "expires": "The link works until {{date}}"
+  },
+  "deactivate": {
+    "open": "Deactivate",
+    "title": "Deactivate {{name}}",
+    "body": "They can't sign in once their access ends, and their sessions end. Records they wrote keep their name.",
+    "when": "When access ends",
+    "now": "Now",
+    "nowHint": "Sign-in stops at once.",
+    "onDate": "At the end of a day",
+    "onDateHint": "For a last working day: access ends when that day is over.",
+    "endDate": "Last day",
+    "upcoming_one": "{{count}} booked visit is still to come with this doctor and needs another doctor.",
+    "upcoming_other": "{{count}} booked visits are still to come with this doctor and need another doctor.",
+    "confirm": "Deactivate"
+  },
+  "matrix": {
+    "description": "Which permissions each role holds. A permission applies at the branches where the person holds the role, unless marked otherwise.",
+    "readOnly": "These are the clinic's default permissions. Changing them comes in a later release.",
+    "caption": "Permissions by role",
+    "permission": "Permission",
+    "none": "Not held",
+    "notInPlan": "Not in your plan",
+    "short": {
+      "O": "Org",
+      "A": "Role",
+      "OO": "Org*",
+      "S": "Own"
+    },
+    "codes": {
+      "O": "Whole organization",
+      "A": "Where the role is held",
+      "OO": "Only when the role is held for the whole organization",
+      "S": "Own records only"
+    }
+  }
+}

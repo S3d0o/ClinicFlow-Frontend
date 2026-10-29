@@ -3,6 +3,8 @@ import { BRANCH_IDS } from './branches';
 
 /** A staff invitation (FR-STF-01). The real backend stores only a hash of the token. */
 export interface InvitationSeed {
+  /** Shown as the staff member's id while invited; the token only travels in the email. */
+  id: string;
   token: string;
   email: string;
   fullName: string;
@@ -19,6 +21,7 @@ export const DEMO_INVITATION_TOKEN = 'demo-nurse-invite';
 export function invitationsSeed(now: Date): InvitationSeed[] {
   return [
     {
+      id: 'inv-fatma',
       token: DEMO_INVITATION_TOKEN,
       email: 'f.hassan@clinicflow.eg',
       fullName: 'Fatma Hassan Mahmoud',
