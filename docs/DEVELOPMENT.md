@@ -40,7 +40,7 @@ Open `/#/sign-in` and sign in with a phone or email and the demo password, or pi
 | Mohamed Adel | Patient | `/patient` |
 | Dr. Nour El-Din Samy | Doctor applicant (no role) | `/my-application` |
 
-Every demo password is **`Demo@1234`** and every one-time (WhatsApp or SMS) or authenticator code is **`123456`**. Staff recovery codes are in `users.ts` too. The session survives reloads; to start over, sign out or clear `clinicflow:demo-session` from local storage. **The mock data resets on every reload**, including accounts and applications made in the browser: a new account is gone after a reload (its session then reads as signed out).
+Every demo password is **`Demo@1234`** and every one-time (WhatsApp or SMS) or authenticator code is **`123456`**. Staff recovery codes are in `users.ts` too. The session survives reloads; to start over, use **Reset demo data** under the demo accounts on the sign-in page. **The mock data is kept in this browser for the day** (`src/mocks/persistence.ts`, key `clinicflow:demo-db`): bookings, accounts, payments and the rest survive a reload. It starts again from the seed on the next day, after "Reset demo data", or when `SEED_VERSION` is raised (raise it whenever a seed or a table changes shape). Uploaded files are not kept; after a reload they download as sample files.
 
 Trying the phase 1 flows:
 - **Sign-up:** `/#/sign-up` with any unused Egyptian mobile number (e.g. `0122 333 4444`), then the code `123456`. Five wrong codes open the lockout screen.
@@ -155,6 +155,6 @@ The backend owns it ([API_CONTRACT.md §11](API_CONTRACT.md#11-how-to-change-thi
 | Text shows as a key such as `nav:items.deskToday` | The key is missing from a translation file or the namespace isn't registered in `app/locales.ts` |
 | `npm run build` fails on a `t('…')` call | The key doesn't exist in the English file (keys are typed) |
 | Layout looks wrong only in Arabic | A physical class (`ml-`, `pl-`, `left-`, `text-left`) instead of a logical one |
-| An account made in the browser stopped working | The mock data resets on reload; sign up again or use a demo account |
+| An account made in the browser stopped working | The saved demo data was dropped (a new day, "Reset demo data", or a raised `SEED_VERSION`); sign up again or use a demo account |
 | A screen opened from a bookmark sends you back a step (`/sign-up/verify`, `/sign-in/verify`, `/forgot-password/verify`) | Those steps need what the previous step handed over; they restart the flow when opened directly |
 | `docker build` can't find a Dockerfile on Linux/CI | The file is named `DockerFile`. Use `docker build -f DockerFile …` |

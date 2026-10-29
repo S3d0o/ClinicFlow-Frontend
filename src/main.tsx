@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import { App } from './app/App';
 import { initI18n } from './app/i18n';
 import { createMockServices } from './mocks/create-mock-services';
+import { createMockDb } from './mocks/db';
+import { clearMockDb, loadMockDb, startAutosave } from './mocks/persistence';
 import { reloadOnceForChunkError } from './shared/lib/chunk-reload';
 import './styles/index.css';
 
@@ -26,8 +28,18 @@ observer.observe(document.body, { attributes: true, attributeFilter: ['style'] }
 initI18n();
 
 // The V2 API isn't built yet, so the app runs on the in-memory mock backend (src/mocks). The HTTP
-// adapters will be wired in here, behind the same `Services` interfaces.
-const services = createMockServices();
+// adapters will be wired in here, behind the same `Services` interfaces. The mock's data is kept in
+// this browser (src/mocks/persistence.ts), so a reload keeps the demo where it was.
+const now = new Date();
+const db = loadMockDb(now) ?? createMockDb(now);
+const autosave = startAutosave(db);
+const services = createMockServices({
+  db,
+  onResetDemo: () => {
+    autosave.stop();
+    clearMockDb();
+  },
+});
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

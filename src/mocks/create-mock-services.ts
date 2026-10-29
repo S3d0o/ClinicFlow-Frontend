@@ -47,6 +47,8 @@ export interface MockServicesOptions {
   queueTickMs?: number;
   /** The virus scan of an upload (default: 5 s with latency, at once without). */
   scanDelayMs?: number;
+  /** Called by "Reset demo data" after signing out, to forget the saved database (`persistence.ts`). */
+  onResetDemo?: () => void;
 }
 
 /** Wires every mock adapter to one shared in-memory database. */
@@ -58,6 +60,7 @@ export function createMockServices({
   outboxDelayMs = latencyMs > 0 ? 2000 : 0,
   queueTickMs = latencyMs > 0 ? 20_000 : 0,
   scanDelayMs = latencyMs > 0 ? 5000 : 0,
+  onResetDemo,
 }: MockServicesOptions = {}): Services {
   const deps = { db, session, latencyMs, now, outboxDelayMs, queueTickMs, scanDelayMs, otp: createOtpStore(now) };
   startQueueDemo(deps);
@@ -92,6 +95,6 @@ export function createMockServices({
     doctorDay: createMockDoctorDayService(deps),
     schedule: createMockScheduleService(deps),
     history: createMockPatientHistoryService(deps),
-    demoAccounts: createMockDemoAccountsService(deps),
+    demoAccounts: createMockDemoAccountsService({ ...deps, onResetDemo }),
   };
 }

@@ -309,7 +309,9 @@
     "password": "Every demo account uses the password <value>{{password}}</value>, and every one-time or authenticator code is <value>{{code}}</value>.",
     "signInAs": "Sign in as {{name}}",
     "invitation": "Try a staff invitation (a new nurse joining Nasr City)",
-    "reminder": "Open a visit reminder message (Mohamed Adel's eye exam)"
+    "reminder": "Open a visit reminder message (Mohamed Adel's eye exam)",
+    "saved": "What you do in the demo is kept in this browser until the end of the day.",
+    "reset": "Reset demo data"
   },
   "footer": {
     "tagline": "One clinic, every branch: book, visit, pay and get your records in one place.",

@@ -145,4 +145,6 @@ export interface DemoAccountsService {
   signInAs(userId: string): Promise<CurrentUser>;
   /** The app path of the link in the latest email sent to `email` (reset or confirmation), if any. */
   latestEmailLink(email: string): Promise<string | null>;
+  /** Signs out and forgets everything done in this browser; the page then reloads on the seed data. */
+  resetDemo(): Promise<void>;
 }

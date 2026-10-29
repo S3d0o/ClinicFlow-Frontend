@@ -1,9 +1,9 @@
-import { ArrowRight, MailPlus, MessageSquareText } from 'lucide-react';
+import { ArrowRight, MailPlus, MessageSquareText, RotateCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { Avatar } from '@/shared/ui/Avatar';
 import { ErrorState, LoadingState } from '@/shared/ui/states';
-import { useDemoAccounts, useDemoSignIn } from '../hooks/use-demo-accounts';
+import { useDemoAccounts, useDemoSignIn, useResetDemo } from '../hooks/use-demo-accounts';
 
 /**
  * One-click sign-in as any sample account. Renders nothing when the backend has no demo accounts.
@@ -13,6 +13,7 @@ export function DemoAccountsPanel() {
   const { t } = useTranslation();
   const demo = useDemoAccounts();
   const signIn = useDemoSignIn();
+  const reset = useResetDemo();
 
   if (!demo.available) return null;
   if (demo.isPending) return <LoadingState />;
@@ -68,6 +69,18 @@ export function DemoAccountsPanel() {
           {t('demo.reminder')}
         </Link>
       )}
+      <div className="space-y-1 border-t border-border pt-4">
+        <p className="text-body-sm text-muted-foreground">{t('demo.saved')}</p>
+        <button
+          type="button"
+          disabled={reset.isPending}
+          onClick={() => reset.mutate()}
+          className="flex items-center gap-2 text-label-md text-primary hover:underline disabled:opacity-60"
+        >
+          <RotateCcw aria-hidden="true" className="size-4" />
+          {t('demo.reset')}
+        </button>
+      </div>
     </section>
   );
 }
