@@ -80,6 +80,8 @@ The UI starts in **Arabic** (right-to-left), as the docs require; switch with th
 
 `VITE_API_URL` (the backend origin without `/api`) is only read by the HTTP client, which nothing calls until the HTTP adapters land. `.env` and `.env.production` leave it empty. Keep the dev server on **port 3000**; the backend's CORS policy and email links expect it.
 
+`VITE_PREVIEW=true` builds the public **V2 preview**. It adds a "Preview: sample data" ribbon and a `noindex` robots tag. `.github/workflows/pages.yml` sets it and deploys every push to `v2` to https://s3d0o.github.io/ClinicFlow-Frontend/. To see the ribbon locally, run `VITE_PREVIEW=true npm run dev`.
+
 ## 3. Scripts and checks
 
 | Command | What it does |
