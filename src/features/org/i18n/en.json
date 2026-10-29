@@ -1,0 +1,142 @@
+{
+  "branches": {
+    "description": "The clinic's locations, with each one's opening hours, holidays and rooms.",
+    "add": "Add branch",
+    "addTitle": "Add a branch",
+    "editTitle": "Edit branch",
+    "edit": "Edit branch",
+    "saved": "Branch saved.",
+    "code": "Code",
+    "codeHint": "2–4 capital letters, used in invoice numbers.",
+    "timeZone": "Time zone",
+    "nameEn": "Name in English",
+    "nameAr": "Name in Arabic",
+    "addressEn": "Address in English",
+    "addressAr": "Address in Arabic",
+    "phone": "Phone",
+    "active": "Open",
+    "inactive": "Deactivated",
+    "workspace": "Branch setup",
+    "deactivate": "Deactivate branch",
+    "reactivate": "Reopen branch",
+    "deactivated": "{{name}} is deactivated: it takes no new bookings.",
+    "reactivated": "{{name}} is open for bookings again.",
+    "inactiveNote": "This branch takes no new bookings. Its visits, invoices and records stay readable."
+  },
+  "hours": {
+    "title": "Opening hours",
+    "openOn": "Open on {{day}}",
+    "open": "Open",
+    "closed": "Closed",
+    "from": "{{day}}: opens at",
+    "to": "{{day}}: closes at",
+    "addPeriod": "Add a period",
+    "removePeriod": "Remove this period",
+    "errors": {
+      "order": "Each period must close after it opens.",
+      "overlap": "The periods overlap."
+    },
+    "save": "Save opening hours",
+    "saved": "Opening hours saved. Doctor schedules can't make slots outside them."
+  },
+  "holidays": {
+    "title": "Holidays and closures",
+    "add": "Add a closure",
+    "addTitle": "Add a holiday or closure",
+    "addConfirm": "Add closure",
+    "added": "Closure added.",
+    "addedAffecting_one": "Closure added. {{count}} booked visit falls on it and needs moving.",
+    "addedAffecting_other": "Closure added. {{count}} booked visits fall on it and need moving.",
+    "range": "{{from}} to {{to}}",
+    "yearly": "Every year",
+    "thisBranch": "This branch",
+    "everyBranch": "Every branch",
+    "remove": "Remove {{name}}",
+    "emptyTitle": "No holidays or closures",
+    "emptyBody": "Add the public holidays and any day the branch closes.",
+    "nameEn": "Name in English",
+    "nameAr": "Name in Arabic",
+    "from": "From",
+    "to": "To",
+    "yearlyLabel": "Repeats every year",
+    "allBranchesLabel": "Closes every branch",
+    "effect": "No slots are made on these days, and booked visits that fall on them are listed for moving."
+  },
+  "rooms": {
+    "title": "Rooms",
+    "add": "Add room",
+    "addTitle": "Add a room",
+    "editTitle": "Edit room",
+    "edit": "Edit {{name}}",
+    "inUse": "{{name}} in use",
+    "emptyTitle": "No rooms yet",
+    "nameEn": "Name in English",
+    "nameAr": "Name in Arabic",
+    "kind": "Type",
+    "kinds": {
+      "Consultation": "Consultation",
+      "Procedure": "Procedure",
+      "Triage": "Triage"
+    }
+  },
+  "profile": {
+    "title": "Organization profile",
+    "hint": "Shown on invoices, receipts and prescriptions.",
+    "save": "Save profile",
+    "saved": "Profile saved.",
+    "fields": {
+      "legalName": "Legal name",
+      "brandNameEn": "Brand name in English",
+      "brandNameAr": "Brand name in Arabic",
+      "taxNumber": "Tax registration number",
+      "commercialRegistration": "Commercial registration",
+      "phone": "Phone",
+      "email": "Email"
+    }
+  },
+  "settings": {
+    "description": "The clinic's rules for bookings, money, records and hiring. Each has a default.",
+    "audited": "Every change here is kept in the audit log with who made it and when.",
+    "save": "Save",
+    "saved": "Settings saved.",
+    "default": "Default: {{value}}",
+    "on": "on",
+    "off": "off",
+    "sections": {
+      "appointments": "Appointments and queue",
+      "payments": "Fees and deposits",
+      "approvals": "Approvals",
+      "records": "Patient records",
+      "recruitment": "Hiring"
+    },
+    "fields": {
+      "cancellationWindowHours": { "label": "Cancellation window", "hint": "Patients can cancel online until this long before the visit.", "unit": "hours" },
+      "rescheduleWindowHours": { "label": "Reschedule window", "hint": "Patients can move a visit online until this long before it.", "unit": "hours" },
+      "noShowGraceMinutes": { "label": "No-show grace", "hint": "How long after the start before the desk can mark a no-show.", "unit": "minutes" },
+      "walkInCap": { "label": "Walk-ins without a slot", "hint": "Per doctor per day.", "unit": "patients" },
+      "noShowFee": { "label": "No-show fee", "hint": "Added to the patient's next visit. 0 means none.", "unit": "EGP" },
+      "depositEnabled": { "label": "Online deposit", "hint": "Patients may pay a deposit when booking online. A booking is confirmed without one." },
+      "depositAmount": { "label": "Deposit amount", "hint": "Taken off the bill at the desk.", "unit": "EGP" },
+      "receptionistDiscountCapPercent": { "label": "Receptionist discount limit", "hint": "Larger discounts need a manager's approval.", "unit": "%" },
+      "accountantDiscountCapPercent": { "label": "Accountant discount limit", "hint": "Larger discounts need a manager's approval.", "unit": "%" },
+      "refundApprovalThreshold": { "label": "Refunds needing approval", "hint": "Refunds above this amount go to a manager.", "unit": "EGP" },
+      "cashVarianceThreshold": { "label": "Cash variance alert", "hint": "A drawer counted this far from expected is flagged at the daily close.", "unit": "EGP" },
+      "shareRecordsWithinBranch": { "label": "Share notes within a branch", "hint": "Doctors can read the notes of other doctors' visits at their branch." },
+      "applicationFileRetentionMonths": { "label": "Keep applicants' files", "hint": "CVs of rejected or withdrawn applicants are deleted after this.", "unit": "months" },
+      "reapplyCooldownDays": { "label": "Wait before reapplying", "hint": "Days before a rejected applicant can apply again.", "unit": "days" }
+    }
+  },
+  "specialties": {
+    "description": "The medical specialties patients search by, in both languages.",
+    "add": "Add specialty",
+    "addTitle": "Add a specialty",
+    "editTitle": "Rename specialty",
+    "edit": "Rename {{name}}",
+    "saved": "Specialty saved.",
+    "emptyTitle": "No specialties yet",
+    "nameEn": "Name in English",
+    "nameAr": "Name in Arabic",
+    "services_one": "{{count}} service",
+    "services_other": "{{count}} services"
+  }
+}

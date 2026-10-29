@@ -293,6 +293,35 @@ Today's patients for a quick jump, and the patient search from the front desk (n
 - **Modules off in the plan** are dimmed and marked "Not in your plan".
 - **Read-only:** editing a role's permissions is FR-STF-06, in release R3.
 
+## Administration: the clinic (release R1)
+
+### Branches — `/admin/branches`
+(Design admin/05, FR-ORG-02, 03, 04, 06. Needs `branches.manage`.)
+- **The branches** as cards: code, name, address, time zone, open or deactivated. **Add branch** and **Edit branch** ask for:
+  - a code of 2–4 capital letters, unique and used in invoice numbers
+  - names and addresses in both languages
+  - phone and time zone
+- **Deactivate branch:** it disappears from public booking, and its records stay readable. The last open branch can't be deactivated. **Reopen branch** undoes it.
+- **Opening hours** per weekday, Saturday first: open or closed, in up to three periods each. Periods must close after they open and mustn't overlap. Doctor schedules can't make slots outside them.
+- **Holidays and closures:** names in both languages, a day or a range, yearly or once, for this branch or every branch. Adding one says how many booked visits fall on it and need moving.
+- **Rooms:** consultation, procedure and triage rooms, renamed or taken out of use with a switch.
+
+### Settings — `/admin/settings`
+(Design admin/06, FR-ORG-01, FR-ORG-05. Needs `org.settings.manage`.)
+- **Organization profile** (shown on invoices, receipts and prescriptions): legal and brand names, tax and commercial registration numbers, phone and email.
+- **The clinic's rules**, each with its default and limits, in sections saved on their own:
+  - **Appointments and queue:** cancellation and reschedule windows, no-show grace, walk-in cap.
+  - **Fees and deposits:** no-show fee, the optional online deposit and its amount.
+  - **Approvals:** discount limits for receptionists and accountants, refunds needing approval, the cash variance alert.
+  - **Patient records:** sharing notes within a branch.
+  - **Hiring:** how long applicants' files are kept, and the wait before reapplying.
+- **Audit:** every change is recorded in the audit log.
+
+### Specialties — `/admin/specialties`
+(Design admin/09. Needs `specialties.manage`.)
+- **The list:** each specialty in both languages, with how many services it has.
+- **Add specialty** and **Rename**. Names are unique in each language.
+
 ## Plans and modules (release R1)
 
 ### Plan & modules — `/admin/subscription`

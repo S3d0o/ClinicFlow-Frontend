@@ -83,6 +83,11 @@ Trying staff administration (sign in as **Karim Adel**, admin):
 - Sign in as **Omar Saeed**, Maadi's manager, to see the directory limited to Maadi and the Admin and Manager roles closed to him.
 - A deactivated demo account can't sign in until **Reset demo data**.
 
+Trying the clinic's setup (sign in as **Karim Adel**):
+- **Branches** (`/#/admin/branches`): change a branch's hours, add a closure on a day with bookings to see how many visits it affects, or add a room or a branch.
+- **Settings** (`/#/admin/settings`): edit the profile and the rules. Out-of-range values can't be saved.
+- **Specialties** (`/#/admin/specialties`).
+
 The UI starts in **Arabic** (right-to-left), as the docs require; switch with the "EN | عربي" toggle. The choice is remembered.
 
 ### Configuration

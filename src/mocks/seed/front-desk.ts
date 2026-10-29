@@ -1,6 +1,7 @@
 import { CHANGE_WINDOW_HOURS } from '@/features/appointments/model/policy';
 import type { DeskPaymentMethod } from '@/features/billing/model/checkout';
 import type { CashSessionStatus } from '@/features/billing/model/cash-session';
+import type { RoomKind } from '@/features/org/model/branch-admin';
 import type { Room } from '@/features/queue/model/queue';
 import type { TriageForm } from '@/features/triage/model/vitals';
 import type { Bilingual } from '@/shared/i18n/bilingual';
@@ -12,7 +13,8 @@ import type { AppointmentRecord, InvoiceRecord, PatientRecordSeed } from './pati
 /** A room (FR-ORG-04). */
 export interface RoomSeed extends Room {
   branchId: string;
-  kind: 'Consultation' | 'Triage';
+  kind: RoomKind;
+  isActive: boolean;
 }
 
 /** The room a doctor's schedule reserves at a branch (FR-ORG-04). */
@@ -65,6 +67,7 @@ const room = (id: string, branchId: string, number: string, kind: RoomSeed['kind
   id,
   branchId,
   kind,
+  isActive: true,
   nameEn: kind === 'Triage' ? `Triage ${number}` : `Room ${number}`,
   nameAr: kind === 'Triage' ? `غرفة الفرز ${number}` : `غرفة ${number}`,
 });

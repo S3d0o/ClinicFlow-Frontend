@@ -45,7 +45,8 @@
     "dateOfBirth": "Enter a date of birth that has already passed.",
     "notPast": "Pick today or a later date.",
     "dateRange": "The end date must be on or after the start date.",
-    "timeRange": "The end time must be after the start time."
+    "timeRange": "The end time must be after the start time.",
+    "branchCode": "Use 2 to 4 capital letters, e.g. NC."
   },
   "errors": {
     "generic": "Something went wrong. Please try again.",
@@ -188,7 +189,20 @@
       "NotFound": "This doctor doesn't offer that service."
     },
     "Branch": {
-      "NotFound": "We couldn't find this branch. It may be closed."
+      "NotFound": "We couldn't find this branch. It may be closed.",
+      "CodeTaken": "Another branch already uses this code.",
+      "LastActive": "This is the last open branch, so it can't be deactivated.",
+      "InvalidHours": "Check the opening hours: a period closes before it opens, or two overlap."
+    },
+    "Holiday": {
+      "NotFound": "This closure no longer exists."
+    },
+    "Room": {
+      "NotFound": "This room no longer exists."
+    },
+    "Specialty": {
+      "NotFound": "This specialty no longer exists.",
+      "NameTaken": "Another specialty already has this name."
     },
     "Booking": {
       "ServiceNotOffered": "This doctor doesn't offer that service at this branch. Please pick another."

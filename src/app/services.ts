@@ -12,7 +12,7 @@ import type {
 } from '@/features/auth/api/auth.service';
 import type { PatientBillingService } from '@/features/billing/api/billing.service';
 import type { CashSessionService, CheckoutService } from '@/features/billing/api/checkout.service';
-import type { CatalogService } from '@/features/catalog/api/catalog.service';
+import type { CatalogService, SpecialtyAdminService } from '@/features/catalog/api/catalog.service';
 import type { DeskService } from '@/features/desk/api/desk.service';
 import type { DoctorDayService, ScheduleService } from '@/features/doctor/api/doctor.service';
 import type { DirectoryService } from '@/features/doctors/api/directory.service';
@@ -21,6 +21,7 @@ import type { EncountersService } from '@/features/encounters/api/encounters.ser
 import type { DemoPlatformService, EntitlementsService } from '@/features/entitlements/api/entitlements.service';
 import type { PatientHistoryService } from '@/features/history/api/history.service';
 import type { NotificationsService } from '@/features/notifications/api/notifications.service';
+import type { BranchAdminService, OrganizationService } from '@/features/org/api/org-admin.service';
 import type { OrgService } from '@/features/org/api/org.service';
 import type { PatientsService } from '@/features/patients/api/patients.service';
 import type { ProfileService } from '@/features/profile/api/profile.service';
@@ -71,6 +72,9 @@ export interface Services {
   history: PatientHistoryService;
   // Staff and roles (release R1)
   staff: StaffService;
+  branchAdmin: BranchAdminService;
+  organization: OrganizationService;
+  specialtyAdmin: SpecialtyAdminService;
   roles: RolesService;
   // Plans and modules (release R1)
   entitlements: EntitlementsService;
