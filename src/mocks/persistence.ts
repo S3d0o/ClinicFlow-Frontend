@@ -10,7 +10,7 @@ import type { MockDb } from './db';
  */
 
 /** Bump when a seed or a table's shape changes, so older saved copies are dropped. */
-export const SEED_VERSION = 3;
+export const SEED_VERSION = 4;
 
 const KEY = 'clinicflow:demo-db';
 

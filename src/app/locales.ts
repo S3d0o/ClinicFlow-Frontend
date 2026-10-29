@@ -18,6 +18,8 @@ import arHistory from '@/features/history/i18n/ar.json';
 import enHistory from '@/features/history/i18n/en.json';
 import arNotifications from '@/features/notifications/i18n/ar.json';
 import enNotifications from '@/features/notifications/i18n/en.json';
+import arOrgAdmin from '@/features/org/i18n/ar.json';
+import enOrgAdmin from '@/features/org/i18n/en.json';
 import arPatients from '@/features/patients/i18n/ar.json';
 import enPatients from '@/features/patients/i18n/en.json';
 import arProfile from '@/features/profile/i18n/ar.json';
@@ -66,6 +68,7 @@ export const resources = {
     history: enHistory,
     entitlements: enEntitlements,
     staff: enStaff,
+    orgAdmin: enOrgAdmin,
   },
   ar: {
     common: arCommon,
@@ -89,6 +92,7 @@ export const resources = {
     history: arHistory,
     entitlements: arEntitlements,
     staff: arStaff,
+    orgAdmin: arOrgAdmin,
   },
 } as const;
 

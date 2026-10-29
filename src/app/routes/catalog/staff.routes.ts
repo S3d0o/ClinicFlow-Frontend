@@ -99,9 +99,18 @@ export const adminRoutes: ScreenRoute[] = [
     path: '/admin/roles', screen: 'roles', layout: 'staff', access: allow('roles.manage'), phase: 6, design: 'admin/04-roles-and-permissions',
     component: lazy(() => import('@/features/staff/pages/RolesPage')),
   },
-  { path: '/admin/branches', screen: 'branches', layout: 'staff', access: allow('branches.manage'), phase: 6, design: 'admin/05-branches' },
-  { path: '/admin/specialties', screen: 'specialties', layout: 'staff', access: allow('specialties.manage'), phase: 6, design: 'admin/09-specialties' },
-  { path: '/admin/settings', screen: 'settings', layout: 'staff', access: allow('org.settings.manage'), phase: 6, design: 'admin/06-settings' },
+  {
+    path: '/admin/branches', screen: 'branches', layout: 'staff', access: allow('branches.manage'), phase: 6, design: 'admin/05-branches',
+    component: lazy(() => import('@/features/org/pages/BranchesPage')),
+  },
+  {
+    path: '/admin/specialties', screen: 'specialties', layout: 'staff', access: allow('specialties.manage'), phase: 6, design: 'admin/09-specialties',
+    component: lazy(() => import('@/features/catalog/pages/SpecialtiesPage')),
+  },
+  {
+    path: '/admin/settings', screen: 'settings', layout: 'staff', access: allow('org.settings.manage'), phase: 6, design: 'admin/06-settings',
+    component: lazy(() => import('@/features/org/pages/SettingsPage')),
+  },
   { path: '/admin/integrations', screen: 'integrations', layout: 'staff', access: allow('integrations.manage', 'notifications.templates'), phase: 6, design: 'admin/07-integrations-and-message-templates' },
   { path: '/admin/audit', screen: 'audit', layout: 'staff', access: allow('audit.view'), phase: 6, design: 'admin/08-audit-log' },
   {

@@ -15,6 +15,7 @@ import { createMockInvitationService, createMockMfaService } from '@/features/au
 import { createMockBillingService } from '@/features/billing/api/billing.mock';
 import { createMockCashSessionService, createMockCheckoutService } from '@/features/billing/api/checkout.mock';
 import { createMockCatalogService } from '@/features/catalog/api/catalog.mock';
+import { createMockSpecialtyAdminService } from '@/features/catalog/api/specialty-admin.mock';
 import { createMockDeskService } from '@/features/desk/api/desk.mock';
 import { createMockDoctorDayService, createMockScheduleService } from '@/features/doctor/api/doctor.mock';
 import { createMockDirectoryService } from '@/features/doctors/api/directory.mock';
@@ -23,6 +24,7 @@ import { createMockEncountersService } from '@/features/encounters/api/encounter
 import { createMockDemoPlatformService, createMockEntitlementsService } from '@/features/entitlements/api/entitlements.mock';
 import { createMockPatientHistoryService } from '@/features/history/api/history.mock';
 import { createMockNotificationsService } from '@/features/notifications/api/notifications.mock';
+import { createMockBranchAdminService, createMockOrganizationService } from '@/features/org/api/org-admin.mock';
 import { createMockOrgService } from '@/features/org/api/org.mock';
 import { createMockPatientsService } from '@/features/patients/api/patients.mock';
 import { createMockProfileService } from '@/features/profile/api/profile.mock';
@@ -98,6 +100,9 @@ export function createMockServices({
     schedule: createMockScheduleService(deps),
     history: createMockPatientHistoryService(deps),
     staff: createMockStaffService(deps),
+    branchAdmin: createMockBranchAdminService(deps),
+    organization: createMockOrganizationService(deps),
+    specialtyAdmin: createMockSpecialtyAdminService(deps),
     roles: createMockRolesService(deps),
     entitlements: createMockEntitlementsService(deps),
     demoAccounts: createMockDemoAccountsService({ ...deps, onResetDemo }),

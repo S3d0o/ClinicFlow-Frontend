@@ -2,6 +2,8 @@ import type { PriceListItem, Service, Specialty } from '@/features/catalog/model
 import type { Payer } from '@/features/documents/model/documents';
 import type { Drug, EncounterTemplate, Icd10Code } from '@/features/encounters/model/encounter';
 import type { Plan } from '@/features/entitlements/api/entitlements.service';
+import type { Holiday } from '@/features/org/model/branch-admin';
+import type { OrganizationProfile, OrganizationSettings } from '@/features/org/model/organization';
 import type { Branch } from '@/features/org/model/branch';
 import { renderNotification } from './notifications';
 import { applicationsSeed, type ApplicationRecord } from './seed/applications';
@@ -35,6 +37,7 @@ import {
 } from './seed/patient-portal';
 import { reviewsSeed, type ReviewSeed } from './seed/reviews';
 import { plansSeed, subscriptionSeed, type SubscriptionRecord } from './seed/subscription';
+import { branchHoursSeed, holidaysSeed, organizationSeed, settingsSeed, type BranchHoursRecord } from './seed/organization';
 import { usersSeed, type UserSeed } from './seed/users';
 
 /** An email the mock "sent". The demo shows its link, since no real email leaves the browser. */
@@ -98,6 +101,11 @@ export interface MockDb {
   /** The platform's plans and the clinic's subscription (ADR 0008). */
   plans: Plan[];
   subscription: SubscriptionRecord;
+  /** Branch opening hours, holidays, the organization profile and its settings (FR-ORG-01…05). */
+  branchHours: BranchHoursRecord[];
+  holidays: Holiday[];
+  organization: OrganizationProfile;
+  settings: OrganizationSettings;
 }
 
 /** A fresh copy of the seed data (tests get an isolated database each). Dated seeds are relative to `now`. */
@@ -118,6 +126,9 @@ export function createMockDb(now: Date = new Date()): MockDb {
     drugs: drugsSeed,
     encounterTemplates: templatesSeed,
     plans: plansSeed,
+    branchHours: branchHoursSeed,
+    organization: organizationSeed,
+    settings: settingsSeed,
   });
   const { notificationEvents, ...portal } = patientPortalSeed(now);
   const desk = frontDeskSeed(now);
@@ -140,6 +151,7 @@ export function createMockDb(now: Date = new Date()): MockDb {
     applications: applicationsSeed(now),
     invitations: invitationsSeed(now),
     subscription: subscriptionSeed(now),
+    holidays: holidaysSeed(now),
     files: new Map(),
     sentEmails: [],
     emailTokens: [],
