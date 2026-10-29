@@ -13,6 +13,15 @@ export function useDemoAccounts() {
   return { ...query, available: !!demoAccounts };
 }
 
+/** Forgets the demo's saved data and reloads the page on the seed. */
+export function useResetDemo() {
+  const { demoAccounts } = useServices();
+  return useMutation({
+    mutationFn: () => demoAccounts!.resetDemo(),
+    onSuccess: () => window.location.reload(),
+  });
+}
+
 export function useDemoSignIn() {
   const { demoAccounts } = useServices();
   const setSessionUser = useSetSessionUser();

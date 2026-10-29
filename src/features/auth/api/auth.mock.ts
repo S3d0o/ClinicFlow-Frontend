@@ -84,7 +84,13 @@ export function createMockAuthService(deps: AuthMockDeps): AuthService {
   };
 }
 
-export function createMockDemoAccountsService({ db, session, latencyMs, now }: AuthMockDeps): DemoAccountsService {
+export function createMockDemoAccountsService({
+  db,
+  session,
+  latencyMs,
+  now,
+  onResetDemo,
+}: AuthMockDeps & { onResetDemo?: () => void }): DemoAccountsService {
   return {
     async list() {
       await delay(latencyMs);
@@ -114,6 +120,12 @@ export function createMockDemoAccountsService({ db, session, latencyMs, now }: A
       await delay(latencyMs);
       const wanted = email.trim().toLowerCase();
       return db.sentEmails.filter((e) => e.to.toLowerCase() === wanted && e.path).at(-1)?.path ?? null;
+    },
+
+    async resetDemo() {
+      await delay(latencyMs);
+      session.clear();
+      onResetDemo?.();
     },
   };
 }

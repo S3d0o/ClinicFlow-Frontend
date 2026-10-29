@@ -1,7 +1,10 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import { createMockServices } from '@/mocks/create-mock-services';
+import { createMockDb } from '@/mocks/db';
 import { DEMO_CODE, DEMO_PASSWORD } from '@/mocks/seed/users';
+import { memorySessionStore } from '@/mocks/session-store';
 import { isServiceError } from '@/shared/api/service-error';
-import { createTestBackend } from '@/test/mock-backend';
+import { createTestBackend, TEST_NOW } from '@/test/mock-backend';
 
 const rejectsWith = (promise: Promise<unknown>, code: string) =>
   expect(promise).rejects.toSatisfy((e) => isServiceError(e, code));
@@ -63,5 +66,16 @@ describe('mock auth service', () => {
     await services.auth.signIn({ identifier: '01012345678', password: DEMO_PASSWORD });
     await services.auth.signOut();
     expect(await services.auth.getCurrentUser()).toBeNull();
+  });
+
+  it('resets the demo: signs out and forgets the saved data', async () => {
+    const onResetDemo = vi.fn();
+    const session = memorySessionStore('u-mona');
+    const services = createMockServices({ db: createMockDb(new Date(TEST_NOW)), session, latencyMs: 0, onResetDemo });
+
+    await services.demoAccounts!.resetDemo();
+
+    expect(session.get()).toBeNull();
+    expect(onResetDemo).toHaveBeenCalledOnce();
   });
 });
