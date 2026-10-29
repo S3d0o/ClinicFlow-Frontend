@@ -3,7 +3,7 @@ import { DEMO_CODE, DEMO_PASSWORD } from '@/mocks/seed/users';
 import { ServiceError } from '@/shared/api/service-error';
 import type { Role } from '../model/user';
 import type { AuthService, DemoAccountsService } from './auth.service';
-import { findByIdentifier, toCurrentUser, type AuthMockDeps } from './mock-accounts';
+import { findByIdentifier, isActiveAt, toCurrentUser, type AuthMockDeps } from './mock-accounts';
 
 // V1's lockout (API contract §2): 5 failed sign-ins lock the account for 15 minutes.
 const MAX_FAILED_SIGN_INS = 5;
@@ -20,7 +20,8 @@ export function createMockAuthService(deps: AuthMockDeps): AuthService {
     async getCurrentUser() {
       await delay(latencyMs);
       const user = userById(session.get());
-      return user ? toCurrentUser(db, user) : null;
+      // A deactivated member's session ends with their access (FR-STF-04)
+      return user && isActiveAt(user, now()) ? toCurrentUser(db, user) : null;
     },
 
     async signIn({ identifier, password }) {
@@ -28,6 +29,7 @@ export function createMockAuthService(deps: AuthMockDeps): AuthService {
       const user = findByIdentifier(db, identifier);
       // The same error whether the account exists or not, so sign-in reveals nothing (FR-ACC-03)
       if (!user) throw new ServiceError('Auth.InvalidCredentials');
+      if (!isActiveAt(user, now())) throw new ServiceError('Auth.AccountNotActive');
 
       const at = now().getTime();
       if (user.lockedUntil && at < Date.parse(user.lockedUntil)) {

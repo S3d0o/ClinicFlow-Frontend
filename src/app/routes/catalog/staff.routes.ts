@@ -87,9 +87,18 @@ export const managerRoutes: ScreenRoute[] = [
 // System administration (phase 6).
 export const adminRoutes: ScreenRoute[] = [
   { path: '/admin', screen: 'adminOverview', layout: 'staff', access: allow('integrations.manage'), phase: 6, design: 'admin/01-overview' },
-  { path: '/admin/staff', screen: 'staff', layout: 'staff', access: allow('staff.invite'), phase: 6, design: 'admin/02-staff' },
-  { path: '/admin/staff/:staffId', screen: 'staffDetail', layout: 'staff', access: allow('staff.invite'), phase: 6, design: 'admin/03-staff-member-detail' },
-  { path: '/admin/roles', screen: 'roles', layout: 'staff', access: allow('roles.manage'), phase: 6, design: 'admin/04-roles-and-permissions' },
+  {
+    path: '/admin/staff', screen: 'staff', layout: 'staff', access: allow('staff.invite'), phase: 6, design: 'admin/02-staff',
+    component: lazy(() => import('@/features/staff/pages/StaffPage')),
+  },
+  {
+    path: '/admin/staff/:staffId', screen: 'staffDetail', layout: 'staff', access: allow('staff.invite'), phase: 6, design: 'admin/03-staff-member-detail',
+    component: lazy(() => import('@/features/staff/pages/StaffDetailPage')),
+  },
+  {
+    path: '/admin/roles', screen: 'roles', layout: 'staff', access: allow('roles.manage'), phase: 6, design: 'admin/04-roles-and-permissions',
+    component: lazy(() => import('@/features/staff/pages/RolesPage')),
+  },
   { path: '/admin/branches', screen: 'branches', layout: 'staff', access: allow('branches.manage'), phase: 6, design: 'admin/05-branches' },
   { path: '/admin/specialties', screen: 'specialties', layout: 'staff', access: allow('specialties.manage'), phase: 6, design: 'admin/09-specialties' },
   { path: '/admin/settings', screen: 'settings', layout: 'staff', access: allow('org.settings.manage'), phase: 6, design: 'admin/06-settings' },

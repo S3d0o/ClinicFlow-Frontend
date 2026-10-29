@@ -27,6 +27,7 @@ import { createMockOrgService } from '@/features/org/api/org.mock';
 import { createMockPatientsService } from '@/features/patients/api/patients.mock';
 import { createMockProfileService } from '@/features/profile/api/profile.mock';
 import { createMockQueueBoardService } from '@/features/queue/api/queue.mock';
+import { createMockRolesService, createMockStaffService } from '@/features/staff/api/staff.mock';
 import { createMockApplicationsService } from '@/features/recruitment/api/applications.mock';
 import { createMockTriageService } from '@/features/triage/api/triage.mock';
 import { createMockVisitsService } from '@/features/visits/api/visits.mock';
@@ -96,6 +97,8 @@ export function createMockServices({
     doctorDay: createMockDoctorDayService(deps),
     schedule: createMockScheduleService(deps),
     history: createMockPatientHistoryService(deps),
+    staff: createMockStaffService(deps),
+    roles: createMockRolesService(deps),
     entitlements: createMockEntitlementsService(deps),
     demoAccounts: createMockDemoAccountsService({ ...deps, onResetDemo }),
     demoPlatform: createMockDemoPlatformService(deps),

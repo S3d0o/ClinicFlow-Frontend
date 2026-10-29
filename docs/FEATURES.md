@@ -267,6 +267,32 @@ Today's patients for a quick jump, and the patient search from the front desk (n
 - **Ask for leave:** from and to dates (not in the past), whole days or some hours, and a reason. Before sending, **Effect on your patients** shows how many shifts it covers and how many booked visits would need moving, per branch. It goes to a manager for approval (their worklist is phase 5); slots stay bookable until then, and approved leave closes them.
 - **My leave requests,** newest first: dates, reason, reference, visits affected, status and who decided; **Cancel** until the leave starts.
 
+## Administration: staff and roles (release R1)
+
+### Staff — `/admin/staff`
+(Design admin/02, FR-STF-01, FR-STF-08. Needs `staff.invite`.)
+- **The directory:** everyone with a staff role, plus invitations not accepted yet. Each row shows name and email, roles, branches ("All branches" for an organization-wide role), status (active, invited, leaving, deactivated) and a warning when two-step sign-in isn't set up.
+- **Filters:** search by name, email or phone, role, branch and status; 20 per page.
+- **Scope:** a branch manager sees only staff who hold a role at one of their branches.
+- **Invite staff member** opens a side sheet: full name, work email, and the roles to give.
+  - **Where each role applies:** every branch, or chosen ones, so one person can be the clinic's manager and a doctor at one branch.
+  - **Who can give what:** managers can't give Admin or Manager (FR-STF-01).
+  - **The link** works once, for 72 hours.
+
+### Staff member — `/admin/staff/:staffId`
+(Design admin/03, FR-STF-03, FR-STF-04, FR-STF-07.)
+- **What it shows:** name, status, roles, email, phone, branches and a doctor's licence. It also shows whether two-step sign-in is set up, and when access ends or ended.
+- **Roles and branches**, with **Edit**. Changes apply at the member's next session refresh. Nobody can change their own roles.
+- **Deactivate:** now, or at the end of a chosen day (a last working day shows the member as *leaving* until then). A doctor's booked visits still to come are counted, since they need another doctor. A deactivated account can't sign in, and an open session ends.
+- **Reset two-step sign-in:** they set it up again at their next sign-in.
+- **For an invitation:** **Send a new link** (the old one stops working) or **Cancel invitation**.
+
+### Roles and permissions — `/admin/roles`
+(Design admin/04, 02 §5–§6. Needs `roles.manage`.)
+- **The matrix:** every permission grouped by module, against the six staff roles. Each cell says how the role holds it: whole organization, where the role is held, only when held organization-wide, or own records only.
+- **Modules off in the plan** are dimmed and marked "Not in your plan".
+- **Read-only:** editing a role's permissions is FR-STF-06, in release R3.
+
 ## Plans and modules (release R1)
 
 ### Plan & modules — `/admin/subscription`

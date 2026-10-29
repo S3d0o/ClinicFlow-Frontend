@@ -30,6 +30,8 @@ import arRecruitment from '@/features/recruitment/i18n/ar.json';
 import enRecruitment from '@/features/recruitment/i18n/en.json';
 import arSite from '@/features/site/i18n/ar.json';
 import enSite from '@/features/site/i18n/en.json';
+import arStaff from '@/features/staff/i18n/ar.json';
+import enStaff from '@/features/staff/i18n/en.json';
 import arTriage from '@/features/triage/i18n/ar.json';
 import enTriage from '@/features/triage/i18n/en.json';
 import arCommon from '@/shared/i18n/locales/ar/common.json';
@@ -63,6 +65,7 @@ export const resources = {
     encounters: enEncounters,
     history: enHistory,
     entitlements: enEntitlements,
+    staff: enStaff,
   },
   ar: {
     common: arCommon,
@@ -85,6 +88,7 @@ export const resources = {
     encounters: arEncounters,
     history: arHistory,
     entitlements: arEntitlements,
+    staff: arStaff,
   },
 } as const;
 

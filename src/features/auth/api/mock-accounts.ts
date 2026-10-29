@@ -48,6 +48,9 @@ export const findByEmail = (db: MockDb, email: string) => {
 export const findByIdentifier = (db: MockDb, identifier: string) =>
   toE164EgyptianMobile(identifier) ? findByPhone(db, identifier) : findByEmail(db, identifier);
 
+/** Whether the account may sign in at `now`: deactivation (FR-STF-04) ends it. */
+export const isActiveAt = (user: UserSeed, now: Date) => !user.accessEndsAt || Date.parse(user.accessEndsAt) > now.getTime();
+
 /** The signed-in account, or 401 when there is none. */
 export function sessionUser({ db, session }: Pick<AuthMockDeps, 'db' | 'session'>): UserSeed {
   const user = db.users.find((u) => u.id === session.get());

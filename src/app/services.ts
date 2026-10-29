@@ -25,6 +25,7 @@ import type { OrgService } from '@/features/org/api/org.service';
 import type { PatientsService } from '@/features/patients/api/patients.service';
 import type { ProfileService } from '@/features/profile/api/profile.service';
 import type { QueueBoardService } from '@/features/queue/api/queue.service';
+import type { RolesService, StaffService } from '@/features/staff/api/staff.service';
 import type { ApplicationsService } from '@/features/recruitment/api/applications.service';
 import type { TriageService } from '@/features/triage/api/triage.service';
 import type { VisitsService } from '@/features/visits/api/visits.service';
@@ -68,6 +69,9 @@ export interface Services {
   doctorDay: DoctorDayService;
   schedule: ScheduleService;
   history: PatientHistoryService;
+  // Staff and roles (release R1)
+  staff: StaffService;
+  roles: RolesService;
   // Plans and modules (release R1)
   entitlements: EntitlementsService;
   /** Only the mock backend offers demo accounts. */
