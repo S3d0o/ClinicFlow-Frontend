@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { publicNav } from '@/app/navigation';
+import { visiblePublicNav } from '@/app/navigation';
+import { useEnabledModules } from '@/features/entitlements/hooks/use-entitlements';
 import { branchName } from '@/features/org/model/branch-access';
 import { useBranches } from '@/features/org/hooks/use-branches';
 import { useLanguage } from '@/shared/i18n/use-language';
@@ -10,6 +11,7 @@ export function PublicFooter() {
   const { t } = useTranslation(['common', 'nav']);
   const { language } = useLanguage();
   const { data: branches = [] } = useBranches();
+  const { modules } = useEnabledModules();
 
   return (
     <footer className="border-t border-border bg-card">
@@ -29,7 +31,7 @@ export function PublicFooter() {
         <div className="space-y-3">
           <p className="eyebrow">{t('appName')}</p>
           <ul className="space-y-2 text-body-md">
-            {publicNav.map((item) => (
+            {visiblePublicNav(modules).map((item) => (
               <li key={item.to}>
                 <Link to={item.to} className="text-muted-foreground hover:text-primary">
                   {t(`nav:public.${item.label}`)}

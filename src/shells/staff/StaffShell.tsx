@@ -15,12 +15,12 @@ import { StaffTopBar } from './StaffTopBar';
  * there is always a signed-in user.
  */
 export function StaffShell() {
-  const { user } = useSession();
+  const { user, modules } = useSession();
   if (!user) return null;
 
-  const groups = visibleStaffNav(user);
+  const groups = visibleStaffNav(user, modules);
   const home = homePath(user);
-  const canSearchPatients = decideAccess(user, routeAt('/desk/patients').access) === 'allow';
+  const canSearchPatients = decideAccess(user, routeAt('/desk/patients').access, modules) === 'allow';
 
   return (
     <ActiveBranchProvider>

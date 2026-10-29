@@ -12,6 +12,8 @@ import arDoctors from '@/features/doctors/i18n/ar.json';
 import enDoctors from '@/features/doctors/i18n/en.json';
 import arEncounters from '@/features/encounters/i18n/ar.json';
 import enEncounters from '@/features/encounters/i18n/en.json';
+import arEntitlements from '@/features/entitlements/i18n/ar.json';
+import enEntitlements from '@/features/entitlements/i18n/en.json';
 import arHistory from '@/features/history/i18n/ar.json';
 import enHistory from '@/features/history/i18n/en.json';
 import arNotifications from '@/features/notifications/i18n/ar.json';
@@ -60,6 +62,7 @@ export const resources = {
     doctor: enDoctor,
     encounters: enEncounters,
     history: enHistory,
+    entitlements: enEntitlements,
   },
   ar: {
     common: arCommon,
@@ -81,6 +84,7 @@ export const resources = {
     doctor: arDoctor,
     encounters: arEncounters,
     history: arHistory,
+    entitlements: arEntitlements,
   },
 } as const;
 

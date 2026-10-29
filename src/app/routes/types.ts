@@ -1,19 +1,27 @@
 import type { ComponentType, LazyExoticComponent } from 'react';
 import type { Permission, Scope } from '@/features/auth/model/permissions';
+import type { ModuleCode } from '@/features/entitlements/model/modules';
 import type enScreens from '@/shared/i18n/locales/en/screens.json';
 
 /** The frame a screen renders in (see src/shells). */
 export type Layout = 'public' | 'auth' | 'patient' | 'staff' | 'tablet' | 'bare';
 
 /** Who may open a screen. Staff screens check permissions, never role names (ADR 0002). */
-export type Access =
+export type Access = (
   | { kind: 'public' }
   | { kind: 'guest' } // signed-out visitors; signed-in users are sent to their home page
   | { kind: 'signed-in' }
   | { kind: 'patient' } // the patient capacity of an account (02 §3)
   | { kind: 'applicant' }
   /** One of `anyOf`, held at `minScope` or wider (default: any scope, including Own). */
-  | { kind: 'permission'; anyOf: Permission[]; minScope?: Scope };
+  | { kind: 'permission'; anyOf: Permission[]; minScope?: Scope }
+) & {
+  /**
+   * The add-on the screen belongs to, when its permissions don't already say so (patient and
+   * public screens, reports). With the module off, the screen says it isn't in the clinic's plan.
+   */
+  module?: ModuleCode;
+};
 
 export type ScreenKey = keyof typeof enScreens;
 

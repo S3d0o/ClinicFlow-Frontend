@@ -1,6 +1,7 @@
 import type { PriceListItem, Service, Specialty } from '@/features/catalog/model/catalog';
 import type { Payer } from '@/features/documents/model/documents';
 import type { Drug, EncounterTemplate, Icd10Code } from '@/features/encounters/model/encounter';
+import type { Plan } from '@/features/entitlements/api/entitlements.service';
 import type { Branch } from '@/features/org/model/branch';
 import { renderNotification } from './notifications';
 import { applicationsSeed, type ApplicationRecord } from './seed/applications';
@@ -33,6 +34,7 @@ import {
   type VisitRecord,
 } from './seed/patient-portal';
 import { reviewsSeed, type ReviewSeed } from './seed/reviews';
+import { plansSeed, subscriptionSeed, type SubscriptionRecord } from './seed/subscription';
 import { usersSeed, type UserSeed } from './seed/users';
 
 /** An email the mock "sent". The demo shows its link, since no real email leaves the browser. */
@@ -93,6 +95,9 @@ export interface MockDb {
   encounterTemplates: EncounterTemplate[];
   encounters: EncounterRecord[];
   leaveRequests: LeaveRecord[];
+  /** The platform's plans and the clinic's subscription (ADR 0008). */
+  plans: Plan[];
+  subscription: SubscriptionRecord;
 }
 
 /** A fresh copy of the seed data (tests get an isolated database each). Dated seeds are relative to `now`. */
@@ -112,6 +117,7 @@ export function createMockDb(now: Date = new Date()): MockDb {
     icd10: icd10Seed,
     drugs: drugsSeed,
     encounterTemplates: templatesSeed,
+    plans: plansSeed,
   });
   const { notificationEvents, ...portal } = patientPortalSeed(now);
   const desk = frontDeskSeed(now);
@@ -133,6 +139,7 @@ export function createMockDb(now: Date = new Date()): MockDb {
     reviews: reviewsSeed(now),
     applications: applicationsSeed(now),
     invitations: invitationsSeed(now),
+    subscription: subscriptionSeed(now),
     files: new Map(),
     sentEmails: [],
     emailTokens: [],

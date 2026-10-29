@@ -1,0 +1,86 @@
+{
+  "description": "Your clinic's plan, the modules it switches on and how much of it you use.",
+  "plan": {
+    "title": "Current plan",
+    "renews": "The current period ends on {{date}}.",
+    "names": {
+      "Starter": "Starter",
+      "Clinic": "Clinic",
+      "Full": "Full"
+    },
+    "status": {
+      "Trial": "Trial",
+      "Active": "Active",
+      "PastDue": "Payment due",
+      "Lapsed": "Lapsed: read-only"
+    }
+  },
+  "usage": {
+    "title": "Usage",
+    "branches": "Branches",
+    "doctors": "Doctors",
+    "phoneMessagesPerMonth": "WhatsApp messages this month",
+    "of": "of {{included}}",
+    "over": "Over the plan's limit: nothing more can be added until the plan changes."
+  },
+  "modules": {
+    "core": "Core modules",
+    "coreHint": "Every clinic has these, on every plan.",
+    "addOns": "Add-ons",
+    "addOnsHint": "Switched on by your plan, or added to it.",
+    "on": "On",
+    "off": "Off",
+    "extra": "Added to the plan",
+    "needs": "Needs {{list}}",
+    "names": {
+      "ORG": "Organization",
+      "STF": "Staff & access",
+      "ACC": "Accounts & sign-in",
+      "SVC": "Services & prices",
+      "SCH": "Scheduling",
+      "APT": "Appointments",
+      "NTF": "Notifications",
+      "AUD": "Audit",
+      "FD": "Front desk & queue",
+      "BIL": "Billing & payments",
+      "EMR": "Clinical records",
+      "INS": "Insurance",
+      "RPT": "Reports",
+      "PAT": "Patient portal",
+      "REC": "Recruitment",
+      "BOT": "Chatbot"
+    },
+    "descriptions": {
+      "ORG": "Branches, rooms, working hours, holidays and clinic settings.",
+      "STF": "Staff invitations, roles per branch and permissions.",
+      "ACC": "Sign-up with a mobile number, sign-in by phone or email.",
+      "SVC": "The service catalog and the price list, per branch or doctor.",
+      "SCH": "Doctor shifts, leave and bookable slots.",
+      "APT": "Every booking: book, reschedule, cancel, check in and complete. Includes the dashboard.",
+      "NTF": "In-app, email and WhatsApp messages in Arabic and English.",
+      "AUD": "Who changed what and when, on every sensitive record.",
+      "FD": "Walk-ins, the live queue, the waiting-room screen and nurse triage.",
+      "BIL": "Invoices from visits, cash and card at the desk, cash sessions and daily close.",
+      "EMR": "Notes, diagnoses, prescriptions and orders, signed and locked.",
+      "INS": "Payers, policies, the co-pay split, pre-authorizations and claims.",
+      "RPT": "Reports and exports beyond the dashboard.",
+      "PAT": "Online booking with prices, and the patient's records and invoices.",
+      "REC": "Doctors apply with a CV and move through interview to acceptance.",
+      "BOT": "An Arabic and English assistant that answers questions and finds slots."
+    }
+  },
+  "compare": {
+    "title": "Plans",
+    "current": "Current plan",
+    "includes": "Add-ons included",
+    "coreOnly": "Core modules only",
+    "limits": "Limits"
+  },
+  "demo": {
+    "title": "Demo: change the plan",
+    "intro": "This stands in for the platform operator, so a presentation can show what each plan unlocks. Menus change at once.",
+    "usePlan": "Switch to {{plan}}",
+    "addOns": "Add-ons beyond the plan",
+    "requiredBy": "Needed by {{list}}"
+  }
+}

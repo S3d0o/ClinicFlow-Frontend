@@ -81,7 +81,7 @@ export const managerRoutes: ScreenRoute[] = [
   { path: '/manager/recruitment/:applicationId', screen: 'applicationDetail', layout: 'staff', access: allow('recruitment.view'), phase: 5, design: 'manager/04-application-detail' },
   { path: '/manager/catalog', screen: 'catalog', layout: 'staff', access: allow('services.manage', 'prices.manage'), phase: 5, design: 'manager/02-services-and-price-list' },
   { path: '/manager/daily-close', screen: 'dailyClose', layout: 'staff', access: allow('cash_sessions.reconcile'), phase: 5, design: 'manager/08-daily-close' },
-  { path: '/manager/reports', screen: 'reports', layout: 'staff', access: allowBranchWide('reports.financial', 'reports.operational'), phase: 5, design: 'manager/09-reports-and-exports' },
+  { path: '/manager/reports', screen: 'reports', layout: 'staff', access: { ...allowBranchWide('reports.financial', 'reports.operational'), module: 'RPT' }, phase: 5, design: 'manager/09-reports-and-exports' },
 ];
 
 // System administration (phase 6).
@@ -95,6 +95,11 @@ export const adminRoutes: ScreenRoute[] = [
   { path: '/admin/settings', screen: 'settings', layout: 'staff', access: allow('org.settings.manage'), phase: 6, design: 'admin/06-settings' },
   { path: '/admin/integrations', screen: 'integrations', layout: 'staff', access: allow('integrations.manage', 'notifications.templates'), phase: 6, design: 'admin/07-integrations-and-message-templates' },
   { path: '/admin/audit', screen: 'audit', layout: 'staff', access: allow('audit.view'), phase: 6, design: 'admin/08-audit-log' },
+  {
+    // No Stitch design: the plan, its limits and the modules on (ADR 0008; release R1)
+    path: '/admin/subscription', screen: 'subscription', layout: 'staff', access: allow('org.settings.manage'), phase: 6,
+    component: lazy(() => import('@/features/entitlements/pages/SubscriptionPage')),
+  },
 ];
 
 // Finance (phase 7). Works without an accountant: managers hold the same permissions (02 §6).

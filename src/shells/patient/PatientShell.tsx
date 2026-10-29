@@ -3,7 +3,8 @@ import { Bell } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
-import { isNavItemActive, patientNav } from '@/app/navigation';
+import { isNavItemActive, visiblePatientNav, type patientNav } from '@/app/navigation';
+import { useSession } from '@/features/auth/hooks/use-session';
 import { notificationKeys, useUnreadCount } from '@/features/notifications/hooks/use-notifications';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/button';
@@ -47,6 +48,8 @@ function NotificationsBell() {
 export function PatientShell() {
   const { t } = useTranslation(['nav', 'common']);
   const { pathname } = useLocation();
+  const { modules } = useSession();
+  const items = visiblePatientNav(modules);
   const isActive = (item: (typeof patientNav)[number]) => isNavItemActive(item, pathname, item.to === '/patient');
 
   return (
@@ -56,7 +59,7 @@ export function PatientShell() {
         <div className="mx-auto flex h-16 max-w-5xl items-center gap-4 px-4">
           <Logo to="/patient" />
           <nav aria-label={t('common:appName')} className="hidden flex-1 items-center justify-center gap-1 md:flex">
-            {patientNav.map((item) => (
+            {items.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
@@ -83,8 +86,8 @@ export function PatientShell() {
         aria-label={t('common:appName')}
         className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card pb-[env(safe-area-inset-bottom)] md:hidden"
       >
-        <ul className="grid h-16 grid-cols-5">
-          {patientNav.map((item) => (
+        <ul className="grid h-16" style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}>
+          {items.map((item) => (
             <li key={item.to}>
               <Link
                 to={item.to}

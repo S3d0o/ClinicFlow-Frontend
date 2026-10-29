@@ -1,11 +1,12 @@
 import {
-  Banknote, Bell, Building2, CalendarCheck, CalendarClock, CalendarDays, CalendarOff, CalendarPlus,
+  BadgeCheck, Banknote, Bell, Building2, CalendarCheck, CalendarClock, CalendarDays, CalendarOff, CalendarPlus,
   CalendarRange, ChartColumn, ChartPie, CircleUser, ClipboardList, FileHeart, Files, FileText, Gauge,
   HeartPulse, House, KeyRound, LayoutDashboard, ListChecks, ListOrdered, Plug, Receipt, ScrollText,
   Settings, Shapes, ShieldCheck, Stethoscope, Tags, UserPlus, Users, UsersRound, Wallet,
   type LucideIcon,
 } from 'lucide-react';
 import type { CurrentUser } from '@/features/auth/model/user';
+import type { ModuleCode } from '@/features/entitlements/model/modules';
 import type enNav from '@/shared/i18n/locales/en/nav.json';
 import { decideAccess } from './routes/access';
 import { routeAt } from './routes';
@@ -91,6 +92,7 @@ export const staffNav: NavGroup[] = [
       { to: '/admin/settings', label: 'adminSettings', icon: Settings },
       { to: '/admin/integrations', label: 'adminIntegrations', icon: Plug },
       { to: '/admin/audit', label: 'adminAudit', icon: ScrollText },
+      { to: '/admin/subscription', label: 'adminSubscription', icon: BadgeCheck },
     ],
   },
   {
@@ -114,12 +116,25 @@ export const publicNav: { to: string; label: PublicKey }[] = [
   { to: '/join', label: 'joinAsDoctor' },
 ];
 
-/** The staff groups and items the user may open, without empty groups. */
-export function visibleStaffNav(user: CurrentUser | null): NavGroup[] {
+/** The staff groups and items the user may open with the clinic's `modules`, without empty groups. */
+export function visibleStaffNav(user: CurrentUser | null, modules?: ReadonlySet<ModuleCode>): NavGroup[] {
   return staffNav
     .map((group) => ({
       ...group,
-      items: group.items.filter((item) => decideAccess(user, routeAt(item.to).access) === 'allow'),
+      items: group.items.filter((item) => decideAccess(user, routeAt(item.to).access, modules) === 'allow'),
     }))
     .filter((group) => group.items.length > 0);
 }
+
+/** Whether the module of the screen at `to` is on (anchors such as `/#branches` aren't screens). */
+const moduleOn = (to: string, modules?: ReadonlySet<ModuleCode>) => {
+  if (!modules || to.startsWith('/#')) return true;
+  const { module } = routeAt(to).access;
+  return !module || modules.has(module);
+};
+
+/** The patient tabs whose screens the clinic's plan includes. */
+export const visiblePatientNav = (modules?: ReadonlySet<ModuleCode>) => patientNav.filter((item) => moduleOn(item.to, modules));
+
+/** The public links whose screens the clinic's plan includes. */
+export const visiblePublicNav = (modules?: ReadonlySet<ModuleCode>) => publicNav.filter((item) => moduleOn(item.to, modules));

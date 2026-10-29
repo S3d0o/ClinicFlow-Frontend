@@ -46,6 +46,7 @@ Staff work on one branch at a time. Branch staff see only their branches; organi
 - Signed-in users who open sign-in or sign-up pages go straight on.
 - Staff who haven't set up two-step sign-in can only open its setup screen; every staff page sends them there (FR-STF-07).
 - A page outside the user's permissions shows "You don't have access to this page" with a link home.
+- A page of an add-on the clinic's plan doesn't include shows "Not in your clinic's plan" to everyone, and its menu items, tabs and public links are hidden (backend ADR 0008). The demo clinic is on the Full plan with recruitment added.
 - Branch-wide pages (the manager dashboard, reports) need the permission at branch or organization scope; a doctor's right to see their *own* reports doesn't open them.
 - Unknown paths show "Page not found". A crash in one page shows "This page couldn't be displayed" with a reload button instead of a blank screen.
 
@@ -265,6 +266,16 @@ Today's patients for a quick jump, and the patient search from the front desk (n
 - **Weekly roster:** each day's shifts per branch with hours, room and booked slots; today highlighted, days off marked.
 - **Ask for leave:** from and to dates (not in the past), whole days or some hours, and a reason. Before sending, **Effect on your patients** shows how many shifts it covers and how many booked visits would need moving, per branch. It goes to a manager for approval (their worklist is phase 5); slots stay bookable until then, and approved leave closes them.
 - **My leave requests,** newest first: dates, reason, reference, visits affected, status and who decided; **Cancel** until the leave starts.
+
+## Plans and modules (release R1)
+
+### Plan & modules — `/admin/subscription`
+(No Stitch design; backend ADR 0008. Needs `org.settings.manage`.)
+- **Current plan:** its name, status (trial, active, payment due, lapsed) and when the period ends.
+- **Usage:** branches, doctors and WhatsApp messages this month against the plan's limits. Usage over a limit is flagged, because nothing more can be added until the plan changes.
+- **Core modules** (every plan) and **add-ons**, each with what it does, on or off, "Added to the plan" for extras, and what it needs (insurance needs billing and clinical records).
+- **Plans:** Starter, Clinic and Full side by side, with their add-ons and limits; the current one is marked. No prices yet.
+- **Demo: change the plan** (demo backend only): switch plans, or turn single add-ons on and off, and the menus change at once. An add-on that an enabled one needs can't be switched off.
 
 ## Screens by phase
 

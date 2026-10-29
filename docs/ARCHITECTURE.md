@@ -102,6 +102,13 @@ Every screen is one entry in `app/routes/catalog/*.routes.ts` (`ScreenRoute`):
 
 Staff screens check **permissions, never role names** (backend ADR 0002). `minScope: 'Branch'` keeps a grant over one's own records (a doctor's own reports) from opening branch-wide screens (the manager dashboard).
 
+**Plans and modules** (backend ADR 0008, release R1). Every clinic has the core modules, and its plan switches add-ons on (`features/entitlements/model/modules.ts`: `CORE_MODULES`, `ADD_ON_MODULES`, `MODULE_REQUIRES`, `effectiveModules`).
+- **Every permission belongs to one module** (`PERMISSION_MODULE`, 02 §5). `useSession()` returns the user seen through the clinic's modules (`withModules`), so every `can()` and guard hides a disabled add-on with no other change.
+- **A route can also name a module** (`access.module`) when its access kind isn't a permission: patient booking (`PAT`), visit records and documents (`EMR`), invoices (`BIL`), applying to the clinic (`REC`), reports (`RPT`).
+- **What a disabled module looks like:** `decideAccess(user, access, modules)` answers `module-off` when that module is off, or when every permission of a permission screen belongs to modules that are off. `RouteGuard` then shows "Not in your clinic's plan" (`ModuleOffPage`), and the menus (`visibleStaffNav`, `visiblePatientNav`, `visiblePublicNav`) drop the item.
+- **Where the modules come from:** `EntitlementsService.getEnabledModules()`. It is public, because patients' and visitors' pages follow the plan too. While it loads, or if it fails, nothing is hidden; the backend still refuses (`Subscription.ModuleNotEnabled`).
+- **The demo** starts on the Full plan with recruitment added, so the preview shows every screen. Its "Plan & modules" screen switches the plan through the demo-only `DemoPlatformService`.
+
 `RouteGuard` applies the decision. A signed-out user is sent to `/sign-in` with `state.from`; once signed in, the guard on the guest page sends them to `postSignInPath(user, from, canOpenPath)`: the requested page if they may open it, otherwise their home. Every sign-in path (password, two-step code, demo account) therefore lands the same way.
 
 Staff without an authenticator (`needsMfaSetup`) get `setup-mfa` for every permission screen, which sends them to `/security/setup` (FR-STF-07); their home page is that screen too.

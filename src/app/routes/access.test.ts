@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { effectiveModules } from '@/features/entitlements/model/modules';
 import { at, makeUser, org } from '@/test/fixtures';
 import { screenRoutes } from './index';
 import { decideAccess } from './access';
@@ -43,6 +44,26 @@ describe('decideAccess', () => {
     expect(decideAccess(newNurse, { kind: 'permission', anyOf: ['vitals.write'] })).toBe('setup-mfa');
     expect(decideAccess(newNurse, { kind: 'signed-in' })).toBe('allow');
   });
+
+  describe("with the clinic's modules", () => {
+    const withoutEmr = effectiveModules(['FD', 'BIL', 'PAT', 'RPT']);
+
+    it("says a screen of a disabled add-on isn't in the plan, signed in or not", () => {
+      expect(decideAccess(patient, { kind: 'patient', module: 'EMR' }, withoutEmr)).toBe('module-off');
+      expect(decideAccess(null, { kind: 'public', module: 'REC' }, withoutEmr)).toBe('module-off');
+      expect(decideAccess(patient, { kind: 'patient', module: 'PAT' }, withoutEmr)).toBe('allow');
+    });
+
+    it('closes a permission screen whose permissions all belong to disabled modules', () => {
+      const doctor = makeUser([at('Doctor', 'br-nc')]);
+      expect(decideAccess(doctor, { kind: 'permission', anyOf: ['encounters.write'] }, withoutEmr)).toBe('module-off');
+      expect(decideAccess(nurse, { kind: 'permission', anyOf: ['vitals.write'] }, withoutEmr)).toBe('allow');
+    });
+
+    it('checks no module when the modules are unknown', () => {
+      expect(decideAccess(patient, { kind: 'patient', module: 'EMR' })).toBe('allow');
+    });
+  });
 });
 
 describe('screen catalog', () => {
@@ -51,7 +72,8 @@ describe('screen catalog', () => {
     expect(new Set(paths).size).toBe(paths.length);
   });
 
-  it('gives every screen a design reference, except the email-link page the designs leave out', () => {
-    expect(screenRoutes.filter((r) => !r.design).map((r) => r.path)).toEqual(['/confirm-email']);
+  it('gives every screen a design reference, except the pages the designs leave out', () => {
+    // The email-link page, and the plan screen (ADR 0008 came after the designs)
+    expect(screenRoutes.filter((r) => !r.design).map((r) => r.path)).toEqual(['/confirm-email', '/admin/subscription']);
   });
 });
