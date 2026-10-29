@@ -19,11 +19,11 @@ export const publicRoutes: ScreenRoute[] = [
     component: lazy(() => import('@/features/doctors/pages/DoctorProfilePage')),
   },
   {
-    path: '/join', screen: 'joinAsDoctor', layout: 'public', access: PUBLIC, phase: 1, design: 'public/05-join-as-a-doctor-application',
+    path: '/join', screen: 'joinAsDoctor', layout: 'public', access: { ...PUBLIC, module: 'REC' }, phase: 1, design: 'public/05-join-as-a-doctor-application',
     component: lazy(() => import('@/features/recruitment/pages/JoinPage')),
   },
   {
-    path: '/my-application', screen: 'myApplication', layout: 'public', access: { kind: 'applicant' }, phase: 1, design: 'public/06-my-application-status',
+    path: '/my-application', screen: 'myApplication', layout: 'public', access: { kind: 'applicant', module: 'REC' }, phase: 1, design: 'public/06-my-application-status',
     component: lazy(() => import('@/features/recruitment/pages/MyApplicationPage')),
   },
 

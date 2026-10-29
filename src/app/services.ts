@@ -18,6 +18,7 @@ import type { DoctorDayService, ScheduleService } from '@/features/doctor/api/do
 import type { DirectoryService } from '@/features/doctors/api/directory.service';
 import type { DocumentsService, InsuranceService } from '@/features/documents/api/documents.service';
 import type { EncountersService } from '@/features/encounters/api/encounters.service';
+import type { DemoPlatformService, EntitlementsService } from '@/features/entitlements/api/entitlements.service';
 import type { PatientHistoryService } from '@/features/history/api/history.service';
 import type { NotificationsService } from '@/features/notifications/api/notifications.service';
 import type { OrgService } from '@/features/org/api/org.service';
@@ -67,8 +68,12 @@ export interface Services {
   doctorDay: DoctorDayService;
   schedule: ScheduleService;
   history: PatientHistoryService;
+  // Plans and modules (release R1)
+  entitlements: EntitlementsService;
   /** Only the mock backend offers demo accounts. */
   demoAccounts?: DemoAccountsService;
+  /** Only the mock backend lets the demo switch the clinic's plan (the operator console is R4). */
+  demoPlatform?: DemoPlatformService;
 }
 
 export const ServicesContext = createContext<Services | null>(null);

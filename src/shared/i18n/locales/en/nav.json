@@ -52,6 +52,7 @@
     "adminSettings": "Settings",
     "adminIntegrations": "Integrations",
     "adminAudit": "Audit log",
+    "adminSubscription": "Plan & modules",
     "notifications": "Notifications"
   }
 }

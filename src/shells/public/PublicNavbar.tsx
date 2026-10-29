@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { Menu } from 'lucide-react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { publicNav } from '@/app/navigation';
+import { visiblePublicNav } from '@/app/navigation';
 import { homePath } from '@/features/auth/model/access';
 import { useSession } from '@/features/auth/hooks/use-session';
+import { useEnabledModules } from '@/features/entitlements/hooks/use-entitlements';
 import { useLanguage } from '@/shared/i18n/use-language';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/button';
@@ -48,13 +49,14 @@ export function PublicNavbar() {
   const { direction } = useLanguage();
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { modules } = useEnabledModules();
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-card/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4 sm:px-6 lg:px-8">
         <Logo />
         <nav aria-label={t('common:appName')} className="hidden flex-1 items-center gap-6 lg:flex">
-          {publicNav.map((item) => (
+          {visiblePublicNav(modules).map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
@@ -82,7 +84,7 @@ export function PublicNavbar() {
               <SheetTitle className="sr-only">{t('common:actions.openMenu')}</SheetTitle>
               <Logo />
               <nav className="flex flex-col gap-1" onClick={() => setMenuOpen(false)}>
-                {publicNav.map((item) => (
+                {visiblePublicNav(modules).map((item) => (
                   <NavLink
                     key={item.to}
                     to={item.to}

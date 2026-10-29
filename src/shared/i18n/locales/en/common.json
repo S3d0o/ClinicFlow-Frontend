@@ -49,6 +49,11 @@
   },
   "errors": {
     "generic": "Something went wrong. Please try again.",
+    "Subscription": {
+      "ModuleNotEnabled": "This isn't part of your clinic's plan.",
+      "ModuleRequired": "Another add-on that is on needs this one, so it can't be switched off.",
+      "LimitReached": "Your clinic's plan limit is reached. Ask your administrator about an upgrade."
+    },
     "Auth": {
       "InvalidCredentials": "The phone or email and password don't match an account.",
       "InvalidMfaCode": "That code isn't right. Check your authenticator app and try again.",
@@ -274,6 +279,11 @@
     "title": "Page not found",
     "body": "The page you're looking for doesn't exist or has moved.",
     "home": "Go to the home page"
+  },
+  "moduleOff": {
+    "title": "Not in your clinic's plan",
+    "body": "This part of ClinicFlow is an add-on your clinic hasn't switched on. Your clinic's administrator can add it to the plan.",
+    "home": "Go to my home page"
   },
   "forbidden": {
     "title": "You don't have access to this page",

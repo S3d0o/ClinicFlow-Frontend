@@ -4,6 +4,7 @@ import { MFA_SETUP_PATH, postSignInPath } from '@/features/auth/model/access';
 import { useSession } from '@/features/auth/hooks/use-session';
 import { LoadingState } from '@/shared/ui/states';
 import ForbiddenPage from '../pages/ForbiddenPage';
+import ModuleOffPage from '../pages/ModuleOffPage';
 import { decideAccess } from './access';
 import { canOpenPath } from './can-open';
 import type { Access } from './types';
@@ -15,23 +16,25 @@ import type { Access } from './types';
  * (password, two-step code, demo account) consistent.
  */
 export function RouteGuard({ access, children }: { access: Access; children: ReactNode }) {
-  const { user, isLoading } = useSession();
+  const { user, modules, isLoading } = useSession();
   const location = useLocation();
 
   if (isLoading) return <LoadingState className="min-h-[50vh]" />;
 
-  switch (decideAccess(user, access)) {
+  switch (decideAccess(user, access, modules)) {
     case 'allow':
       return children;
     case 'sign-in':
       return <Navigate to="/sign-in" replace state={{ from: `${location.pathname}${location.search}` }} />;
     case 'go-home': {
       const from = (location.state as { from?: string } | null)?.from;
-      return <Navigate to={postSignInPath(user!, from, (path) => canOpenPath(user!, path))} replace />;
+      return <Navigate to={postSignInPath(user!, from, (path) => canOpenPath(user!, path, modules))} replace />;
     }
     case 'setup-mfa':
       return <Navigate to={MFA_SETUP_PATH} replace />;
     case 'forbidden':
       return <ForbiddenPage />;
+    case 'module-off':
+      return <ModuleOffPage />;
   }
 }

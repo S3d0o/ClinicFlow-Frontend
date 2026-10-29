@@ -74,6 +74,8 @@ Trying the phase 4 flows (sign in as **Dr. Ahmed Fathy**; his day is the desk's,
 - **Patient history** (`/#/doctor/patients/pat-000412`): Mohamed's blood pressure over two visits, his medicines and his dental visit at Maadi; filter by branch or period.
 - **Schedule and leave** (`/#/doctor/schedule`): Dr. Ahmed works Nasr City mornings and Maadi evenings; ask for leave on days with bookings to see the visits it affects, then cancel the request.
 
+Trying plans and modules (release R1; sign in as **Karim Adel**, admin, or **Dr. Hala Mostafa**, manager): open **Plan & modules** (`/#/admin/subscription`) and use **Demo: change the plan**. On Starter, the billing, front desk queue, clinical and reports menus disappear; on Clinic, clinical records and insurance do. Opening one of their pages says "Not in your clinic's plan". The choice is kept with the rest of the demo data (until "Reset demo data" or the next day).
+
 The UI starts in **Arabic** (right-to-left), as the docs require; switch with the "EN | عربي" toggle. The choice is remembered.
 
 ### Configuration

@@ -20,6 +20,7 @@ import { createMockDoctorDayService, createMockScheduleService } from '@/feature
 import { createMockDirectoryService } from '@/features/doctors/api/directory.mock';
 import { createMockDocumentsService, createMockInsuranceService } from '@/features/documents/api/documents.mock';
 import { createMockEncountersService } from '@/features/encounters/api/encounters.mock';
+import { createMockDemoPlatformService, createMockEntitlementsService } from '@/features/entitlements/api/entitlements.mock';
 import { createMockPatientHistoryService } from '@/features/history/api/history.mock';
 import { createMockNotificationsService } from '@/features/notifications/api/notifications.mock';
 import { createMockOrgService } from '@/features/org/api/org.mock';
@@ -95,6 +96,8 @@ export function createMockServices({
     doctorDay: createMockDoctorDayService(deps),
     schedule: createMockScheduleService(deps),
     history: createMockPatientHistoryService(deps),
+    entitlements: createMockEntitlementsService(deps),
     demoAccounts: createMockDemoAccountsService({ ...deps, onResetDemo }),
+    demoPlatform: createMockDemoPlatformService(deps),
   };
 }
