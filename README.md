@@ -9,6 +9,8 @@ This repository is the **React frontend**. It talks to the [ClinicFlow .NET 10 b
 > **Looking for the original UI?** It is kept on the [`legacy-ui`](https://github.com/S3d0o/ClinicFlow-Frontend/tree/legacy-ui) branch (tag `v0-legacy-ui`). The LinkedIn demo shows that version.
 
 > **This is the `v2` branch.** V2 turns ClinicFlow into the operating system of a multi-branch clinic (seven roles, front desk, nurse station, clinical records, billing, insurance), in Arabic and English. Its UI is being rebuilt in phases from the designs in [`design-v2/`](design-v2/README.md) and runs on sample data until the V2 API exists; see [docs/FEATURES.md](docs/FEATURES.md) and [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md). The feature list below describes V1, which lives on `main`.
+>
+> **[Open the V2 preview](https://s3d0o.github.io/ClinicFlow-Frontend/)**: the whole V2 UI on sample data, rebuilt from `v2` on every push. Pick a demo account on the sign-in page; every password is `Demo@1234` and every code `123456`.
 
 ---
 

@@ -1,0 +1,53 @@
+# Publishes the V2 preview: the mock-backend build of `v2` on GitHub Pages, so the whole V2 can be
+# shown from one link (backend docs/v2/plans/R1.md, M0). It runs on sample data only; the live app is
+# a separate build against the real API.
+name: V2 preview
+
+on:
+  push:
+    branches: [v2]
+  workflow_dispatch:
+
+# One deployment at a time; a newer push waits rather than cancelling one already deploying
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Test and build the preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      # VITE_PREVIEW shows the "sample data" ribbon and keeps search engines out (vite.config.ts)
+      - run: npm run build
+        env:
+          VITE_PREVIEW: 'true'
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

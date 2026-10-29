@@ -1,6 +1,9 @@
 {
   "appName": "ClinicFlow",
   "skipToContent": "تخطَّ إلى المحتوى",
+  "preview": {
+    "ribbon": "معاينة: بيانات تجريبية وليست النظام الفعلي"
+  },
   "actions": {
     "save": "حفظ",
     "cancel": "إلغاء",

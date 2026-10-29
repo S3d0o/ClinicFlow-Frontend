@@ -1,6 +1,9 @@
 {
   "appName": "ClinicFlow",
   "skipToContent": "Skip to content",
+  "preview": {
+    "ribbon": "Preview: sample data, not the live app"
+  },
   "actions": {
     "save": "Save",
     "cancel": "Cancel",

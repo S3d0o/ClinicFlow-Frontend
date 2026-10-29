@@ -6,7 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This repo holds two separate products, like the backend (`docs/v2/adr/0007-v2-separate-product-line.md` in the backend repo):
 - **`main` is V1.** It's finished, talks to the backend's `master` (contract 3.x) and stays untouched. Change it only when the owner explicitly asks for a V1 fix, on a `fix/<name>` branch off `main`. `legacy-ui` (tag `v0-legacy-ui`) is the original UI: never delete or rewrite it.
-- **`v2` is V2.** It started from V1's code and talks to the backend's `v2` branch (contract 4.0.0, pre-releases `4.0.0-p<n>`). Every piece of work gets its own branch off `v2` (`feature/p<phase>-<kebab-case-name>`, or `fix/`, `docs/`, `test/`, `chore/`) and is merged back into `v2`. Never build directly on `v2`, `main` or another feature's branch. If the working tree has uncommitted changes when work starts, ask whether to commit, stash or carry them over.
+- **`v2` is V2.** It started from V1's code and talks to the backend's `v2` branch (contract 4.0.0, pre-releases `4.0.0-p<n>`). Every piece of work gets its own branch off `v2` (`feature/r<release>-ui-<kebab-case-name>` since 2026-10-29, earlier `feature/p<phase>-…`, or `fix/`, `docs/`, `test/`, `chore/`) and is merged back into `v2`. Never build directly on `v2`, `main` or another feature's branch. If the working tree has uncommitted changes when work starts, ask whether to commit, stash or carry them over.
+- **Releases are builds and tags, not branches** (backend `docs/v2/plans/R1.md`). V2 ships as releases R1–R4. Each release is tagged `v2.0.0-r<n>` on `v2`, and the clinic's plan (backend ADR 0008) hides the modules a release doesn't have. There's no long-lived release branch. Cut `release/r<n>` from its tag only when the live app needs a fix while unfinished work is already on `v2`; fix it there, then merge the fix back into `v2`. Two builds come from `v2`: the public **V2 preview** (mock backend, `VITE_PREVIEW=true`, `.github/workflows/pages.yml`) and the live app (the Docker image, against the real API).
 - Commit or push only when asked.
 
 **The V2 plan lives in the backend repo**, cloned next to this one at `../../ClinicFlow.Backend`. Its working tree may be on a feature branch, so read the merged docs with `git -C ../../ClinicFlow.Backend show v2:<path>`:
@@ -73,5 +74,7 @@ Details and rationale: `docs/ARCHITECTURE.md`. Clean code and SOLID are a requir
 `tsconfig.app.json` is strict with `noUnusedLocals`, `noUnusedParameters`, `verbatimModuleSyntax` (use `import type` for type-only imports) and `erasableSyntaxOnly` (no `enum`s or parameter properties). Unused imports fail `npm run build`.
 
 ## Deployment
+
+**V2 preview:** every push to `v2` runs `.github/workflows/pages.yml`: tests, then `npm run build` with `VITE_PREVIEW=true`, which adds the "Preview: sample data" ribbon (`src/app/PreviewRibbon.tsx`) and a `noindex` robots tag (`vite.config.ts`), then deploys `dist/` to GitHub Pages (https://s3d0o.github.io/ClinicFlow-Frontend/). It needs Pages → Source → GitHub Actions in the repo settings, with `v2` allowed by the `github-pages` environment.
 
 `DockerFile` (tracked in git with a capital F; use `docker build -f DockerFile`) builds with Node 22 (Vitest needs it) and serves `dist/` from nginx on port 80 (`nginx.conf`, SPA fallback to `index.html`, `/api` proxied to the `backend` service). `vite.config.ts` sets `base: './'` and puts React and the router in their own `react` chunk so it stays cached across deploys, and the translation files in a `locales` chunk.

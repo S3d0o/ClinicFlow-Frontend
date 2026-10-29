@@ -1,10 +1,19 @@
 import path from "path"
 import react from "@vitejs/plugin-react"
-import { defineConfig } from "vite"
+import { defineConfig, type Plugin } from "vite"
+
+// The public preview (GitHub Pages, VITE_PREVIEW=true) runs on sample data: keep it out of search engines
+const previewNoIndex = (): Plugin => ({
+  name: 'preview-noindex',
+  transformIndexHtml: (html) =>
+    process.env.VITE_PREVIEW === 'true'
+      ? html.replace('</head>', '  <meta name="robots" content="noindex, nofollow" />\n  </head>')
+      : html,
+});
 
 export default defineConfig({
   base: './',
-  plugins: [react()],
+  plugins: [react(), previewNoIndex()],
   server: {
     port: 3000,
   },
