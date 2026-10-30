@@ -13,7 +13,7 @@ import { ModuleList } from '../components/ModuleList';
 import { useDemoPlatform, usePlans, useSubscription } from '../hooks/use-entitlements';
 import { ADD_ON_MODULES, CORE_MODULES } from '../model/modules';
 
-const STATUS_TONE: Record<SubscriptionStatus, Tone> = { Trial: 'info', Active: 'success', PastDue: 'warning', Lapsed: 'danger' };
+const STATUS_TONE: Record<SubscriptionStatus, Tone> = { Trial: 'info', Active: 'success', PastDue: 'warning', Cancelled: 'danger' };
 
 // The organization's own calendar (ADR 0008 subscriptions are per organization, not per branch)
 const ORGANIZATION_ZONE = 'Africa/Cairo';
@@ -41,7 +41,9 @@ export default function SubscriptionPage() {
   const sub = subscription.data;
   const enabled = new Set(sub.modules);
   const extras = new Set(sub.overrides.filter((o) => o.enabled).map((o) => o.module));
-  const periodEnd = formatInstant(sub.currentPeriodEnd, language, ORGANIZATION_ZONE, { day: 'numeric', month: 'long', year: 'numeric' });
+  const periodEnd =
+    sub.currentPeriodEnd && formatInstant(sub.currentPeriodEnd, language, ORGANIZATION_ZONE, { day: 'numeric', month: 'long', year: 'numeric' });
+  const limit = (value: number | null) => (value === null ? t('usage.unlimited') : formatNumber(value, language));
 
   return (
     <div className="space-y-8">
@@ -55,7 +57,7 @@ export default function SubscriptionPage() {
           </h2>
           <StatusChip tone={STATUS_TONE[sub.status]}>{t(`plan.status.${sub.status}`)}</StatusChip>
         </div>
-        <p className="text-body-md text-muted-foreground">{t('plan.renews', { date: periodEnd })}</p>
+        {periodEnd && <p className="text-body-md text-muted-foreground">{t('plan.renews', { date: periodEnd })}</p>}
       </section>
 
       <section aria-labelledby="usage" className="space-y-3">
@@ -64,7 +66,7 @@ export default function SubscriptionPage() {
         </h2>
         <div className="grid gap-3 sm:grid-cols-3">
           {sub.usage.map((usage) => {
-            const over = usage.used > usage.included;
+            const over = usage.included !== null && usage.used > usage.included;
             return (
               <StatTile
                 key={usage.key}
@@ -72,7 +74,7 @@ export default function SubscriptionPage() {
                 value={formatNumber(usage.used, language)}
                 hint={
                   <>
-                    {t('usage.of', { included: formatNumber(usage.included, language) })}
+                    {t('usage.of', { included: limit(usage.included) })}
                     {over && <span className="mt-1 block text-warning">{t('usage.over')}</span>}
                   </>
                 }
@@ -143,9 +145,9 @@ export default function SubscriptionPage() {
                   <p className="text-body-md text-foreground">
                     {formatList(
                       [
-                        `${t('usage.branches')}: ${formatNumber(plan.limits.branches, language)}`,
-                        `${t('usage.doctors')}: ${formatNumber(plan.limits.doctors, language)}`,
-                        `${t('usage.phoneMessagesPerMonth')}: ${formatNumber(plan.limits.phoneMessagesPerMonth, language)}`,
+                        `${t('usage.branches')}: ${limit(plan.limits.branches)}`,
+                        `${t('usage.doctors')}: ${limit(plan.limits.doctors)}`,
+                        `${t('usage.phoneMessagesPerMonth')}: ${limit(plan.limits.phoneMessagesPerMonth)}`,
                       ],
                       language
                     )}
