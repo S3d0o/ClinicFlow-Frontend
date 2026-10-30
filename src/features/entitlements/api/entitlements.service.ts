@@ -2,12 +2,12 @@ import type { AddOnModule, ModuleCode } from '../model/modules';
 
 export type PlanCode = 'Starter' | 'Clinic' | 'Full';
 
-/** What a plan includes and how much of it (ADR 0008 decision 5). */
+/** What a plan includes and how much of it (ADR 0008 decision 5). `null`: the plan sets no limit. */
 export interface PlanLimits {
-  branches: number;
-  doctors: number;
+  branches: number | null;
+  doctors: number | null;
   /** WhatsApp (or SMS) messages to patients per month; verification codes don't count. */
-  phoneMessagesPerMonth: number;
+  phoneMessagesPerMonth: number | null;
 }
 
 /** A plan the platform offers. Prices aren't shown until they are set (ADR 0008 Q19). */
@@ -18,11 +18,12 @@ export interface Plan {
   limits: PlanLimits;
 }
 
-export type SubscriptionStatus = 'Trial' | 'Active' | 'PastDue' | 'Lapsed';
+export type SubscriptionStatus = 'Trial' | 'Active' | 'PastDue' | 'Cancelled';
 
 export interface LimitUsage {
   key: keyof PlanLimits;
-  included: number;
+  /** `null`: the plan sets no limit. */
+  included: number | null;
   used: number;
 }
 
@@ -30,8 +31,8 @@ export interface LimitUsage {
 export interface Subscription {
   planCode: PlanCode;
   status: SubscriptionStatus;
-  /** UTC, when the current period ends. */
-  currentPeriodEnd: string;
+  /** UTC, when the current period ends; `null` until subscription billing (R4) sets periods. */
+  currentPeriodEnd: string | null;
   /** Every module that is on, core included, after the plan's add-ons, extras and dependencies. */
   modules: ModuleCode[];
   /** Add-ons switched on or off for this clinic beyond its plan. */

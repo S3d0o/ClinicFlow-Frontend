@@ -60,7 +60,11 @@
     "Subscription": {
       "ModuleNotEnabled": "This isn't part of your clinic's plan.",
       "ModuleRequired": "Another add-on that is on needs this one, so it can't be switched off.",
-      "LimitReached": "Your clinic's plan limit is reached. Ask your administrator about an upgrade."
+      "LimitReached": "Your clinic's plan limit is reached. Ask your administrator about an upgrade.",
+      "NotFound": "This clinic has no subscription yet.",
+      "PlanNotFound": "That plan doesn't exist.",
+      "NotAnAddOn": "Only add-on modules can be switched on or off.",
+      "SwitchingDisabled": "Plans and add-ons can't be switched on this installation."
     },
     "Auth": {
       "InvalidCredentials": "The phone or email and password don't match an account.",

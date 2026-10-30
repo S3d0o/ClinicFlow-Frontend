@@ -12,7 +12,7 @@
       "Trial": "Trial",
       "Active": "Active",
       "PastDue": "Payment due",
-      "Lapsed": "Lapsed: read-only"
+      "Cancelled": "Cancelled: read-only"
     }
   },
   "usage": {
@@ -21,6 +21,7 @@
     "doctors": "Doctors",
     "phoneMessagesPerMonth": "WhatsApp messages this month",
     "of": "of {{included}}",
+    "unlimited": "Unlimited",
     "over": "Over the plan's limit: nothing more can be added until the plan changes."
   },
   "modules": {
